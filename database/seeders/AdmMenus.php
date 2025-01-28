@@ -41,6 +41,46 @@ class AdmMenus extends Seeder
             ]
         );
 
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Submaster',
+            ],
+            [
+                'name'              => 'Submaster',
+                'type'              => 'URL',
+                'path'              => '#',
+                'slug'              => NULL,
+                'color'             => NULL,
+                'icon'              => 'fa-solid fa-bars',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 1
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Brands',
+            ],
+            [
+                'name'              => 'Brands',
+                'type'              => 'Route',
+                'path'              => 'Brands\BrandsControllerGetIndex',
+                'slug'              => 'brands',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 1
+            ]
+        );
+
+        
+
     }
 
 }

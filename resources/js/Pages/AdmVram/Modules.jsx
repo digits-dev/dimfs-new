@@ -41,8 +41,8 @@ const Modules = ({ modules, queryParams }) => {
                 <ContentPanel>
                     <TopPanel>
                         <div className="inline-flex gap-3">
-                            <TableButton extendClass={theme === 'bg-skin-white' ? primayActiveColor : theme} fontColor={theme === 'bg-skin-white' ? 'text-white' : textColor} onClick={handleCreate}>
-                            <i className="fa fa-plus-circle"></i> Add Modules
+                            <TableButton extendClass={theme === 'bg-skin-white' ? primayActiveColor : theme} fontColor={theme === 'bg-skin-white' ? 'text-white' : theme === 'bg-skin-blue' ? 'text-white' : textColor} onClick={handleCreate}>
+                                <i className="fa fa-plus-circle text-white mr-1"></i> Add Modules
                             </TableButton>
                         </div>
                         <div className='flex'>

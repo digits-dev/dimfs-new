@@ -77,13 +77,13 @@ const Tooltip = ({ children, text, extendClass, arrow = 'left' }) => {
                 className={`absolute ${currentArrowPosition.arrow}`}
                 style={currentArrowPosition.arrowStyles}
               ></div>
-              {text}
+              <div className='text-white'>{text}</div>
             </div>
           )}
         </div>
       ) : (
         <div
-          className={`relative ${text ? 'flex items-center' : ''} w-full`}
+          className={` relative ${text ? 'flex items-center ' : ''} w-full`}
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
           style={{ overflow: 'visible', zIndex: 60 }}

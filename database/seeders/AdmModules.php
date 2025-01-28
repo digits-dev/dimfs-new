@@ -148,6 +148,19 @@ class AdmModules extends Seeder
                 'controller' => 'Dashboard\DashboardController',
                 'is_protected' => 0,
                 'is_active' => 1,
+            ],
+
+            // FOR NEW MODULES 
+            [
+
+                'name' => 'Brands',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'brands',
+                'table_name' => 'brands',
+                'controller' => 'Brands\BrandsController',
+                'is_protected' => 0,
+                'is_active' => 1,
             ]
         ];
 
