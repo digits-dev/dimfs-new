@@ -32,7 +32,7 @@ class SettingsController extends Controller{
     }
 
     public function postSave(Request $request){
-        $appname = [$request->name];
+        $appname = [$request->app_name];
         $favicon = [$request->favicon];
         $system_logo = [$request->system_logo];
         $login_background_color = [$request->login_background_color];

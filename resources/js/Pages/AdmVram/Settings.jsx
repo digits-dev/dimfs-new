@@ -132,7 +132,7 @@ const Settings = ({app_name, favicon, logo, login_background_color, login_font_c
                     <form onSubmit={handleSubmit}>
                     <div className="mb-3 w-full">
                         <InputComponent 
-                            name="name"       
+                            name="app_name"       
                             value={forms.app_name}
                             onChange={handleChange}
                             displayName="Application Name"

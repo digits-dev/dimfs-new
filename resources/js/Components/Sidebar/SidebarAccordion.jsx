@@ -265,7 +265,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                         </div>
                     ) : (
                         <Link
-                            href={`${window.location.origin}/`+item.url}
+                            href={item.url}
                             onClick={() => { 
                                 handleMenuClick(item.name);
                                 closeSidebar();
@@ -347,7 +347,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                             <div>
                                 {item.children.map((child, childIndex) => (
                                     <Link
-                                        href={`${window.location.origin}/`+child.url}
+                                        href={child.url}
                                         onClick={() =>{
                                                 handleMenuClick(
                                                     item.name + " - " + child.name
