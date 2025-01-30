@@ -84,7 +84,8 @@ const BrandAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="brand_code"
             value={data.brand_code}
-             placeholder="Enter Brand Code"
+            disabled={action === 'View'}
+            placeholder="Enter Brand Code"
             onChange={(e)=> setData("brand_code", e.target.value)}
         />
         {(errors.brand_code) && (
@@ -96,6 +97,7 @@ const BrandAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="brand_description"
             value={data.brand_description}
+            disabled={action === 'View'}
             placeholder="Enter Brand Description"
             onChange={(e)=> setData("brand_description", e.target.value)}
         />
@@ -108,7 +110,8 @@ const BrandAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="brand_group"
             value={data.brand_group}
-                 placeholder="Enter Brand Group"
+            disabled={action === 'View'}
+            placeholder="Enter Brand Group"
             onChange={(e)=> setData("brand_group", e.target.value)}
         />
         {(errors.brand_group) && (
@@ -120,6 +123,7 @@ const BrandAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="contact_name"
             value={data.contact_name}
+            disabled={action === 'View'}
             placeholder="Enter Contact Name"
             onChange={(e)=> setData("contact_name", e.target.value)}
         />
@@ -132,6 +136,7 @@ const BrandAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="contact_email"
             value={data.contact_email}
+            disabled={action === 'View'}
             placeholder="Enter Contact Email"
             onChange={(e)=> setData("contact_email", e.target.value)}
         />

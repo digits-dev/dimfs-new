@@ -17,6 +17,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
 use App\Http\Controllers\Users\ForceChangePasswordController;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia; 
 /*
 |--------------------------------------------------------------------------

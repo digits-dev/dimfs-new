@@ -73,7 +73,8 @@ class BrandsController extends Controller
         }
 
         catch (\Exception $e) {
-            return back()->with(['message' => 'An error occurred: ' . $e->getMessage(), 'type' => 'error']);
+            CommonHelpers::LogSystemError('Brands', $e->getMessage());
+            return back()->with(['message' => 'Brand Creation Failed!', 'type' => 'error']);
         }
         
        
@@ -99,6 +100,7 @@ class BrandsController extends Controller
             }
     
             $brandCodeExist = Brands::where('brand_code', $request->brand_code)->exists();
+            $brandDescriptionExist = Brands::where('brand_description', $request->brand_description)->exists();
 
             if ($request->brand_code !== $brands->brand_code) {
                 if (!$brandCodeExist) {
@@ -107,8 +109,14 @@ class BrandsController extends Controller
                     return back()->with(['message' => 'Brand code already exists!', 'type' => 'error']);
                 }
             }
+            if ($request->brand_description !== $brands->brand_description) {
+                if (!$brandDescriptionExist) {
+                    $brands->brand_description = $validatedFields['brand_description'];
+                } else {
+                    return back()->with(['message' => 'Brand Description already exists!', 'type' => 'error']);
+                }
+            }
     
-            $brands->brand_description = $validatedFields['brand_description'];
             $brands->brand_group = $validatedFields['brand_group'];
             $brands->contact_email = $validatedFields['contact_email'];
             $brands->contact_name = $validatedFields['contact_name'];
@@ -122,7 +130,9 @@ class BrandsController extends Controller
         }  
 
         catch (\Exception $e) {
-            return back()->with(['message' => 'An error occurred: ' . $e->getMessage(), 'type' => 'error']);
+
+            CommonHelpers::LogSystemError('Brands', $e->getMessage());
+            return back()->with(['message' => 'Brand Updating Failed!', 'type' => 'error']);
         }
     }
     

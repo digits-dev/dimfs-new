@@ -2,6 +2,7 @@
 
 namespace app\Helpers;
 
+use App\Models\LogSystemError;
 use Cache;
 use DB;
 use Image;
@@ -21,6 +22,15 @@ class CommonHelpers {
             $result[] = str_replace('.php', '', basename($file));
         }
         return $result;
+    }
+
+    public static function LogSystemError($module_name, $error_details){
+        LogSystemError::create([
+            'module_name' => $module_name,
+            'error_details' => $error_details,
+            'created_by' => self::myId(),
+            'created_at' => now(),
+        ]);
     }
 
     public static function getOthersControllerFiles() {
@@ -187,6 +197,8 @@ class CommonHelpers {
     {
         return url(config('ad_url.ADMIN_PATH').'/'.$path);
     }
+
+    
 
     //ADMIN
     public static function routeController($prefix, $controller, $namespace = null){
