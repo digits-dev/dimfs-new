@@ -86,7 +86,7 @@ class BrandDirectionsController extends Controller
             $brandsDirection = BrandDirections::find($request->id);
 
             if (!$brandsDirection) {
-                return back()->with(['message' => 'Brand not found!', 'type' => 'error']);
+                return back()->with(['message' => 'Brand Direction not found!', 'type' => 'error']);
             }
 
             $brandsDirection->brand_direction_description = $validatedFields['brand_direction_description'];

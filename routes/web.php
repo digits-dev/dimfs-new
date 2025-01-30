@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
 use App\Http\Controllers\BrandDirections\BrandDirectionsController;
+use App\Http\Controllers\BrandGroups\BrandGroupsController;
 use App\Http\Controllers\Brands\BrandsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
@@ -129,7 +130,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [BrandDirectionsController::class, 'create']);
         Route::post('/update', [BrandDirectionsController::class, 'update']);
     });
-
+    
+    // BRAND GROUPS
+    Route::prefix('brand_groups')->group(function() {
+        Route::post('/create', [BrandGroupsController::class, 'create']);
+        Route::post('/update', [BrandGroupsController::class, 'update']);
+    });
 });
 
 Route::group([

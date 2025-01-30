@@ -107,7 +107,7 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
                                 ID
                             </TableHeader>
                             <TableHeader
-                                name="brand_code"
+                                name="brand_direction_description"
                                 queryParams={queryParams}
                                 width="xl"
                             >
