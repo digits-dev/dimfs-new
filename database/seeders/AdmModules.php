@@ -151,8 +151,8 @@ class AdmModules extends Seeder
             ],
 
             // FOR NEW MODULES 
-            [
 
+            [
                 'name' => 'Brands',
                 'created_at' => date('Y-m-d H:i:s'),
                 'icon' => 'fa-regular fa-circle',
@@ -161,7 +161,29 @@ class AdmModules extends Seeder
                 'controller' => 'Brands\BrandsController',
                 'is_protected' => 0,
                 'is_active' => 1,
-            ]
+            ],
+
+            [
+                'name' => 'Brand Directions',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'brand_directions',
+                'table_name' => 'brand_directions',
+                'controller' => 'BrandDirections\BrandDirectionsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Brand Groups',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'brand_groups',
+                'table_name' => 'brand_groups',
+                'controller' => 'BrandGroups\BrandGroupsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {

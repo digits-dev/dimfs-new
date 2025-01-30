@@ -7,18 +7,14 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const BrandAction = ({action, onClose, updateData}) => {
+const BrandDirectionsAction = ({action, onClose, updateData}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        brand_code: "" || updateData.brand_code,
-        brand_description: "" || updateData.brand_description,
-        brand_group: "" || updateData.brand_group,
-        contact_name: "" || updateData.contact_name,
-        contact_email: "" || updateData.contact_email,
+        brand_direction_description: "" || updateData.brand_direction_description,
         status: "" || updateData.status,
     });
 
@@ -37,7 +33,7 @@ const BrandAction = ({action, onClose, updateData}) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand Direction?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == 'Add' ? 'Confirm' : 'Update'}`,
             confirmButtonColor: buttonSwalColor,
@@ -48,11 +44,11 @@ const BrandAction = ({action, onClose, updateData}) => {
             if (result.isConfirmed) {
 
                 if (action == 'Add'){
-                    post('brands/create', {
+                    post('brand_directions/create', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["brands"] });
+                            router.reload({ only: ["brand_directions"] });
                             reset();
                             onClose();
                         },
@@ -61,11 +57,11 @@ const BrandAction = ({action, onClose, updateData}) => {
                     });
                 }
                 else{
-                    post('brands/update', {
+                    post('brand_directions/update', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["brands"] });
+                            router.reload({ only: ["brand_directions"] });
                             reset();
                             onClose();
                         },
@@ -80,71 +76,20 @@ const BrandAction = ({action, onClose, updateData}) => {
 
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
-        {/* BRAND CODE */}
-        <InputComponent
-            name="brand_code"
-            value={data.brand_code}
-            disabled={action === 'View'}
-            placeholder="Enter Brand Code"
-            onChange={(e)=> setData("brand_code", e.target.value)}
-        />
-        {(errors.brand_code) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_code}
-            </div>
-        )}
         {/* BRAND DESCRIPTION */}
         <InputComponent
-            name="brand_description"
-            value={data.brand_description}
+            name="brand_direction_description"
+            value={data.brand_direction_description}
             disabled={action === 'View'}
-            placeholder="Enter Brand Description"
-            onChange={(e)=> setData("brand_description", e.target.value)}
+            placeholder="Enter Brand Direction Description"
+            onChange={(e)=> setData("brand_direction_description", e.target.value)}
         />
-        {(errors.brand_description) && (
+        {(errors.brand_direction_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_description}
+                {errors.brand_direction_description}
             </div>
         )}
-        {/* BRAND GROUP */}
-        <InputComponent
-            name="brand_group"
-            value={data.brand_group}
-            disabled={action === 'View'}
-            placeholder="Enter Brand Group"
-            onChange={(e)=> setData("brand_group", e.target.value)}
-        />
-        {(errors.brand_group) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_group}
-            </div>
-        )}
-        {/* CONTACT NAME */}
-        <InputComponent
-            name="contact_name"
-            value={data.contact_name}
-            disabled={action === 'View'}
-            placeholder="Enter Contact Name"
-            onChange={(e)=> setData("contact_name", e.target.value)}
-        />
-        {(errors.contact_name) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.contact_name}
-            </div>
-        )}
-        {/* CONTACT EMAIL */}
-        <InputComponent
-            name="contact_email"
-            value={data.contact_email}
-            disabled={action === 'View'}
-            placeholder="Enter Contact Email"
-            onChange={(e)=> setData("contact_email", e.target.value)}
-        />
-        {(errors.contact_email) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.contact_email}
-            </div>
-        )}
+
 
         {action == 'Update' && 
             <>
@@ -176,7 +121,6 @@ const BrandAction = ({action, onClose, updateData}) => {
             </div>
         }
         
-        
         {action !== 'View' && 
             <div className='flex justify-end'>
                 <Button
@@ -192,7 +136,7 @@ const BrandAction = ({action, onClose, updateData}) => {
                     : 
                     (
                         <span>
-                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Brand' : 'Update Brand'}
+                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Brand Direction' : 'Update Brand Direction'}
                         </span>
                     )
                 }
@@ -204,4 +148,4 @@ const BrandAction = ({action, onClose, updateData}) => {
   )
 }
 
-export default BrandAction
+export default BrandDirectionsAction

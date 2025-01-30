@@ -78,8 +78,44 @@ class AdmMenus extends Seeder
                 'sorting'           => 1
             ]
         );
-
         
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Brand Directions',
+            ],
+            [
+                'name'              => 'Brand Directions',
+                'type'              => 'Route',
+                'path'              => 'BrandDirections\BrandDirectionsControllerGetIndex',
+                'slug'              => 'brand_directions',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 2
+            ]
+        );
+        
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Brand Groups',
+            ],
+            [
+                'name'              => 'Brand Groups',
+                'type'              => 'Route',
+                'path'              => 'BrandGroups\BrandGroupsControllerGetIndex',
+                'slug'              => 'brand_groups',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 3
+            ]
+        );
 
     }
 

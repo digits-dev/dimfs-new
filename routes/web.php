@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
+use App\Http\Controllers\BrandDirections\BrandDirectionsController;
 use App\Http\Controllers\Brands\BrandsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
@@ -117,10 +118,18 @@ Route::middleware(['auth'])->group(function () {
 
     // SUBMASTERS
 
+    // BRANDS
     Route::prefix('brands')->group(function() {
         Route::post('/create', [BrandsController::class, 'create']);
         Route::post('/update', [BrandsController::class, 'update']);
     });
+
+    // BRAND DIRECTIONS
+    Route::prefix('brand_directions')->group(function() {
+        Route::post('/create', [BrandDirectionsController::class, 'create']);
+        Route::post('/update', [BrandDirectionsController::class, 'update']);
+    });
+
 });
 
 Route::group([
