@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
+use App\Http\Controllers\Brands\BrandsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -60,20 +61,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/sidebar', [MenusController::class, 'sidebarMenu'])->name('sidebar');
+
     //USERS
     Route::post('create-user', [AdminUsersController::class, 'postAddSave'])->name('create-user');
     Route::post('/postAddSave', [AdminUsersController::class, 'postAddSave'])->name('postAddSave');
     Route::post('/postEditSave', [AdminUsersController::class, 'postEditSave'])->name('postEditSave');
     Route::post('/deactivate-users', [AdminUsersController::class, 'setStatus'])->name('postDeactivateUsers');
+
     //PROFILE PAGE
     Route::get('/profile', [ProfilePageController::class, 'getIndex'])->name('profile_page');
     Route::post('/save-edit-image', [ProfilePageController::class, 'saveEditImage'])->name('save-edit-image');
     Route::get('/profiles', [ProfilePageController::class, 'getProfiles'])->name('get-profiles');
     Route::post('/update-profile', [ProfilePageController::class, 'updateProfile'])->name('update-profile');
     Route::post('/update-theme', [ProfilePageController::class, 'updateTheme'])->name('update-theme');
+
     //CHANGE PASSWORD
     Route::get('/change_password', [ChangePasswordController::class, 'getIndex'])->name('change_password');
     Route::post('/postChangePassword', [AdminUsersController::class, 'postUpdatePassword'])-> name('postChangePassword');
+
     //PRIVILEGES
     Route::get('privileges/create-privileges', [PrivilegesController::class, 'createPrivilegesView'])->name('create-privileges');
     Route::get('privileges/edit-privileges/{id}', [PrivilegesController::class, 'getEdit'])->name('edit-privileges');
@@ -84,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('create-modules', [ModulsController::class, 'getAddModuls'])->name('create-modules');
     Route::post('/module_generator/postAddSave', [ModulsController::class, 'postAddSave'])->name('postAddSave');
     Route::get('/tables', [ModulsController::class, 'getTableNames']);
+
     //MENUS
     Route::post('/menu_management/add', [MenusController::class, 'postAddSave'])->name('MenusControllerPostSaveMenu');
     Route::get('/menu_management/edit/{id}', [MenusController::class, 'getEdit'])->name('MenusControllerGetEdit');
@@ -100,11 +106,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/read', [NotificationsController::class, 'markAsRead'])->name('notification-read');
     Route::get('/notifications/view-notification/{id}', [NotificationsController::class, 'viewNotification'])->name('view-notification');
     Route::get('/notifications/view-all-notifications', [NotificationsController::class, 'viewAllNotification'])->name('view-all-notifications');
+
     //FILTER
     Route::get('/filter/privileges', [AdmRequestController::class, 'privilegesFilter'])->name('privileges-filter');
     Route::get('/filter/users', [AdmRequestController::class, 'usersFilter'])->name('users-filter');
+
     //EXPORT
     Route::post('/request/export', [AdmRequestController::class, 'export'])->name('export');
+
+    // SUBMASTERS
+
+    Route::prefix('brands')->group(function() {
+        Route::post('/create', [BrandsController::class, 'create']);
+        Route::post('/update', [BrandsController::class, 'update']);
+    });
 });
 
 Route::group([

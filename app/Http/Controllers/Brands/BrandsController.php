@@ -15,22 +15,18 @@ use DB;
 
 class BrandsController extends Controller
 {
-    private $table_name;
-    private $primary_key;
     private $sortBy;
     private $sortDir;
     private $perPage;
 
     public function __construct() {
-        $this->table_name  =  'brands';
-        $this->primary_key = 'id';
         $this->sortBy = request()->get('sortBy', 'brands.created_at');
         $this->sortDir = request()->get('sortDir', 'desc');
         $this->perPage = request()->get('perPage', 10);
     }
 
     public function getAllData(){
-        $query = Brands::query();
+        $query = Brands::query()->with(['getCreatedBy', 'getUpdatedBy']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -49,4 +45,85 @@ class BrandsController extends Controller
         return Inertia::render("Brands/Brands", $data);
         
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'brand_code' => 'required|string|max:3|unique:brands,brand_code',
+            'brand_description' => 'required|string|max:30|unique:brands,brand_description',
+            'brand_group' => 'required|string|max:50',
+            'contact_email' => 'required|email|max:100',
+            'contact_name' => 'required|string|max:100',
+        ]);
+
+        try {
+
+            Brands::create([
+                'brand_code' => $validatedFields['brand_code'], 
+                'brand_description' => $validatedFields['brand_description'],   
+                'brand_group' => $validatedFields['brand_group'], 
+                'contact_email' => $validatedFields['contact_email'], 
+                'contact_name' => $validatedFields['contact_name'], 
+                'status' => 'ACTIVE',
+                'created_by' => CommonHelpers::myId(),
+            ]);
+    
+            return back()->with(['message' => 'Brand Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            return back()->with(['message' => 'An error occurred: ' . $e->getMessage(), 'type' => 'error']);
+        }
+        
+       
+    }
+
+    public function update(Request $request){
+
+        $validatedFields = $request->validate([
+            'brand_code' => 'required|string|max:3',
+            'brand_description' => 'required|string|max:30',
+            'brand_group' => 'required|string|max:50',
+            'contact_email' => 'required|email|max:100',
+            'contact_name' => 'required|string|max:100',
+            'status' => 'required|string',
+        ]);
+
+        try {
+    
+            $brands = Brands::find($request->id);
+
+            if (!$brands) {
+                return back()->with(['message' => 'Brand not found!', 'type' => 'error']);
+            }
+    
+            $brandCodeExist = Brands::where('brand_code', $request->brand_code)->exists();
+
+            if ($request->brand_code !== $brands->brand_code) {
+                if (!$brandCodeExist) {
+                    $brands->brand_code = $validatedFields['brand_code'];
+                } else {
+                    return back()->with(['message' => 'Brand code already exists!', 'type' => 'error']);
+                }
+            }
+    
+            $brands->brand_description = $validatedFields['brand_description'];
+            $brands->brand_group = $validatedFields['brand_group'];
+            $brands->contact_email = $validatedFields['contact_email'];
+            $brands->contact_name = $validatedFields['contact_name'];
+            $brands->status = $validatedFields['status'];
+            $brands->updated_by = CommonHelpers::myId();
+            $brands->updated_at = now();
+    
+            $brands->save();
+    
+            return back()->with(['message' => 'Brand Updating Success!', 'type' => 'success']);
+        }  
+
+        catch (\Exception $e) {
+            return back()->with(['message' => 'An error occurred: ' . $e->getMessage(), 'type' => 'error']);
+        }
+    }
+    
 }

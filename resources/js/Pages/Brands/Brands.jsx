@@ -16,23 +16,42 @@ import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
 import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
+import Modal from "../../Components/Modal/Modal";
+import BrandAction from "./BrandAction";
+
 
 const Brands = ({tableName, brands, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
-    const { textColor, primayActiveColor, textColorActive } = useThemeStyles(theme);
+    const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [action, setAction] = useState(null);
+    const [updateData, setUpdateData] = useState({
+        id: "",
+        brand_code: "",
+        brand_description: "",
+        brand_group: "",
+        contact_name: "",
+        contact_email: "",
+        status: "",
+    })
 
-     useEffect(() => {
+    useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
+        console.log(brands);
     }, []);
 
-     const refreshTable = (e) => {
+    const refreshTable = (e) => {
         e.preventDefault();
         router.get(pathname);
     };
+
+    const handleModalClick = () => {
+        setIsModalOpen(!isModalOpen);
+    }
+
     return (
         <>
             <Head title="Brands"/>
@@ -54,19 +73,43 @@ const Brands = ({tableName, brands, queryParams}) => {
                             extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
                             type="button"
                             fontColor={textColorActive}
-                        >
-                            <i className="fa fa-plus-circle mr-1"></i> Add
-                            Brand
+                            onClick={()=>{handleModalClick(); setAction('Add');
+                                setUpdateData({
+                                    id: "",
+                                    brand_code: "",
+                                    brand_description: "",
+                                    brand_group: "",
+                                    contact_name: "",
+                                    contact_email: "",
+                                    status: "",
+                                })
+                            
+                            }}
+                        > 
+                          <i className="fa-solid fa-plus mr-1"></i>  Add Brand
                         </Button>
                     </div>
                     <div className='flex'>
-                        
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
                 <TableContainer>
                    <Thead>
                         <Row>
+                            <TableHeader
+                                sortable={false}
+                                width="md"
+                                justify="center"
+                            >
+                                Action
+                            </TableHeader>
+                            <TableHeader
+                                name="status"
+                                queryParams={queryParams}
+                                width="sm"
+                            >
+                                Status
+                            </TableHeader>
                             <TableHeader
                                 name="id"
                                 queryParams={queryParams}
@@ -77,51 +120,65 @@ const Brands = ({tableName, brands, queryParams}) => {
                             <TableHeader
                                 name="brand_code"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="md"
                             >
                                 Brand Code
                             </TableHeader>
                             <TableHeader
                                 name="brand_description"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="lg"
                             >
                                 Brand Description
                             </TableHeader>
                             <TableHeader
                                 name="brand_group"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="lg"
                             >
                                 Brand Group
                             </TableHeader>
                             <TableHeader
                                 name="contact_name"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="lg"
                             >
                                 Contact Name
                             </TableHeader>
                             <TableHeader
                                 name="contact_email"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="lg"
                             >
                                 Contact Email
                             </TableHeader>
                             <TableHeader
-                                name="status"
+                                name="created_by"
                                 queryParams={queryParams}
-                                width="sm"
+                                width="md"
                             >
-                                Status
+                                Created By
                             </TableHeader>
                             <TableHeader
-                                sortable={false}
-                                width="auto"
-                                justify="center"
+                                name="updated_by"
+                                queryParams={queryParams}
+                                width="md"
                             >
-                                Action
+                                Updated By
+                            </TableHeader>
+                            <TableHeader
+                                name="updated_by"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Created At
+                            </TableHeader>
+                            <TableHeader
+                                name="updated_by"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Updated At
                             </TableHeader>
                         </Row>
                     </Thead>
@@ -129,6 +186,52 @@ const Brands = ({tableName, brands, queryParams}) => {
                         {brands &&
                             brands?.data.map((item, index) => (
                                 <Row key={item.id}>
+                                    <RowData center>
+                                        <RowAction
+                                            type="button"
+                                            action="edit"
+                                            onClick={()=>{handleModalClick(); setAction('Update'); 
+                                                setUpdateData({
+                                                    id: item.id,
+                                                    brand_code: item.brand_code,
+                                                    brand_description: item.brand_description,
+                                                    brand_group: item.brand_group,
+                                                    contact_name: item.contact_name,
+                                                    contact_email: item.contact_email,
+                                                    status: item.status,
+                                                })
+                                            
+                                            }}
+                                        />
+                                        <RowAction
+                                            type="button"
+                                            action="view"
+                                            onClick={()=>{handleModalClick(); setAction('View'); 
+                                                setUpdateData({
+                                                    id: item.id,
+                                                    brand_code: item.brand_code,
+                                                    brand_description: item.brand_description,
+                                                    brand_group: item.brand_group,
+                                                    contact_name: item.contact_name,
+                                                    contact_email: item.contact_email,
+                                                    status: item.status,
+                                                })
+                                            
+                                            }}
+                                        />
+                                    </RowData>
+                                    <RowStatus
+                                        isLoading={loading}
+                                        systemStatus={
+                                            item.status === "ACTIVE"
+                                                ? "active"
+                                                : "inactive"
+                                        }
+                                    >
+                                        {item.status === "ACTIVE"
+                                            ? "ACTIVE"
+                                            : "INACTIVE"}
+                                    </RowStatus>
                                     <RowData isLoading={loading}>
                                         {item.id}
                                     </RowData>
@@ -147,27 +250,17 @@ const Brands = ({tableName, brands, queryParams}) => {
                                     <RowData isLoading={loading}>
                                         {item.contact_email}
                                     </RowData>
-                                    <RowStatus
-                                        isLoading={loading}
-                                        systemStatus={
-                                            item.status === "ACTIVE"
-                                                ? "active"
-                                                : "inactive"
-                                        }
-                                    >
-                                        {item.status === "ACTIVE"
-                                            ? "ACTIVE"
-                                            : "INACTIVE"}
-                                    </RowStatus>
-                                    <RowData center>
-                                        <RowAction
-                                            as="button"
-                                            action="edit"
-                                        />
-                                        <RowAction
-                                            as="button"
-                                            action="view"
-                                        />
+                                    <RowData isLoading={loading}>
+                                        {item.get_created_by?.name}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_updated_by?.name}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.created_at}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.updated_at}
                                     </RowData>
                                 </Row>
                             ))}
@@ -175,6 +268,18 @@ const Brands = ({tableName, brands, queryParams}) => {
                 </TableContainer>
                 <Pagination extendClass={theme} paginate={brands} />
             </ContentPanel>
+            <Modal
+                theme={theme}
+                show={isModalOpen}
+                onClose={handleModalClick}
+                title={action == 'Add' ? "Add Brand" : action == 'Update' ? 'Update Brand' : 'Brand Information'}
+                width="xl"
+                fontColor={textColorActive}
+                btnIcon='fa fa-edit'
+            >
+                <BrandAction onClose={handleModalClick} action={action} updateData={updateData}/>
+            </Modal>
+            
         </>
     );
 };

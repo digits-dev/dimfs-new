@@ -72,16 +72,16 @@ const TableHeader = ({
 						sort_field === name &&
 						sort_direction === "desc" ? (
 							<span className="inline-block mb-0.5">
-								<DescIcon />
+                <i className="fa-solid fa-sort-down"></i>
 							</span>
 						) : //  ASCENDING
 						sort_field === name && sort_direction === "asc" ? (
 							<span className="inline-block mb-0.5">
-								<AscIcon/>
+                <i className="fa-solid fa-sort-up"></i>
 							</span>
 						) : (
 							// BOTH ICON
-							<SortIcon />
+              <i className="fa-solid fa-sort"></i>
 						)}
 					</div>
 				)}

@@ -48,7 +48,7 @@ const Modal = ({
                     >
                         <div className={`${theme === 'bg-skin-white' ? 'bg-skin-black' : theme} rounded-t-lg flex justify-between p-3 border-b-2 items-center`}>
                             <p className={`${fontColor} font-poppins font-extrabold text-lg`}>
-                               <i className={icon}></i> {title}
+                               {icon && <i className={`${icon} mr-2`}></i> }{title}
                             </p>
                             <i
                                 className="fa fa-times-circle text-white font-extrabold text-md cursor-pointer"

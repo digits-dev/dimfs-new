@@ -23,7 +23,7 @@ const RowStatus = ({
 			) : (
         <>
         {systemStatusColor ? 
-          <span className={`mx-auto rounded-[9px] text-[12px] text-white px-[9px] py-[2px] ${systemStatusColor} `}>{children}</span> 
+          <span className={`mx-auto rounded-full text-[12px] text-white px-[9px] py-[2px] ${systemStatusColor} `}>{children}</span> 
         :
 				  <span style={{background: color}} className={`mx-auto text-[12px] rounded-[9px] ${color && 'text-white'} px-3 py-1 `}>{children}</span>
         }

@@ -4,12 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Brands extends Model
 {
     use HasFactory;
 
     protected $table = 'brands';
+
+    protected $fillable = [
+        'id',
+        'brand_code',
+        'brand_description',
+        'brand_group',
+        'contact_name',
+        'contact_email',
+        'status',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 
     protected $filterable = [
         'id',
@@ -18,16 +39,34 @@ class Brands extends Model
         'brand_group',
         'contact_name',
         'contact_email',
+        'created_by',
+        'updated_by',
+        'created_at',
         'status',
     ];
 
     public function scopeSearchAndFilter($query, $request){
         $filter_column = $request['filter_column'] ?? [];
+
         if ($request['search']) {
             $search = $request['search'];
             $query->where(function ($query) use ($search) {
                 foreach ($this->filterable as $field) {
-                    $query->orWhere($field, 'LIKE', "%$search%");
+                    if ($field === 'created_by') {
+                        $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    }
+                    elseif ($field === 'updated_by')  {
+                        $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    } elseif (in_array($field, ['created_at', 'updated_at'])) {
+                        $query->orWhereDate($field, $search);
+                    }
+                    else {
+                        $query->orWhere($field, 'LIKE', "%$search%");
+                    }
                 }
             });
         } 
@@ -95,4 +134,13 @@ class Brands extends Model
 
         return $query;
     }
+
+    public function getCreatedBy() {
+        return $this->belongsTo(AdmUser::class, 'created_by', 'id');
+    }
+    
+    public function getUpdatedBy() {
+        return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+    }
+
 }
