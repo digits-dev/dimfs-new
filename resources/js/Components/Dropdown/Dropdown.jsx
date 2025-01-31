@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const DropdownSelect = ({ options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass }) => {
+const DropdownSelect = ({isStatus = false, options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -29,12 +29,20 @@ const DropdownSelect = ({ options, onChange, value, name, defaultSelect, display
         option: (provided, state) => ({
             ...provided,
             backgroundColor: state.isFocused ? "#374151" : "#1f2937", // Highlight on hover (Tailwind's bg-gray-700)
-            color: "#9CA3AF", // Option text color
+            color: isStatus ? state.data.status == "INACTIVE" ? "#EB4034" : "#9CA3AF" : "#9CA3AF", // Option text color
             "&:active": {
                 backgroundColor: "#4b5563", // Active state background
             },
         }),
     };
+
+    const customStatusStyles = {
+        option: (provided, state) => ({
+          ...provided,
+          color: isStatus ? state.data.status === "INACTIVE" ? "#EB4034" : "" : "", // Make text red for INACTIVE status
+        }),
+      };
+      
     return (
         <div className="relative">
             <label
@@ -49,10 +57,10 @@ const DropdownSelect = ({ options, onChange, value, name, defaultSelect, display
                 placeholder={placeholder}
                 defaultValue={value}
                 name={name}
-                className={`block w-full bg-gray-800 border-gray-300  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                className={`block w-full bg-gray-800 border-gray-300 mt-1  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 onChange={onChange}
-                options={options.map(opt => ({ value: opt.id, label: opt.name, name: name }))}
-                styles={theme === 'bg-skin-black' ? customStyles : ''}
+                options={options.map(opt => ({ value: opt.id, label: opt.name, name: name, status: opt.status}))}
+                styles={theme === 'bg-skin-black' ? customStyles : customStatusStyles}
             />
              
                

@@ -16,7 +16,7 @@ const TableContainer = ({children, autoHeight, data}) => {
                     </table>
                 </div>
                 :
-                <div className={`w-full ${autoHeight ? 'min-h-[100px] max-h-[130px]' : 'h-[130px]'} overflow-auto scrollbar-thin h-64 ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
+                <div style={{height: "16rem"}} className={`w-full ${autoHeight ? 'min-h-[100px] max-h-[auto]' : 'h-[auto]'} overflow-auto scrollbar-thin ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
                     <table className="w-full ">
                         {children}
                     </table>

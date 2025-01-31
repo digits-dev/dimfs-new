@@ -117,6 +117,63 @@ class AdmMenus extends Seeder
             ]
         );
 
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Brand Marketings',
+            ],
+            [
+                'name'              => 'Brand Marketings',
+                'type'              => 'Route',
+                'path'              => 'BrandMarketings\BrandMarketingsControllerGetIndex',
+                'slug'              => 'brand_marketings',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 4
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Categories',
+            ],
+            [
+                'name'              => 'Categories',
+                'type'              => 'Route',
+                'path'              => 'Categories\CategoriesControllerGetIndex',
+                'slug'              => 'categories',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 5
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Classifications',
+            ],
+            [
+                'name'              => 'Classifications',
+                'type'              => 'Route',
+                'path'              => 'Classifications\ClassificationsControllerGetIndex',
+                'slug'              => 'classifications',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 6
+            ]
+        );
+
     }
 
 }

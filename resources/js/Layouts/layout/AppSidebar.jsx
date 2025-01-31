@@ -53,7 +53,7 @@ const AppSidebar = () => {
             >
                 <img
                     src={`${theme == 'bg-skin-white' ? `/images/navigation/dashboard-arrow-icon-black.png` : `/images/navigation/dashboard-arrow-icon.png`}`}
-                    className={`w-2 h-2 ${!open && "rotate-180"}`}
+                    className={`w-2 h-2 ${!open && "rotate-180"} select-none`}
                 />
             </div>
                 

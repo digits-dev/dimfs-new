@@ -100,13 +100,6 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="id"
-                                queryParams={queryParams}
-                                width="sm"
-                            >
-                                ID
-                            </TableHeader>
-                            <TableHeader
                                 name="brand_direction_description"
                                 queryParams={queryParams}
                                 width="xl"
@@ -185,9 +178,6 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
                                             ? "ACTIVE"
                                             : "INACTIVE"}
                                     </RowStatus>
-                                    <RowData isLoading={loading}>
-                                        {item.id}
-                                    </RowData>
                                     <RowData isLoading={loading}>
                                         {item.brand_direction_description}
                                     </RowData>

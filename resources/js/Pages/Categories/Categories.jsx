@@ -17,10 +17,10 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
-import BrandMarketingsAction from "./BrandMarketingsAction";
+import CategoriesAction from "./CategoriesAction";
 
 
-const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
+const Categories = ({tableName, categories, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,7 +29,8 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
     const [action, setAction] = useState(null);
     const [updateData, setUpdateData] = useState({
         id: "",
-        brand_marketing_description: "",
+        category_code: "",
+        category_description: "",
         status: "",
     })
 
@@ -49,7 +50,7 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
 
     return (
         <>
-            <Head title="Brand Marketings"/>
+            <Head title="Categories"/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -69,20 +70,21 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                             onClick={()=>{handleModalClick(); setAction('Add');
                                 setUpdateData({
                                     id: "",
-                                    brand_marketing_description: "",
+                                    category_code: "",
+                                    category_description: "",
                                     status: "",
                                 })
                             
                             }}
                         > 
-                          <i className="fa-solid fa-plus mr-1"></i>  Add Brand Marketing
+                          <i className="fa-solid fa-plus mr-1"></i>  Add Category
                         </Button>
                     </div>
                     <div className='flex'>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
-                <TableContainer data={brand_marketings?.data}>
+                <TableContainer data={categories?.data}>
                    <Thead>
                         <Row>
                             <TableHeader
@@ -100,11 +102,18 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="brand_marketing_description"
+                                name="category_code"
                                 queryParams={queryParams}
-                                width="xl"
+                                width="lg"
                             >
-                                Brand Marketing Description
+                                Category Code
+                            </TableHeader>
+                            <TableHeader
+                                name="category_description"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Category Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -136,9 +145,9 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                             </TableHeader>
                         </Row>
                     </Thead>
-                    <Tbody data={brand_marketings.data}>
-                        {brand_marketings &&
-                            brand_marketings?.data.map((item, index) => (
+                    <Tbody data={categories?.data}>
+                        {categories &&
+                            categories?.data.map((item, index) => (
                                 <Row key={item.id}>
                                     <RowData center>
                                         <RowAction
@@ -147,7 +156,8 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                                             onClick={()=>{handleModalClick(); setAction('Update'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    brand_marketing_description: item.brand_marketing_description,
+                                                    category_code: item.category_code,
+                                                    category_description: item.category_description,
                                                     status: item.status,
                                                 })
                                             
@@ -159,7 +169,8 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                                             onClick={()=>{handleModalClick(); setAction('View'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    brand_marketing_description: item.brand_marketing_description,
+                                                    category_code: item.category_code,
+                                                    category_description: item.category_description,
                                                     status: item.status,
                                                 })
                                             
@@ -179,7 +190,10 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.brand_marketing_description}
+                                        {item.category_code}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}
@@ -197,22 +211,22 @@ const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
                             ))}
                     </Tbody>
                 </TableContainer>
-                <Pagination extendClass={theme} paginate={brand_marketings} />
+                <Pagination extendClass={theme} paginate={categories} />
             </ContentPanel>
             <Modal
                 theme={theme}
                 show={isModalOpen}
                 onClose={handleModalClick}
-                title={action == 'Add' ? "Add Brand Marketing" : action == 'Update' ? 'Update Brand Marketing' : 'Brand Marketing Information'}
+                title={action == 'Add' ? "Add Category" : action == 'Update' ? 'Update Category' : 'Category Information'}
                 width="xl"
                 fontColor={textColorActive}
                 btnIcon='fa fa-edit'
             >
-                <BrandMarketingsAction onClose={handleModalClick} action={action} updateData={updateData}/>
+                <CategoriesAction onClose={handleModalClick} action={action} updateData={updateData}/>
             </Modal>
             
         </>
     );
 };
 
-export default BrandMarketings;
+export default Categories;

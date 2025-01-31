@@ -16,6 +16,8 @@ use App\Http\Controllers\BrandDirections\BrandDirectionsController;
 use App\Http\Controllers\BrandGroups\BrandGroupsController;
 use App\Http\Controllers\BrandMarketings\BrandMarketingsController;
 use App\Http\Controllers\Brands\BrandsController;
+use App\Http\Controllers\Categories\CategoriesController;
+use App\Http\Controllers\Classifications\ClassificationsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -143,8 +145,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [BrandMarketingsController::class, 'create']);
         Route::post('/update', [BrandMarketingsController::class, 'update']);
     });
-
-
+    
+    // CATEGORIES
+    Route::prefix('categories')->group(function() {
+        Route::post('/create', [CategoriesController::class, 'create']);
+        Route::post('/update', [CategoriesController::class, 'update']);
+    });
+    
+    // CLASSIFICATIONS
+    Route::prefix('classifications')->group(function() {
+        Route::post('/create', [ClassificationsController::class, 'create']);
+        Route::post('/update', [ClassificationsController::class, 'update']);
+    });
 
 
 });

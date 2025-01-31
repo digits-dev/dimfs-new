@@ -3,15 +3,11 @@
 namespace app\Helpers;
 
 use App\Models\LogSystemError;
-use Cache;
-use DB;
-use Image;
-use Request;
-use Route;
-use Schema;
-use Session;
-use Storage;
-use Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 
 class CommonHelpers {
 
@@ -549,7 +545,7 @@ class CommonHelpers {
         $to = $config['to'];
         $id_adm_users = $config['id_adm_users'];
         $type = $config['type'];
-        $id_adm_users = ($id_adm_users) ?: [CRUDBooster::myId()];
+        $id_adm_users = ($id_adm_users) ?: [self::myId()];
         foreach ($id_adm_users as $id) {
             $a = [];
             $a['created_at'] = date('Y-m-d H:i:s');

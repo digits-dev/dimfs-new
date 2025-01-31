@@ -32,7 +32,7 @@ const Modules = ({ modules, queryParams }) => {
     };
     const handleCloseCreateModal = () => {
         setShowCreateModal(false);
-        router.reload({ only: ['modules'] });
+        router.reload({ only: ['modules', 'adm_menuses'] });
     };
 
     return (

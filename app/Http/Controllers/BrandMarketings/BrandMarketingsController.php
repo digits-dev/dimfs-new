@@ -39,7 +39,7 @@ class BrandMarketingsController extends Controller
         }
         $data = [];
         $data['tableName'] = 'brand_marketings';
-        $data['page_title'] = 'Brand Groups';
+        $data['page_title'] = 'Brand Marketings';
         $data['brand_marketings'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 

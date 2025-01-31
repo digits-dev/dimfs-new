@@ -205,12 +205,11 @@ const AppNavbar = () => {
         <>
         <div className='flex flex-col lg:flex-row'>
             <div
-                className={`${theme} w-auto h-[50px] lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
+                className={`${theme} h-[50px] lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
                     !['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'
                 }`}
                 ref={menuRef}
             >
-                <Link href={`${window.location.origin}/dashboard`}>
                     <div className="flex gap-x-4 items-center justify-center lg:justify-start px-[20px] py-[10px] lg:py-[15px]">
                         <img
                             src={applogo}
@@ -229,10 +228,9 @@ const AppNavbar = () => {
                             <p className="font-semibold text-[15px]">{appname}</p>
                         </div>
                     </div>
-                </Link>
             </div>
             <div
-                className={`${theme} w-full h-[60px] border-b-[1px] w-full ${!['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'}  flex items-center justify-end px-5 py-7 select-none shodow-customLight`}
+                className={`${theme} w-full h-[60px] border-b-[1px] ${!['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'}  flex items-center justify-end px-5 py-7 select-none shodow-customLight`}
                 ref={menuRef}
             >
                 <div className="flex items-center gap-4 pl-[16px] py-10">

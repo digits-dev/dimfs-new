@@ -184,6 +184,39 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+
+            [
+                'name' => 'Brand Marketings',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'brand_marketings',
+                'table_name' => 'brand_marketings',
+                'controller' => 'BrandMarketings\BrandMarketingsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Categories',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'categories',
+                'table_name' => 'categories',
+                'controller' => 'Categories\CategoriesController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Classifications',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'classifications',
+                'table_name' => 'classifications',
+                'controller' => 'Classifications\ClassificationsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {

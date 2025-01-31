@@ -40,7 +40,6 @@ const Brands = ({tableName, brands, queryParams}) => {
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
-        console.log(brands);
     }, []);
 
     const refreshTable = (e) => {
@@ -60,7 +59,6 @@ const Brands = ({tableName, brands, queryParams}) => {
                     <div className="inline-flex gap-1">
                         <Tooltip text='Refresh data' arrow='bottom'>
                             <Button
-                                href="privileges/create-privileges"
                                 extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
@@ -69,7 +67,6 @@ const Brands = ({tableName, brands, queryParams}) => {
                             </Button>
                         </Tooltip>
                         <Button
-                            href="privileges/create-privileges"
                             extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
                             type="button"
                             fontColor={textColorActive}
@@ -109,13 +106,6 @@ const Brands = ({tableName, brands, queryParams}) => {
                                 width="sm"
                             >
                                 Status
-                            </TableHeader>
-                            <TableHeader
-                                name="id"
-                                queryParams={queryParams}
-                                width="sm"
-                            >
-                                ID
                             </TableHeader>
                             <TableHeader
                                 name="brand_code"
@@ -232,9 +222,6 @@ const Brands = ({tableName, brands, queryParams}) => {
                                             ? "ACTIVE"
                                             : "INACTIVE"}
                                     </RowStatus>
-                                    <RowData isLoading={loading}>
-                                        {item.id}
-                                    </RowData>
                                     <RowData isLoading={loading}>
                                         {item.brand_code}
                                     </RowData>
