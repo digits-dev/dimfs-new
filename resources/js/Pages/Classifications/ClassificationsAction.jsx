@@ -21,11 +21,6 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
         status: "" || updateData.status,
     });
 
-    useEffect(()=>{
-        console.log(all_categories);
-        
-    })
-
     const statuses = [
         {
             id: 'ACTIVE',
@@ -100,6 +95,7 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
                 {errors.status}
             </div>
         )}
+        {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
         {/* CLASS CODE */}
         <InputComponent
             name="class_code"
