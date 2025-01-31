@@ -10,13 +10,13 @@ const TableContainer = ({children, autoHeight, data}) => {
             <div className="w-full overflow-hidden relative border border-secondary rounded-md text-secondary ">
             {
                 data?.length != 0 ?
-                <div className={`w-full max-h-[510px] ${autoHeight ? 'min-h-[100px] max-h-[auto]' : 'h-[auto]'} overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar  scrollbar-thin h-32 ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
+                <div className={`w-full max-h-[510px] ${autoHeight ? 'min-h-[100px] max-h-[auto]' : 'h-[auto]'} overflow-auto scrollbar-thin h-32 ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
                     <table className="w-full">
                         {children}
                     </table>
                 </div>
                 :
-                <div className={`w-full ${autoHeight ? 'min-h-[100px] max-h-[130px]' : 'h-[130px]'} overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thin h-32 ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
+                <div className={`w-full ${autoHeight ? 'min-h-[100px] max-h-[130px]' : 'h-[130px]'} overflow-auto scrollbar-thin h-64 ${scrollbarTheme} scrollbar-track-gray-200 cursor-pointer`}>
                     <table className="w-full ">
                         {children}
                     </table>

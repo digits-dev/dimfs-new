@@ -82,7 +82,7 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
-                <TableContainer>
+                <TableContainer data={brand_directions?.data}>
                    <Thead>
                         <Row>
                             <TableHeader

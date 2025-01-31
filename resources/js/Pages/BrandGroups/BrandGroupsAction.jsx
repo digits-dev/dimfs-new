@@ -33,7 +33,7 @@ const BrandGroupsAction = ({action, onClose, updateData}) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand Direction?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand Group?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == 'Add' ? 'Confirm' : 'Update'}`,
             confirmButtonColor: buttonSwalColor,
@@ -76,7 +76,7 @@ const BrandGroupsAction = ({action, onClose, updateData}) => {
 
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
-        {/* BRAND DESCRIPTION */}
+        {/* BRAND GROUP DESCRIPTION */}
         <InputComponent
             name="brand_group_description"
             value={data.brand_group_description}

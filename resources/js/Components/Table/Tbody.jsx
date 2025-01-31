@@ -1,8 +1,10 @@
 import React from 'react'
 import useViewport from '../../Hooks/useViewport';
+import { useTheme } from '../../Context/ThemeContext';
 
 const Tbody = ({data, children}) => {
     const { width } = useViewport();
+    const {theme} = useTheme();
     const mobileView = width < 640 ? true : false ;
 
   return (
@@ -12,11 +14,10 @@ const Tbody = ({data, children}) => {
             {children}
         </tbody>
         : <tbody>
-            <tr className='absolute w-full h-full top-0 grid place-items-center p-12'>
-                <td className={`my-6 text-center text-md font-poppins flex ${mobileView && 'flex-col'} gap-2 items-center justify-center`}>
-                    <i className="fa-solid fa-inbox text-lg"></i><em>No data available.</em>
-                </td>
-            </tr>
+            <div className={`${theme === 'bg-skin-black' ? 'bg-skin-black' : 'bg-white'} absolute flex  w-full h-52 items-center justify-center`}>
+                <img className='w-16 h-16 mr-2 mb-5' src='/images/others/empty-box.png'/>
+                <p className='font-poppins mb-2 font-medium text-gray-400'>No Data Available</p>
+            </div>
         </tbody>}
     </>
   )

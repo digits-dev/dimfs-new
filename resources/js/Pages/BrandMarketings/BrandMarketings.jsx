@@ -17,10 +17,10 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
-import BrandGroupsAction from "./BrandGroupsAction";
+import BrandMarketingsAction from "./BrandMarketingsAction";
 
 
-const BrandGroups = ({tableName, brand_groups, queryParams}) => {
+const BrandMarketings = ({tableName, brand_marketings, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,7 +29,7 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
     const [action, setAction] = useState(null);
     const [updateData, setUpdateData] = useState({
         id: "",
-        brand_group_description: "",
+        brand_marketing_description: "",
         status: "",
     })
 
@@ -49,7 +49,7 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
 
     return (
         <>
-            <Head title="Brand Groups"/>
+            <Head title="Brand Marketings"/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -69,20 +69,20 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                             onClick={()=>{handleModalClick(); setAction('Add');
                                 setUpdateData({
                                     id: "",
-                                    brand_group_description: "",
+                                    brand_marketing_description: "",
                                     status: "",
                                 })
                             
                             }}
                         > 
-                          <i className="fa-solid fa-plus mr-1"></i>  Add Brand Group
+                          <i className="fa-solid fa-plus mr-1"></i>  Add Brand Marketing
                         </Button>
                     </div>
                     <div className='flex'>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
-                <TableContainer data={brand_groups?.data}>
+                <TableContainer data={brand_marketings?.data}>
                    <Thead>
                         <Row>
                             <TableHeader
@@ -107,11 +107,11 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                                 ID
                             </TableHeader>
                             <TableHeader
-                                name="brand_group_description"
+                                name="brand_marketing_description"
                                 queryParams={queryParams}
                                 width="xl"
                             >
-                                Brand Group Description
+                                Brand Marketing Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -143,9 +143,9 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                             </TableHeader>
                         </Row>
                     </Thead>
-                    <Tbody data={brand_groups.data}>
-                        {brand_groups &&
-                            brand_groups?.data.map((item, index) => (
+                    <Tbody data={brand_marketings.data}>
+                        {brand_marketings &&
+                            brand_marketings?.data.map((item, index) => (
                                 <Row key={item.id}>
                                     <RowData center>
                                         <RowAction
@@ -154,7 +154,7 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                                             onClick={()=>{handleModalClick(); setAction('Update'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    brand_group_description: item.brand_group_description,
+                                                    brand_marketing_description: item.brand_marketing_description,
                                                     status: item.status,
                                                 })
                                             
@@ -166,7 +166,7 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                                             onClick={()=>{handleModalClick(); setAction('View'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    brand_group_description: item.brand_group_description,
+                                                    brand_marketing_description: item.brand_marketing_description,
                                                     status: item.status,
                                                 })
                                             
@@ -189,7 +189,7 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                                         {item.id}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.brand_group_description}
+                                        {item.brand_marketing_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}
@@ -207,22 +207,22 @@ const BrandGroups = ({tableName, brand_groups, queryParams}) => {
                             ))}
                     </Tbody>
                 </TableContainer>
-                <Pagination extendClass={theme} paginate={brand_groups} />
+                <Pagination extendClass={theme} paginate={brand_marketings} />
             </ContentPanel>
             <Modal
                 theme={theme}
                 show={isModalOpen}
                 onClose={handleModalClick}
-                title={action == 'Add' ? "Add Brand Group" : action == 'Update' ? 'Update Brand Group' : 'Brand Group Information'}
+                title={action == 'Add' ? "Add Brand Marketing" : action == 'Update' ? 'Update Brand Marketing' : 'Brand Marketing Information'}
                 width="xl"
                 fontColor={textColorActive}
                 btnIcon='fa fa-edit'
             >
-                <BrandGroupsAction onClose={handleModalClick} action={action} updateData={updateData}/>
+                <BrandMarketingsAction onClose={handleModalClick} action={action} updateData={updateData}/>
             </Modal>
             
         </>
     );
 };
 
-export default BrandGroups;
+export default BrandMarketings;

@@ -432,7 +432,7 @@ const AppNavbar = () => {
                                     >
                                     <i className='fa fa-moon p-2 bg-gray-300 rounded-md hover:bg-gray-400 text-black'></i>
                                     <span className="font-poppins text-[16px] ml-2">
-                                        Dark mode
+                                        Change Theme
                                     </span>
                                 </div>
                                 <div

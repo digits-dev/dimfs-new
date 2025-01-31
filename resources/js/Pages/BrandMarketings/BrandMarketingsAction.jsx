@@ -7,14 +7,14 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const BrandDirectionsAction = ({action, onClose, updateData}) => {
+const BrandMarketingsAction = ({action, onClose, updateData}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        brand_direction_description: "" || updateData.brand_direction_description,
+        brand_marketing_description: "" || updateData.brand_marketing_description,
         status: "" || updateData.status,
     });
 
@@ -33,7 +33,7 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand Direction?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Brand Marketing?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == 'Add' ? 'Confirm' : 'Update'}`,
             confirmButtonColor: buttonSwalColor,
@@ -44,11 +44,11 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
             if (result.isConfirmed) {
 
                 if (action == 'Add'){
-                    post('brand_directions/create', {
+                    post('brand_marketings/create', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["brand_directions"] });
+                            router.reload({ only: ["brand_marketings"] });
                             reset();
                             onClose();
                         },
@@ -57,11 +57,11 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
                     });
                 }
                 else{
-                    post('brand_directions/update', {
+                    post('brand_marketings/update', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["brand_directions"] });
+                            router.reload({ only: ["brand_marketings"] });
                             reset();
                             onClose();
                         },
@@ -76,17 +76,17 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
 
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
-        {/* BRAND DIRECTION DESCRIPTION */}
+        {/* BRAND MARKETING DESCRIPTION */}
         <InputComponent
-            name="brand_direction_description"
-            value={data.brand_direction_description}
+            name="brand_marketing_description"
+            value={data.brand_marketing_description}
             disabled={action === 'View'}
-            placeholder="Enter Brand Direction Description"
-            onChange={(e)=> setData("brand_direction_description", e.target.value)}
+            placeholder="Enter Brand Marketing Description"
+            onChange={(e)=> setData("brand_marketing_description", e.target.value)}
         />
-        {(errors.brand_direction_description) && (
+        {(errors.brand_marketing_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_direction_description}
+                {errors.brand_marketing_description}
             </div>
         )}
 
@@ -136,7 +136,7 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
                     : 
                     (
                         <span>
-                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Brand Direction' : 'Update Brand Direction'}
+                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Brand Marketing' : 'Update Brand Marketing'}
                         </span>
                     )
                 }
@@ -148,4 +148,4 @@ const BrandDirectionsAction = ({action, onClose, updateData}) => {
   )
 }
 
-export default BrandDirectionsAction
+export default BrandMarketingsAction
