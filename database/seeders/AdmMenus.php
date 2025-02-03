@@ -56,7 +56,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 1
+                'sorting'           => 3
             ]
         );
 
@@ -208,7 +208,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 5
+                'sorting'           => 4
             ]
         );
 
@@ -740,7 +740,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 4
+                'sorting'           => 5
             ]
         );
 

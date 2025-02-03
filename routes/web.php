@@ -18,6 +18,7 @@ use App\Http\Controllers\BrandMarketings\BrandMarketingsController;
 use App\Http\Controllers\Brands\BrandsController;
 use App\Http\Controllers\Categories\CategoriesController;
 use App\Http\Controllers\Classifications\ClassificationsController;
+use App\Http\Controllers\Colors\ColorsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -157,7 +158,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [ClassificationsController::class, 'create']);
         Route::post('/update', [ClassificationsController::class, 'update']);
     });
-
+    
+    // COLORS
+    Route::prefix('colors')->group(function() {
+        Route::post('/create', [ColorsController::class, 'create']);
+        Route::post('/update', [ColorsController::class, 'update']);
+    });
 
 });
 
