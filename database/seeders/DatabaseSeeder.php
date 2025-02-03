@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call([AdmSeeders::class]);
         // $this->call([AdmModules::class]);
-        // $this->call([AdmMenus::class]);
+        $this->call([AdmMenus::class]);
         // $this->call([AdmPrivileges::class]);
         // $this->call([AdmMenuPrivileges::class]);
         // $this->call([AdmUsersSeeders::class]);
