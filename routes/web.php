@@ -19,6 +19,7 @@ use App\Http\Controllers\Brands\BrandsController;
 use App\Http\Controllers\Categories\CategoriesController;
 use App\Http\Controllers\Classifications\ClassificationsController;
 use App\Http\Controllers\Colors\ColorsController;
+use App\Http\Controllers\Counters\CountersController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -163,6 +164,12 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('colors')->group(function() {
         Route::post('/create', [ColorsController::class, 'create']);
         Route::post('/update', [ColorsController::class, 'update']);
+    });
+
+    // COUNTERS
+    Route::prefix('counters')->group(function() {
+        Route::post('/create', [CountersController::class, 'create']);
+        Route::post('/update', [CountersController::class, 'update']);
     });
 
 });

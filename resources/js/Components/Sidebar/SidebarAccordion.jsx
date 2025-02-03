@@ -351,7 +351,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                     <div
                         className={`overflow-hidden transition-all duration-300 ease-in-out  ${
                             activeIndex === index && isOpen
-                                ? "max-h-screen opacity-100"
+                                ? "max-h-[300vh] opacity-100"
                                 : "max-h-0 opacity-0"
                         }`}
                     >
