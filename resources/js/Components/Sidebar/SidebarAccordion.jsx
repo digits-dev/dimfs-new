@@ -9,6 +9,8 @@ import useThemeStyles from "../../Hooks/useThemeStyles";
 const SidebarAccordion = ({ open, closeSidebar }) => {
     const [activeIndex, setActiveIndex] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [activeIndexAdmin, setActiveIndexAdmin] = useState(null);
+    const [isOpenAdmin, setIsOpenAdmin] = useState(false);
     const [links, setLinks] = useState([]);
     const { setTitle } = useContext(NavbarContext);
     const { auth } = usePage().props;
@@ -115,7 +117,17 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
             setIsOpen(true);
         }
     };
-  ;
+
+    const handleToggleAdmin = (index, url) => {
+        setPathname(url);
+        if (activeIndexAdmin === index) {
+            setIsOpenAdmin(!isOpen);
+        } else {
+            setActiveIndexAdmin(index);
+            setIsOpenAdmin(true);
+        }
+    };
+  
     const formatActiveSlug = (pathname) => {
         const segments = pathname.split("/");
         const lastSegment = segments.pop() || segments.pop();
@@ -464,7 +476,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                                 (theme === 'bg-skin-black' ? textColorActive : textColor)
                                         }
                                     `}
-                                    onClick={() => handleToggle(index, menu.url)}
+                                    onClick={() => handleToggleAdmin(index, menu.url)}
                                     style={{
                                         display: "flex",
                                         alignItems: "center",  // Center items vertically
@@ -503,7 +515,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                                 )   
                                             }
                                             className={`h-1 w-2 transition-transform duration-300 ${
-                                                activeIndex === index && isOpen
+                                                activeIndexAdmin === index && isOpenAdmin
                                                     ? "rotate-180"
                                                     : ""
                                             } ${!open && "hidden"} ${
@@ -533,7 +545,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                                     (theme === 'bg-skin-black' ? textColorActive : textColor)
                                             }
                                         `}
-                                        onClick={() => handleToggle(index, menu.url)}
+                                        onClick={() => handleToggleAdmin(index, menu.url)}
                                         style={{
                                             display: "flex",
                                             alignItems: "center",  // Center items vertically
@@ -573,7 +585,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                                     )   
                                                 }
                                                 className={`h-1 w-2 transition-transform duration-300 ${
-                                                    activeIndex === index && isOpen
+                                                    activeIndexAdmin === index && isOpenAdmin
                                                         ? "rotate-180"
                                                         : ""
                                                 } ${!open && "hidden"} ${
@@ -587,7 +599,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                             )}
                             <div
                                 className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                                    activeIndex === index && isOpen
+                                    activeIndexAdmin === index && isOpenAdmin
                                         ? "max-h-screen opacity-100"
                                         : "max-h-0 opacity-0"
                                 }`}
