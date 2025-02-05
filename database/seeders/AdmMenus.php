@@ -309,12 +309,12 @@ class AdmMenus extends Seeder
 
         DB::table('adm_menuses')->updateOrInsert(
             [
-                'name'              => 'Gashapon Intercoterms',
+                'name'              => 'Gashapon Incoterms',
             ],
             [
-                'name'              => 'Gashapon Intercoterms',
+                'name'              => 'Gashapon Incoterms',
                 'type'              => 'Route',
-                'path'              => 'GashaponIntercoterms\GashaponIntercotermsControllerGetIndex',
+                'path'              => 'GashaponIncoterms\GashaponIncotermsControllerGetIndex',
                 'slug'              => 'gashapon_incoterms',
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',

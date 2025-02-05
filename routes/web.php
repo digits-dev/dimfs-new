@@ -28,11 +28,30 @@ use App\Http\Controllers\ItemPlatforms\ItemPlatformsController;
 use App\Http\Controllers\ItemPromoTypes\ItemPromoTypesController;
 use App\Http\Controllers\ItemSegmentations\ItemSegmentationsController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\GashaponBrands\GashaponBrandsController;
+use App\Http\Controllers\GashaponCategories\GashaponCategoriesController;
+use App\Http\Controllers\GashaponCountries\GashaponCountriesController;
+use App\Http\Controllers\GashaponIncoterms\GashaponIncotermsController;
+use App\Http\Controllers\GashaponInventoryTypes\GashaponInventoryTypesController;
+use App\Http\Controllers\GashaponModels\GashaponModelsController;
+use App\Http\Controllers\GashaponProductTypes\GashaponProductTypesController;
+use App\Http\Controllers\GashaponSkuStatuses\GashaponSkuStatusesController;
+use App\Http\Controllers\GashaponUoms\GashaponUomsController;
+use App\Http\Controllers\GashaponVendorGroups\GashaponVendorGroupsController;
+use App\Http\Controllers\GashaponVendorTypes\GashaponVendorTypesController;
+use App\Http\Controllers\GashaponWarehouseCategories\GashaponWarehouseCategoriesController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
 use App\Http\Controllers\Platforms\PlatformsController;
 use App\Http\Controllers\PromoTypes\PromoTypesController;
+use App\Http\Controllers\RmaCategories\RmaCategoriesController;
+use App\Http\Controllers\RmaClassifications\RmaClassificationsController;
+use App\Http\Controllers\RmaMarginCategories\RmaMarginCategoriesController;
+use App\Http\Controllers\RmaModelSpecifics\RmaModelSpecificsController;
+use App\Http\Controllers\RmaStoreCategories\RmaStoreCategoriesController;
+use App\Http\Controllers\RmaSubClassifications\RmaSubClassificationsController;
+use App\Http\Controllers\RmaUoms\RmaUomsController;
 use App\Http\Controllers\Segmentations\SegmentationsController;
 use App\Http\Controllers\Sizes\SizesController;
 use App\Http\Controllers\SkuClassifications\SkuClassificationsController;
@@ -149,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
     //EXPORT
     Route::post('/request/export', [AdmRequestController::class, 'export'])->name('export');
 
-    // SUBMASTERS
+    // ----------------------------------------- SUBMASTERS -----------------------------------------//
 
     // BRANDS
     Route::prefix('brands')->group(function() {
@@ -360,6 +379,125 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [WarrantiesController::class, 'create']);
         Route::post('/update', [WarrantiesController::class, 'update']);
     });
+
+    // ----------------------------------- GASHAPON SUBMASTERS -------------------------------------//
+
+    // GASHAPON BRANDS
+    Route::prefix('gashapon_brands')->group(function() {
+        Route::post('/create', [GashaponBrandsController::class, 'create']);
+        Route::post('/update', [GashaponBrandsController::class, 'update']);
+    });
+
+    // GASHAPON CATEGORIES
+    Route::prefix('gashapon_categories')->group(function() {
+        Route::post('/create', [GashaponCategoriesController::class, 'create']);
+        Route::post('/update', [GashaponCategoriesController::class, 'update']);
+    });
+
+    // GASHAPON COUNTRIES
+    Route::prefix('gashapon_countries')->group(function() {
+        Route::post('/create', [GashaponCountriesController::class, 'create']);
+        Route::post('/update', [GashaponCountriesController::class, 'update']);
+    });
+
+    // GASHAPON INCOTERMS
+    Route::prefix('gashapon_incoterms')->group(function() {
+        Route::post('/create', [GashaponIncotermsController::class, 'create']);
+        Route::post('/update', [GashaponIncotermsController::class, 'update']);
+    });
+
+    // GASHAPON INVENTORY TYPES
+    Route::prefix('gashapon_inventory_types')->group(function() {
+        Route::post('/create', [GashaponInventoryTypesController::class, 'create']);
+        Route::post('/update', [GashaponInventoryTypesController::class, 'update']);
+    });
+
+    // GASHAPON MODELS
+    Route::prefix('gashapon_models')->group(function() {
+        Route::post('/create', [GashaponModelsController::class, 'create']);
+        Route::post('/update', [GashaponModelsController::class, 'update']);
+    });
+
+    // GASHAPON PRODUCT TYPES
+    Route::prefix('gashapon_product_types')->group(function() {
+        Route::post('/create', [GashaponProductTypesController::class, 'create']);
+        Route::post('/update', [GashaponProductTypesController::class, 'update']);
+    });
+
+    // GASHAPON SKU STATUSES
+    Route::prefix('gashapon_sku_statuses')->group(function() {
+        Route::post('/create', [GashaponSkuStatusesController::class, 'create']);
+        Route::post('/update', [GashaponSkuStatusesController::class, 'update']);
+    });
+
+    // GASHAPON UOMS
+    Route::prefix('gashapon_uoms')->group(function() {
+        Route::post('/create', [GashaponUomsController::class, 'create']);
+        Route::post('/update', [GashaponUomsController::class, 'update']);
+    });
+
+    // GASHAPON VENDOR GROUPS
+    Route::prefix('gashapon_vendor_groups')->group(function() {
+        Route::post('/create', [GashaponVendorGroupsController::class, 'create']);
+        Route::post('/update', [GashaponVendorGroupsController::class, 'update']);
+    });
+
+    // GASHAPON VENDOR TYPES
+    Route::prefix('gashapon_vendor_types')->group(function() {
+        Route::post('/create', [GashaponVendorTypesController::class, 'create']);
+        Route::post('/update', [GashaponVendorTypesController::class, 'update']);
+    });
+
+    // GASHAPON WAREHOUSE CATEGORIES
+    Route::prefix('gashapon_warehouse_categories')->group(function() {
+        Route::post('/create', [GashaponWarehouseCategoriesController::class, 'create']);
+        Route::post('/update', [GashaponWarehouseCategoriesController::class, 'update']);
+    });
+
+    // ------------------------------------ RMA SUBMASTERS -------------------------------------//
+
+    // RMA CATEGORIES
+    Route::prefix('rma_categories')->group(function() {
+        Route::post('/create', [RmaCategoriesController::class, 'create']);
+        Route::post('/update', [RmaCategoriesController::class, 'update']);
+    });
+
+    // RMA CLASSIFICATIONS
+    Route::prefix('rma_classifications')->group(function() {
+        Route::post('/create', [RmaClassificationsController::class, 'create']);
+        Route::post('/update', [RmaClassificationsController::class, 'update']);
+    });
+
+    // RMA MARGIN CATEGORIES
+    Route::prefix('rma_margin_categories')->group(function() {
+        Route::post('/create', [RmaMarginCategoriesController::class, 'create']);
+        Route::post('/update', [RmaMarginCategoriesController::class, 'update']);
+    });
+
+    // RMA MODEL SPECIFICS
+    Route::prefix('rma_model_specifics')->group(function() {
+        Route::post('/create', [RmaModelSpecificsController::class, 'create']);
+        Route::post('/update', [RmaModelSpecificsController::class, 'update']);
+    });
+
+    // RMA MODEL SPECIFICS
+    Route::prefix('rma_store_categories')->group(function() {
+        Route::post('/create', [RmaStoreCategoriesController::class, 'create']);
+        Route::post('/update', [RmaStoreCategoriesController::class, 'update']);
+    });
+
+    // RMA SUB CLASSIFICATIONS
+    Route::prefix('rma_sub_classifications')->group(function() {
+        Route::post('/create', [RmaSubClassificationsController::class, 'create']);
+        Route::post('/update', [RmaSubClassificationsController::class, 'update']);
+    });
+
+    // RMA UOMS
+    Route::prefix('rma_uoms')->group(function() {
+        Route::post('/create', [RmaUomsController::class, 'create']);
+        Route::post('/update', [RmaUomsController::class, 'update']);
+    });
+    
 });
 
 Route::group([
