@@ -28,9 +28,29 @@ use App\Http\Controllers\ItemPlatforms\ItemPlatformsController;
 use App\Http\Controllers\ItemPromoTypes\ItemPromoTypesController;
 use App\Http\Controllers\ItemSegmentations\ItemSegmentationsController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\ItemSerials\ItemSerialsController;
+use App\Http\Controllers\MarginCategories\MarginCategoriesController;
+use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
+use App\Http\Controllers\Platforms\PlatformsController;
+use App\Http\Controllers\PromoTypes\PromoTypesController;
+use App\Http\Controllers\Segmentations\SegmentationsController;
+use App\Http\Controllers\Sizes\SizesController;
+use App\Http\Controllers\SkuClassifications\SkuClassificationsController;
+use App\Http\Controllers\SkuLegends\SkuLegendsController;
+use App\Http\Controllers\SkuStatuses\SkuStatusesController;
+use App\Http\Controllers\StoreCategories\StoreCategoriesController;
+use App\Http\Controllers\SubCategories\SubCategoriesController;
+use App\Http\Controllers\SubClassifications\SubClassificationsController;
+use App\Http\Controllers\SupportTypes\SupportTypesController;
+use App\Http\Controllers\Uoms\UomsController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
 use App\Http\Controllers\Users\ForceChangePasswordController;
+use App\Http\Controllers\VendorGroups\VendorGroupsController;
+use App\Http\Controllers\Vendors\VendorsController;
+use App\Http\Controllers\VendorTypes\VendorTypesController;
+use App\Http\Controllers\WarehouseCategories\WarehouseCategoriesController;
+use App\Http\Controllers\Warranties\WarrantiesController;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia; 
 /*
@@ -219,6 +239,126 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('item_segmentations')->group(function() {
         Route::post('/create', [ItemSegmentationsController::class, 'create']);
         Route::post('/update', [ItemSegmentationsController::class, 'update']);
+    });
+
+    // ITEM SERIALS
+    Route::prefix('item_serials')->group(function() {
+        Route::post('/create', [ItemSerialsController::class, 'create']);
+        Route::post('/update', [ItemSerialsController::class, 'update']);
+    });
+
+    // MARGIN CATEGORIES
+    Route::prefix('margin_categories')->group(function() {
+        Route::post('/create', [MarginCategoriesController::class, 'create']);
+        Route::post('/update', [MarginCategoriesController::class, 'update']);
+    });
+
+    // MODEL SPECIFICS
+    Route::prefix('model_specifics')->group(function() {
+        Route::post('/create', [ModelSpecificsController::class, 'create']);
+        Route::post('/update', [ModelSpecificsController::class, 'update']);
+    });
+
+    // PLATFORMS
+    Route::prefix('platforms')->group(function() {
+        Route::post('/create', [PlatformsController::class, 'create']);
+        Route::post('/update', [PlatformsController::class, 'update']);
+    });
+
+    // PROMO TYPES
+    Route::prefix('promo_types')->group(function() {
+        Route::post('/create', [PromoTypesController::class, 'create']);
+        Route::post('/update', [PromoTypesController::class, 'update']);
+    });
+
+    // SEGMENTATIONS
+    Route::prefix('segmentations')->group(function() {
+        Route::post('/create', [SegmentationsController::class, 'create']);
+        Route::post('/update', [SegmentationsController::class, 'update']);
+    });
+
+    // SIZES
+    Route::prefix('sizes')->group(function() {
+        Route::post('/create', [SizesController::class, 'create']);
+        Route::post('/update', [SizesController::class, 'update']);
+    });
+
+    // SKU CLASSIFICATIONS
+    Route::prefix('sku_classifications')->group(function() {
+        Route::post('/create', [SkuClassificationsController::class, 'create']);
+        Route::post('/update', [SkuClassificationsController::class, 'update']);
+    });
+
+    // SKU LEGENDS
+    Route::prefix('sku_legends')->group(function() {
+        Route::post('/create', [SkuLegendsController::class, 'create']);
+        Route::post('/update', [SkuLegendsController::class, 'update']);
+    });
+
+    // SKU STATUSES
+    Route::prefix('sku_statuses')->group(function() {
+        Route::post('/create', [SkuStatusesController::class, 'create']);
+        Route::post('/update', [SkuStatusesController::class, 'update']);
+    });
+
+    // STORE CATEGORIES
+    Route::prefix('store_categories')->group(function() {
+        Route::post('/create', [StoreCategoriesController::class, 'create']);
+        Route::post('/update', [StoreCategoriesController::class, 'update']);
+    });
+
+    // SUB CATEGORIES
+    Route::prefix('sub_categories')->group(function() {
+        Route::post('/create', [SubCategoriesController::class, 'create']);
+        Route::post('/update', [SubCategoriesController::class, 'update']);
+    });
+
+    // SUB CLASSIFICATIONS
+    Route::prefix('sub_classifications')->group(function() {
+        Route::post('/create', [SubClassificationsController::class, 'create']);
+        Route::post('/update', [SubClassificationsController::class, 'update']);
+    });
+
+    // SUPPORT TYPES
+    Route::prefix('support_types')->group(function() {
+        Route::post('/create', [SupportTypesController::class, 'create']);
+        Route::post('/update', [SupportTypesController::class, 'update']);
+    });
+
+    // UOMS
+    Route::prefix('uoms')->group(function() {
+        Route::post('/create', [UomsController::class, 'create']);
+        Route::post('/update', [UomsController::class, 'update']);
+    });
+
+    // VENDORS
+    Route::prefix('vendors')->group(function() {
+        Route::post('/create', [VendorsController::class, 'create']);
+        Route::post('/update', [VendorsController::class, 'update']);
+    });
+
+    // VENDOR GROUPS
+    Route::prefix('vendor_groups')->group(function() {
+        Route::post('/create', [VendorGroupsController::class, 'create']);
+        Route::post('/update', [VendorGroupsController::class, 'update']);
+    });
+
+    // VENDOR TYPES
+    Route::prefix('vendor_types')->group(function() {
+        Route::post('/create', [VendorTypesController::class, 'create']);
+        Route::post('/update', [VendorTypesController::class, 'update']);
+    });
+
+    // WAREHOUSE CATEGORIES
+    Route::prefix('warehouse_categories')->group(function() {
+        Route::post('/create', [WarehouseCategoriesController::class, 'create']);
+        Route::post('/update', [WarehouseCategoriesController::class, 'update']);
+    });
+
+    // WARRANTIES
+    Route::prefix('warranties')->group(function() {
+        Route::post('/create', [WarrantiesController::class, 'create']);
+        Route::post('/update', [WarrantiesController::class, 'update']);
     });
 });
 
