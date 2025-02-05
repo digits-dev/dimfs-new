@@ -216,7 +216,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                     {item.children ? (
                         <div
                             className={`flex cursor-pointer items-center justify-between px-[5px] py-[12px] ${hoverColor} ${hoverTextColor} rounded-[6px] 
-                                ${ pathname === item.url ? 
+                                ${ pathname === item.url_path ? 
                                     (theme === 'bg-skin-white' ? 
                                         theme+"-active text-white" 
                                         : 
@@ -226,7 +226,10 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                         (theme === 'bg-skin-black' ? textColorActive : textColor)
                                 }
                             `}
-                            onClick={() => handleToggle(index, item.url)}
+                            onClick={() => {
+                                handleToggle(index, item.url_path); 
+                                handleMenuClick(item.name); 
+                            }}
                                 style={{
                                 display: "flex",
                                 alignItems: "center",  // Center items vertically
@@ -269,7 +272,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                         >
                             <div
                                 className={`relative flex cursor-pointer items-center justify-between px-[5px] py-[12px] ${hoverColor} ${hoverTextColor} rounded-[6px] 
-                                    ${ pathname === item.url ? 
+                                    ${ pathname === item.url_path ? 
                                         (theme === 'bg-skin-white' ? 
                                             theme+"-active text-white" 
                                             : 
@@ -279,7 +282,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                             (theme === 'bg-skin-black' ? textColorActive : textColor)
                                     }
                                 `}
-                                onClick={() => handleToggle(index, item.url)}
+                                onClick={() => handleToggle(index, item.url_path)}
                                 style={{
                                     display: "flex",
                                     alignItems: "center",  // Center items vertically
@@ -363,14 +366,14 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                                     open &&
                                                     formatActiveSlug(
                                                         window.location.pathname
-                                                    ) === child.slug
+                                                    ) === child.url_path
                                                         ? theme+"-active"
                                                         : ""
                                                 }
                                                 ${ 
                                                     formatActiveSlug(
                                                         window.location.pathname
-                                                    ) === child.slug && !['bg-skin-black'].includes(theme) ? textColorActive : textColor}
+                                                    ) === child.url_path && !['bg-skin-black'].includes(theme) ? textColorActive : textColor}
                                                 `}
                                             >
                                                 <i
