@@ -129,7 +129,7 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                             <TableHeader
                                 name="margin_category_description"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Margin Category Description
                             </TableHeader>
