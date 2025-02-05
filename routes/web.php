@@ -20,6 +20,11 @@ use App\Http\Controllers\Categories\CategoriesController;
 use App\Http\Controllers\Classifications\ClassificationsController;
 use App\Http\Controllers\Colors\ColorsController;
 use App\Http\Controllers\Counters\CountersController;
+use App\Http\Controllers\Currencies\CurrenciesController;
+use App\Http\Controllers\Identifiers\IdentifiersController;
+use App\Http\Controllers\InventoryTypes\InventoryTypesController;
+use App\Http\Controllers\Incoterms\IncotermsController;
+use App\Http\Controllers\ItemPlatforms\ItemPlatformsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -171,7 +176,42 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [CountersController::class, 'create']);
         Route::post('/update', [CountersController::class, 'update']);
     });
+    
+    // CURRENCIES   
+    Route::prefix('currencies')->group(function() {
+        Route::post('/create', [CurrenciesController::class, 'create']);
+        Route::post('/update', [CurrenciesController::class, 'update']);
+    });
 
+    // IDENTIFIERS   
+    Route::prefix('identifiers')->group(function() {
+        Route::post('/create', [IdentifiersController::class, 'create']);
+        Route::post('/update', [IdentifiersController::class, 'update']);
+    });
+
+    // INCOTERMS
+    Route::prefix('incoterms')->group(function() {
+        Route::post('/create', [IncotermsController::class, 'create']);
+        Route::post('/update', [IncotermsController::class, 'update']);
+    });
+
+    // INVENTORY TYPES
+    Route::prefix('inventory_types')->group(function() {
+        Route::post('/create', [InventoryTypesController::class, 'create']);
+        Route::post('/update', [InventoryTypesController::class, 'update']);
+    });
+    
+    // ITEM PLATFORMS
+    Route::prefix('item_platforms')->group(function() {
+        Route::post('/create', [ItemPlatformsController::class, 'create']);
+        Route::post('/update', [ItemPlatformsController::class, 'update']);
+    });
+
+    // ITEM PROMO TYPES
+    Route::prefix('item_promo_types')->group(function() {
+        Route::post('/create', [ItemPromoTypeController::class, 'create']);
+        Route::post('/update', [ItemPromoTypeController::class, 'update']);
+    });
 });
 
 Route::group([
