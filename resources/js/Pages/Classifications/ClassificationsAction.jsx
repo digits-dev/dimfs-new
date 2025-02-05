@@ -80,19 +80,34 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
         {/* CATEGORIES ID  */}
-        <DropdownSelect
-            placeholder="Choose Category"
-            selectType="react-select"
-            defaultSelect="Select Category"
-            onChange={(selectedOption) => setData({categories_id: selectedOption?.value, category_name: selectedOption?.label})}
-            name="category"
-            isStatus={action == "Update"}
-            options={action == 'Update' ? all_categories : all_active_categories}
-            value={data.categories_id ? { label: data.category_name, value: data.categories_id } : null}
-        />
-        {(errors.status) && (
+        {action == 'View' && 
+            <InputComponent
+                name="Category Description"
+                value={data.category_name}
+                disabled={action === 'View'}
+                placeholder="Enter Class Code"
+            />
+        }
+        {(action == 'Update' || action == 'Add') && 
+            (   <DropdownSelect
+                    placeholder="Choose Category"
+                    selectType="react-select"
+                    defaultSelect="Select Category"
+                    onChange={(selectedOption) => setData((prevData) => ({
+                        ...prevData,
+                        categories_id: selectedOption?.value,
+                        category_name: selectedOption?.label
+                    }))}
+                    name="category"
+                    isStatus={action == "Update"}
+                    options={action == 'Update' ? all_categories : all_active_categories}
+                    value={data.categories_id ? { label: data.category_name, value: data.categories_id } : null}
+                />
+            )
+        }
+        {(errors.category_name) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.status}
+                {errors.category_name}
             </div>
         )}
         {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }

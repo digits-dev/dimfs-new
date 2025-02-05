@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AdmModels\AdmModules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -153,4 +154,5 @@ class Counters extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
 }

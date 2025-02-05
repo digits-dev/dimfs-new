@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import ClassificationsAction from "./ClassificationsAction";
 
 
-const Categories = ({tableName, classifications, queryParams, all_active_categories, all_categories}) => {
+const Classifications = ({tableName, classifications, queryParams, all_active_categories, all_categories}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -52,7 +52,7 @@ const Categories = ({tableName, classifications, queryParams, all_active_categor
 
     return (
         <>
-            <Head title="Categories"/>
+            <Head title="Classifications"/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -241,10 +241,9 @@ const Categories = ({tableName, classifications, queryParams, all_active_categor
             >
                 <ClassificationsAction onClose={handleModalClick} action={action} updateData={updateData} all_active_categories={all_active_categories} all_categories={all_categories}/>
             </Modal>
-            <Modal modalLoading show={false}/>
             
         </>
     );
 };
 
-export default Categories;
+export default Classifications;

@@ -120,7 +120,7 @@ const InventoryTypes = ({ tableName, inventory_types, queryParams }) => {
                             <TableHeader
                                 name="inventory_type_description"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Inventory Type Description
                             </TableHeader>

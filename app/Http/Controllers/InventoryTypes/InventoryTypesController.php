@@ -49,12 +49,13 @@ class InventoryTypesController extends Controller
     }
 
     public function create(Request $request){
+
         
         $validatedFields = $request->validate([
             'inventory_type_code' => 'required|string|max:3|unique:inventory_types,inventory_type_code',
             'inventory_type_description' => 'required|string|max:30|unique:inventory_types,inventory_type_description',
         ]);
-        
+
         try {
 
             InventoryTypes::create([
@@ -69,7 +70,7 @@ class InventoryTypesController extends Controller
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('InventoryTypes', $e->getMessage());
+            CommonHelpers::LogSystemError('Inventory Types', $e->getMessage());
             return back()->with(['message' => 'Inventory Type Creation Failed!', 'type' => 'error']);
         }
         
@@ -122,7 +123,7 @@ class InventoryTypesController extends Controller
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('InventoryTypes', $e->getMessage());
+            CommonHelpers::LogSystemError('Inventory Types', $e->getMessage());
             return back()->with(['message' => 'Inventory Type Updating Failed!', 'type' => 'error']);
         }
     }

@@ -15,8 +15,8 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        inventory_code: "" || updateData.inventory_code,
-        inventory_description: "" || updateData.inventory_description,
+        inventory_type_code: "" || updateData.inventory_type_code,
+        inventory_type_description: "" || updateData.inventory_type_description,
         status: "" || updateData.status,
     });
 
@@ -76,30 +76,30 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
         <form onSubmit={handleFormSubmit} className="space-y-2">
             {/* INVENTORY TYPE CODE */}
             <InputComponent
-                name="inventory_code"
-                value={data.inventory_code}
+                name="inventory_type_code"
+                value={data.inventory_type_code}
                 disabled={action === "View"}
                 placeholder="Enter Inventory Code"
-                onChange={(e) => setData("inventory_code", e.target.value)}
+                onChange={(e) => setData("inventory_type_code", e.target.value)}
             />
-            {errors.inventory_code && (
+            {errors.inventory_type_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.inventory_code}
+                    {errors.inventory_type_code}
                 </div>
             )}
             {/* INVENTORY TYPE DESCRIPTION */}
             <InputComponent
-                name="inventory_description"
-                value={data.inventory_description}
+                name="inventory_type_description"
+                value={data.inventory_type_description}
                 disabled={action === "View"}
                 placeholder="Enter Inventory Description"
                 onChange={(e) =>
-                    setData("inventory_description", e.target.value)
+                    setData("inventory_type_description", e.target.value)
                 }
             />
-            {errors.inventory_description && (
+            {errors.inventory_type_description && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.inventory_description}
+                    {errors.inventory_type_description}
                 </div>
             )}
             {action == "Update" && (
