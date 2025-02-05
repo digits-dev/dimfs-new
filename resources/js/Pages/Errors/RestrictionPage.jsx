@@ -13,7 +13,7 @@ const RestrictionPage = () => {
                     />
                     <Link
                         href="/dashboard"
-                        className="my-[20px] bg-primary py-3 px-5 rounded-[50px] text-white font-poppins hover:opacity-70"
+                        className="my-[20px] bg-blue-950 py-3 px-5 rounded-[50px] text-white font-poppins hover:opacity-70"
                     >
                         Go to Dashboard
                     </Link>
