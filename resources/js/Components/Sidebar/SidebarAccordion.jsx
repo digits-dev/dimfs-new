@@ -259,7 +259,6 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                             `}
                             onClick={() => {
                                 handleToggle(index, item.url_path); 
-                                handleMenuClick(item.name); 
                             }}
                                 style={{
                                 display: "flex",

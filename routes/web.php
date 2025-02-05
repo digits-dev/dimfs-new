@@ -40,6 +40,7 @@ use App\Http\Controllers\GashaponUoms\GashaponUomsController;
 use App\Http\Controllers\GashaponVendorGroups\GashaponVendorGroupsController;
 use App\Http\Controllers\GashaponVendorTypes\GashaponVendorTypesController;
 use App\Http\Controllers\GashaponWarehouseCategories\GashaponWarehouseCategoriesController;
+use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
@@ -167,6 +168,13 @@ Route::middleware(['auth'])->group(function () {
 
     //EXPORT
     Route::post('/request/export', [AdmRequestController::class, 'export'])->name('export');
+
+    // ---------------------------------------- ITEM MASTER ----------------------------------------//
+
+    Route::prefix('item_masters')->group(function() {
+        Route::post('/create', [ItemMastersController::class, 'create']);
+        Route::post('/update', [ItemMastersController::class, 'update']);
+    });
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//
 
