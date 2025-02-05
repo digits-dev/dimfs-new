@@ -25,6 +25,8 @@ use App\Http\Controllers\Identifiers\IdentifiersController;
 use App\Http\Controllers\InventoryTypes\InventoryTypesController;
 use App\Http\Controllers\Incoterms\IncotermsController;
 use App\Http\Controllers\ItemPlatforms\ItemPlatformsController;
+use App\Http\Controllers\ItemPromoTypes\ItemPromoTypesController;
+use App\Http\Controllers\ItemSegmentations\ItemSegmentationsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -209,8 +211,14 @@ Route::middleware(['auth'])->group(function () {
 
     // ITEM PROMO TYPES
     Route::prefix('item_promo_types')->group(function() {
-        Route::post('/create', [ItemPromoTypeController::class, 'create']);
-        Route::post('/update', [ItemPromoTypeController::class, 'update']);
+        Route::post('/create', [ItemPromoTypesController::class, 'create']);
+        Route::post('/update', [ItemPromoTypesController::class, 'update']);
+    });
+
+    // ITEM SEGMENTATIONS
+    Route::prefix('item_segmentations')->group(function() {
+        Route::post('/create', [ItemSegmentationsController::class, 'create']);
+        Route::post('/update', [ItemSegmentationsController::class, 'update']);
     });
 });
 
