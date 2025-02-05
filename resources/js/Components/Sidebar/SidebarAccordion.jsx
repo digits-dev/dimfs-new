@@ -110,22 +110,22 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
 
     const handleToggle = (index, url) => {
         setPathname(url);
-        if (activeIndex === index) {
-            setIsOpen(!isOpen);
-        } else {
-            setActiveIndex(index);
-            setIsOpen(true);
-        }
+        setActiveIndex(index);
+        setIsOpen((prev) => (activeIndex === index ? !prev : true));
+    
+        // Ensure the admin sidebar dropdown is closed when opening this one
+        setIsOpenAdmin(false);
+        setActiveIndexAdmin(null);
     };
-
+    
     const handleToggleAdmin = (index, url) => {
         setPathname(url);
-        if (activeIndexAdmin === index) {
-            setIsOpenAdmin(!isOpen);
-        } else {
-            setActiveIndexAdmin(index);
-            setIsOpenAdmin(true);
-        }
+        setActiveIndexAdmin(index);
+        setIsOpenAdmin((prev) => (activeIndexAdmin === index ? !prev : true));
+    
+        // Ensure the user sidebar dropdown is closed when opening this one
+        setIsOpen(false);
+        setActiveIndex(null);
     };
   
     const formatActiveSlug = (pathname) => {
@@ -240,7 +240,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                 }}
                             ></i>
                             <span
-                                className={`pl-4 flex-1 font-semibold  ${
+                                className={`pl-4 flex-1 text-[13px] font-semibold  ${
                                     !open && "hidden"
                                 } `}
                                 style={{
@@ -252,27 +252,11 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                 {item.name}
                             </span>
                             <div className="mr-2">
-                                <img
-                                    src={
-                                        (pathname === item.url &&  theme === 'bg-skin-black' ? 
-                                            `/images/navigation/arrow-down-white.png` 
-                                            : 
-                                            (pathname === item.url &&  !['bg-skin-black'].includes(theme) ? 
-                                                `/images/navigation/arrow-down-white.png`
-                                                : 
-                                                (!['bg-skin-black'].includes(theme) ? `/images/navigation/arrow-down-black.png` : `/images/navigation/arrow-down-white.png`)
-                                            )
-                                        )   
-                                    }
-                                    className={`h-1 w-2 transition-transform duration-300 ${
-                                        activeIndex === index && isOpen
-                                            ? "rotate-180"
-                                            : ""
-                                    } ${!open && "hidden"} ${
-                                        item.children ? "" : "hidden"
-                                    }`}
-                                    alt="toggle icon"
-                                />
+                                <i
+                                    className={`fa fa-angle-down text-[11px] transition-transform duration-300 ${
+                                        activeIndex === index && isOpen ? "rotate-180" : ""
+                                    } ${!open ? "hidden" : ""} ${item.children ? "" : "hidden"}`}
+                                />   
                             </div>
                         </div>
                     ) : (
@@ -302,7 +286,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                 }}
                             >
                                 <i
-                                    className={`ml-[7px] ${item.icon} text-[16px] text-center`}
+                                    className={`ml-[7px] ${item.icon} text-[15px] text-center`}
                                     style={{
                                         fontSize: "17px",     
                                         width: "16px",         
@@ -310,7 +294,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                     }}
                                 ></i>
                                 <span
-                                    className={`pl-4 flex-1 font-semibold single-lines ${
+                                    className={`pl-4 flex-1 text-[13px] font-semibold single-lines ${
                                         !open && "hidden"
                                     } `}
                                     style={{
@@ -322,27 +306,11 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                     {item.name}
                                 </span>
                                 <div className="mr-2">
-                                    <img
-                                        src={
-                                            (pathname === item.url &&  theme === 'bg-skin-black' ? 
-                                                `/images/navigation/arrow-down-white.png` 
-                                                : 
-                                                (pathname === item.url &&  !['bg-skin-black'].includes(theme) ? 
-                                                    `/images/navigation/arrow-down-white.png`
-                                                    : 
-                                                    (!['bg-skin-black'].includes(theme) ? `/images/navigation/arrow-down-black.png` : `/images/navigation/arrow-down-white.png`)
-                                                )
-                                            )   
-                                        }
-                                        className={`h-1 w-2 transition-transform duration-300 ${
-                                            activeIndex === index && isOpen
-                                                ? "rotate-180"
-                                                : ""
-                                        } ${!open && "hidden"} ${
-                                            item.children ? "" : "hidden"
-                                        }`}
-                                        alt="toggle icon"
-                                    />
+                                    <i
+                                        className={`fa fa-angle-down text-[11px] transition-transform duration-300 ${
+                                            activeIndex === index && isOpen ? "rotate-180" : ""
+                                        } ${!open ? "hidden" : ""} ${item.children ? "" : "hidden"}`}
+                                    />   
                                 </div>
                             </div>
                         </Link>
@@ -351,7 +319,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                     <div
                         className={`overflow-hidden transition-all duration-300 ease-in-out  ${
                             activeIndex === index && isOpen
-                                ? "max-h-[300vh] opacity-100"
+                                ? "max-h-screen opacity-100"
                                 : "max-h-0 opacity-0"
                         }`}
                     >
@@ -502,27 +470,11 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                         {menu.name}
                                     </span>
                                     <div className="mr-2">
-                                        <img
-                                            src={
-                                                (pathname === menu.url &&  theme === 'bg-skin-black' ? 
-                                                    `/images/navigation/arrow-down-white.png` 
-                                                    : 
-                                                    (pathname === menu.url &&  !['bg-skin-black'].includes(theme) ? 
-                                                        `/images/navigation/arrow-down-white.png`
-                                                        : 
-                                                        (!['bg-skin-black'].includes(theme) ? `/images/navigation/arrow-down-black.png` : `/images/navigation/arrow-down-white.png`)
-                                                    )
-                                                )   
-                                            }
-                                            className={`h-1 w-2 transition-transform duration-300 ${
-                                                activeIndexAdmin === index && isOpenAdmin
-                                                    ? "rotate-180"
-                                                    : ""
-                                            } ${!open && "hidden"} ${
-                                                menu.children ? "" : "hidden"
-                                            }`}
-                                            alt="toggle icon"
-                                        />
+                                        <i
+                                            className={`fa fa-angle-down text-[11px] transition-transform duration-300 ${
+                                                activeIndexAdmin === index && isOpenAdmin ? "rotate-180" : ""
+                                            } ${!open ? "hidden" : ""} ${menu.children ? "" : "hidden"}`}
+                                        />                                       
                                     </div>
                                 </div>                         
                             ) : (
@@ -572,27 +524,11 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                             {menu.name}
                                         </span>
                                         <div className="mr-2">
-                                            <img
-                                                src={
-                                                    (pathname === menu.url &&  theme === 'bg-skin-black' ? 
-                                                        `/images/navigation/arrow-down-white.png` 
-                                                        : 
-                                                        (pathname === menu.url &&  !['bg-skin-black'].includes(theme) ? 
-                                                            `/images/navigation/arrow-down-white.png`
-                                                            : 
-                                                            (!['bg-skin-black'].includes(theme) ? `/images/navigation/arrow-down-black.png` : `/images/navigation/arrow-down-white.png`)
-                                                        )
-                                                    )   
-                                                }
-                                                className={`h-1 w-2 transition-transform duration-300 ${
-                                                    activeIndexAdmin === index && isOpenAdmin
-                                                        ? "rotate-180"
-                                                        : ""
-                                                } ${!open && "hidden"} ${
-                                                    menu.children ? "" : "hidden"
-                                                }`}
-                                                alt="toggle icon"
-                                            />
+                                            <i
+                                                className={`fa fa-angle-down text-[11px] transition-transform duration-300 ${
+                                                    activeIndexAdmin === index && isOpenAdmin ? "rotate-180" : ""
+                                                } ${!open ? "hidden" : ""} ${menu.children ? "" : "hidden"}`}
+                                            />   
                                         </div>
                                     </div>
                                 </Link>
@@ -621,7 +557,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                                             >
                                                 <div
                                                     className={` ml-3  transition-opacity duration-500 flex relative ${
-                                                        isOpen
+                                                        isOpenAdmin
                                                             ? "opacity-100"
                                                             : "opacity-0"
                                                     }`}
