@@ -98,16 +98,16 @@ class ColorsController extends Controller
 
             if ($request->color_code !== $colors->color_code) {
                 if (!$colorCodeExist) {
-                    $colors->category_code = $validatedFields['category_code'];
+                    $colors->color_code = $validatedFields['color_code'];
                 } else {
-                    return back()->with(['message' => 'Category code already exists!', 'type' => 'error']);
+                    return back()->with(['message' => 'Color code already exists!', 'type' => 'error']);
                 }
             }
-            if ($request->category_description !== $colors->category_description) {
+            if ($request->color_description !== $colors->color_description) {
                 if (!$colorDescriptionExist) {
-                    $colors->category_description = $validatedFields['category_description'];
+                    $colors->color_description = $validatedFields['color_description'];
                 } else {
-                    return back()->with(['message' => 'Category Description already exists!', 'type' => 'error']);
+                    return back()->with(['message' => 'Color Description already exists!', 'type' => 'error']);
                 }
             }
     
