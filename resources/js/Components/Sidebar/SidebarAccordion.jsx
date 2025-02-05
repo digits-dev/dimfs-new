@@ -104,26 +104,57 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
     }, [open]);
 
     useEffect(() => {
-        const segments = window.location.pathname.split("/");
-        setPathname(segments.pop());
+        const storedActiveIndex = JSON.parse(localStorage.getItem("activeIndex"));
+        const storedActiveIndexAdmin = JSON.parse(localStorage.getItem("activeIndexAdmin"));
+        const storedPathname = JSON.parse(localStorage.getItem("url"));
+
+        if (storedActiveIndex !== null) {
+            setActiveIndex(storedActiveIndex);
+            setIsOpen(true);
+        }
+
+        if (storedActiveIndexAdmin !== null) {
+            setActiveIndexAdmin(storedActiveIndexAdmin);
+            setIsOpenAdmin(true);
+        }
+
+        if (storedPathname) {
+            setPathname(storedPathname);
+        }
     }, []);
 
     const handleToggle = (index, url) => {
         setPathname(url);
-        setActiveIndex(index);
-        setIsOpen((prev) => (activeIndex === index ? !prev : true));
-    
-        // Ensure the admin sidebar dropdown is closed when opening this one
+        localStorage.setItem("url", JSON.stringify(url));
+
+        if (activeIndex === index) {
+            setActiveIndex(null);
+            setIsOpen(false);
+            localStorage.removeItem("activeIndex");
+        } else {
+            setActiveIndex(index);
+            setIsOpen(true);
+            localStorage.setItem("activeIndex", JSON.stringify(index));
+        }
+
         setIsOpenAdmin(false);
         setActiveIndexAdmin(null);
     };
-    
+
     const handleToggleAdmin = (index, url) => {
         setPathname(url);
-        setActiveIndexAdmin(index);
-        setIsOpenAdmin((prev) => (activeIndexAdmin === index ? !prev : true));
-    
-        // Ensure the user sidebar dropdown is closed when opening this one
+        localStorage.setItem("url", JSON.stringify(url));
+
+        if (activeIndexAdmin === index) {
+            setActiveIndexAdmin(null);
+            setIsOpenAdmin(false);
+            localStorage.removeItem("activeIndexAdmin");
+        } else {
+            setActiveIndexAdmin(index);
+            setIsOpenAdmin(true);
+            localStorage.setItem("activeIndexAdmin", JSON.stringify(index));
+        }
+
         setIsOpen(false);
         setActiveIndex(null);
     };
@@ -148,7 +179,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                 );
             });
     }, []);
-    // console.log(links);
+
     const handleMenuClick = (newTitle) => {
         setTitle(newTitle);
     };
