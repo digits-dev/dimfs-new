@@ -192,9 +192,17 @@ const Platforms = ({ tableName, platforms, queryParams }) => {
                                             }}
                                         />
                                     </RowData>
-
-                                    <RowStatus isLoading={loading}>
-                                        {item.status}
+                                    <RowStatus
+                                        isLoading={loading}
+                                        systemStatus={
+                                            item.status === "ACTIVE"
+                                                ? "active"
+                                                : "inactive"
+                                        }
+                                    >
+                                        {item.status === "ACTIVE"
+                                            ? "ACTIVE"
+                                            : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
                                         {item.platform_description}

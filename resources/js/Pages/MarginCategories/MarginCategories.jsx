@@ -205,8 +205,17 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                             }}
                                         />
                                     </RowData>
-                                    <RowStatus isLoading={loading}>
-                                        {item.status}
+                                    <RowStatus
+                                        isLoading={loading}
+                                        systemStatus={
+                                            item.status === "ACTIVE"
+                                                ? "active"
+                                                : "inactive"
+                                        }
+                                    >
+                                        {item.status === "ACTIVE"
+                                            ? "ACTIVE"
+                                            : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
                                         {item.sub_classifications_id}
