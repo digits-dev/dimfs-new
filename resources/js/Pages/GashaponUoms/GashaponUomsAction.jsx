@@ -7,14 +7,15 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const GashaponBrandAction = ({action, onClose, updateData}) => {
+const GashaponUomsAction = ({action, onClose, updateData}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        brand_description: "" || updateData.brand_description,
+        uom_code: "" || updateData.uom_code,
+        uom_description: "" || updateData.uom_description,
         status: "" || updateData.status,
     });
 
@@ -33,7 +34,7 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Gashapon Brand?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Gashapon UOM?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == 'Add' ? 'Confirm' : 'Update'}`,
             confirmButtonColor: buttonSwalColor,
@@ -44,11 +45,11 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
             if (result.isConfirmed) {
 
                 if (action == 'Add'){
-                    post('gashapon_brands/create', {
+                    post('gashapon_uoms/create', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["gashapon_brands"] });
+                            router.reload({ only: ["gashapon_uoms"] });
                             reset();
                             onClose();
                         },
@@ -57,11 +58,11 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
                     });
                 }
                 else{
-                    post('gashapon_brands/update', {
+                    post('gashapon_uoms/update', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["gashapon_brands"] });
+                            router.reload({ only: ["gashapon_uoms"] });
                             reset();
                             onClose();
                         },
@@ -76,17 +77,30 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
 
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
-        {/* BRAND DESCRIPTION */}
+        {/* UOM CODE */}
         <InputComponent
-            name="brand_description"
-            value={data.brand_description}
+            name="uom_code"
+            value={data.uom_code}
             disabled={action === 'View'}
-            placeholder="Enter Gashapon Brand Description"
-            onChange={(e)=> setData("brand_description", e.target.value)}
+            placeholder="Enter Gashapon UOM Code"
+            onChange={(e)=> setData("uom_code", e.target.value)}
         />
-        {(errors.brand_description) && (
+        {(errors.uom_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_description}
+                {errors.uom_code}
+            </div>
+        )}
+        {/* UOM DESCRIPTION */}
+        <InputComponent
+            name="uom_description"
+            value={data.uom_description}
+            disabled={action === 'View'}
+            placeholder="Enter Gashapon UOM Description"
+            onChange={(e)=> setData("uom_description", e.target.value)}
+        />
+        {(errors.uom_description) && (
+            <div className="font-poppins text-xs font-semibold text-red-600">
+                {errors.uom_description}
             </div>
         )}
         {action == 'Update' && 
@@ -135,7 +149,7 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
                     : 
                     (
                         <span>
-                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Gashapon Brand' : 'Update Gashapon Brand'}
+                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Gashapon UOM' : 'Update Gashapon UOM'}
                         </span>
                     )
                 }
@@ -147,4 +161,4 @@ const GashaponBrandAction = ({action, onClose, updateData}) => {
   )
 }
 
-export default GashaponBrandAction
+export default GashaponUomsAction
