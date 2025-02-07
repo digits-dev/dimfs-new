@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const StoreCategoriesAction = ({ action, onClose, updateData }) => {
+const StoreCategoriesAction = ({ action, onClose, updateData, all_sub_classifications, all_active_sub_classifications }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -16,6 +16,7 @@ const StoreCategoriesAction = ({ action, onClose, updateData }) => {
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         sub_classifications_id: "" || updateData.sub_classifications_id,
+        sub_classifications_name: "" || updateData.sub_classifications_name,
         store_category_description: "" || updateData.store_category_description,
         status: "" || updateData.status,
     });
@@ -74,21 +75,38 @@ const StoreCategoriesAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* SUB CLASSIFICATIONS ID */}
-            <InputComponent
-                name="sub_classifications_id"
-                value={data.sub_classifications_id}
-                disabled={action === "View"}
-                placeholder="Enter Sub Classification ID"
-                onChange={(e) =>
-                    setData("sub_classifications_id", e.target.value)
-                }
-            />
-            {errors.sub_classifications_id && (
+            {/* SUB CLASSIFICATIONS ID  */}
+            {action == 'View' && 
+                <InputComponent
+                    name="Sub Classification Description"
+                    value={data.sub_classifications_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Sub Classification Name"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Sub Classification"
+                        selectType="react-select"
+                        defaultSelect="Select Sub Classification"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            sub_classifications_id: selectedOption?.value,
+                            sub_classifications_name: selectedOption?.label
+                        }))}
+                        name="sub_classification_description"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_sub_classifications : all_active_sub_classifications}
+                        value={data.sub_classifications_id ? { label: data.sub_classifications_name, value: data.sub_classifications_id } : null}
+                    />
+                )
+            }
+            {(errors.sub_classifications_id) && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
                     {errors.sub_classifications_id}
                 </div>
             )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Sub Classification is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
             {/* STORE CATEGORY DESCRIPTION */}
             <InputComponent
                 name="store_category_description"
@@ -172,7 +190,7 @@ const StoreCategoriesAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Store Category"
                                     : "Update Store Category"}

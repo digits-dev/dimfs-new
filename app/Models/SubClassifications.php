@@ -138,4 +138,8 @@ class SubClassifications extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
+    public function getClassification() {
+        return $this->belongsTo(Classifications::class, 'classifications_id', 'id');
+    }
+
 }

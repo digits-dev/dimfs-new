@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuStatusesAction from "./SkuStatusesAction";
 
-const SkuStatuses = ({ tableName, sku_statuses, queryParams }) => {
+const SkuStatuses = ({page_title, tableName, sku_statuses, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -32,6 +32,9 @@ const SkuStatuses = ({ tableName, sku_statuses, queryParams }) => {
         sku_status_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -49,7 +52,7 @@ const SkuStatuses = ({ tableName, sku_statuses, queryParams }) => {
 
     return (
         <>
-            <Head title="Sku Statuses" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -63,7 +66,7 @@ const SkuStatuses = ({ tableName, sku_statuses, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                              <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

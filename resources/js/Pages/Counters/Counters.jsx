@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import CountersAction from "./CountersAction";
 
 
-const Counters = ({tableName, counters, queryParams, all_active_modules, all_modules}) => {
+const Counters = ({page_title, tableName, counters, queryParams, all_active_modules, all_modules}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -41,7 +41,10 @@ const Counters = ({tableName, counters, queryParams, all_active_modules, all_mod
         code_8: "",
         code_9: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -59,7 +62,7 @@ const Counters = ({tableName, counters, queryParams, all_active_modules, all_mod
 
     return (
         <>
-            <Head title="Counters"/>
+            <Head title={page_title}/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -69,7 +72,7 @@ const Counters = ({tableName, counters, queryParams, all_active_modules, all_mod
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

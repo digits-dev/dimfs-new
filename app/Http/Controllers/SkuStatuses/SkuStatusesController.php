@@ -41,7 +41,7 @@ class SkuStatusesController extends Controller
 
         $data = [];
         $data['tableName'] = 'sku_statuses';
-        $data['page_title'] = 'Sku Statuses';
+        $data['page_title'] = 'SKU Statuses';
         $data['sku_statuses'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
@@ -113,7 +113,7 @@ class SkuStatusesController extends Controller
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('Sku Statuses', $e->getMessage());
+            CommonHelpers::LogSystemError('SKU Statuses', $e->getMessage());
             return back()->with(['message' => 'Sku Status Updating Failed!', 'type' => 'error']);
         }
     }

@@ -136,7 +136,7 @@ const BrandGroupsAction = ({action, onClose, updateData}) => {
                     : 
                     (
                         <span>
-                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Brand Group' : 'Update Brand Group'}
+                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Brand Group' : 'Update Brand Group'}
                         </span>
                     )
                 }

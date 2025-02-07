@@ -74,12 +74,12 @@ const IdentifiersAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* IDENTIFIER CODE */}
+            {/* IDENTIFIER COLUMN */}
             <InputComponent
                 name="identifier_column"
                 value={data.identifier_column}
                 disabled={action === "View"}
-                placeholder="Enter Identifier Code"
+                placeholder="Enter Identifier Column"
                 onChange={(e) => setData("identifier_column", e.target.value)}
             />
             {errors.identifier_column && (
@@ -170,7 +170,7 @@ const IdentifiersAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Identifier"
                                     : "Update Identifier"}

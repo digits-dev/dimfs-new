@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import PromoTypesAction from "./PromoTypesAction";
 
-const PromoTypes = ({ tableName, promo_types, queryParams }) => {
+const PromoTypes = ({page_title, tableName, promo_types, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -32,6 +32,9 @@ const PromoTypes = ({ tableName, promo_types, queryParams }) => {
         promo_type_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -49,7 +52,7 @@ const PromoTypes = ({ tableName, promo_types, queryParams }) => {
 
     return (
         <>
-            <Head title="Promo Types" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -63,7 +66,7 @@ const PromoTypes = ({ tableName, promo_types, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

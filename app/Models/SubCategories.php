@@ -138,4 +138,8 @@ class SubCategories extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
+    public function getCategory() {
+        return $this->belongsTo(Categories::class, 'categories_id', 'id');
+    }
+
 }

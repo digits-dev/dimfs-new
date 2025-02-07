@@ -82,7 +82,7 @@ const IncotermsAction = ({action, onClose, updateData}) => {
             name="incoterms_code"
             value={data.incoterms_code}
             disabled={action === 'View'}
-            placeholder="Enter Color Code"
+            placeholder="Enter Incoterms Code"
             onChange={(e)=> setData("incoterms_code", e.target.value)}
         />
         {(errors.incoterms_code) && (
@@ -95,7 +95,7 @@ const IncotermsAction = ({action, onClose, updateData}) => {
             name="incoterms_description"
             value={data.incoterms_description}
             disabled={action === 'View'}
-            placeholder="Enter Color Description"
+            placeholder="Enter Incoterms Description"
             onChange={(e)=> setData("incoterms_description", e.target.value)}
         />
         {(errors.incoterms_description) && (
@@ -149,7 +149,7 @@ const IncotermsAction = ({action, onClose, updateData}) => {
                     : 
                     (
                         <span>
-                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Incoterms' : 'Update Incoterms'}
+                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Incoterms' : 'Update Incoterms'}
                         </span>
                     )
                 }

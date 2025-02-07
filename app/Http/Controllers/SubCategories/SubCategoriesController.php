@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SubCategories;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\Categories;
 use App\Models\SubCategories;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,7 @@ class SubCategoriesController extends Controller
     }
 
     public function getAllData(){
-        $query = SubCategories::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = SubCategories::query()->with(['getCreatedBy', 'getUpdatedBy', 'getCategory']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -44,6 +45,12 @@ class SubCategoriesController extends Controller
         $data['page_title'] = 'Sub Categories';
         $data['sub_categories'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
+
+        $data['all_active_categories'] = Categories::select('id', 'category_description as name', 'status')
+        ->where('status', 'ACTIVE')
+        ->get();
+        $data['all_categories'] = Categories::select('id', 'category_description as name', 'status')     
+            ->get();
 
         return Inertia::render("SubCategories/SubCategories", $data);
     }

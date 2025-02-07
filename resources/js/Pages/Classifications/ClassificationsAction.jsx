@@ -110,7 +110,7 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
                 {errors.category_name}
             </div>
         )}
-        {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
+        {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
         {/* CLASS CODE */}
         <InputComponent
             name="class_code"
@@ -184,7 +184,7 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
                     : 
                     (
                         <span>
-                            <i className="fa-solid fa-plus mr-1"></i> {action === "Add" ? 'Add Classification' : 'Update Classification'}
+                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Classification' : 'Update Classification'}
                         </span>
                     )
                 }

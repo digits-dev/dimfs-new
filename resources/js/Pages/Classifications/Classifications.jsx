@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import ClassificationsAction from "./ClassificationsAction";
 
 
-const Classifications = ({tableName, classifications, queryParams, all_active_categories, all_categories}) => {
+const Classifications = ({page_title, tableName, classifications, queryParams, all_active_categories, all_categories}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -34,7 +34,10 @@ const Classifications = ({tableName, classifications, queryParams, all_active_ca
         class_code: "",
         class_description: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -52,7 +55,7 @@ const Classifications = ({tableName, classifications, queryParams, all_active_ca
 
     return (
         <>
-            <Head title="Classifications"/>
+            <Head title={page_title}/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -62,7 +65,7 @@ const Classifications = ({tableName, classifications, queryParams, all_active_ca
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

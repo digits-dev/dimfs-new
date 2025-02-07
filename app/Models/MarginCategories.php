@@ -137,5 +137,8 @@ class MarginCategories extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
-
+    
+    public function getSubClassification() {
+        return $this->belongsTo(SubClassifications::class, 'sub_classifications_id', 'id');
+    }
 }

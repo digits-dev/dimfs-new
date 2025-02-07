@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import BrandDirectionsAction from "./BrandDirectionsAction";
 
 
-const BrandDirections = ({tableName, brand_directions, queryParams}) => {
+const BrandDirections = ({page_title, tableName, brand_directions, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -31,7 +31,10 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
         id: "",
         brand_direction_description: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -49,7 +52,7 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
 
     return (
         <>
-            <Head title="Brand Directions"/>
+            <Head title={page_title}/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -59,7 +62,7 @@ const BrandDirections = ({tableName, brand_directions, queryParams}) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

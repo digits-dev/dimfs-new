@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SegmentationsAction from "./SegmentationsAction";
 
-const Segmentations = ({ tableName, segmentations, queryParams }) => {
+const Segmentations = ({page_title, tableName, segmentations, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -34,6 +34,9 @@ const Segmentations = ({ tableName, segmentations, queryParams }) => {
         import_header_name: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -51,7 +54,7 @@ const Segmentations = ({ tableName, segmentations, queryParams }) => {
 
     return (
         <>
-            <Head title="Segmentations" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -65,7 +68,7 @@ const Segmentations = ({ tableName, segmentations, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

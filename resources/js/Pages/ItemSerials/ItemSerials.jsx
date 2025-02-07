@@ -18,7 +18,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import ItemSerialsAction from "./ItemSerialsAction";
 
-const ItemSerials = ({ tableName, item_serials, queryParams }) => {
+const ItemSerials = ({page_title, tableName, item_serials, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,6 +29,9 @@ const ItemSerials = ({ tableName, item_serials, queryParams }) => {
         id: "",
         item_masters_id: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -46,7 +49,7 @@ const ItemSerials = ({ tableName, item_serials, queryParams }) => {
 
     return (
         <>
-            <Head title="Item Serials" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -60,7 +63,7 @@ const ItemSerials = ({ tableName, item_serials, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

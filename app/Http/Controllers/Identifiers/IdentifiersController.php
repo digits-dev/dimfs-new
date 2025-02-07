@@ -51,7 +51,7 @@ class IdentifiersController extends Controller
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'identifier_column' => 'required|string|max:3|unique:identifiers,identifier_column',
+            'identifier_column' => 'required|string|max:30|unique:identifiers,identifier_column',
             'identifier_description' => 'required|string|max:30|unique:identifiers,identifier_description',
         ]);
 
@@ -80,7 +80,7 @@ class IdentifiersController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'identifier_column' => 'required|string|max:3',
+            'identifier_column' => 'required|string|max:30',
             'identifier_description' => 'required|string|max:30',
             'status' => 'required|string',
         ]);

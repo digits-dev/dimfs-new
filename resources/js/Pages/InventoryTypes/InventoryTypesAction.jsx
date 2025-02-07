@@ -79,7 +79,7 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
                 name="inventory_type_code"
                 value={data.inventory_type_code}
                 disabled={action === "View"}
-                placeholder="Enter Inventory Code"
+                placeholder="Enter Inventory Type Code"
                 onChange={(e) => setData("inventory_type_code", e.target.value)}
             />
             {errors.inventory_type_code && (
@@ -92,7 +92,7 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
                 name="inventory_type_description"
                 value={data.inventory_type_description}
                 disabled={action === "View"}
-                placeholder="Enter Inventory Description"
+                placeholder="Enter Inventory Type Description"
                 onChange={(e) =>
                     setData("inventory_type_description", e.target.value)
                 }
@@ -170,7 +170,7 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Inventory Type"
                                     : "Update Inventory Type"}

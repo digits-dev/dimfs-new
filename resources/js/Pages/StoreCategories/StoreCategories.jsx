@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import StoreCategoriesAction from "./StoreCategoriesAction";
 
-const StoreCategories = ({ tableName, store_categories, queryParams }) => {
+const StoreCategories = ({page_title, tableName, store_categories, queryParams, all_sub_classifications, all_active_sub_classifications }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,9 +29,13 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
     const [updateData, setUpdateData] = useState({
         id: "",
         sub_classifications_id: "",
+        sub_classifications_name: "",
         store_category_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -49,7 +53,7 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
 
     return (
         <>
-            <Head title="Store Categories" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -63,7 +67,7 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                             <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -80,6 +84,7 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                                 setUpdateData({
                                     id: "",
                                     sub_classifications_id: "",
+                                    sub_classifications_name: "",
                                     store_category_description: "",
                                     status: "",
                                 });
@@ -113,14 +118,14 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                             <TableHeader
                                 name="sub_classifications_id"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
-                                Sub Classifications ID
+                                Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="store_category_description"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Store Category Description
                             </TableHeader>
@@ -167,10 +172,9 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                                                 setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    sub_classifications_id:
-                                                        item.sub_classifications_id,
-                                                    store_category_description:
-                                                        item.store_category_description,
+                                                    sub_classifications_id: item.sub_classifications_id,
+                                                    sub_classifications_name: item.get_sub_classification?.subclass_description,
+                                                    store_category_description: item.store_category_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -183,10 +187,9 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                                                 setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    sub_classifications_id:
-                                                        item.sub_classifications_id,
-                                                    store_category_description:
-                                                        item.store_category_description,
+                                                    sub_classifications_id: item.sub_classifications_id,
+                                                    sub_classifications_name: item.get_sub_classification?.subclass_description,
+                                                    store_category_description: item.store_category_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -205,7 +208,7 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.sub_classifications_id}
+                                        {item.get_sub_classification?.subclass_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.store_category_description}
@@ -247,6 +250,8 @@ const StoreCategories = ({ tableName, store_categories, queryParams }) => {
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_sub_classifications={all_sub_classifications}
+                    all_active_sub_classifications={all_active_sub_classifications}
                 />
             </Modal>
         </>

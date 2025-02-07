@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const SubCategoriesAction = ({ action, onClose, updateData }) => {
+const SubCategoriesAction = ({ action, onClose, updateData, all_active_categories, all_categories }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -16,6 +16,7 @@ const SubCategoriesAction = ({ action, onClose, updateData }) => {
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         categories_id: "" || updateData.categories_id,
+        category_name: "" || updateData.category_name,
         subcategory_code: "" || updateData.subcategory_code,
         subcategory_description: "" || updateData.subcategory_description,
         status: "" || updateData.status,
@@ -75,22 +76,42 @@ const SubCategoriesAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* CATEGORIES ID */}
-            <InputComponent
-                name="categories_id"
-                value={data.categories_id}
-                disabled={action === "View"}
-                placeholder="Enter Category ID"
-                onChange={(e) => setData("categories_id", e.target.value)}
-            />
-            {errors.categories_id && (
+            {/* CATEGORIES ID  */}
+            {action == 'View' && 
+                <InputComponent
+                    name="Category Description"
+                    value={data.category_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Class Code"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Category"
+                        selectType="react-select"
+                        defaultSelect="Select Category"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            categories_id: selectedOption?.value,
+                            category_name: selectedOption?.label
+                        }))}
+                        name="category"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_categories : all_active_categories}
+                        value={data.categories_id ? { label: data.category_name, value: data.categories_id } : null}
+                    />
+                )
+            }
+            {(errors.category_name) && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.categories_id}
+                    {errors.category_name}
                 </div>
             )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
             {/* SUBCATEGORY CODE */}
             <InputComponent
                 name="subcategory_code"
+                 displayName="Sub Category Code"
                 value={data.subcategory_code}
                 disabled={action === "View"}
                 placeholder="Enter Subcategory Code"
@@ -104,6 +125,7 @@ const SubCategoriesAction = ({ action, onClose, updateData }) => {
             {/* SUBCATEGORY DESCRIPTION */}
             <InputComponent
                 name="subcategory_description"
+                displayName="Sub Category Description"
                 value={data.subcategory_description}
                 disabled={action === "View"}
                 placeholder="Enter Subcategory Description"
@@ -184,7 +206,7 @@ const SubCategoriesAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Sub Category"
                                     : "Update Sub Category"}

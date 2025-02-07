@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SubCategoriesAction from "./SubCategoriesAction";
 
-const SubCategories = ({ tableName, sub_categories, queryParams }) => {
+const SubCategories = ({page_title, tableName, sub_categories, queryParams, all_active_categories, all_categories }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,10 +29,14 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
     const [updateData, setUpdateData] = useState({
         id: "",
         categories_id: "",
+        category_name: "",
         subcategory_code: "",
         subcategory_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -50,7 +54,7 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
 
     return (
         <>
-            <Head title="Sub Categories" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -64,7 +68,7 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                               <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -81,6 +85,7 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                 setUpdateData({
                                     id: "",
                                     categories_id: "",
+                                    category_name: "",
                                     subcategory_code: "",
                                     subcategory_description: "",
                                     status: "",
@@ -117,7 +122,7 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Categories ID
+                                Category Description
                             </TableHeader>
                             <TableHeader
                                 name="subcategory_code"
@@ -176,12 +181,10 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                                 setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    categories_id:
-                                                        item.categories_id,
-                                                    subcategory_code:
-                                                        item.subcategory_code,
-                                                    subcategory_description:
-                                                        item.subcategory_description,
+                                                    categories_id: item.categories_id,
+                                                    category_name: item.get_category?.category_description,
+                                                    subcategory_code: item.subcategory_code,
+                                                    subcategory_description: item.subcategory_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -194,12 +197,10 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                                 setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    categories_id:
-                                                        item.categories_id,
-                                                    subcategory_code:
-                                                        item.subcategory_code,
-                                                    subcategory_description:
-                                                        item.subcategory_description,
+                                                    categories_id: item.categories_id,
+                                                    category_name: item.get_category?.category_description,
+                                                    subcategory_code: item.subcategory_code,
+                                                    subcategory_description: item.subcategory_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -218,7 +219,7 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.categories_id}
+                                        {item.get_category?.category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.subcategory_code}
@@ -263,6 +264,8 @@ const SubCategories = ({ tableName, sub_categories, queryParams }) => {
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_active_categories={all_active_categories} 
+                    all_categories={all_categories}
                 />
             </Modal>
         </>

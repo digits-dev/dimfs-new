@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuLegendsAction from "./SkuLegendsAction";
 
-const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
+const SkuLegends = ({page_title, tableName, sku_legends, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -31,6 +31,9 @@ const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
         sku_legend_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -48,7 +51,7 @@ const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
 
     return (
         <>
-            <Head title="Sku Legends" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -62,7 +65,7 @@ const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                               <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -83,7 +86,7 @@ const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
                                 });
                             }}
                         >
-                            <i className="fa-solid fa-plus mr-1"></i> Add Sku
+                            <i className="fa-solid fa-plus mr-1"></i> Add SKU
                             Legend
                         </Button>
                     </div>
@@ -218,10 +221,10 @@ const SkuLegends = ({ tableName, sku_legends, queryParams }) => {
                 onClose={handleModalClick}
                 title={
                     action == "Add"
-                        ? "Add Sku Legend"
+                        ? "Add SKU Legend"
                         : action == "Update"
-                        ? "Update Sku Legend"
-                        : "Sku Legend Information"
+                        ? "Update SKU Legend"
+                        : "SKU Legend Information"
                 }
                 width="xl"
                 fontColor={textColorActive}

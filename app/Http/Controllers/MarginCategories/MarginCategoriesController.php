@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MarginCategories;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\MarginCategories;
+use App\Models\SubClassifications;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class MarginCategoriesController extends Controller
     }
 
     public function getAllData(){
-        $query = MarginCategories::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = MarginCategories::query()->with(['getCreatedBy', 'getUpdatedBy', 'getSubClassification']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -45,13 +46,19 @@ class MarginCategoriesController extends Controller
         $data['margin_categories'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
+        $data['all_active_sub_classifications'] = SubClassifications::select('id', 'subclass_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_sub_classifications'] = SubClassifications::select('id', 'subclass_description as name', 'status')     
+            ->get();
+
         return Inertia::render("MarginCategories/MarginCategories", $data);
     }
 
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'sub_classifications_id' => 'required|integer|unique:margin_categories,sub_classifications_id',
+            'sub_classifications_id' => 'required|integer',
             'margin_category_code' => 'required|string|max:10|unique:margin_categories,margin_category_code',
             'margin_category_description' => 'required|string|max:255',
         ]);
@@ -80,7 +87,7 @@ class MarginCategoriesController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'sub_classifications_id' => 'required|string|max:3',
+            'sub_classifications_id' => 'required|integer',
             'margin_category_code' => 'required|string|max:10',
             'margin_category_description' => 'required|string|max:255',
             'status' => 'required|string',

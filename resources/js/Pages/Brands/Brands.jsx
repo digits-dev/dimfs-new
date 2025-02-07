@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import BrandAction from "./BrandAction";
 
 
-const Brands = ({tableName, brands, queryParams}) => {
+const Brands = ({page_title, tableName, brands, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -35,7 +35,10 @@ const Brands = ({tableName, brands, queryParams}) => {
         contact_name: "",
         contact_email: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -53,7 +56,7 @@ const Brands = ({tableName, brands, queryParams}) => {
 
     return (
         <>
-            <Head title="Brands"/>
+            <Head title={page_title}/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -63,7 +66,7 @@ const Brands = ({tableName, brands, queryParams}) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

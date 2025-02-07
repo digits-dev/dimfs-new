@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import ColorsAction from "./ColorsAction";
 
 
-const Colors = ({tableName, colors, queryParams}) => {
+const Colors = ({page_title, tableName, colors, queryParams}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -32,7 +32,10 @@ const Colors = ({tableName, colors, queryParams}) => {
         color_code: "",
         color_description: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -50,7 +53,7 @@ const Colors = ({tableName, colors, queryParams}) => {
 
     return (
         <>
-            <Head title="Colors"/>
+            <Head title={page_title}/>
             <ContentPanel>
             <TopPanel>
                     <div className="inline-flex gap-1">
@@ -60,7 +63,7 @@ const Colors = ({tableName, colors, queryParams}) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

@@ -19,11 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SubClassificationsAction from "./SubClassificationsAction";
 
-const SubClassifications = ({
-    tableName,
-    sub_classifications,
-    queryParams,
-}) => {
+const SubClassifications = ({page_title, tableName, sub_classifications, queryParams, all_classifications, all_active_classifications}) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -33,6 +29,7 @@ const SubClassifications = ({
     const [updateData, setUpdateData] = useState({
         id: "",
         classifications_id: "",
+        classification_name: "",
         subclass_code: "",
         subclass_description: "",
         status: "",
@@ -54,7 +51,7 @@ const SubClassifications = ({
 
     return (
         <>
-            <Head title="Sub Classifications" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -68,7 +65,7 @@ const SubClassifications = ({
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                               <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -85,6 +82,7 @@ const SubClassifications = ({
                                 setUpdateData({
                                     id: "",
                                     classifications_id: "",
+                                    classification_name: "",
                                     subclass_code: "",
                                     subclass_description: "",
                                     status: "",
@@ -119,9 +117,9 @@ const SubClassifications = ({
                             <TableHeader
                                 name="classifications_id"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
-                                Classifications ID
+                                Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="subclass_code"
@@ -180,12 +178,10 @@ const SubClassifications = ({
                                                 setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    classifications_id:
-                                                        item.classifications_id,
-                                                    subclass_code:
-                                                        item.subclass_code,
-                                                    subclass_description:
-                                                        item.subclass_description,
+                                                    classifications_id: item.classifications_id,
+                                                    classification_name: item.get_classification.class_description,
+                                                    subclass_code: item.subclass_code,
+                                                    subclass_description: item.subclass_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -197,12 +193,11 @@ const SubClassifications = ({
                                                 handleModalClick();
                                                 setAction("View");
                                                 setUpdateData({
-                                                    classifications_id:
-                                                        item.classifications_id,
-                                                    subclass_code:
-                                                        item.subclass_code,
-                                                    subclass_description:
-                                                        item.subclass_description,
+                                                    id: item.id,
+                                                    classifications_id: item.classifications_id,
+                                                    classification_name: item.get_classification.class_description,
+                                                    subclass_code: item.subclass_code,
+                                                    subclass_description: item.subclass_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -221,7 +216,7 @@ const SubClassifications = ({
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.classifications_id}
+                                        {item.get_classification.class_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.subclass_code}
@@ -269,6 +264,8 @@ const SubClassifications = ({
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_classifications={all_classifications}
+                    all_active_classifications={all_active_classifications}
                 />
             </Modal>
         </>

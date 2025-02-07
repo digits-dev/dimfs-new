@@ -5,6 +5,7 @@ namespace App\Http\Controllers\StoreCategories;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\StoreCategories;
+use App\Models\SubClassifications;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class StoreCategoriesController extends Controller
     }
 
     public function getAllData(){
-        $query = StoreCategories::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = StoreCategories::query()->with(['getCreatedBy', 'getUpdatedBy', 'getSubClassification']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -45,13 +46,19 @@ class StoreCategoriesController extends Controller
         $data['store_categories'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
+        $data['all_active_sub_classifications'] = SubClassifications::select('id', 'subclass_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_sub_classifications'] = SubClassifications::select('id', 'subclass_description as name', 'status')     
+            ->get();
+
         return Inertia::render("StoreCategories/StoreCategories", $data);
     }
 
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'sub_classifications_id' => 'required|string|max:3|unique:store_categories,sub_classifications_id',
+            'sub_classifications_id' => 'required|integer',
             'store_category_description' => 'required|string|max:255',
         ]);
 
@@ -78,7 +85,7 @@ class StoreCategoriesController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'sub_classifications_id' => 'required|string|max:3',
+            'sub_classifications_id' => 'required|integer',
             'store_category_description' => 'required|string|max:255',
             'status' => 'required|string',
         ]);

@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const SubClassificationsAction = ({ action, onClose, updateData }) => {
+const SubClassificationsAction = ({ action, onClose, updateData, all_classifications, all_active_classifications }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -16,6 +16,7 @@ const SubClassificationsAction = ({ action, onClose, updateData }) => {
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         classifications_id: "" || updateData.classifications_id,
+        classification_name: "" || updateData.classification_name,
         subclass_code: "" || updateData.subclass_code,
         subclass_description: "" || updateData.subclass_description,
         status: "" || updateData.status,
@@ -75,19 +76,38 @@ const SubClassificationsAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* CLASSIFICATIONS ID */}
-            <InputComponent
-                name="classifications_id"
-                value={data.classifications_id}
-                disabled={action === "View"}
-                placeholder="Enter Classification ID"
-                onChange={(e) => setData("classifications_id", e.target.value)}
-            />
-            {errors.classifications_id && (
+            {/* CLASSIFICATIONS ID  */}
+            {action == 'View' && 
+                <InputComponent
+                    name="Sub Classification Description"
+                    value={data.classification_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Classification Name"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Classification"
+                        selectType="react-select"
+                        defaultSelect="Select Category"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            classifications_id: selectedOption?.value,
+                            classification_name: selectedOption?.label
+                        }))}
+                        name="classification_description"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_classifications : all_active_classifications}
+                        value={data.classifications_id ? { label: data.classification_name, value: data.classifications_id } : null}
+                    />
+                )
+            }
+            {(errors.classification_name) && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.classifications_id}
+                    {errors.classification_name}
                 </div>
             )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Classification is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
             {/* SUBCLASS CODE */}
             <InputComponent
                 name="subclass_code"
@@ -184,7 +204,7 @@ const SubClassificationsAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Sub Classification"
                                     : "Update Sub Classification"}

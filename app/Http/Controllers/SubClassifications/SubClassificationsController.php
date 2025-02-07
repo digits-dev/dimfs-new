@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SubClassifications;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\Classifications;
 use App\Models\SubClassifications;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,7 @@ class SubClassificationsController extends Controller
     }
 
     public function getAllData(){
-        $query = SubClassifications::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = SubClassifications::query()->with(['getCreatedBy', 'getUpdatedBy', 'getClassification']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -45,15 +46,21 @@ class SubClassificationsController extends Controller
         $data['sub_classifications'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
+        $data['all_active_classifications'] = Classifications::select('id', 'class_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_classifications'] = Classifications::select('id', 'class_description as name', 'status')     
+            ->get();
+
         return Inertia::render("SubClassifications/SubClassifications", $data);
     }
 
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'classifications_id' => 'required|string|max:3|unique:sub_classifications,classifications_id',
-            'subclass_code' => 'required|string|max:10|unique:sub_classifications,subclass_code',
-            'subclass_description' => 'required|string|max:255',
+            'classifications_id' => 'required|integer',
+            'subclass_code' => 'required|string|max:40|unique:sub_classifications,subclass_code',
+            'subclass_description' => 'required|string|max:50|unique:sub_classifications,subclass_description',
         ]);
 
         try {
@@ -71,7 +78,7 @@ class SubClassificationsController extends Controller
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('SubClassifications', $e->getMessage());
+            CommonHelpers::LogSystemError('Sub Classifications', $e->getMessage());
             return back()->with(['message' => 'Sub Classification Creation Failed!', 'type' => 'error']);
         }
         
@@ -80,9 +87,9 @@ class SubClassificationsController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'classifications_id' => 'required|string|max:3',
-            'subclass_code' => 'required|string|max:10',
-            'subclass_description' => 'required|string|max:255',
+            'classifications_id' => 'required|integer',
+            'subclass_code' => 'required|string|max:40',
+            'subclass_description' => 'required|string|max:50',
             'status' => 'required|string',
         ]);
 
@@ -125,7 +132,7 @@ class SubClassificationsController extends Controller
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('SubClassifications', $e->getMessage());
+            CommonHelpers::LogSystemError('Sub Classifications', $e->getMessage());
             return back()->with(['message' => 'Sub Classification Updating Failed!', 'type' => 'error']);
         }
     }

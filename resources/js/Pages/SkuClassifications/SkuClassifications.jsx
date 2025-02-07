@@ -19,11 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuClassificationsAction from "./SkuClassificationsAction";
 
-const SkuClassifications = ({
-    tableName,
-    sku_classifications,
-    queryParams,
-}) => {
+const SkuClassifications = ({page_title, tableName, sku_classifications, queryParams,}) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -35,6 +31,9 @@ const SkuClassifications = ({
         sku_class_description: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -52,7 +51,7 @@ const SkuClassifications = ({
 
     return (
         <>
-            <Head title="SKU Classifications" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -66,7 +65,7 @@ const SkuClassifications = ({
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

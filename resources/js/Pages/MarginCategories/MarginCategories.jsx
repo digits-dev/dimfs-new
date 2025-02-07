@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import MarginCategoriesAction from "./MarginCategoriesAction";
 
-const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
+const MarginCategories = ({page_title, tableName, margin_categories, queryParams, all_sub_classifications, all_active_sub_classifications }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,12 +29,18 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
     const [updateData, setUpdateData] = useState({
         id: "",
         sub_classifications_id: "",
+        sub_classifications_name: "",
         margin_category_code: "",
         margin_category_description: "",
         status: "",
     });
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     useEffect(() => {
+        console.log(margin_categories);
+
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
     }, []);
@@ -50,7 +56,7 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
 
     return (
         <>
-            <Head title="Margin Categories" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -64,7 +70,7 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -81,6 +87,7 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                 setUpdateData({
                                     id: "",
                                     sub_classifications_id: "",
+                                    sub_classifications_name: "",
                                     margin_category_code: "",
                                     margin_category_description: "",
                                     status: "",
@@ -115,9 +122,9 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                             <TableHeader
                                 name="sub_classifications_id"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
-                                Sub Classifications ID
+                                Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="margin_category_code"
@@ -176,12 +183,10 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                                 setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    sub_classifications_id:
-                                                        item.sub_classifications_id,
-                                                    margin_category_code:
-                                                        item.margin_category_code,
-                                                    margin_category_description:
-                                                        item.margin_category_description,
+                                                    sub_classifications_id: item.sub_classifications_id,
+                                                    sub_classifications_name: item.get_sub_classification?.subclass_description,
+                                                    margin_category_code: item.margin_category_code,
+                                                    margin_category_description: item.margin_category_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -194,12 +199,10 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                                 setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    sub_classifications_id:
-                                                        item.sub_classifications_id,
-                                                    margin_category_code:
-                                                        item.margin_category_code,
-                                                    margin_category_description:
-                                                        item.margin_category_description,
+                                                    sub_classifications_id: item.sub_classifications_id,
+                                                    sub_classifications_name: item.get_sub_classification?.subclass_description,
+                                                    margin_category_code: item.margin_category_code,
+                                                    margin_category_description: item.margin_category_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -218,7 +221,7 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.sub_classifications_id}
+                                        {item.get_sub_classification?.subclass_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.margin_category_code}
@@ -263,6 +266,8 @@ const MarginCategories = ({ tableName, margin_categories, queryParams }) => {
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_sub_classifications={all_sub_classifications}
+                    all_active_sub_classifications={all_active_sub_classifications}
                 />
             </Modal>
         </>
