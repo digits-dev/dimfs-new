@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     const {theme} = useTheme();
     return (
         <NavbarProvider>
-            <div className="fixed w-full w-full z-100">
+            <div className="fixed w-full z-100">
                 <AppNavbar />   
             </div>
             <div className={`h-screen pt-[100px] md:pt-[60px] lg:pt-[60px] flex`}>
