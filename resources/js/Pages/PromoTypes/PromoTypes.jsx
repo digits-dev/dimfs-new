@@ -183,17 +183,26 @@ const PromoTypes = ({ tableName, promo_types, queryParams }) => {
                                                 setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    currency_code:
-                                                        item.currency_code,
-                                                    currency_description:
-                                                        item.currency_description,
+                                                    promo_type_column:
+                                                        item.promo_type_column,
+                                                    promo_type_description:
+                                                        item.promo_type_description,
                                                     status: item.status,
                                                 });
                                             }}
                                         />
                                     </RowData>
-                                    <RowStatus isLoading={loading}>
-                                        {item.status}
+                                    <RowStatus
+                                        isLoading={loading}
+                                        systemStatus={
+                                            item.status === "ACTIVE"
+                                                ? "active"
+                                                : "inactive"
+                                        }
+                                    >
+                                        {item.status === "ACTIVE"
+                                            ? "ACTIVE"
+                                            : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
                                         {item.promo_type_column}

@@ -69,7 +69,7 @@ class PromoTypesController extends Controller
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('PromoTypes', $e->getMessage());
+            CommonHelpers::LogSystemError('Promo Types', $e->getMessage());
             return back()->with(['message' => 'Promo Type Creation Failed!', 'type' => 'error']);
         }
         
