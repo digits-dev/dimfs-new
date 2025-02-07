@@ -5,6 +5,7 @@ namespace App\Http\Controllers\RmaMarginCategories;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\RmaMarginCategories;
+use App\Models\RmaSubClassifications;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class RmaMarginCategoriesController extends Controller
     }
 
     public function getAllData(){
-        $query = RmaMarginCategories::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = RmaMarginCategories::query()->with(['getCreatedBy', 'getUpdatedBy', 'getRmaSubClassification']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -43,6 +44,12 @@ class RmaMarginCategoriesController extends Controller
         $data['page_title'] = 'RMA Margin Categories';
         $data['rma_margin_categories'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
+
+        $data['all_active_rma_sub_classifications'] = RmaSubClassifications::select('id', 'sub_classification_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_rma_sub_classifications'] = RmaSubClassifications::select('id', 'sub_classification_description as name', 'status')     
+            ->get();
 
         return Inertia::render("RmaMarginCategories/RmaMarginCategories", $data);
     }

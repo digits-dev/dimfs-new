@@ -137,4 +137,8 @@ class RmaMarginCategories extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function getRmaSubClassification() {
+        return $this->belongsTo(RmaSubClassifications::class, 'rma_sub_classifications_id', 'id');
+    }
 }

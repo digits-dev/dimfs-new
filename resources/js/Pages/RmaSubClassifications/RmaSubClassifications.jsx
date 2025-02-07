@@ -33,7 +33,10 @@ const RmaSubClassifications = ({page_title, tableName, rma_sub_classifications, 
         rma_classification_name: "",
         sub_classification_description: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -61,7 +64,7 @@ const RmaSubClassifications = ({page_title, tableName, rma_sub_classifications, 
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button

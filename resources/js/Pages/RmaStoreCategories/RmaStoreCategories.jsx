@@ -35,6 +35,9 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
         status: "",
     })
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
@@ -61,7 +64,7 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -86,7 +89,7 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
-                <TableContainer data={rma_sub_classifications?.data}>
+                <TableContainer data={rma_store_categories?.data}>
                    <Thead>
                         <Row>
                             <TableHeader
@@ -106,7 +109,7 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                             <TableHeader
                                 name="rma_sub_classifications_id"
                                 queryParams={queryParams}
-                                width="xl"
+                                width="2xl"
                             >
                                 RMA Sub Classification Description
                             </TableHeader>
@@ -147,9 +150,9 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                             </TableHeader>
                         </Row>
                     </Thead>
-                    <Tbody data={rma_sub_classifications?.data}>
-                        {rma_sub_classifications &&
-                            rma_sub_classifications?.data.map((item, index) => (
+                    <Tbody data={rma_store_categories?.data}>
+                        {rma_store_categories &&
+                            rma_store_categories?.data.map((item, index) => (
                                 <Row key={item.id}>
                                     <RowData center>
                                         <RowAction
@@ -194,7 +197,7 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_rma_classification?.class_description}
+                                        {item.get_rma_sub_classification?.sub_classification_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.store_category_description}
@@ -215,7 +218,7 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                             ))}
                     </Tbody>
                 </TableContainer>
-                <Pagination extendClass={theme} paginate={rma_sub_classifications} />
+                <Pagination extendClass={theme} paginate={rma_store_categories} />
             </ContentPanel>
             <Modal
                 theme={theme}

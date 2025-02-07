@@ -15,7 +15,7 @@ const RmaMarginCategoriesAction = ({action, onClose, updateData, all_active_rma_
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         rma_sub_classifications_id: "" || updateData.rma_sub_classifications_id,
-        sub_classification_name: "" || updateData.sub_classification_name,
+        rma_sub_classification_name: "" || updateData.rma_sub_classification_name,
         margin_category_code: "" || updateData.margin_category_code,
         margin_category_description: "" || updateData.margin_category_description,
         status: "" || updateData.status,
@@ -83,7 +83,7 @@ const RmaMarginCategoriesAction = ({action, onClose, updateData, all_active_rma_
         {action == 'View' && 
             <InputComponent
                 name="RMA Sub Classification Description"
-                value={data.sub_classification_name}
+                value={data.rma_sub_classification_name}
                 disabled={action === 'View'}
                 placeholder="Enter Sub Classification"
             />
@@ -96,18 +96,18 @@ const RmaMarginCategoriesAction = ({action, onClose, updateData, all_active_rma_
                     onChange={(selectedOption) => setData((prevData) => ({
                         ...prevData,
                         rma_sub_classifications_id: selectedOption?.value,
-                        sub_classification_name: selectedOption?.label
+                        rma_sub_classification_name: selectedOption?.label
                     }))}
                     name="category"
                     isStatus={action == "Update"}
                     options={action == 'Update' ? all_rma_sub_classifications : all_active_rma_sub_classifications}
-                    value={data.rma_sub_classifications_id ? { label: data.sub_classification_name, value: data.rma_sub_classifications_id } : null}
+                    value={data.rma_sub_classifications_id ? { label: data.rma_sub_classification_name, value: data.rma_sub_classifications_id } : null}
                 />
             )
         }
-        {(errors.sub_classification_name) && (
+        {(errors.rma_sub_classification_name) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.sub_classification_name}
+                {errors.rma_sub_classification_name}
             </div>
         )}
         {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the category is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }

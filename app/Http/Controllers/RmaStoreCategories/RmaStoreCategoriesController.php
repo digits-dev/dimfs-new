@@ -27,7 +27,7 @@ class RmaStoreCategoriesController extends Controller
     }
 
     public function getAllData(){
-        $query = RmaStoreCategories::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = RmaStoreCategories::query()->with(['getCreatedBy', 'getUpdatedBy', 'getRmaSubClassification']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;

@@ -98,6 +98,7 @@ const RmaStoreCategoriesAction = ({action, onClose, updateData, all_active_rma_s
                         rma_sub_classification_name: selectedOption?.label
                     }))}
                     name="category"
+                    displayName="RMA Sub Classification Description"
                     isStatus={action == "Update"}
                     options={action == 'Update' ? all_rma_sub_classifications : all_active_rma_sub_classifications}
                     value={data.rma_sub_classifications_id ? { label: data.rma_sub_classification_name, value: data.rma_sub_classifications_id } : null}

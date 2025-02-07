@@ -137,6 +137,6 @@ class RmaStoreCategories extends Model
     }
 
     public function getRmaSubClassification() {
-        return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+        return $this->belongsTo(RmaSubClassifications::class, 'rma_sub_classifications_id', 'id');
     }
 }

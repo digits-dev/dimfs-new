@@ -34,7 +34,10 @@ const RmaClassifications = ({page_title, tableName, rma_classifications, queryPa
         class_code: "",
         class_description: "",
         status: "",
-    })
+    });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -62,7 +65,7 @@ const RmaClassifications = ({page_title, tableName, rma_classifications, queryPa
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-table text-base p-[1px]'></i>
+                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
                             </Button>
                         </Tooltip>
                         <Button
