@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SupportTypes extends Model
+class VendorTypes extends Model
 {
     use HasFactory;
 
-    protected $table = 'support_types';
+    protected $table = 'vendor_types';
 
     protected $fillable = [
         'id',
-        'support_type_description',
+        'vendor_type_code',
+        'vendor_type_description',
         'status',
         'created_by',
         'updated_by',
@@ -28,7 +29,8 @@ class SupportTypes extends Model
     ];
 
     protected $filterable = [
-        'support_type_description',
+        'vendor_type_code',
+        'vendor_type_description',
         'status',
         'created_by',
         'updated_by',

@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const SupportTypesAction = ({ action, onClose, updateData }) => {
+const WarehouseCategoriesAction = ({ action, onClose, updateData }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -15,7 +15,9 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        support_type_description: "" || updateData.support_type_description,
+        warehouse_category_code: "" || updateData.warehouse_category_code,
+        warehouse_category_description:
+            "" || updateData.warehouse_category_description,
         status: "" || updateData.status,
     });
 
@@ -35,7 +37,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
         Swal.fire({
             title: `<p class="font-poppins text-3xl" >Do you want ${
                 action == "Add" ? "add" : "update"
-            } Support Type?</p>`,
+            } Warehouse Category?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == "Add" ? "Confirm" : "Update"}`,
             confirmButtonColor: buttonSwalColor,
@@ -45,22 +47,22 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 if (action == "Add") {
-                    post("support_types/create", {
+                    post("warehouse_categories/create", {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["support_types"] });
+                            router.reload({ only: ["warehouse_categories"] });
                             reset();
                             onClose();
                         },
                         onError: (error) => {},
                     });
                 } else {
-                    post("support_types/update", {
+                    post("warehouse_categories/update", {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["support_types"] });
+                            router.reload({ only: ["warehouse_categories"] });
                             reset();
                             onClose();
                         },
@@ -73,19 +75,34 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* SUPPORT TYPE DESCRIPTION */}
+            {/* WAREHOUSE CATEGORY CODE */}
             <InputComponent
-                name="support_type_description"
-                value={data.support_type_description}
+                name="warehouse_category_code"
+                value={data.warehouse_category_code}
                 disabled={action === "View"}
-                placeholder="Enter Support Type Description"
+                placeholder="Enter Warehouse Category Code"
                 onChange={(e) =>
-                    setData("support_type_description", e.target.value)
+                    setData("warehouse_category_code", e.target.value)
                 }
             />
-            {errors.support_type_description && (
+            {errors.warehouse_category_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.support_type_description}
+                    {errors.warehouse_category_code}
+                </div>
+            )}
+            {/* WAREHOUSE CATEGORY DESCRIPTION */}
+            <InputComponent
+                name="warehouse_category_description"
+                value={data.warehouse_category_description}
+                disabled={action === "View"}
+                placeholder="Enter Warehouse Category Description"
+                onChange={(e) =>
+                    setData("warehouse_category_description", e.target.value)
+                }
+            />
+            {errors.warehouse_category_description && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.warehouse_category_description}
                 </div>
             )}
             {action == "Update" && (
@@ -112,6 +129,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                     )}
                 </>
             )}
+
             {action == "View" && (
                 <div className="flex items-center space-x-2">
                     <div
@@ -134,6 +152,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                     </div>
                 </div>
             )}
+
             {action !== "View" && (
                 <div className="flex justify-end">
                     <Button
@@ -156,8 +175,8 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                             <span>
                                 <i className="fa-solid fa-plus mr-1"></i>{" "}
                                 {action === "Add"
-                                    ? "Add Support Type"
-                                    : "Update Support Type"}
+                                    ? "Add Warehouse Category"
+                                    : "Update Warehouse Category"}
                             </span>
                         )}
                     </Button>
@@ -167,4 +186,4 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
     );
 };
 
-export default SupportTypesAction;
+export default WarehouseCategoriesAction;

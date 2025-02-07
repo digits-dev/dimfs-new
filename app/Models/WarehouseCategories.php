@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SupportTypes extends Model
+class WarehouseCategories extends Model
 {
     use HasFactory;
 
-    protected $table = 'support_types';
+    protected $table = 'warehouse_categories';
 
     protected $fillable = [
         'id',
-        'support_type_description',
+        'warehouse_category_code',
+        'warehouse_category_description',
         'status',
         'created_by',
         'updated_by',
@@ -28,7 +29,8 @@ class SupportTypes extends Model
     ];
 
     protected $filterable = [
-        'support_type_description',
+        'warehouse_category_code',
+        'warehouse_category_description',
         'status',
         'created_by',
         'updated_by',

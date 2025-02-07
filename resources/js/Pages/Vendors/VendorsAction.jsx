@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const SupportTypesAction = ({ action, onClose, updateData }) => {
+const VendorsAction = ({ action, onClose, updateData }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -15,7 +15,10 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        support_type_description: "" || updateData.support_type_description,
+        brands_id: "" || updateData.brands_id,
+        vendor_name: "" || updateData.vendor_name,
+        vendor_types_id: "" || updateData.vendor_types_id,
+        incoterms_id: "" || updateData.incoterms_id,
         status: "" || updateData.status,
     });
 
@@ -35,7 +38,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
         Swal.fire({
             title: `<p class="font-poppins text-3xl" >Do you want ${
                 action == "Add" ? "add" : "update"
-            } Support Type?</p>`,
+            } Vendor?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == "Add" ? "Confirm" : "Update"}`,
             confirmButtonColor: buttonSwalColor,
@@ -45,22 +48,22 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 if (action == "Add") {
-                    post("support_types/create", {
+                    post("vendors/create", {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["support_types"] });
+                            router.reload({ only: ["vendors"] });
                             reset();
                             onClose();
                         },
                         onError: (error) => {},
                     });
                 } else {
-                    post("support_types/update", {
+                    post("vendors/update", {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["support_types"] });
+                            router.reload({ only: ["vendors"] });
                             reset();
                             onClose();
                         },
@@ -73,19 +76,56 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* SUPPORT TYPE DESCRIPTION */}
+            {/* BRANDS ID */}
             <InputComponent
-                name="support_type_description"
-                value={data.support_type_description}
+                name="brands_id"
+                value={data.brands_id}
                 disabled={action === "View"}
-                placeholder="Enter Support Type Description"
-                onChange={(e) =>
-                    setData("support_type_description", e.target.value)
-                }
+                placeholder="Enter Brand ID"
+                onChange={(e) => setData("brands_id", e.target.value)}
             />
-            {errors.support_type_description && (
+            {errors.brands_id && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.support_type_description}
+                    {errors.brands_id}
+                </div>
+            )}
+            {/* VENDOR NAME */}
+            <InputComponent
+                name="vendor_name"
+                value={data.vendor_name}
+                disabled={action === "View"}
+                placeholder="Enter Vendor Name"
+                onChange={(e) => setData("vendor_name", e.target.value)}
+            />
+            {errors.vendor_name && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.vendor_name}
+                </div>
+            )}
+            {/* VENDOR TYPES ID */}
+            <InputComponent
+                name="vendor_types_id"
+                value={data.vendor_types_id}
+                disabled={action === "View"}
+                placeholder="Enter Vendor Type ID"
+                onChange={(e) => setData("vendor_types_id", e.target.value)}
+            />
+            {errors.vendor_types_id && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.vendor_types_id}
+                </div>
+            )}
+            {/* INCOTERMS ID */}
+            <InputComponent
+                name="incoterms_id"
+                value={data.incoterms_id}
+                disabled={action === "View"}
+                placeholder="Enter Incoterms ID"
+                onChange={(e) => setData("incoterms_id", e.target.value)}
+            />
+            {errors.incoterms_id && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.incoterms_id}
                 </div>
             )}
             {action == "Update" && (
@@ -112,6 +152,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                     )}
                 </>
             )}
+
             {action == "View" && (
                 <div className="flex items-center space-x-2">
                     <div
@@ -156,8 +197,8 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                             <span>
                                 <i className="fa-solid fa-plus mr-1"></i>{" "}
                                 {action === "Add"
-                                    ? "Add Support Type"
-                                    : "Update Support Type"}
+                                    ? "Add Vendor"
+                                    : "Update Vendor"}
                             </span>
                         )}
                     </Button>
@@ -167,4 +208,4 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
     );
 };
 
-export default SupportTypesAction;
+export default VendorsAction;
