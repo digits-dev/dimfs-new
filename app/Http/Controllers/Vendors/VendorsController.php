@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Vendors;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\Brands;
+use App\Models\Incoterms;
 use App\Models\Vendors;
+use App\Models\VendorTypes;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +30,7 @@ class VendorsController extends Controller
     }
 
     public function getAllData(){
-        $query = Vendors::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = Vendors::query()->with(['getCreatedBy', 'getUpdatedBy', 'getBrand', 'getVendorType', 'getIncoterm']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -45,18 +48,40 @@ class VendorsController extends Controller
         $data['vendors'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
+        // BRANDS
+        $data['all_active_brands'] = Brands::select('id', 'brand_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_brands'] = Brands::select('id', 'brand_description as name', 'status')     
+            ->get();
+
+        // VENDOR TYPES
+        $data['all_active_vendor_types'] = VendorTypes::select('id', 'vendor_type_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_vendor_types'] = VendorTypes::select('id', 'vendor_type_description as name', 'status')     
+            ->get();
+
+        // INCOTERMS
+
+        $data['all_active_incoterms'] = Incoterms::select('id', 'incoterms_description as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_incoterms'] = Incoterms::select('id', 'incoterms_description as name', 'status')     
+            ->get();
+
         return Inertia::render("Vendors/Vendors", $data);
     }
 
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'brands_id' => 'required|string|max:3',
+            'brands_id' => 'required|integer',
+            'vendor_types_id' => 'required|integer',
+            'incoterms_id' => 'required|integer',
             'vendor_name' => 'required|string|max:255',
-            'vendor_types_id' => 'required|string|max:3',
-            'incoterms_id' => 'required|string|max:3',
         ]);
-
+        
         try {
 
             Vendors::create([
@@ -82,10 +107,10 @@ class VendorsController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'brands_id' => 'required|string|max:3',
+            'brands_id' => 'required|integer',
+            'vendor_types_id' => 'required|integer',
+            'incoterms_id' => 'required|integer',
             'vendor_name' => 'required|string|max:255',
-            'vendor_types_id' => 'required|string|max:3',
-            'incoterms_id' => 'required|string|max:3',
             'status' => 'required|string',
         ]);
 

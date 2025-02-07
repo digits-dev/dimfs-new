@@ -20,6 +20,9 @@ const UomsAction = ({ action, onClose, updateData }) => {
         status: "" || updateData.status,
     });
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     const statuses = [
         {
             id: "ACTIVE",
@@ -79,6 +82,7 @@ const UomsAction = ({ action, onClose, updateData }) => {
                 name="uom_code"
                 value={data.uom_code}
                 disabled={action === "View"}
+                displayName="UOM Code"
                 placeholder="Enter UOM Code"
                 onChange={(e) => setData("uom_code", e.target.value)}
             />
@@ -92,6 +96,7 @@ const UomsAction = ({ action, onClose, updateData }) => {
                 name="uom_description"
                 value={data.uom_description}
                 disabled={action === "View"}
+                displayName="UOM Description"
                 placeholder="Enter UOM Description"
                 onChange={(e) => setData("uom_description", e.target.value)}
             />
@@ -167,7 +172,7 @@ const UomsAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add" ? "Add Oum" : "Update Oum"}
                             </span>
                         )}

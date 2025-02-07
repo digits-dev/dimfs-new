@@ -118,25 +118,25 @@ const SubCategories = ({page_title, tableName, sub_categories, queryParams, all_
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="categories_id"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Category Description
-                            </TableHeader>
-                            <TableHeader
                                 name="subcategory_code"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Subcategory Code
+                                Sub Category Code
                             </TableHeader>
                             <TableHeader
                                 name="subcategory_description"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Subcategory Description
+                                Sub Category Description
+                            </TableHeader>
+                            <TableHeader
+                                name="categories_id"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Category Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -219,13 +219,13 @@ const SubCategories = ({page_title, tableName, sub_categories, queryParams, all_
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_category?.category_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.subcategory_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.subcategory_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_category?.category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

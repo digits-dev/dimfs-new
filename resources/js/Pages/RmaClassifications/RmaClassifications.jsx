@@ -108,25 +108,25 @@ const RmaClassifications = ({page_title, tableName, rma_classifications, queryPa
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="rma_categories_id"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                RMA Category Description
-                            </TableHeader>
-                            <TableHeader
                                 name="class_code"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Class Code
+                                RMA Class Code
                             </TableHeader>
                             <TableHeader
                                 name="class_description"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Class Description
+                                RMA Class Description
+                            </TableHeader>
+                            <TableHeader
+                                name="rma_categories_id"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                RMA Category Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -207,13 +207,13 @@ const RmaClassifications = ({page_title, tableName, rma_classifications, queryPa
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_rma_category?.category_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.class_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.class_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_rma_category?.category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

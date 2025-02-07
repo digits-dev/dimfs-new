@@ -140,4 +140,16 @@ class Vendors extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
+    public function getBrand() {
+        return $this->belongsTo(Brands::class, 'brands_id', 'id');
+    }
+    
+    public function getVendorType() {
+        return $this->belongsTo(VendorTypes::class, 'vendor_types_id', 'id');
+    }
+
+    public function getIncoterm() {
+        return $this->belongsTo(Incoterms::class, 'incoterms_id', 'id');
+    }
+    
 }

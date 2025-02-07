@@ -108,13 +108,6 @@ const Classifications = ({page_title, tableName, classifications, queryParams, a
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="categories_id"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Category Description
-                            </TableHeader>
-                            <TableHeader
                                 name="class_code"
                                 queryParams={queryParams}
                                 width="lg"
@@ -127,6 +120,13 @@ const Classifications = ({page_title, tableName, classifications, queryParams, a
                                 width="lg"
                             >
                                 Class Description
+                            </TableHeader>
+                            <TableHeader
+                                name="categories_id"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Category Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -207,13 +207,13 @@ const Classifications = ({page_title, tableName, classifications, queryParams, a
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_category?.category_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.class_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.class_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_category?.category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

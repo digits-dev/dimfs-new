@@ -107,18 +107,18 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="rma_sub_classifications_id"
-                                queryParams={queryParams}
-                                width="2xl"
-                            >
-                                RMA Sub Classification Description
-                            </TableHeader>
-                            <TableHeader
                                 name="store_category_description"
                                 queryParams={queryParams}
                                 width="xl"
                             >
                                 RMA Store Category Description
+                            </TableHeader>
+                            <TableHeader
+                                name="rma_sub_classifications_id"
+                                queryParams={queryParams}
+                                width="2xl"
+                            >
+                                RMA Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -197,10 +197,10 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_rma_sub_classification?.sub_classification_description}
+                                        {item.store_category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.store_category_description}
+                                        {item.get_rma_sub_classification?.sub_classification_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

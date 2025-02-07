@@ -19,7 +19,19 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorsAction from "./VendorsAction";
 
-const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
+const Vendors = ({ 
+    page_title, 
+    tableName, 
+    vendors, 
+    queryParams,
+    all_active_brands,
+    all_brands,
+    all_active_vendor_types,
+    all_vendor_types,
+    all_active_incoterms,
+    all_incoterms,
+}) => {
+
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,11 +41,17 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
     const [updateData, setUpdateData] = useState({
         id: "",
         brands_id: "",
-        vendor_name: "",
+        brands_name: "",
         vendor_types_id: "",
+        vendor_types_name: "",
         incoterms_id: "",
+        incoterms_name: "",
+        vendor_name: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -65,7 +83,7 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -82,9 +100,12 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                 setUpdateData({
                                     id: "",
                                     brands_id: "",
-                                    vendor_name: "",
+                                    brands_name: "",
                                     vendor_types_id: "",
+                                    vendor_types_name: "",
                                     incoterms_id: "",
+                                    incoterms_name: "",
+                                    vendor_name: "",
                                     status: "",
                                 });
                             }}
@@ -114,32 +135,32 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="brands_id"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Brands ID
-                            </TableHeader>
-                            <TableHeader
                                 name="vendor_name"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Vendor Name
                             </TableHeader>
                             <TableHeader
+                                name="brands_id"
+                                queryParams={queryParams}
+                                width="xl"
+                            >
+                                Brand Description
+                            </TableHeader>
+                            <TableHeader
                                 name="vendor_types_id"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
-                                Vendor Types ID
+                                Vendor Type Description
                             </TableHeader>
                             <TableHeader
                                 name="incoterms_id"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Incoterms ID
+                                Incoterm Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -185,12 +206,12 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                                 setUpdateData({
                                                     id: item.id,
                                                     brands_id: item.brands_id,
-                                                    vendor_name:
-                                                        item.vendor_name,
-                                                    vendor_types_id:
-                                                        item.vendor_types_id,
-                                                    incoterms_id:
-                                                        item.incoterms_id,
+                                                    brands_name: item.get_brand?.brand_description,
+                                                    vendor_types_id: item.vendor_types_id,
+                                                    vendor_types_name: item.get_vendor_type.vendor_type_description,
+                                                    incoterms_id: item.incoterms_id,
+                                                    incoterms_name: item.get_incoterm?.incoterms_description,
+                                                    vendor_name: item.vendor_name,
                                                     status: item.status,
                                                 });
                                             }}
@@ -204,12 +225,12 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                                 setUpdateData({
                                                     id: item.id,
                                                     brands_id: item.brands_id,
-                                                    vendor_name:
-                                                        item.vendor_name,
-                                                    vendor_types_id:
-                                                        item.vendor_types_id,
-                                                    incoterms_id:
-                                                        item.incoterms_id,
+                                                    brands_name: item.get_brand?.brand_description,
+                                                    vendor_types_id: item.vendor_types_id,
+                                                    vendor_types_name: item.get_vendor_type.vendor_type_description,
+                                                    incoterms_id: item.incoterms_id,
+                                                    incoterms_name: item.get_incoterm?.incoterms_description,
+                                                    vendor_name: item.vendor_name,
                                                     status: item.status,
                                                 });
                                             }}
@@ -228,16 +249,16 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.brands_id}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.vendor_name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.vendor_types_id}
+                                        {item.get_brand?.brand_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.incoterms_id}
+                                        {item.get_vendor_type.vendor_type_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_incoterm?.incoterms_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}
@@ -276,6 +297,12 @@ const Vendors = ({ page_title, tableName, vendors, queryParams }) => {
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_active_brands={all_active_brands}
+                    all_brands={all_brands}
+                    all_active_vendor_types={all_active_vendor_types}
+                    all_vendor_types={all_vendor_types}
+                    all_active_incoterms={all_active_incoterms}
+                    all_incoterms={all_incoterms}
                 />
             </Modal>
         </>

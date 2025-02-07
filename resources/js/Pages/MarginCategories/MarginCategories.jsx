@@ -120,13 +120,6 @@ const MarginCategories = ({page_title, tableName, margin_categories, queryParams
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="sub_classifications_id"
-                                queryParams={queryParams}
-                                width="xl"
-                            >
-                                Sub Classification Description
-                            </TableHeader>
-                            <TableHeader
                                 name="margin_category_code"
                                 queryParams={queryParams}
                                 width="lg"
@@ -139,6 +132,13 @@ const MarginCategories = ({page_title, tableName, margin_categories, queryParams
                                 width="xl"
                             >
                                 Margin Category Description
+                            </TableHeader>
+                            <TableHeader
+                                name="sub_classifications_id"
+                                queryParams={queryParams}
+                                width="xl"
+                            >
+                                Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -221,13 +221,13 @@ const MarginCategories = ({page_title, tableName, margin_categories, queryParams
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_sub_classification?.subclass_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.margin_category_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.margin_category_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_sub_classification?.subclass_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

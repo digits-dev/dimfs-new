@@ -7,7 +7,7 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const VendorGroupsAction = ({ action, onClose, updateData }) => {
+const VendorGroupsAction = ({ action, onClose, updateData, all_active_vendors, all_vendors }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -16,6 +16,7 @@ const VendorGroupsAction = ({ action, onClose, updateData }) => {
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         vendors_id: "" || updateData.vendors_id,
+        vendors_name: "" || updateData.vendors_name,
         vendor_group_name: "" || updateData.vendor_group_name,
         status: "" || updateData.status,
     });
@@ -74,19 +75,38 @@ const VendorGroupsAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* VENDORS ID */}
-            <InputComponent
-                name="vendors_id"
-                value={data.vendors_id}
-                disabled={action === "View"}
-                placeholder="Enter Vendor ID"
-                onChange={(e) => setData("vendors_id", e.target.value)}
-            />
-            {errors.vendors_id && (
+            {/* VENDORS ID  */}
+            {action == 'View' && 
+                <InputComponent
+                    name="Vendor Name"
+                    value={data.vendors_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Vendor Name"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Vendor Name"
+                        selectType="react-select"
+                        defaultSelect="Select Vendor Name"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            vendors_id: selectedOption?.value,
+                            vendors_name: selectedOption?.label
+                        }))}
+                        name="vendor_name"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_vendors : all_active_vendors}
+                        value={data.vendors_id ? { label: data.vendors_name, value: data.vendors_id } : null}
+                    />
+                )
+            }
+            {(errors.vendors_name) && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.vendors_id}
+                    {errors.vendors_name}
                 </div>
             )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Vendor Name is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
             {/* VENDOR GROUP NAME */}
             <InputComponent
                 name="vendor_group_name"
@@ -168,7 +188,7 @@ const VendorGroupsAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Vendor Group"
                                     : "Update Vendor Group"}

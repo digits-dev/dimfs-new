@@ -7,7 +7,17 @@ import InputComponent from "../../Components/Forms/Input";
 import { router, useForm } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
-const VendorsAction = ({ action, onClose, updateData }) => {
+const VendorsAction = ({ 
+    action, 
+    onClose, 
+    updateData,
+    all_active_brands,
+    all_brands,
+    all_active_vendor_types,
+    all_vendor_types,
+    all_active_incoterms,
+    all_incoterms, }) => {
+        
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -16,9 +26,12 @@ const VendorsAction = ({ action, onClose, updateData }) => {
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         brands_id: "" || updateData.brands_id,
+        brands_name: "" || updateData.brands_name,
         vendor_name: "" || updateData.vendor_name,
         vendor_types_id: "" || updateData.vendor_types_id,
+        vendor_types_name: "" || updateData.vendor_types_name,
         incoterms_id: "" || updateData.incoterms_id,
+        incoterms_name: "" || updateData.incoterms_name,
         status: "" || updateData.status,
     });
 
@@ -76,19 +89,107 @@ const VendorsAction = ({ action, onClose, updateData }) => {
 
     return (
         <form onSubmit={handleFormSubmit} className="space-y-2">
-            {/* BRANDS ID */}
-            <InputComponent
-                name="brands_id"
-                value={data.brands_id}
-                disabled={action === "View"}
-                placeholder="Enter Brand ID"
-                onChange={(e) => setData("brands_id", e.target.value)}
-            />
-            {errors.brands_id && (
+            {/* BRANDS ID  */}
+            {action == 'View' && 
+                <InputComponent
+                    displayName="Brand"
+                    value={data.brands_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Brand"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Brand"
+                        selectType="react-select"
+                        defaultSelect="Select Brand"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            brands_id: selectedOption?.value,
+                            brands_name: selectedOption?.label
+                        }))}
+                        name="brand"
+                        displayName="Brand Description"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_brands : all_active_brands}
+                        value={data.brands_id ? { label: data.brands_name, value: data.brands_id } : null}
+                    />
+                )
+            }
+            {(errors.brands_id) && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
                     {errors.brands_id}
                 </div>
             )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Brand is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
+            {/* VENDOR TYPES ID */}
+            {action == 'View' && 
+                <InputComponent
+                    displayName="Vendor Type"
+                    value={data.vendor_types_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Vendor Type"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Vendor Type"
+                        selectType="react-select"
+                        defaultSelect="Select Vendor Type"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            vendor_types_id: selectedOption?.value,
+                            vendor_types_name: selectedOption?.label
+                        }))}
+                        name="vendor_type"
+                        displayName="Vendor Type Description"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_vendor_types : all_active_vendor_types}
+                        value={data.vendor_types_id ? { label: data.vendor_types_name, value: data.vendor_types_id } : null}
+                    />
+                )
+            }
+            {(errors.vendor_types_id) && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.vendor_types_id}
+                </div>
+            )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Vendor Type is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
+
+            {/* INCOTERMS ID */}
+            {action == 'View' && 
+                <InputComponent
+                    displayName="Incoterm Description"
+                    value={data.incoterms_name}
+                    disabled={action === 'View'}
+                    placeholder="Enter Incoterm Description"
+                />
+            }
+            {(action == 'Update' || action == 'Add') && 
+                (   <DropdownSelect
+                        placeholder="Choose Incoterm Description"
+                        selectType="react-select"
+                        defaultSelect="Select Incoterm Description"
+                        onChange={(selectedOption) => setData((prevData) => ({
+                            ...prevData,
+                            incoterms_id: selectedOption?.value,
+                            incoterms_name: selectedOption?.label
+                        }))}
+                        name="incoterms"
+                        displayName="Incoterm Description"
+                        isStatus={action == "Update"}
+                        options={action == 'Update' ? all_incoterms : all_active_incoterms}
+                        value={data.incoterms_id ? { label: data.incoterms_name, value: data.incoterms_id } : null}
+                    />
+                )
+            }
+            {(errors.incoterms_id) && (
+                <div className="font-poppins text-xs font-semibold text-red-600">
+                    {errors.incoterms_id}
+                </div>
+            )}
+            {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Incoterm is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
+
             {/* VENDOR NAME */}
             <InputComponent
                 name="vendor_name"
@@ -102,32 +203,7 @@ const VendorsAction = ({ action, onClose, updateData }) => {
                     {errors.vendor_name}
                 </div>
             )}
-            {/* VENDOR TYPES ID */}
-            <InputComponent
-                name="vendor_types_id"
-                value={data.vendor_types_id}
-                disabled={action === "View"}
-                placeholder="Enter Vendor Type ID"
-                onChange={(e) => setData("vendor_types_id", e.target.value)}
-            />
-            {errors.vendor_types_id && (
-                <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.vendor_types_id}
-                </div>
-            )}
-            {/* INCOTERMS ID */}
-            <InputComponent
-                name="incoterms_id"
-                value={data.incoterms_id}
-                disabled={action === "View"}
-                placeholder="Enter Incoterms ID"
-                onChange={(e) => setData("incoterms_id", e.target.value)}
-            />
-            {errors.incoterms_id && (
-                <div className="font-poppins text-xs font-semibold text-red-600">
-                    {errors.incoterms_id}
-                </div>
-            )}
+
             {action == "Update" && (
                 <>
                     <DropdownSelect
@@ -195,7 +271,7 @@ const VendorsAction = ({ action, onClose, updateData }) => {
                             )
                         ) : (
                             <span>
-                                <i className="fa-solid fa-plus mr-1"></i>{" "}
+                                <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i>{" "}
                                 {action === "Add"
                                     ? "Add Vendor"
                                     : "Update Vendor"}

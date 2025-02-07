@@ -115,25 +115,25 @@ const SubClassifications = ({page_title, tableName, sub_classifications, queryPa
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="classifications_id"
-                                queryParams={queryParams}
-                                width="xl"
-                            >
-                                Classification Description
-                            </TableHeader>
-                            <TableHeader
                                 name="subclass_code"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Subclass Code
+                                Sub Class Code
                             </TableHeader>
                             <TableHeader
                                 name="subclass_description"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Subclass Description
+                                Sub Class Description
+                            </TableHeader>
+                            <TableHeader
+                                name="classifications_id"
+                                queryParams={queryParams}
+                                width="xl"
+                            >
+                                Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -216,13 +216,13 @@ const SubClassifications = ({page_title, tableName, sub_classifications, queryPa
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_classification.class_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.subclass_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.subclass_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_classification.class_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

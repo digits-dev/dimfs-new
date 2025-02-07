@@ -33,6 +33,9 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
         status: "",
     });
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
@@ -63,7 +66,7 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -85,7 +88,7 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                                 });
                             }}
                         >
-                            <i className="fa-solid fa-plus mr-1"></i> Add Uom
+                            <i className="fa-solid fa-plus mr-1"></i> Add UOM
                         </Button>
                     </div>
                     <div className="flex">
@@ -114,14 +117,14 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Uom Code
+                                UOM Code
                             </TableHeader>
                             <TableHeader
                                 name="uom_description"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Uom Description
+                                UOM Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -231,10 +234,10 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                 onClose={handleModalClick}
                 title={
                     action == "Add"
-                        ? "Add Uom"
+                        ? "Add UOM"
                         : action == "Update"
-                        ? "Update Uom"
-                        : "Uom Information"
+                        ? "Update UOM"
+                        : "UOM Information"
                 }
                 width="xl"
                 fontColor={textColorActive}

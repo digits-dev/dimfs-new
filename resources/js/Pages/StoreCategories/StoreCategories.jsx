@@ -116,18 +116,18 @@ const StoreCategories = ({page_title, tableName, store_categories, queryParams, 
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="sub_classifications_id"
-                                queryParams={queryParams}
-                                width="xl"
-                            >
-                                Sub Classification Description
-                            </TableHeader>
-                            <TableHeader
                                 name="store_category_description"
                                 queryParams={queryParams}
                                 width="xl"
                             >
                                 Store Category Description
+                            </TableHeader>
+                            <TableHeader
+                                name="sub_classifications_id"
+                                queryParams={queryParams}
+                                width="xl"
+                            >
+                                Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -208,10 +208,10 @@ const StoreCategories = ({page_title, tableName, store_categories, queryParams, 
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_sub_classification?.subclass_description}
+                                        {item.store_category_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.store_category_description}
+                                        {item.get_sub_classification?.subclass_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

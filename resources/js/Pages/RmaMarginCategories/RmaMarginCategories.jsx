@@ -109,13 +109,6 @@ const RmaMarginCategories = ({page_title, tableName, rma_margin_categories, quer
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="rma_sub_classifications_id"
-                                queryParams={queryParams}
-                                width="2xl"
-                            >
-                                RMA Sub Classification Description
-                            </TableHeader>
-                            <TableHeader
                                 name="margin_category_code"
                                 queryParams={queryParams}
                                 width="2xl"
@@ -128,6 +121,13 @@ const RmaMarginCategories = ({page_title, tableName, rma_margin_categories, quer
                                 width="2xl"
                             >
                                 RMA Margin Category Description
+                            </TableHeader>
+                            <TableHeader
+                                name="rma_sub_classifications_id"
+                                queryParams={queryParams}
+                                width="2xl"
+                            >
+                                RMA Sub Classification Description
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -208,13 +208,13 @@ const RmaMarginCategories = ({page_title, tableName, rma_margin_categories, quer
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.get_rma_sub_classification?.sub_classification_description}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
                                         {item.margin_category_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.margin_category_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_rma_sub_classification?.sub_classification_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

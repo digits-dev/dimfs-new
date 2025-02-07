@@ -19,7 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorGroupsAction from "./VendorGroupsAction";
 
-const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
+const VendorGroups = ({ page_title, vendor_groups, queryParams, all_active_vendors, all_vendors }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -29,9 +29,13 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
     const [updateData, setUpdateData] = useState({
         id: "",
         vendors_id: "",
+        vendors_name: "",
         vendor_group_name: "",
         status: "",
     });
+
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -63,7 +67,7 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -80,6 +84,7 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                 setUpdateData({
                                     id: "",
                                     vendors_id: "",
+                                    vendors_name: "",
                                     vendor_group_name: "",
                                     status: "",
                                 });
@@ -111,18 +116,18 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="vendors_id"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Vendors ID
-                            </TableHeader>
-                            <TableHeader
                                 name="vendor_group_name"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Vendor Group Name
+                            </TableHeader>
+                            <TableHeader
+                                name="vendors_id"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Vendor Name
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -168,8 +173,8 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                                 setUpdateData({
                                                     id: item.id,
                                                     vendors_id: item.vendors_id,
-                                                    vendor_group_name:
-                                                        item.vendor_group_name,
+                                                    vendors_name: item.get_vendor?.vendor_name,
+                                                    vendor_group_name:item.vendor_group_name,
                                                     status: item.status,
                                                 });
                                             }}
@@ -183,8 +188,8 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                                 setUpdateData({
                                                     id: item.id,
                                                     vendors_id: item.vendors_id,
-                                                    vendor_group_name:
-                                                        item.vendor_group_name,
+                                                    vendors_name: item.get_vendor?.vendor_name,
+                                                    vendor_group_name:item.vendor_group_name,
                                                     status: item.status,
                                                 });
                                             }}
@@ -203,10 +208,10 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.vendors_id}
+                                        {item.vendor_group_name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.vendor_group_name}
+                                        {item.get_vendor?.vendor_name}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}
@@ -245,6 +250,8 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams }) => {
                     onClose={handleModalClick}
                     action={action}
                     updateData={updateData}
+                    all_active_vendors={all_active_vendors}
+                    all_vendors={all_vendors}
                 />
             </Modal>
         </>

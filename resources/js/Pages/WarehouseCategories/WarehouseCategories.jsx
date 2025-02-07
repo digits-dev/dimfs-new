@@ -38,6 +38,9 @@ const WarehouseCategories = ({
         status: "",
     });
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
@@ -54,7 +57,7 @@ const WarehouseCategories = ({
 
     return (
         <>
-            <Head title="Warehouse Categories" />
+            <Head title={page_title} />
             <ContentPanel>
                 <TopPanel>
                     <div className="inline-flex gap-1">
@@ -68,7 +71,7 @@ const WarehouseCategories = ({
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -118,14 +121,14 @@ const WarehouseCategories = ({
                             <TableHeader
                                 name="warehouse_category_code"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Warehouse Category Code
                             </TableHeader>
                             <TableHeader
                                 name="warehouse_category_description"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="xl"
                             >
                                 Warehouse Category Description
                             </TableHeader>

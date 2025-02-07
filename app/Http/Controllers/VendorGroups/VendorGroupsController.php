@@ -5,6 +5,7 @@ namespace App\Http\Controllers\VendorGroups;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\VendorGroups;
+use App\Models\Vendors;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class VendorGroupsController extends Controller
     }
 
     public function getAllData(){
-        $query = VendorGroups::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = VendorGroups::query()->with(['getCreatedBy', 'getUpdatedBy', 'getVendor']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -44,6 +45,12 @@ class VendorGroupsController extends Controller
         $data['page_title'] = 'Vendor Groups';
         $data['vendor_groups'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
+
+        $data['all_active_vendors'] = Vendors::select('id', 'vendor_name as name', 'status')
+            ->where('status', 'ACTIVE')
+            ->get();
+        $data['all_vendors'] = Vendors::select('id', 'vendor_name as name', 'status')     
+            ->get();
 
         return Inertia::render("VendorGroups/VendorGroups", $data);
     }
@@ -69,7 +76,7 @@ class VendorGroupsController extends Controller
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('VendorGroups', $e->getMessage());
+            CommonHelpers::LogSystemError('Vendor Groups', $e->getMessage());
             return back()->with(['message' => 'Vendor Group Creation Failed!', 'type' => 'error']);
         }
         
@@ -104,7 +111,7 @@ class VendorGroupsController extends Controller
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('VendorGroups', $e->getMessage());
+            CommonHelpers::LogSystemError('Vendor Groups', $e->getMessage());
             return back()->with(['message' => 'Vendor Group Updating Failed!', 'type' => 'error']);
         }
     }

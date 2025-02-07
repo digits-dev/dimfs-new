@@ -33,6 +33,9 @@ const VendorTypes = ({ page_title, tableName, vendor_types, queryParams }) => {
         status: "",
     });
 
+    router.on('start', () => setLoading(true));
+    router.on('finish', () => setLoading(false));
+
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
@@ -63,7 +66,7 @@ const VendorTypes = ({ page_title, tableName, vendor_types, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className="fa fa-table text-base p-[1px]"></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -209,6 +212,9 @@ const VendorTypes = ({ page_title, tableName, vendor_types, queryParams }) => {
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.vendor_type_description}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.get_created_by?.name}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_updated_by?.name}

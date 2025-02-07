@@ -135,5 +135,8 @@ class VendorGroups extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
-
+    
+    public function getVendor() {
+        return $this->belongsTo(Vendors::class, 'vendors_id', 'id');
+    }
 }

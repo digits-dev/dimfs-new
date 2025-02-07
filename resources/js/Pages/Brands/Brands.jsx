@@ -111,18 +111,18 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="brand_code"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Brand Code
-                            </TableHeader>
-                            <TableHeader
                                 name="brand_description"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Brand Description
+                            </TableHeader>
+                            <TableHeader
+                                name="brand_code"
+                                queryParams={queryParams}
+                                width="md"
+                            >
+                                Brand Code
                             </TableHeader>
                             <TableHeader
                                 name="brand_group"
@@ -226,10 +226,10 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.brand_code}
+                                        {item.brand_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.brand_description}
+                                        {item.brand_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.brand_group}
