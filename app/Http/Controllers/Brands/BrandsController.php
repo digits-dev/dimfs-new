@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Brands;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\BrandGroups;
 use App\Models\Brands;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,7 @@ class BrandsController extends Controller
     }
 
     public function getAllData(){
-        $query = Brands::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = Brands::query()->with(['getCreatedBy', 'getUpdatedBy', 'getBrandGroup']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -42,16 +43,24 @@ class BrandsController extends Controller
         $data['page_title'] = 'Brands';
         $data['brands'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
+
+        $data['all_active_brand_groups'] = BrandGroups::select('id', 'brand_group_description as name', 'status')
+            ->where('status', 'ACTIVE')
+                ->get();
+            $data['all_brand_groups'] = BrandGroups::select('id', 'brand_group_description as name', 'status')     
+                ->get();
+
         return Inertia::render("Brands/Brands", $data);
         
     }
 
     public function create(Request $request){
 
+
         $validatedFields = $request->validate([
             'brand_code' => 'required|string|max:3|unique:brands,brand_code',
             'brand_description' => 'required|string|max:30|unique:brands,brand_description',
-            'brand_group' => 'required|string|max:50',
+            'brand_groups_id' => 'required|integer',
             'contact_email' => 'required|email|max:100',
             'contact_name' => 'required|string|max:100',
         ]);
@@ -61,7 +70,7 @@ class BrandsController extends Controller
             Brands::create([
                 'brand_code' => $validatedFields['brand_code'], 
                 'brand_description' => $validatedFields['brand_description'],   
-                'brand_group' => $validatedFields['brand_group'], 
+                'brand_groups_id' => $validatedFields['brand_groups_id'], 
                 'contact_email' => $validatedFields['contact_email'], 
                 'contact_name' => $validatedFields['contact_name'], 
                 'status' => 'ACTIVE',
@@ -85,7 +94,7 @@ class BrandsController extends Controller
         $validatedFields = $request->validate([
             'brand_code' => 'required|string|max:3',
             'brand_description' => 'required|string|max:30',
-            'brand_group' => 'required|string|max:50',
+            'brand_groups_id' => 'required|integer',
             'contact_email' => 'required|email|max:100',
             'contact_name' => 'required|string|max:100',
             'status' => 'required|string',
@@ -117,7 +126,7 @@ class BrandsController extends Controller
                 }
             }
     
-            $brands->brand_group = $validatedFields['brand_group'];
+            $brands->brand_groups_id = $validatedFields['brand_groups_id'];
             $brands->contact_email = $validatedFields['contact_email'];
             $brands->contact_name = $validatedFields['contact_name'];
             $brands->status = $validatedFields['status'];

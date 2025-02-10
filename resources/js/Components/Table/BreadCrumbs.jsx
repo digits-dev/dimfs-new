@@ -17,7 +17,6 @@ const BreadCrumbs = ({data, title}) => {
         } else {
             setIcon(null);
         }
-        console.log(theme);
         
 
     }, [data.module, title]); 

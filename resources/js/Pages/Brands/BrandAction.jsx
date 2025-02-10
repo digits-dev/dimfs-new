@@ -7,7 +7,7 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const BrandAction = ({action, onClose, updateData}) => {
+const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_brand_groups}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -16,7 +16,8 @@ const BrandAction = ({action, onClose, updateData}) => {
         id: "" || updateData.id,
         brand_code: "" || updateData.brand_code,
         brand_description: "" || updateData.brand_description,
-        brand_group: "" || updateData.brand_group,
+        brand_groups_id: "" || updateData.brand_groups_id,
+        brand_groups_name: "" || updateData.brand_groups_name,
         contact_name: "" || updateData.contact_name,
         contact_email: "" || updateData.contact_email,
         status: "" || updateData.status,
@@ -107,18 +108,37 @@ const BrandAction = ({action, onClose, updateData}) => {
             </div>
         )}
         {/* BRAND GROUP */}
-        <InputComponent
-            name="brand_group"
-            value={data.brand_group}
-            disabled={action === 'View'}
-            placeholder="Enter Brand Group"
-            onChange={(e)=> setData("brand_group", e.target.value)}
-        />
-        {(errors.brand_group) && (
+        {action == 'View' && 
+            <InputComponent
+                displayName="Brand Group"
+                value={data.category_name}
+                disabled={action === 'View'}
+                placeholder="Enter Brand Group"
+            />
+        }
+        {(action == 'Update' || action == 'Add') && 
+            (   <DropdownSelect
+                    placeholder="Choose Brand Group"
+                    selectType="react-select"
+                    defaultSelect="Select Brand Group"
+                    onChange={(selectedOption) => setData((prevData) => ({
+                        ...prevData,
+                        brand_groups_id: selectedOption?.value,
+                        brand_groups_name: selectedOption?.label
+                    }))}
+                    name="brand_group"
+                    isStatus={action == "Update"}
+                    options={action == 'Update' ? all_brand_groups : all_active_brand_groups}
+                    value={data.brand_groups_id ? { label: data.brand_groups_name, value: data.brand_groups_id } : null}
+                />
+            )
+        }
+        {(errors.brand_groups_id) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.brand_group}
+                {errors.brand_groups_id}
             </div>
         )}
+        {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Brand Group is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
         {/* CONTACT NAME */}
         <InputComponent
             name="contact_name"

@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import BrandAction from "./BrandAction";
 
 
-const Brands = ({page_title, tableName, brands, queryParams}) => {
+const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_groups , all_brand_groups}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -31,7 +31,8 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
         id: "",
         brand_code: "",
         brand_description: "",
-        brand_group: "",
+        brand_groups_id: "",
+        brand_groups_name: "",
         contact_name: "",
         contact_email: "",
         status: "",
@@ -78,7 +79,8 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                     id: "",
                                     brand_code: "",
                                     brand_description: "",
-                                    brand_group: "",
+                                    brand_groups_id: "",
+                                    brand_groups_name: "",
                                     contact_name: "",
                                     contact_email: "",
                                     status: "",
@@ -188,7 +190,8 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                                     id: item.id,
                                                     brand_code: item.brand_code,
                                                     brand_description: item.brand_description,
-                                                    brand_group: item.brand_group,
+                                                    brand_groups_id: item.brand_groups_id,
+                                                    brand_groups_name: item.get_brand_group?.brand_group_description,
                                                     contact_name: item.contact_name,
                                                     contact_email: item.contact_email,
                                                     status: item.status,
@@ -204,7 +207,8 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                                     id: item.id,
                                                     brand_code: item.brand_code,
                                                     brand_description: item.brand_description,
-                                                    brand_group: item.brand_group,
+                                                    brand_groups_id: item.brand_groups_id,
+                                                    brand_groups_name: item.get_brand_group?.brand_group_description,
                                                     contact_name: item.contact_name,
                                                     contact_email: item.contact_email,
                                                     status: item.status,
@@ -232,7 +236,7 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                                         {item.brand_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.brand_group}
+                                        {item.get_brand_group?.brand_group_description}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.contact_name}
@@ -267,7 +271,7 @@ const Brands = ({page_title, tableName, brands, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon='fa fa-edit'
             >
-                <BrandAction onClose={handleModalClick} action={action} updateData={updateData}/>
+                <BrandAction onClose={handleModalClick} action={action} updateData={updateData} all_brand_groups={all_brand_groups} all_active_brand_groups={all_active_brand_groups}/>
             </Modal>
             
         </>

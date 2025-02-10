@@ -16,7 +16,7 @@ class Brands extends Model
         'id',
         'brand_code',
         'brand_description',
-        'brand_group',
+        'brand_groups_id',
         'contact_name',
         'contact_email',
         'status',
@@ -141,6 +141,10 @@ class Brands extends Model
     
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+    }
+
+    public function getBrandGroup() {
+        return $this->belongsTo(BrandGroups::class, 'brand_groups_id', 'id');
     }
 
 }
