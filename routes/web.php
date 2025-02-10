@@ -182,6 +182,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('brands')->group(function() {
         Route::post('/create', [BrandsController::class, 'create']);
         Route::post('/update', [BrandsController::class, 'update']);
+        Route::get('/export', [BrandsController::class, 'export']);
     });
 
     // BRAND DIRECTIONS

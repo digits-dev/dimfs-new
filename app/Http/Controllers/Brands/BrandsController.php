@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Brands;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\BrandGroups;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BrandsController extends Controller
 {
@@ -143,6 +145,41 @@ class BrandsController extends Controller
             CommonHelpers::LogSystemError('Brands', $e->getMessage());
             return back()->with(['message' => 'Brand Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Brand Code',
+            'Brand Description',
+            'Brand Brand Group',
+            'Contact Name',
+            'Contact Email',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'brand_code',
+            'brand_description',
+            'getBrandGroup.brand_group_description',
+            'contact_name',
+            'contact_email',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Brands - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
     
 }
