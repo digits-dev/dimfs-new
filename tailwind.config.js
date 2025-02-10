@@ -10,6 +10,8 @@ module.exports = {
         extend: {
             colors: {
                 "login-bg-color": "#383838",
+                "login-btn-color": "#3cbfcc",
+                "login-btn-color2": "#4cefff",
                 "camera-color": "#342D2D",
                 "screen-color": "#E8E8E8",
                 "black-screen-color": "#232222",

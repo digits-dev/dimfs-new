@@ -90,7 +90,7 @@ Route::get('/reset_password', [ResetPasswordController::class, 'getIndex'])->nam
 Route::post('/send_resetpass_email',[ResetPasswordController::class, 'sendResetPasswordInstructions']);
 Route::get('/reset_password_email/{email}', [ResetPasswordController::class, 'getResetIndex'])->name('reset_password_email');
 Route::post('/send_resetpass_email/reset',[ResetPasswordController::class, 'resetPassword']);
-Route::post('login-save', [LoginController::class, 'authenticate'])->name('login-save');
+Route::post('post_login', [LoginController::class, 'authenticate'])->name('post_login');
 Route::get('/appname', [SettingsController::class, 'getAppname'])->name('app-name');
 Route::get('/applogo', [SettingsController::class, 'getApplogo'])->name('app-logo');
 Route::get('/login-details', [SettingsController::class, 'getLoginDetails'])->name('app-login-details');
