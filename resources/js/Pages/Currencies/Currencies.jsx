@@ -19,10 +19,11 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import CurrenciesAction from "./CurrenciesAction";
 
-const Currencies = ({page_title, tableName, currencies, queryParams }) => {
+const Currencies = ({ page_title, tableName, currencies, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
-    const { primayActiveColor, textColorActive } = useThemeStyles(theme);
+    const { primayActiveColor, textColorActive, buttonSwalColor } =
+        useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
@@ -33,8 +34,8 @@ const Currencies = ({page_title, tableName, currencies, queryParams }) => {
         status: "",
     });
 
-    router.on('start', () => setLoading(true));
-    router.on('finish', () => setLoading(false));
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -48,6 +49,37 @@ const Currencies = ({page_title, tableName, currencies, queryParams }) => {
 
     const handleModalClick = () => {
         setIsModalOpen(!isModalOpen);
+    };
+
+    // EXPORT
+
+    const handleExport = (e) => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: `<p class="font-poppins text-3xl">Do you want to Export ${page_title}?</p>`,
+            showCancelButton: true,
+            confirmButtonText: `Export`,
+            confirmButtonColor: buttonSwalColor,
+            icon: "question",
+            iconColor: buttonSwalColor,
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    window.location.href =
+                        "/currencies/export" + window.location.search;
+                } catch (error) {
+                    {
+                        handleToast &&
+                            handleToast(
+                                "Something went wrong, please try again later.",
+                                "Error"
+                            );
+                    }
+                }
+            }
+        });
     };
 
     return (
@@ -66,7 +98,7 @@ const Currencies = ({page_title, tableName, currencies, queryParams }) => {
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
@@ -90,6 +122,18 @@ const Currencies = ({page_title, tableName, currencies, queryParams }) => {
                         >
                             <i className="fa-solid fa-plus mr-1"></i> Add
                             Currency
+                        </Button>
+                        <Button
+                            extendClass={
+                                (["bg-skin-white"].includes(theme)
+                                    ? primayActiveColor
+                                    : theme) + " py-[5px] px-[10px]"
+                            }
+                            type="button"
+                            fontColor={textColorActive}
+                            onClick={handleExport}
+                        >
+                            <i className="fa-solid fa-download mr-1"></i> Export
                         </Button>
                     </div>
                     <div className="flex">

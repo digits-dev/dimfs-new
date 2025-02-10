@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class ClassificationsController extends Controller
 {
@@ -135,5 +137,37 @@ class ClassificationsController extends Controller
             CommonHelpers::LogSystemError('Classifications', $e->getMessage());
             return back()->with(['message' => 'Classification Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Class Code',
+            'Class Description',
+            'Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'class_code',
+            'class_description',
+            'getCategory.category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Classfications - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

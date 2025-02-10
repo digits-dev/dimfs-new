@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class ColorsController extends Controller
 {
@@ -126,4 +128,33 @@ class ColorsController extends Controller
             return back()->with(['message' => 'Color Updating Failed!', 'type' => 'error']);
         }
     }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Color Code',
+            'Color Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'color_code',
+            'color_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Color - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
+    }
+
 }

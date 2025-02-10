@@ -189,36 +189,42 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('brand_directions')->group(function() {
         Route::post('/create', [BrandDirectionsController::class, 'create']);
         Route::post('/update', [BrandDirectionsController::class, 'update']);
+        Route::get('/export', [BrandDirectionsController::class, 'export']);
     });
     
     // BRAND GROUPS
     Route::prefix('brand_groups')->group(function() {
         Route::post('/create', [BrandGroupsController::class, 'create']);
         Route::post('/update', [BrandGroupsController::class, 'update']);
+        Route::get('/export', [BrandGroupsController::class, 'export']);
     });
 
     // BRAND MARKETINGS
     Route::prefix('brand_marketings')->group(function() {
         Route::post('/create', [BrandMarketingsController::class, 'create']);
         Route::post('/update', [BrandMarketingsController::class, 'update']);
+        Route::get('/export', [BrandMarketingsController::class, 'export']);
     });
     
     // CATEGORIES
     Route::prefix('categories')->group(function() {
         Route::post('/create', [CategoriesController::class, 'create']);
         Route::post('/update', [CategoriesController::class, 'update']);
+        Route::get('/export', [CategoriesController::class, 'export']);
     });
     
     // CLASSIFICATIONS
     Route::prefix('classifications')->group(function() {
         Route::post('/create', [ClassificationsController::class, 'create']);
         Route::post('/update', [ClassificationsController::class, 'update']);
+        Route::get('/export', [ClassificationsController::class, 'export']);
     });
     
     // COLORS
     Route::prefix('colors')->group(function() {
         Route::post('/create', [ColorsController::class, 'create']);
         Route::post('/update', [ColorsController::class, 'update']);
+        Route::get('/export', [ColorsController::class, 'export']);
     });
 
     // COUNTERS
@@ -231,6 +237,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('currencies')->group(function() {
         Route::post('/create', [CurrenciesController::class, 'create']);
         Route::post('/update', [CurrenciesController::class, 'update']);
+        Route::get('/export', [CurrenciesController::class, 'export']);
     });
 
     // IDENTIFIERS   
