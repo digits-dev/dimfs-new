@@ -370,48 +370,56 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('sub_classifications')->group(function() {
         Route::post('/create', [SubClassificationsController::class, 'create']);
         Route::post('/update', [SubClassificationsController::class, 'update']);
+        Route::get('/export', [SubClassificationsController::class, 'export']);
     });
 
     // SUPPORT TYPES
     Route::prefix('support_types')->group(function() {
         Route::post('/create', [SupportTypesController::class, 'create']);
         Route::post('/update', [SupportTypesController::class, 'update']);
+        Route::get('/export', [SupportTypesController::class, 'export']);
     });
 
     // UOMS
     Route::prefix('uoms')->group(function() {
         Route::post('/create', [UomsController::class, 'create']);
         Route::post('/update', [UomsController::class, 'update']);
+        Route::get('/export', [UomsController::class, 'export']);
     });
 
     // VENDORS
     Route::prefix('vendors')->group(function() {
         Route::post('/create', [VendorsController::class, 'create']);
         Route::post('/update', [VendorsController::class, 'update']);
+        Route::get('/export', [VendorsController::class, 'export']);
     });
 
     // VENDOR GROUPS
     Route::prefix('vendor_groups')->group(function() {
         Route::post('/create', [VendorGroupsController::class, 'create']);
         Route::post('/update', [VendorGroupsController::class, 'update']);
+        Route::get('/export', [VendorGroupsController::class, 'export']);
     });
 
     // VENDOR TYPES
     Route::prefix('vendor_types')->group(function() {
         Route::post('/create', [VendorTypesController::class, 'create']);
         Route::post('/update', [VendorTypesController::class, 'update']);
+        Route::get('/export', [VendorTypesController::class, 'export']);
     });
 
     // WAREHOUSE CATEGORIES
     Route::prefix('warehouse_categories')->group(function() {
         Route::post('/create', [WarehouseCategoriesController::class, 'create']);
         Route::post('/update', [WarehouseCategoriesController::class, 'update']);
+        Route::get('/export', [WarehouseCategoriesController::class, 'export']);
     });
 
     // WARRANTIES
     Route::prefix('warranties')->group(function() {
         Route::post('/create', [WarrantiesController::class, 'create']);
         Route::post('/update', [WarrantiesController::class, 'update']);
+        Route::get('/export', [WarrantiesController::class, 'export']);
     });
 
     // ----------------------------------- GASHAPON SUBMASTERS -------------------------------------//
@@ -420,72 +428,85 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('gashapon_brands')->group(function() {
         Route::post('/create', [GashaponBrandsController::class, 'create']);
         Route::post('/update', [GashaponBrandsController::class, 'update']);
+        Route::get('/export', [GashaponBrandsController::class, 'export']);
     });
 
     // GASHAPON CATEGORIES
     Route::prefix('gashapon_categories')->group(function() {
         Route::post('/create', [GashaponCategoriesController::class, 'create']);
         Route::post('/update', [GashaponCategoriesController::class, 'update']);
+        Route::get('/export', [GashaponCategoriesController::class, 'export']);
     });
 
     // GASHAPON COUNTRIES
     Route::prefix('gashapon_countries')->group(function() {
         Route::post('/create', [GashaponCountriesController::class, 'create']);
         Route::post('/update', [GashaponCountriesController::class, 'update']);
+        Route::get('/export', [GashaponCountriesController::class, 'export']);
     });
 
     // GASHAPON INCOTERMS
     Route::prefix('gashapon_incoterms')->group(function() {
         Route::post('/create', [GashaponIncotermsController::class, 'create']);
         Route::post('/update', [GashaponIncotermsController::class, 'update']);
+        Route::get('/export', [GashaponIncotermsController::class, 'export']);
     });
 
     // GASHAPON INVENTORY TYPES
     Route::prefix('gashapon_inventory_types')->group(function() {
         Route::post('/create', [GashaponInventoryTypesController::class, 'create']);
         Route::post('/update', [GashaponInventoryTypesController::class, 'update']);
+        Route::get('/export', [GashaponInventoryTypesController::class, 'export']);
     });
 
     // GASHAPON MODELS
     Route::prefix('gashapon_models')->group(function() {
         Route::post('/create', [GashaponModelsController::class, 'create']);
         Route::post('/update', [GashaponModelsController::class, 'update']);
+        Route::get('/export', [GashaponModelsController::class, 'export']);
+        
     });
 
     // GASHAPON PRODUCT TYPES
     Route::prefix('gashapon_product_types')->group(function() {
         Route::post('/create', [GashaponProductTypesController::class, 'create']);
         Route::post('/update', [GashaponProductTypesController::class, 'update']);
+        Route::get('/export', [GashaponProductTypesController::class, 'export']);
     });
 
     // GASHAPON SKU STATUSES
     Route::prefix('gashapon_sku_statuses')->group(function() {
         Route::post('/create', [GashaponSkuStatusesController::class, 'create']);
         Route::post('/update', [GashaponSkuStatusesController::class, 'update']);
+        Route::get('/export', [GashaponSkuStatusesController::class, 'export']);
     });
 
     // GASHAPON UOMS
     Route::prefix('gashapon_uoms')->group(function() {
         Route::post('/create', [GashaponUomsController::class, 'create']);
         Route::post('/update', [GashaponUomsController::class, 'update']);
+        Route::get('/export', [GashaponUomsController::class, 'export']);
     });
 
     // GASHAPON VENDOR GROUPS
     Route::prefix('gashapon_vendor_groups')->group(function() {
         Route::post('/create', [GashaponVendorGroupsController::class, 'create']);
         Route::post('/update', [GashaponVendorGroupsController::class, 'update']);
+        Route::get('/export', [GashaponVendorGroupsController::class, 'export']);
     });
 
     // GASHAPON VENDOR TYPES
     Route::prefix('gashapon_vendor_types')->group(function() {
         Route::post('/create', [GashaponVendorTypesController::class, 'create']);
         Route::post('/update', [GashaponVendorTypesController::class, 'update']);
+        Route::get('/export', [GashaponVendorTypesController::class, 'export']);
     });
 
     // GASHAPON WAREHOUSE CATEGORIES
     Route::prefix('gashapon_warehouse_categories')->group(function() {
         Route::post('/create', [GashaponWarehouseCategoriesController::class, 'create']);
         Route::post('/update', [GashaponWarehouseCategoriesController::class, 'update']);
+        Route::get('/export', [GashaponWarehouseCategoriesController::class, 'export']);
     });
 
     // ------------------------------------ RMA SUBMASTERS -------------------------------------//
@@ -494,42 +515,49 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('rma_categories')->group(function() {
         Route::post('/create', [RmaCategoriesController::class, 'create']);
         Route::post('/update', [RmaCategoriesController::class, 'update']);
+        Route::get('/export', [RmaCategoriesController::class, 'export']);
     });
 
     // RMA CLASSIFICATIONS
     Route::prefix('rma_classifications')->group(function() {
         Route::post('/create', [RmaClassificationsController::class, 'create']);
         Route::post('/update', [RmaClassificationsController::class, 'update']);
+        Route::get('/export', [RmaClassificationsController::class, 'export']);
     });
 
     // RMA MARGIN CATEGORIES
     Route::prefix('rma_margin_categories')->group(function() {
         Route::post('/create', [RmaMarginCategoriesController::class, 'create']);
         Route::post('/update', [RmaMarginCategoriesController::class, 'update']);
+        Route::get('/export', [RmaMarginCategoriesController::class, 'export']);
     });
 
     // RMA MODEL SPECIFICS
     Route::prefix('rma_model_specifics')->group(function() {
         Route::post('/create', [RmaModelSpecificsController::class, 'create']);
         Route::post('/update', [RmaModelSpecificsController::class, 'update']);
+        Route::get('/export', [RmaModelSpecificsController::class, 'export']);
     });
 
     // RMA MODEL SPECIFICS
     Route::prefix('rma_store_categories')->group(function() {
         Route::post('/create', [RmaStoreCategoriesController::class, 'create']);
         Route::post('/update', [RmaStoreCategoriesController::class, 'update']);
+        Route::get('/export', [RmaStoreCategoriesController::class, 'export']);
     });
 
     // RMA SUB CLASSIFICATIONS
     Route::prefix('rma_sub_classifications')->group(function() {
         Route::post('/create', [RmaSubClassificationsController::class, 'create']);
         Route::post('/update', [RmaSubClassificationsController::class, 'update']);
+        Route::get('/export', [RmaSubClassificationsController::class, 'export']);
     });
 
     // RMA UOMS
     Route::prefix('rma_uoms')->group(function() {
         Route::post('/create', [RmaUomsController::class, 'create']);
         Route::post('/update', [RmaUomsController::class, 'update']);
+        Route::get('/export', [RmaUomsController::class, 'export']);
     });
     
 });
