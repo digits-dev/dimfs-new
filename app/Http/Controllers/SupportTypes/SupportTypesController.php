@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class SupportTypesController extends Controller
 {
@@ -103,5 +105,31 @@ class SupportTypesController extends Controller
             CommonHelpers::LogSystemError('SupportTypes', $e->getMessage());
             return back()->with(['message' => 'Support Type Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Support Type Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'support_type_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Support Types - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

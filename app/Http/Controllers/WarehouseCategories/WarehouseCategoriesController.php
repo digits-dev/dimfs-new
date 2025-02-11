@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class WarehouseCategoriesController extends Controller
 {
@@ -116,5 +118,33 @@ class WarehouseCategoriesController extends Controller
             CommonHelpers::LogSystemError('WarehouseCategories', $e->getMessage());
             return back()->with(['message' => 'Warehouse Category Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Warehouse Category Code',
+            'Warehouse Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'warehouse_category_code',
+            'warehouse_category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Warehouse Categories - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

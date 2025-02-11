@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class VendorTypesController extends Controller
 {
@@ -116,5 +118,33 @@ class VendorTypesController extends Controller
             CommonHelpers::LogSystemError('VendorTypes', $e->getMessage());
             return back()->with(['message' => 'Vendor Type Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Vendor Type Code',
+            'Vendor Type Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'vendor_type_code',
+            'vendor_type_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Vendor Types - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class VendorGroupsController extends Controller
 {
@@ -114,5 +116,34 @@ class VendorGroupsController extends Controller
             CommonHelpers::LogSystemError('Vendor Groups', $e->getMessage());
             return back()->with(['message' => 'Vendor Group Updating Failed!', 'type' => 'error']);
         }
+    }
+    
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Vendor Group Name',
+            'Vendor Name',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'vendor_group_name',
+            'getVendor.vendor_name',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Vendor Groups - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

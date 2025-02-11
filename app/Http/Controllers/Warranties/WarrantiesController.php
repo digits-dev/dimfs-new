@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class WarrantiesController extends Controller
 {
@@ -116,5 +118,33 @@ class WarrantiesController extends Controller
             CommonHelpers::LogSystemError('Warranties', $e->getMessage());
             return back()->with(['message' => 'Warranty Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Warranty Code',
+            'Warranty Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'warranty_code',
+            'warranty_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Warranties - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }
