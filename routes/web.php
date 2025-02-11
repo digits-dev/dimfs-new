@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
+use App\Http\Controllers\Admin\SystemErrorLogsController;
 use App\Http\Controllers\AppleLobs\AppleLobsController;
 use App\Http\Controllers\BrandDirections\BrandDirectionsController;
 use App\Http\Controllers\BrandGroups\BrandGroupsController;
@@ -169,6 +170,11 @@ Route::middleware(['auth'])->group(function () {
 
     //EXPORT
     Route::post('/request/export', [AdmRequestController::class, 'export'])->name('export');
+
+    //SYSTEM ERROR LOGS
+    Route::prefix('system_error_logs')->group(function() {
+        Route::get('/export', [SystemErrorLogsController::class, 'export']);
+    });
 
     // ---------------------------------------- ITEM MASTER ----------------------------------------//
 

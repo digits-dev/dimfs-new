@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FormatLabelName from "../../Utilities/FormatLabelName";
 import { useTheme } from "../../Context/ThemeContext";
 
-const InputComponent = ({
+const TextArea = ({
     type = "text",
     name,
     value,
@@ -22,7 +22,7 @@ const InputComponent = ({
             >
                 {displayName || FormatLabelName(name)}
             </label>
-            <input
+            <textarea
                 id={name}
                 type={type}
                 value={value}
@@ -37,4 +37,4 @@ const InputComponent = ({
     );
 };
 
-export default InputComponent;
+export default TextArea;

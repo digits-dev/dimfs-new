@@ -778,6 +778,16 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+            [
+                'name' => 'System Error Logs',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa fa-history',
+                'path' => 'system_error_logs',
+                'table_name' => 'log_system_errors',
+                'controller' => 'SystemErrorLogsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {

@@ -95,6 +95,12 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
             image: "/images/navigation/logs-icon.png",
             icon: "fa fa-history",
         },
+        {
+            name: "System Error Logs",
+            url: "system_error_logs",
+            image: "/images/navigation/logs-icon.png",
+            icon: "fa fa-history",
+        },
     ];
    
     useEffect(() => {
