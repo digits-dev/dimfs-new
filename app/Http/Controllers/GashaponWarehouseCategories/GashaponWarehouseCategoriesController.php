@@ -139,7 +139,7 @@ class GashaponWarehouseCategoriesController extends Controller
                 'updated_at',
             ];
     
-            $filename = "Gashapon Vendor Types - " . date ('Y-m-d H:i:s');
+            $filename = "Gashapon Warehouse Categories - " . date ('Y-m-d H:i:s');
             $query = self::getAllData();
             return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
