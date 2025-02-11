@@ -53,7 +53,7 @@ class ModelSpecificsController extends Controller
     public function create(Request $request){
 
         $validatedFields = $request->validate([
-            'model_specific_code' => 'required|string|max:10|unique:model_specifics,model_specific_code',
+            'model_specific_code' => 'required|string|max:20|unique:model_specifics,model_specific_code',
             'model_specific_description' => 'required|string|max:255',
         ]);
 
@@ -80,7 +80,7 @@ class ModelSpecificsController extends Controller
     public function update(Request $request){
 
         $validatedFields = $request->validate([
-            'model_specific_code' => 'required|string|max:10',
+            'model_specific_code' => 'required|string|max:20',
             'model_specific_description' => 'required|string|max:255',
             'status' => 'required|string',
         ]);

@@ -61,7 +61,7 @@ class MarginCategoriesController extends Controller
 
         $validatedFields = $request->validate([
             'sub_classifications_id' => 'required|integer',
-            'margin_category_code' => 'required|string|max:10|unique:margin_categories,margin_category_code',
+            'margin_category_code' => 'required|string|max:10',
             'margin_category_description' => 'required|string|max:255',
         ]);
         
