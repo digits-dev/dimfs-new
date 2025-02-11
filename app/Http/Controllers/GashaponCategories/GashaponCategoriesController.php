@@ -121,27 +121,35 @@ class GashaponCategoriesController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'Category Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try {
 
-        $columns = [
-            'category_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+            $headers = [
+                'Category Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'category_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Categories - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $filename = "Gashapon Categories - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Categories', $e->getMessage());
+        }
 
     }
 

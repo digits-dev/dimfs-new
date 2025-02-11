@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RmaClassifications;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\RmaCategories;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RmaClassificationsController extends Controller
 {
@@ -142,6 +144,43 @@ class RmaClassificationsController extends Controller
 
             CommonHelpers::LogSystemError('RMA Classifications', $e->getMessage());
             return back()->with(['message' => 'RMA Classification Updating Failed!', 'type' => 'error']);
+        }
+    }
+
+    public function export(Request $request)
+    {
+        try {
+
+            $headers = [
+                'RMA Class Code',
+                'RMA Class Description',
+                'RMA Category Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+
+            $columns = [
+                'class_code',
+                'class_description',
+                'getRmaCategory.category_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+            
+            $filename = "RMA Classifications - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+            
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('RMA Classifications', $e->getMessage());
         }
     }
 }

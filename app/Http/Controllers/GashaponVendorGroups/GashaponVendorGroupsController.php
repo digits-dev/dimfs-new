@@ -120,27 +120,35 @@ class GashaponVendorGroupsController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'Vendor Group Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try { 
 
-        $columns = [
-            'vendor_group_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+            $headers = [
+                'Vendor Group Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'vendor_group_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Vendor Groups - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $filename = "Gashapon Vendor Groups - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        }
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Vendor Groups', $e->getMessage());
+        }
+
 
     }
 

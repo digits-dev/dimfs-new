@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RmaCategories;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\RmaCategories;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RmaCategoriesController extends Controller
 {
@@ -125,5 +127,41 @@ class RmaCategoriesController extends Controller
             CommonHelpers::LogSystemError('RMA Categories', $e->getMessage());
             return back()->with(['message' => 'RMA Category Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+        try {
+
+            $headers = [
+                'Category Code',
+                'Category Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+
+            $columns = [
+                'category_code',
+                'category_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+
+            $filename = "RMA Categories - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('RMA Categories', $e->getMessage());
+        }
+
     }
 }

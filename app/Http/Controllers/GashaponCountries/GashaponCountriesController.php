@@ -131,30 +131,37 @@ class GashaponCountriesController extends Controller
 
     public function export(Request $request)
     {
+        try {
 
-        $headers = [
-            'Country Code',
-            'Country Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+            $headers = [
+                'Country Code',
+                'Country Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'country_code',
+                'country_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Countries - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $columns = [
-            'country_code',
-            'country_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+        }
 
-        $filename = "Gashapon Countries - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
-
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Countries', $e->getMessage());
+        }
+        
     }
 }

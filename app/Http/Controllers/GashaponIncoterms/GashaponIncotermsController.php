@@ -120,27 +120,35 @@ class GashaponIncotermsController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'Incoterm Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try {
 
-        $columns = [
-            'incoterm_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+            $headers = [
+                'Incoterm Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'incoterm_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Incoterms - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $filename = "Gashapon Incoterms - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Incoterms', $e->getMessage());
+        }
 
     }
 }

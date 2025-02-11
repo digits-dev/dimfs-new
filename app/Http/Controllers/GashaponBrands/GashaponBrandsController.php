@@ -118,27 +118,35 @@ class GashaponBrandsController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'Brand Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try {
+            
+            $headers = [
+                'Brand Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'brand_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Brands - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $columns = [
-            'brand_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+        }
 
-        $filename = "Gashapon Brands - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Brands', $e->getMessage());
+        }
 
     }
 }

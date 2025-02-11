@@ -133,29 +133,37 @@ class GashaponUomsController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'UOM Code',
-            'UOM Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try {
 
-        $columns = [
-            'uom_code',
-            'uom_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+            $headers = [
+                'UOM Code',
+                'UOM Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'uom_code',
+                'uom_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon UOMs - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $filename = "Gashapon UOMs - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon UOMs', $e->getMessage());
+        }
 
     }
 }

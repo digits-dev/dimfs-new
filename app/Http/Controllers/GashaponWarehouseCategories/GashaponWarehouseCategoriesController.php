@@ -119,27 +119,35 @@ class GashaponWarehouseCategoriesController extends Controller
     public function export(Request $request)
     {
 
-        $headers = [
-            'Warehouse Category Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+        try {
 
-        $columns = [
-            'warehouse_category_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+            $headers = [
+                'Warehouse Category Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'warehouse_category_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Vendor Types - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $filename = "Gashapon Vendor Types - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Warehouse Categories', $e->getMessage());
+        }
 
     }
 }

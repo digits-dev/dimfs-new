@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RmaUoms;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\RmaUoms;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RmaUomsController extends Controller
 {
@@ -124,5 +126,42 @@ class RmaUomsController extends Controller
             CommonHelpers::LogSystemError('RMA UOMs', $e->getMessage());
             return back()->with(['message' => 'RMA UOM Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        try {
+            
+            $headers = [
+                'UOM Code',
+                'UOM Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'uom_code',
+                'uom_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "RMA UOMs - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('RMA UOMs', $e->getMessage());
+        }
+
     }
 }

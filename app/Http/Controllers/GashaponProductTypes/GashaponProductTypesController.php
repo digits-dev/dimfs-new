@@ -118,28 +118,35 @@ class GashaponProductTypesController extends Controller
 
     public function export(Request $request)
     {
+        try {
 
-        $headers = [
-            'Product Type Description',
-            'Status',
-            'Created By',
-            'Updated By',
-            'Created At',
-            'Updated At',
-        ];
+            $headers = [
+                'Product Type Description',
+                'Status',
+                'Created By',
+                'Updated By',
+                'Created At',
+                'Updated At',
+            ];
+    
+            $columns = [
+                'product_type_description',
+                'status',
+                'getCreatedBy.name',
+                'getUpdatedBy.name',
+                'created_at',
+                'updated_at',
+            ];
+    
+            $filename = "Gashapon Product Types - " . date ('Y-m-d H:i:s');
+            $query = self::getAllData();
+            return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        $columns = [
-            'product_type_description',
-            'status',
-            'getCreatedBy.name',
-            'getUpdatedBy.name',
-            'created_at',
-            'updated_at',
-        ];
+        }
 
-        $filename = "Gashapon Product Types - " . date ('Y-m-d H:i:s');
-        $query = self::getAllData();
-        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Gashapon Product Types', $e->getMessage());
+        }
 
     }
 }
