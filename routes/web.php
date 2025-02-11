@@ -244,108 +244,126 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('identifiers')->group(function() {
         Route::post('/create', [IdentifiersController::class, 'create']);
         Route::post('/update', [IdentifiersController::class, 'update']);
+        Route::get('/export', [IdentifiersController::class, 'export']);
     });
 
     // INCOTERMS
     Route::prefix('incoterms')->group(function() {
         Route::post('/create', [IncotermsController::class, 'create']);
         Route::post('/update', [IncotermsController::class, 'update']);
+        Route::get('/export', [IncotermsController::class, 'export']);
     });
 
     // INVENTORY TYPES
     Route::prefix('inventory_types')->group(function() {
         Route::post('/create', [InventoryTypesController::class, 'create']);
         Route::post('/update', [InventoryTypesController::class, 'update']);
+        Route::get('/export', [InventoryTypesController::class, 'export']);
     });
     
     // ITEM PLATFORMS
     Route::prefix('item_platforms')->group(function() {
         Route::post('/create', [ItemPlatformsController::class, 'create']);
         Route::post('/update', [ItemPlatformsController::class, 'update']);
+        Route::get('/export', [ItemPlatformsController::class, 'export']);
     });
 
     // ITEM PROMO TYPES
     Route::prefix('item_promo_types')->group(function() {
         Route::post('/create', [ItemPromoTypesController::class, 'create']);
         Route::post('/update', [ItemPromoTypesController::class, 'update']);
+        Route::get('/export', [ItemPromoTypesController::class, 'export']);
     });
 
     // ITEM SEGMENTATIONS
     Route::prefix('item_segmentations')->group(function() {
         Route::post('/create', [ItemSegmentationsController::class, 'create']);
         Route::post('/update', [ItemSegmentationsController::class, 'update']);
+        Route::get('/export', [ItemSegmentationsController::class, 'export']);
     });
 
     // ITEM SERIALS
     Route::prefix('item_serials')->group(function() {
         Route::post('/create', [ItemSerialsController::class, 'create']);
         Route::post('/update', [ItemSerialsController::class, 'update']);
+        Route::get('/export', [ItemSerialsController::class, 'export']);
     });
 
     // MARGIN CATEGORIES
     Route::prefix('margin_categories')->group(function() {
         Route::post('/create', [MarginCategoriesController::class, 'create']);
         Route::post('/update', [MarginCategoriesController::class, 'update']);
+        Route::get('/export', [MarginCategoriesController::class, 'export']);
     });
 
     // MODEL SPECIFICS
     Route::prefix('model_specifics')->group(function() {
         Route::post('/create', [ModelSpecificsController::class, 'create']);
         Route::post('/update', [ModelSpecificsController::class, 'update']);
+        Route::get('/export', [ModelSpecificsController::class, 'export']);
     });
 
     // PLATFORMS
     Route::prefix('platforms')->group(function() {
         Route::post('/create', [PlatformsController::class, 'create']);
         Route::post('/update', [PlatformsController::class, 'update']);
+        Route::get('/export', [PlatformsController::class, 'export']);
     });
 
     // PROMO TYPES
     Route::prefix('promo_types')->group(function() {
         Route::post('/create', [PromoTypesController::class, 'create']);
         Route::post('/update', [PromoTypesController::class, 'update']);
+        Route::get('/export', [PromoTypesController::class, 'export']);
     });
 
     // SEGMENTATIONS
     Route::prefix('segmentations')->group(function() {
         Route::post('/create', [SegmentationsController::class, 'create']);
         Route::post('/update', [SegmentationsController::class, 'update']);
+        Route::get('/export', [SegmentationsController::class, 'export']);
     });
 
     // SIZES
     Route::prefix('sizes')->group(function() {
         Route::post('/create', [SizesController::class, 'create']);
         Route::post('/update', [SizesController::class, 'update']);
+        Route::get('/export', [SizesController::class, 'export']);
     });
 
     // SKU CLASSIFICATIONS
     Route::prefix('sku_classifications')->group(function() {
         Route::post('/create', [SkuClassificationsController::class, 'create']);
         Route::post('/update', [SkuClassificationsController::class, 'update']);
+        Route::get('/export', [SkuClassificationsController::class, 'export']);
     });
 
     // SKU LEGENDS
     Route::prefix('sku_legends')->group(function() {
         Route::post('/create', [SkuLegendsController::class, 'create']);
         Route::post('/update', [SkuLegendsController::class, 'update']);
+        Route::get('/export', [SkuLegendsController::class, 'export']);
     });
 
     // SKU STATUSES
     Route::prefix('sku_statuses')->group(function() {
         Route::post('/create', [SkuStatusesController::class, 'create']);
         Route::post('/update', [SkuStatusesController::class, 'update']);
+        Route::get('/export', [SkuStatusesController::class, 'export']);
     });
 
     // STORE CATEGORIES
     Route::prefix('store_categories')->group(function() {
         Route::post('/create', [StoreCategoriesController::class, 'create']);
         Route::post('/update', [StoreCategoriesController::class, 'update']);
+        Route::get('/export', [StoreCategoriesController::class, 'export']);
     });
 
     // SUB CATEGORIES
     Route::prefix('sub_categories')->group(function() {
         Route::post('/create', [SubCategoriesController::class, 'create']);
         Route::post('/update', [SubCategoriesController::class, 'update']);
+        Route::get('/export', [SubCategoriesController::class, 'export']);
     });
 
     // SUB CLASSIFICATIONS
