@@ -1,7 +1,7 @@
 import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-import { useTheme } from '../../Context/ThemeContext';
-import useThemeStyles from '../../Hooks/useThemeStyles';
+import { useTheme } from "../../Context/ThemeContext";
+import useThemeStyles from "../../Hooks/useThemeStyles";
 import ContentPanel from "../../Components/Table/ContentPanel";
 import TopPanel from "../../Components/Table/TopPanel";
 import Tooltip from "../../Components/Tooltip/Tooltip";
@@ -10,21 +10,28 @@ import TableSearch from "../../Components/Table/TableSearch";
 import TableContainer from "../../Components/Table/TableContainer";
 import Thead from "../../Components/Table/Thead";
 import Tbody from "../../Components/Table/Tbody";
-import RowAction from '../../Components/Table/RowAction';
+import RowAction from "../../Components/Table/RowAction";
 import Row from "../../Components/Table/Row";
 import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
-import RowStatus from '../../Components/Table/RowStatus';
+import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandAction from "./BrandAction";
-import { useToast } from '../../Context/ToastContext';
+import { useToast } from "../../Context/ToastContext";
 
-
-const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_groups , all_brand_groups}) => {
-    const {theme} = useTheme();
+const Brands = ({
+    page_title,
+    tableName,
+    brands,
+    queryParams,
+    all_active_brand_groups,
+    all_brand_groups,
+}) => {
+    const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
-    const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+    const { primayActiveColor, textColorActive, buttonSwalColor } =
+        useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
@@ -39,10 +46,8 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
         status: "",
     });
 
-    const { handleToast } = useToast();
-
-    router.on('start', () => setLoading(true));
-    router.on('finish', () => setLoading(false));
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -56,25 +61,28 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
 
     const handleModalClick = () => {
         setIsModalOpen(!isModalOpen);
-    }
+    };
+
+    const { handleToast } = useToast();
 
     // EXPORT
 
     const handleExport = (e) => {
         e.preventDefault();
-        
+
         Swal.fire({
             title: `<p class="font-poppins text-3xl">Do you want to Export ${page_title}?</p>`,
             showCancelButton: true,
             confirmButtonText: `Export`,
             confirmButtonColor: buttonSwalColor,
-            icon: 'question',
+            icon: "question",
             iconColor: buttonSwalColor,
             reverseButtons: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    window.location.href = '/brands/export' + window.location.search;
+                    window.location.href =
+                        "/brands/export" + window.location.search;
                 } catch (error) {
                     {
                         handleToast &&
@@ -90,24 +98,34 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
 
     return (
         <>
-            <Head title={page_title}/>
+            <Head title={page_title} />
             <ContentPanel>
-            <TopPanel>
+                <TopPanel>
                     <div className="inline-flex gap-1">
-                        <Tooltip text='Refresh data' arrow='bottom'>
+                        <Tooltip text="Refresh data" arrow="bottom">
                             <Button
-                                extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                                extendClass={
+                                    (["bg-skin-white"].includes(theme)
+                                        ? primayActiveColor
+                                        : theme) + " py-[5px] px-[10px]"
+                                }
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                                <i className='fa fa-rotate-right text-base p-[1px]'></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
-                            extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                            extendClass={
+                                (["bg-skin-white"].includes(theme)
+                                    ? primayActiveColor
+                                    : theme) + " py-[5px] px-[10px]"
+                            }
                             type="button"
                             fontColor={textColorActive}
-                            onClick={()=>{handleModalClick(); setAction('Add');
+                            onClick={() => {
+                                handleModalClick();
+                                setAction("Add");
                                 setUpdateData({
                                     id: "",
                                     brand_code: "",
@@ -117,27 +135,30 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
                                     contact_name: "",
                                     contact_email: "",
                                     status: "",
-                                })
-                            
+                                });
                             }}
-                        > 
-                          <i className="fa-solid fa-plus mr-1"></i>  Add Brand
+                        >
+                            <i className="fa-solid fa-plus mr-1"></i> Add Brand
                         </Button>
                         <Button
-                            extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                            extendClass={
+                                (["bg-skin-white"].includes(theme)
+                                    ? primayActiveColor
+                                    : theme) + " py-[5px] px-[10px]"
+                            }
                             type="button"
                             fontColor={textColorActive}
                             onClick={handleExport}
-                        > 
-                          <i className="fa-solid fa-download mr-1"></i> Export
+                        >
+                            <i className="fa-solid fa-download mr-1"></i> Export
                         </Button>
                     </div>
-                    <div className='flex'>
+                    <div className="flex">
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
                 <TableContainer data={brands?.data}>
-                   <Thead>
+                    <Thead>
                         <Row>
                             <TableHeader
                                 sortable={false}
@@ -226,35 +247,49 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
                                         <RowAction
                                             type="button"
                                             action="edit"
-                                            onClick={()=>{handleModalClick(); setAction('Update'); 
+                                            onClick={() => {
+                                                handleModalClick();
+                                                setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
                                                     brand_code: item.brand_code,
-                                                    brand_description: item.brand_description,
-                                                    brand_groups_id: item.brand_groups_id,
-                                                    brand_groups_name: item.get_brand_group?.brand_group_description,
-                                                    contact_name: item.contact_name,
-                                                    contact_email: item.contact_email,
+                                                    brand_description:
+                                                        item.brand_description,
+                                                    brand_groups_id:
+                                                        item.brand_groups_id,
+                                                    brand_groups_name:
+                                                        item.get_brand_group
+                                                            ?.brand_group_description,
+                                                    contact_name:
+                                                        item.contact_name,
+                                                    contact_email:
+                                                        item.contact_email,
                                                     status: item.status,
-                                                })
-                                            
+                                                });
                                             }}
                                         />
                                         <RowAction
                                             type="button"
                                             action="view"
-                                            onClick={()=>{handleModalClick(); setAction('View'); 
+                                            onClick={() => {
+                                                handleModalClick();
+                                                setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
                                                     brand_code: item.brand_code,
-                                                    brand_description: item.brand_description,
-                                                    brand_groups_id: item.brand_groups_id,
-                                                    brand_groups_name: item.get_brand_group?.brand_group_description,
-                                                    contact_name: item.contact_name,
-                                                    contact_email: item.contact_email,
+                                                    brand_description:
+                                                        item.brand_description,
+                                                    brand_groups_id:
+                                                        item.brand_groups_id,
+                                                    brand_groups_name:
+                                                        item.get_brand_group
+                                                            ?.brand_group_description,
+                                                    contact_name:
+                                                        item.contact_name,
+                                                    contact_email:
+                                                        item.contact_email,
                                                     status: item.status,
-                                                })
-                                            
+                                                });
                                             }}
                                         />
                                     </RowData>
@@ -277,7 +312,10 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
                                         {item.brand_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.get_brand_group?.brand_group_description}
+                                        {
+                                            item.get_brand_group
+                                                ?.brand_group_description
+                                        }
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.contact_name}
@@ -307,14 +345,25 @@ const Brands = ({page_title, tableName, brands, queryParams, all_active_brand_gr
                 theme={theme}
                 show={isModalOpen}
                 onClose={handleModalClick}
-                title={action == 'Add' ? "Add Brand" : action == 'Update' ? 'Update Brand' : 'Brand Information'}
+                title={
+                    action == "Add"
+                        ? "Add Brand"
+                        : action == "Update"
+                        ? "Update Brand"
+                        : "Brand Information"
+                }
                 width="xl"
                 fontColor={textColorActive}
-                btnIcon='fa fa-edit'
+                btnIcon="fa fa-edit"
             >
-                <BrandAction onClose={handleModalClick} action={action} updateData={updateData} all_brand_groups={all_brand_groups} all_active_brand_groups={all_active_brand_groups}/>
+                <BrandAction
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_brand_groups={all_brand_groups}
+                    all_active_brand_groups={all_active_brand_groups}
+                />
             </Modal>
-            
         </>
     );
 };

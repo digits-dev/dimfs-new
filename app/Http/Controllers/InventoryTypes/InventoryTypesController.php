@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class InventoryTypesController extends Controller
 {
@@ -126,5 +128,33 @@ class InventoryTypesController extends Controller
             CommonHelpers::LogSystemError('Inventory Types', $e->getMessage());
             return back()->with(['message' => 'Inventory Type Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Inventory Type Code',
+            'Inventory Type Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'inventory_type_code',
+            'inventory_type_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Inventory Types - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

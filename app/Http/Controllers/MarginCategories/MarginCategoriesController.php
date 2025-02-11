@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class MarginCategoriesController extends Controller
 {
@@ -135,5 +137,34 @@ class MarginCategoriesController extends Controller
             CommonHelpers::LogSystemError('MarginCategories', $e->getMessage());
             return back()->with(['message' => 'Margin Category Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Margin Category Code',
+            'Margin Category Description',
+            'Sub Classification Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'margin_category_code',
+            'margin_category_description',
+            'getSubClassification.subclass_description',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Margin Categories - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class ModelSpecificsController extends Controller
 {
@@ -116,5 +118,34 @@ class ModelSpecificsController extends Controller
             CommonHelpers::LogSystemError('Model Specifics', $e->getMessage());
             return back()->with(['message' => 'Model Specific Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Model Specific Code',
+            'Model Specific Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'model_specific_code',
+            'model_specific_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Model Specifics - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

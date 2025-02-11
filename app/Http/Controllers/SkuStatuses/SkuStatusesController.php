@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
+
 
 class SkuStatusesController extends Controller
 {
@@ -116,5 +119,33 @@ class SkuStatusesController extends Controller
             CommonHelpers::LogSystemError('SKU Statuses', $e->getMessage());
             return back()->with(['message' => 'Sku Status Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'SKU Status Code',
+            'SKU Status Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'sku_status_code',
+            'sku_status_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "SKU Statuses - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

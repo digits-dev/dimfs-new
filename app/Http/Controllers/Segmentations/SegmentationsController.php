@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
+
 
 class SegmentationsController extends Controller
 {
@@ -124,5 +127,38 @@ class SegmentationsController extends Controller
             CommonHelpers::LogSystemError('Segmentations', $e->getMessage());
             return back()->with(['message' => 'Segmentation Updating Failed!', 'type' => 'error']);
         }
+    }
+    
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Segmentation Column',
+            'Segmentation Code',
+            'Segmentation Description',
+            'Import Header Name',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'segmentation_column',
+            'segmentation_code',
+            'segmentation_description',
+            'import_header_name',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Segmentations - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

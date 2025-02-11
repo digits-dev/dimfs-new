@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
+
 
 class IncotermsController extends Controller
 {
@@ -124,5 +127,34 @@ class IncotermsController extends Controller
             CommonHelpers::LogSystemError('Incoterms', $e->getMessage());
             return back()->with(['message' => 'Incoterms Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Incoterms Code',
+            'Incoterms Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'incoterms_code',
+            'incoterms_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Incoterms - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

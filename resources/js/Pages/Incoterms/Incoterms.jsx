@@ -1,7 +1,7 @@
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-import { useTheme } from '../../Context/ThemeContext';
-import useThemeStyles from '../../Hooks/useThemeStyles';
+import { useTheme } from "../../Context/ThemeContext";
+import useThemeStyles from "../../Hooks/useThemeStyles";
 import ContentPanel from "../../Components/Table/ContentPanel";
 import TopPanel from "../../Components/Table/TopPanel";
 import Tooltip from "../../Components/Tooltip/Tooltip";
@@ -10,20 +10,20 @@ import TableSearch from "../../Components/Table/TableSearch";
 import TableContainer from "../../Components/Table/TableContainer";
 import Thead from "../../Components/Table/Thead";
 import Tbody from "../../Components/Table/Tbody";
-import RowAction from '../../Components/Table/RowAction';
+import RowAction from "../../Components/Table/RowAction";
 import Row from "../../Components/Table/Row";
 import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
-import RowStatus from '../../Components/Table/RowStatus';
+import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import IncotermsAction from "./IncotermsAction";
 
-
-const Incoterms = ({page_title, tableName, incoterms, queryParams}) => {
-    const {theme} = useTheme();
+const Incoterms = ({ page_title, tableName, incoterms, queryParams }) => {
+    const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
-    const { primayActiveColor, textColorActive } = useThemeStyles(theme);
+    const { primayActiveColor, textColorActive, buttonSwalColor } =
+        useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
@@ -34,8 +34,8 @@ const Incoterms = ({page_title, tableName, incoterms, queryParams}) => {
         status: "",
     });
 
-    router.on('start', () => setLoading(true));
-    router.on('finish', () => setLoading(false));
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -49,46 +49,99 @@ const Incoterms = ({page_title, tableName, incoterms, queryParams}) => {
 
     const handleModalClick = () => {
         setIsModalOpen(!isModalOpen);
-    }
+    };
+
+    // EXPORT
+
+    const handleExport = (e) => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: `<p class="font-poppins text-3xl">Do you want to Export ${page_title}?</p>`,
+            showCancelButton: true,
+            confirmButtonText: `Export`,
+            confirmButtonColor: buttonSwalColor,
+            icon: "question",
+            iconColor: buttonSwalColor,
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    window.location.href =
+                        "/incoterms/export" + window.location.search;
+                } catch (error) {
+                    {
+                        handleToast &&
+                            handleToast(
+                                "Something went wrong, please try again later.",
+                                "Error"
+                            );
+                    }
+                }
+            }
+        });
+    };
 
     return (
         <>
-            <Head title={page_title}/>
+            <Head title={page_title} />
             <ContentPanel>
-            <TopPanel>
+                <TopPanel>
                     <div className="inline-flex gap-1">
-                        <Tooltip text='Refresh data' arrow='bottom'>
+                        <Tooltip text="Refresh data" arrow="bottom">
                             <Button
-                                extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                                extendClass={
+                                    (["bg-skin-white"].includes(theme)
+                                        ? primayActiveColor
+                                        : theme) + " py-[5px] px-[10px]"
+                                }
                                 fontColor={textColorActive}
                                 onClick={refreshTable}
                             >
-                              <i className='fa fa-rotate-right text-base p-[1px]'></i>
+                                <i className="fa fa-rotate-right text-base p-[1px]"></i>
                             </Button>
                         </Tooltip>
                         <Button
-                            extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                            extendClass={
+                                (["bg-skin-white"].includes(theme)
+                                    ? primayActiveColor
+                                    : theme) + " py-[5px] px-[10px]"
+                            }
                             type="button"
                             fontColor={textColorActive}
-                            onClick={()=>{handleModalClick(); setAction('Add');
+                            onClick={() => {
+                                handleModalClick();
+                                setAction("Add");
                                 setUpdateData({
                                     id: "",
                                     incoterms_code: "",
                                     incoterms_description: "",
                                     status: "",
-                                })
-                            
+                                });
                             }}
-                        > 
-                          <i className="fa-solid fa-plus mr-1"></i>  Add Incoterms
+                        >
+                            <i className="fa-solid fa-plus mr-1"></i> Add
+                            Incoterms
+                        </Button>
+                        <Button
+                            extendClass={
+                                (["bg-skin-white"].includes(theme)
+                                    ? primayActiveColor
+                                    : theme) + " py-[5px] px-[10px]"
+                            }
+                            type="button"
+                            fontColor={textColorActive}
+                            onClick={handleExport}
+                        >
+                            <i className="fa-solid fa-download mr-1"></i> Export
                         </Button>
                     </div>
-                    <div className='flex'>
+                    <div className="flex">
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
                 <TableContainer data={incoterms?.data}>
-                   <Thead>
+                    <Thead>
                         <Row>
                             <TableHeader
                                 sortable={false}
@@ -156,27 +209,33 @@ const Incoterms = ({page_title, tableName, incoterms, queryParams}) => {
                                         <RowAction
                                             type="button"
                                             action="edit"
-                                            onClick={()=>{handleModalClick(); setAction('Update'); 
+                                            onClick={() => {
+                                                handleModalClick();
+                                                setAction("Update");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    incoterms_code: item.incoterms_code,
-                                                    incoterms_description: item.incoterms_description,
+                                                    incoterms_code:
+                                                        item.incoterms_code,
+                                                    incoterms_description:
+                                                        item.incoterms_description,
                                                     status: item.status,
-                                                })
-                                            
+                                                });
                                             }}
                                         />
                                         <RowAction
                                             type="button"
                                             action="view"
-                                            onClick={()=>{handleModalClick(); setAction('View'); 
+                                            onClick={() => {
+                                                handleModalClick();
+                                                setAction("View");
                                                 setUpdateData({
                                                     id: item.id,
-                                                    incoterms_code: item.incoterms_code,
-                                                    incoterms_description: item.incoterms_description,
+                                                    incoterms_code:
+                                                        item.incoterms_code,
+                                                    incoterms_description:
+                                                        item.incoterms_description,
                                                     status: item.status,
-                                                })
-                                            
+                                                });
                                             }}
                                         />
                                     </RowData>
@@ -220,14 +279,23 @@ const Incoterms = ({page_title, tableName, incoterms, queryParams}) => {
                 theme={theme}
                 show={isModalOpen}
                 onClose={handleModalClick}
-                title={action == 'Add' ? "Add Incoterms" : action == 'Update' ? 'Update Incoterms' : 'Incoterms Information'}
+                title={
+                    action == "Add"
+                        ? "Add Incoterms"
+                        : action == "Update"
+                        ? "Update Incoterms"
+                        : "Incoterms Information"
+                }
                 width="xl"
                 fontColor={textColorActive}
-                btnIcon='fa fa-edit'
+                btnIcon="fa fa-edit"
             >
-                <IncotermsAction onClose={handleModalClick} action={action} updateData={updateData}/>
+                <IncotermsAction
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                />
             </Modal>
-            
         </>
     );
 };

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SubmasterExport;
 
 class SubCategoriesController extends Controller
 {
@@ -135,5 +137,35 @@ class SubCategoriesController extends Controller
             CommonHelpers::LogSystemError('SubCategories', $e->getMessage());
             return back()->with(['message' => 'Sub Category Updating Failed!', 'type' => 'error']);
         }
+    }
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Subcategory Code',
+            'Subcategory Description',
+            'Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'subcategory_code',
+            'subcategory_description',
+            'getCategory.category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Sub Categories - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }
