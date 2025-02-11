@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ResetPasswordController extends Controller
@@ -37,19 +37,23 @@ class ResetPasswordController extends Controller
     }
 
     public function resetPassword(Request $request){
+
         $key = session('encryption_key');
         $iv = session('encryption_iv');
+
+        // dd($key, $iv);
   
         if (!$key || !$iv) {
-            return json_encode(["message"=>"Request expired, please request another one", "status"=>"error", 'redirect'=>url('admin/login')]);
+            return back()->withErrors(['message' => 'Request expired, please request another one', 'type' => 'error']);
         }
 
         $encryptedEmail = base64_decode(str_replace('_', '/', $request->email));
         $decryptedEmail = openssl_decrypt($encryptedEmail, 'aes-256-cbc', $key, 0, $iv);
    
         if ($decryptedEmail === false) {
-            return json_encode(["message"=>"Request expired, please request another one", "status"=>"error", 'redirect'=>url('admin/login')]);
+            return back()->withErrors(['message' => 'Request expired, please request another one', 'type' => 'error']);
         }
+
 		//Check if password exist in history
 		$user = AdmUser::where('email',$decryptedEmail)->first();
 		$passwordHistory = DB::table('adm_password_histories')->where('adm_user_id',$user->id)->get()->toArray();
@@ -75,9 +79,10 @@ class ResetPasswordController extends Controller
 
 			session()->forget('encryption_key');
 			session()->forget('encryption_iv');
-			return json_encode(["message"=>"Password successfully reset, you will be redirect to login!", "status"=>"success"]);
+
+            return back()->with(['message' => 'Password successfully reset, you will be redirect to login!', 'type' => 'success']);
 		}else{
-			return json_encode(["message"=>"Password not available, please try another one!"]);
+            return back()->with(['message' => 'Password not available', 'type' => 'error']);
 		}
         
     }

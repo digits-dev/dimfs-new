@@ -30,6 +30,7 @@ const AppNavbar = () => {
     const [showModalTheme, setShowModalTheme] = useState(false);
     const swalColor = useThemeSwalColor(theme);
     useEffect(() => {
+        console.log(theme);
         getAppName().then(appName => {
             setAppname(appName);
         });

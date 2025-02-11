@@ -1,31 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import InputWithLogo from '../../Components/Forms/InputWithLogo';
-import { router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import getAppName from '../../Components/SystemSettings/ApplicationName';
 import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
 import LoginDetails from '../../Components/SystemSettings/LoginDetails';
+import LoginInput from '../../Components/Forms/LoginInput';
 const ResetPassword = () => {
-    const [appname, setAppname] = useState('');
-    const [loginBgColor, setLoginBgColor] = useState('');
-    const [lfc, setLfc] = useState('');
-    const [lbi, setLbi] = useState('');
-    const [applogo, setApplogo] = useState('');
-
-    useEffect(()=>{
-        getAppName().then(appName => {
-            setAppname(appName);
-        });
-        getAppLogo().then(appLogo => {
-            setApplogo(appLogo);
-        });
-        LoginDetails().then(detail => {
-            setLoginBgColor(detail.login_bg_color);
-            setLfc(detail.login_font_color);
-            setLbi(detail.login_bg_image);
- 
-        });
-    },[LoginDetails]);
-
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
     });
@@ -57,53 +36,38 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className={`${loginBgColor} h-screen flex flex-col items-center justify-center p-5`}>
-            <div className="flex flex-col justify-center items-center space-y-1 mb-5">
-                <div className="flex">
-                    <img
-                        src={applogo}
-                        className="w-[63px] h-63px] rounded-full"
-                    />
-                    <div className="h-[57px] w-[2px] bg-white ml-[9px] mr-[10px]"></div>
-                    <p className="text-white font-poppins font-bold text-[20px] mt-4 text-center">
-                        {appname}
-                    </p>
-                </div>
-               
-            </div>
-            <div className="bg-white rounded-lg max-w-lg w-full font-poppins">
-                <p className="p-4 border-b-2 text-center text-lg font-bold">
-                   <i className='fa fa-key'></i> Forgot Password
-                </p>
-                <form className="py-2 px-5" onSubmit={handleSubmit}>
-                    <p className="text-red-500 my-2 text-sm">
+        <>
+            <Head title='Forgot Password'/>
+            <div className="flex flex-col items-center p-5 justify-center w-screen h-screen font-poppins " >
+                <img className='w-full h-full absolute' src='/images/login-page/login-bg.jpg'/>
+                <img className='w-12 h-12 md:w-16 md:h-16 mb-3 z-50' src='/images/others/digits-icon.png'/>
+                <p className='text-white text-md md:text-xl font-semibold z-50'>Digits Item Masterfile System</p>
+                <form onSubmit={handleSubmit} className="flex flex-col m-5 items-center z-50 bg-white/20 w-full border border-white/40 rounded-xl shadow-lg p-6 max-w-md">
+                    <p className='text-white text-xl md:text-2xl font-semibold my-4'>Forgot Password</p>
+                    <p className="text-red-300 text-xs md:text-sm w-full">
                         *will send instructions by your email
                     </p>
-                    <InputWithLogo
-                        label="Enter your Email"
+                    <LoginInput
+                        addMainClass="mt-2"
+                        placeholder="Enter your Email"
+                        title="Email"
                         name="email"
-                        type="email"
-                        value={data.email}
-                        onChange={(e) => setData("email", e.target.value)}
-                        logo="images/login-page/email-icon.png"
-                        placeholder="Enter Email"
-                        marginTop={2}
+                        type="text"
+                        onError={errors.email}
+                        onChange={(e) =>setData("email", e.target.value)
+                        }
                     />
-                    {errors.email && (
-                        <div className="text-red-500 font-base mt-2">
-                            {errors.email}
-                        </div>
-                    )}
-                    <button
+                    <button 
+                        className={`w-full font-open-sans bg-login-btn-color mt-4 text-white p-2 text-xs cursor-pointer rounded-lg text-center font-medium hover:opacity-70 md:text-base md:p-2.5 disabled:cursor-not-allowed `}
                         type="submit"
-                        className={`${lfc} w-full text-white font-poppins  py-3 text-sm font-bold rounded-md my-4 hover:opacity-70`}
                         disabled={processing}
-                    >
-                        {processing ? "Sending..." : "Send"}
+                        >
+                            {processing ? 'Please Wait' : 'Send Email'}
                     </button>
+                    <p className='text-xs md:text-sm mt-5 text-white '><span>Already know the password?</span> <Link href='login' className='text-login-btn-color2 font-semibold hover:opacity-70'>Back to Login</Link></p>
                 </form>
             </div>
-        </div>
+        </>
     );
 };
 
