@@ -767,6 +767,17 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+
+            [
+                'name' => 'Apple LOBs',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'apple_lobs',
+                'table_name' => 'apple_lobs',
+                'controller' => 'AppleLobs\AppleLobsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {

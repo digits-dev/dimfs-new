@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
+use App\Http\Controllers\AppleLobs\AppleLobsController;
 use App\Http\Controllers\BrandDirections\BrandDirectionsController;
 use App\Http\Controllers\BrandGroups\BrandGroupsController;
 use App\Http\Controllers\BrandMarketings\BrandMarketingsController;
@@ -177,6 +178,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//
+
+    // APPLE LOBS
+    Route::prefix('apple_lobs')->group(function() {
+        Route::post('/create', [AppleLobsController::class, 'create']);
+        Route::post('/update', [AppleLobsController::class, 'update']);
+        Route::get('/export', [AppleLobsController::class, 'export']);
+    });
 
     // BRANDS
     Route::prefix('brands')->group(function() {

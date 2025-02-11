@@ -62,6 +62,26 @@ class AdmMenus extends Seeder
 
         DB::table('adm_menuses')->updateOrInsert(
             [
+                'name'              => 'Apple LOBs',
+            ],
+            [
+                'name'              => 'Apple LOBs',
+                'type'              => 'Route',
+                'path'              => 'AppleLobs\AppleLobsControllerGetIndex',
+                'slug'              => 'apple_lobs',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 36
+            ]
+        );
+
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
                 'name'              => 'Brands',
             ],
             [
