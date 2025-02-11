@@ -63,8 +63,6 @@ class BrandsController extends Controller
             'brand_code' => 'required|string|max:3|unique:brands,brand_code',
             'brand_description' => 'required|string|max:30|unique:brands,brand_description',
             'brand_groups_id' => 'required|integer',
-            'contact_email' => 'required|email|max:100',
-            'contact_name' => 'required|string|max:100',
         ]);
 
         try {
@@ -73,8 +71,8 @@ class BrandsController extends Controller
                 'brand_code' => $validatedFields['brand_code'], 
                 'brand_description' => $validatedFields['brand_description'],   
                 'brand_groups_id' => $validatedFields['brand_groups_id'], 
-                'contact_email' => $validatedFields['contact_email'], 
-                'contact_name' => $validatedFields['contact_name'], 
+                'contact_email' => $request->contact_email, 
+                'contact_name' => $request->contact_name, 
                 'status' => 'ACTIVE',
                 'created_by' => CommonHelpers::myId(),
             ]);
@@ -97,8 +95,6 @@ class BrandsController extends Controller
             'brand_code' => 'required|string|max:3',
             'brand_description' => 'required|string|max:30',
             'brand_groups_id' => 'required|integer',
-            'contact_email' => 'required|email|max:100',
-            'contact_name' => 'required|string|max:100',
             'status' => 'required|string',
         ]);
 
@@ -129,8 +125,8 @@ class BrandsController extends Controller
             }
     
             $brands->brand_groups_id = $validatedFields['brand_groups_id'];
-            $brands->contact_email = $validatedFields['contact_email'];
-            $brands->contact_name = $validatedFields['contact_name'];
+            $brands->contact_email = $request->contact_email;
+            $brands->contact_name = $request->contact_name;
             $brands->status = $validatedFields['status'];
             $brands->updated_by = CommonHelpers::myId();
             $brands->updated_at = now();
