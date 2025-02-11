@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorTypesAction from "./VendorTypesAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const VendorTypes = ({ page_title, tableName, vendor_types, queryParams }) => {
     const { theme } = useTheme();
@@ -91,6 +92,7 @@ const VendorTypes = ({ page_title, tableName, vendor_types, queryParams }) => {
                             <i className="fa-solid fa-plus mr-1"></i> Add Vendor
                             Type
                         </Button>
+                        <Export path="/vendor_types/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

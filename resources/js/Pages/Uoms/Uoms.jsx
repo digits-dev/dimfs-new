@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import UomsAction from "./UomsAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
     const { theme } = useTheme();
@@ -90,6 +91,7 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                         >
                             <i className="fa-solid fa-plus mr-1"></i> Add UOM
                         </Button>
+                        <Export path="/uoms/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

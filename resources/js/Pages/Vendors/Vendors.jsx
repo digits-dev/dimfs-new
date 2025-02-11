@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorsAction from "./VendorsAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const Vendors = ({ 
     page_title, 
@@ -112,6 +113,7 @@ const Vendors = ({
                         >
                             <i className="fa-solid fa-plus mr-1"></i> Add Vendor
                         </Button>
+                        <Export path="/vendors/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

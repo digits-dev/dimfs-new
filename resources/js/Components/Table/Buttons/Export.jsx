@@ -1,23 +1,26 @@
 import React from "react";
-import TableButton from "./TableButton";
+import Button from "./Button";
 import { useTheme } from "../../../Context/ThemeContext";
+import { useToast } from "../../../Context/ToastContext";
+import useThemeStyles from "../../../Hooks/useThemeStyles";
 
-const Export = ({ path, handleToast }) => {
-    const {theme} = useTheme();
+const Export = ({ path = "", page_title }) => {
+    const { theme } = useTheme();
+    const { handleToast } = useToast();
+    const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
     const handleExport = () => {
         Swal.fire({
-            title: `<p class="font-poppins" >Are you sure that you want to export this table?</p>`,
+            title: `<p class="font-poppins text-3xl">Do you want to Export ${page_title ? page_title : 'Table'}?</p>`,
             showCancelButton: true,
-            confirmButtonText: "Confirm",
-            confirmButtonColor: "#000000",
+            confirmButtonText: "Export",
+            confirmButtonColor: buttonSwalColor,
             icon: "question",
-            iconColor: "#D1B701",
+            iconColor: buttonSwalColor,
             reverseButtons: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // throw new Error('test');
-                    window.location.href = path;
+                    window.location.href = path + window.location.search;
                 } catch (error) {
                     {
                         handleToast &&
@@ -31,7 +34,17 @@ const Export = ({ path, handleToast }) => {
         });
     };
 
-    return <TableButton extendClass={theme} onClick={handleExport}>Export</TableButton>;
+    return (
+
+        <Button
+            extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+            type="button"
+            fontColor={textColorActive}
+            onClick={handleExport}
+        > 
+            <i className="fa-solid fa-download mr-1"></i> Export
+        </Button>
+    )
 };
 
 export default Export;

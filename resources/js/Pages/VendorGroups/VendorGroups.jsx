@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorGroupsAction from "./VendorGroupsAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const VendorGroups = ({ page_title, vendor_groups, queryParams, all_active_vendors, all_vendors }) => {
     const { theme } = useTheme();
@@ -93,6 +94,7 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams, all_active_vendo
                             <i className="fa-solid fa-plus mr-1"></i> Add Vendor
                             Group
                         </Button>
+                        <Export path="/vendor_groups/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

@@ -18,12 +18,12 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandGroupsAction from "./BrandGroupsAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const BrandGroups = ({ page_title, tableName, brand_groups, queryParams }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
-    const { primayActiveColor, textColorActive, buttonSwalColor } =
-        useThemeStyles(theme);
+    const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
@@ -48,37 +48,6 @@ const BrandGroups = ({ page_title, tableName, brand_groups, queryParams }) => {
 
     const handleModalClick = () => {
         setIsModalOpen(!isModalOpen);
-    };
-
-    // EXPORT
-
-    const handleExport = (e) => {
-        e.preventDefault();
-
-        Swal.fire({
-            title: `<p class="font-poppins text-3xl">Do you want to Export ${page_title}?</p>`,
-            showCancelButton: true,
-            confirmButtonText: `Export`,
-            confirmButtonColor: buttonSwalColor,
-            icon: "question",
-            iconColor: buttonSwalColor,
-            reverseButtons: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    window.location.href =
-                        "/brand_groups/export" + window.location.search;
-                } catch (error) {
-                    {
-                        handleToast &&
-                            handleToast(
-                                "Something went wrong, please try again later.",
-                                "Error"
-                            );
-                    }
-                }
-            }
-        });
     };
 
     return (
@@ -121,18 +90,7 @@ const BrandGroups = ({ page_title, tableName, brand_groups, queryParams }) => {
                             <i className="fa-solid fa-plus mr-1"></i> Add Brand
                             Group
                         </Button>
-                        <Button
-                            extendClass={
-                                (["bg-skin-white"].includes(theme)
-                                    ? primayActiveColor
-                                    : theme) + " py-[5px] px-[10px]"
-                            }
-                            type="button"
-                            fontColor={textColorActive}
-                            onClick={handleExport}
-                        >
-                            <i className="fa-solid fa-download mr-1"></i> Export
-                        </Button>
+                        <Export path="/brand_groups/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import WarrantiesAction from "./WarrantiesAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const Warranties = ({ page_title, tableName, warranties, queryParams }) => {
     const { theme } = useTheme();
@@ -88,6 +89,7 @@ const Warranties = ({ page_title, tableName, warranties, queryParams }) => {
                             <i className="fa-solid fa-plus mr-1"></i> Add
                             Warranty
                         </Button>
+                        <Export path="/warranties/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

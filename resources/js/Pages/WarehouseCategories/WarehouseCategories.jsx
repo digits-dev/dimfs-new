@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import WarehouseCategoriesAction from "./WarehouseCategoriesAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const WarehouseCategories = ({
     page_title,
@@ -96,6 +97,7 @@ const WarehouseCategories = ({
                             <i className="fa-solid fa-plus mr-1"></i> Add
                             Warehouse Category
                         </Button>
+                        <Export path="/warehouse_categories/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

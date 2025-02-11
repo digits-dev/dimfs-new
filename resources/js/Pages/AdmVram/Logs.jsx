@@ -27,7 +27,6 @@ const Logs = ({ logs, queryParams }) => {
                             <Export path="" />
                         </div>
                         <div className='flex'>
-                            <Filters />
                             <TableSearch queryParams={queryParams} />
                         </div>
                     </TopPanel>

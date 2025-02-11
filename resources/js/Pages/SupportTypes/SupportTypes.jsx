@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SupportTypesAction from "./SupportTypesAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const SupportTypes = ({page_title, tableName, support_types, queryParams}) => {
     const { theme } = useTheme();
@@ -89,6 +90,7 @@ const SupportTypes = ({page_title, tableName, support_types, queryParams}) => {
                             <i className="fa-solid fa-plus mr-1"></i> Add
                             Support Type
                         </Button>
+                        <Export path="support_types/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

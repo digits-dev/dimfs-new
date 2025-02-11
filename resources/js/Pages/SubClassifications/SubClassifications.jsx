@@ -18,6 +18,7 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SubClassificationsAction from "./SubClassificationsAction";
+import Export from "../../Components/Table/Buttons/Export";
 
 const SubClassifications = ({page_title, tableName, sub_classifications, queryParams, all_classifications, all_active_classifications}) => {
     const { theme } = useTheme();
@@ -92,6 +93,7 @@ const SubClassifications = ({page_title, tableName, sub_classifications, queryPa
                             <i className="fa-solid fa-plus mr-1"></i> Add Sub
                             Classification
                         </Button>
+                        <Export path="/sub_classifications/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
                         <TableSearch queryParams={queryParams} />

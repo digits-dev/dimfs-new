@@ -41,7 +41,7 @@ class UomsController extends Controller
 
         $data = [];
         $data['tableName'] = 'uoms';
-        $data['page_title'] = 'Uoms';
+        $data['page_title'] = 'UOMs';
         $data['uoms'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
