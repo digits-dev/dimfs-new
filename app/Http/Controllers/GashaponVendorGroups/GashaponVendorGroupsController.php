@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GashaponVendorGroups;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\GashaponVendorGroups;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GashaponVendorGroupsController extends Controller
 {
@@ -114,4 +116,33 @@ class GashaponVendorGroupsController extends Controller
             return back()->with(['message' => 'Gashapon Vendor Group Updating Failed!', 'type' => 'error']);
         }
     }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Vendor Group Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'vendor_group_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Gashapon Vendor Groups - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
+    }
+
+    
 }

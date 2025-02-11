@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GashaponSkuStatuses;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\GashaponSkuStatuses;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GashaponSkuStatusesController extends Controller
 {
@@ -112,5 +114,32 @@ class GashaponSkuStatusesController extends Controller
             CommonHelpers::LogSystemError('Gashapon SKU Statuses', $e->getMessage());
             return back()->with(['message' => 'Gashapon SKU Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Status Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'status_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Gashapon SKU Statuses - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

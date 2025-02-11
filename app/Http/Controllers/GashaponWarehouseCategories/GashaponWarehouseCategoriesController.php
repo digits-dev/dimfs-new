@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GashaponWarehouseCategories;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\GashaponWarehouseCategories;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GashaponWarehouseCategoriesController extends Controller
 {
@@ -112,5 +114,32 @@ class GashaponWarehouseCategoriesController extends Controller
             CommonHelpers::LogSystemError('Gashapon Warehouse Categories', $e->getMessage());
             return back()->with(['message' => 'Gashapon Warehouse Category Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Warehouse Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'warehouse_category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Gashapon Vendor Types - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

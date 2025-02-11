@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GashaponVendorTypes;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\GashaponVendorTypes;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GashaponVendorTypesController extends Controller
 {
@@ -126,5 +128,34 @@ class GashaponVendorTypesController extends Controller
             CommonHelpers::LogSystemError('Gashapon Vendor Types', $e->getMessage());
             return back()->with(['message' => 'Gashapon Vendor Type Updating Failed!', 'type' => 'error']);
         }
+    }
+
+    public function export(Request $request)
+    {
+
+        $headers = [
+            'Vendor Type Code',
+            'Vendor Type Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'vendor_type_code',
+            'vendor_type_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Gashapon Vendor Types - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }
