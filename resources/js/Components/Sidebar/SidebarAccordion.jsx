@@ -192,7 +192,7 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
         >
             <ul>
                 <Link
-                    href={`${window.location.origin}/dashboard`}
+                    href={`/dashboard`}
                     onClick={() => {
                         handleMenuClick("Dashboard");
                         setIsOpen(false);
@@ -212,24 +212,13 @@ const SidebarAccordion = ({ open, closeSidebar }) => {
                             handleToggle('', 'dashboard');
                         }}
                     >
-                        <img
-                            src={
-                                (pathname === "dashboard" &&  theme === 'bg-skin-black' ? 
-                                    `/images/navigation/dashboard-icon.png` 
-                                    : 
-                                    (pathname === "dashboard" &&  !['bg-skin-black'].includes(theme) ? 
-                                        `/images/navigation/dashboard-icon.png`
-                                        : 
-                                        (!['bg-skin-black'].includes(theme) ? `/images/navigation/dashboard-icon-black.png` : `/images/navigation/dashboard-icon.png`)
-                                    )
-                                )   
-                            }
-                            className={`w-[16px] h-[16px] ml-[1px] group-hover:hidden`}
-                        />
-                        <img
-                            src={`/images/navigation/dashboard-icon.png`}
-                            className={`w-[16px] h-[16px] ml-[1px] hidden group-hover:block`}
-                        />
+                         <i className={` fa-solid fa-chart-simple text-[15px]`}
+                                style={{
+                                    fontSize: "17px",     
+                                    width: "16px",         
+                                    textAlign: "center", 
+                                }}
+                            ></i>
                         <p
                             className={`font-poppins font-semibold single-line max-w-[500px] text-[13px] ${!open && "hidden"}`}
                         >
