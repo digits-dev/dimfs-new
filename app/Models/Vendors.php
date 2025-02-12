@@ -43,12 +43,26 @@ class Vendors extends Model
     ];
 
     public function scopeSearchAndFilter($query, $request){
-        $filter_column = $request['filter_column'] ?? [];
 
-        if ($request['search']) {
-            $search = $request['search'];
+        if ($request->filled('search')) {
+            $search = $request->input('search');
             $query->where(function ($query) use ($search) {
                 foreach ($this->filterable as $field) {
+                    if ($field === 'brands_id') {
+                        $query->orWhereHas('getBrand', function ($query) use ($search) {
+                            $query->where('brand_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'vendor_types_id') {
+                        $query->orWhereHas('getVendorType', function ($query) use ($search) {
+                            $query->where('vendor_type_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'incoterms_id') {
+                        $query->orWhereHas('getIncoterm', function ($query) use ($search) {
+                            $query->where('incoterms_description', 'LIKE', "%$search%");
+                        });
+                    }
                     if ($field === 'created_by') {
                         $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
@@ -66,71 +80,19 @@ class Vendors extends Model
                     }
                 }
             });
-        } 
-        else {
-            //filter function
-            $query->where(function($w) use ($filter_column) {
-                if(is_array($filter_column)){
-                    foreach((array)$filter_column as $key=>$fc) {
-
-                        $value = @$fc['value'];
-                        $type  = @$fc['type'];
-
-                        if($type == 'empty') {
-                            $w->whereNull($key)->orWhere($key,'');
-                            continue;
-                        }
-
-                        if($value=='' || $type=='') continue;
-
-                        if($type == 'between') continue;
-
-                        switch($type) {
-                            default:
-                                if($key && $type && $value) $w->where($key,$type,$value);
-                            break;
-                            case 'like':
-                            case 'not like':
-                                $value = '%'.$value.'%';
-                                if($key && $type && $value) $w->where($key,$type,$value);
-                            break;
-                            case 'in':
-                            case 'not in':
-                                if($value) {
-                                    $value = explode(',',$value);
-                                    if($key && $value) $w->whereIn($key,$value);
-                                }
-                            break;
-                        }
-                    }
-                }
-            });
-            if(is_array($filter_column)){
-                foreach((array)$filter_column as $key=>$fc) {
-                    $value = @$fc['value'];
-                    $type  = @$fc['type'];
-                    $sorting = @$fc['sort'];
-
-                    if($sorting!='') {
-                        if($key) {
-                            $query->orderby($key,$sorting);
-                            $filter_is_orderby = true;
-                        }
-                    }
-
-                    if ($type=='between') {
-                        if($key && $value) $query->whereBetween($key,$value);
-                    }
-
-                    else {
-                        continue;
-                    }
-                }
-            }
         }
 
+        foreach ($this->filterable as $field) {
+            if ($request->filled($field)) {
+                $value = $request->input($field);
+                $query->where($field, 'LIKE', "%$value%");
+            }
+        }
+    
         return $query;
+        
     }
+
 
     public function getCreatedBy() {
         return $this->belongsTo(AdmUser::class, 'created_by', 'id');
