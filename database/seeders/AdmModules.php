@@ -778,6 +778,7 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+
             [
                 'name' => 'System Error Logs',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -785,6 +786,28 @@ class AdmModules extends Seeder
                 'path' => 'system_error_logs',
                 'table_name' => 'log_system_errors',
                 'controller' => 'SystemErrorLogsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Action Types',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'action_types',
+                'table_name' => 'action_types',
+                'controller' => 'ActionTypes\ActionTypesController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Table Setting',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-solid fa-sliders',
+                'path' => 'table_settings',
+                'table_name' => 'table_settings',
+                'controller' => 'TableSettings\TableSettingsController',
                 'is_protected' => 0,
                 'is_active' => 1,
             ],

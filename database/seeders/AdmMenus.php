@@ -62,26 +62,6 @@ class AdmMenus extends Seeder
 
         DB::table('adm_menuses')->updateOrInsert(
             [
-                'name'              => 'Apple LOBs',
-            ],
-            [
-                'name'              => 'Apple LOBs',
-                'type'              => 'Route',
-                'path'              => 'AppleLobs\AppleLobsControllerGetIndex',
-                'slug'              => 'apple_lobs',
-                'color'             => NULL,
-                'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 2,
-                'is_active'         => 1,
-                'is_dashboard'      => 0,
-                'id_adm_privileges'  => 1,
-                'sorting'           => 36
-            ]
-        );
-
-
-        DB::table('adm_menuses')->updateOrInsert(
-            [
                 'name'              => 'Brands',
             ],
             [
@@ -1180,6 +1160,82 @@ class AdmMenus extends Seeder
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 35
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Apple LOBs',
+            ],
+            [
+                'name'              => 'Apple LOBs',
+                'type'              => 'Route',
+                'path'              => 'AppleLobs\AppleLobsControllerGetIndex',
+                'slug'              => 'apple_lobs',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 36
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Settings',
+            ],
+            [
+                'name'              => 'Settings',
+                'type'              => 'URL',
+                'path'              => '####',
+                'slug'              => NULL,
+                'color'             => NULL,
+                'icon'              => 'fa-solid fa-bars',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 6
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Action Types',
+            ],
+            [
+                'name'              => 'Action Types',
+                'type'              => 'Route',
+                'path'              => 'ActionTypes\ActionTypesControllerGetIndex',
+                'slug'              => 'action_types',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 62,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 1
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Table Setting',
+            ],
+            [
+                'name'              => 'Table Setting',
+                'type'              => 'Route',
+                'path'              => 'TableSettings\TableSettingsControllerGetIndex',
+                'slug'              => 'table_settings',
+                'color'             => NULL,
+                'icon'              => 'fa-solid fa-sliders',
+                'parent_id'         => 62,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 2
             ]
         );
     }
