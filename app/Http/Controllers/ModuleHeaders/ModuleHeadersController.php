@@ -71,6 +71,7 @@ class ModuleHeadersController extends Controller
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
             'header_name' => 'required|string|max:255',
+            'width' => 'required|string|max:10',
         ]);
 
         try {
@@ -78,6 +79,7 @@ class ModuleHeadersController extends Controller
             ModuleHeaders::create([
                 'module_id' => $validatedFields['module_id'],   
                 'name' => $validatedFields['name'],   
+                'width' => $validatedFields['width'],   
                 'header_name' => $validatedFields['header_name'],   
             ]);
     
@@ -99,6 +101,7 @@ class ModuleHeadersController extends Controller
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
             'header_name' => 'required|string|max:255',
+            'width' => 'required|string|max:10',
             'status' => 'required|string',
         ]);
 
@@ -113,6 +116,7 @@ class ModuleHeadersController extends Controller
             $module_headers->module_id = $validatedFields['module_id'];
             $module_headers->name = $validatedFields['name'];
             $module_headers->header_name = $validatedFields['header_name'];
+            $module_headers->width = $validatedFields['width'];
             $module_headers->status = $validatedFields['status'];
             $module_headers->updated_at = now();
     

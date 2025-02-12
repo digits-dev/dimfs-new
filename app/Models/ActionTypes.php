@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use app\Helpers\CommonHelpers;
-use App\Models\AdmModels\AdmModules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ModuleHeaders extends Model
+class ActionTypes extends Model
 {
     use HasFactory;
 
@@ -24,12 +23,11 @@ class ModuleHeaders extends Model
         });
     }
 
+    protected $table = 'action_types';
+
     protected $fillable = [
         'id',
-        'module_id',
-        'name',
-        'width',
-        'header_name',
+        'action_type_description',
         'status',
         'created_by',
         'updated_by',
@@ -44,10 +42,7 @@ class ModuleHeaders extends Model
     ];
 
     protected $filterable = [
-        'module_id',
-        'name',
-        'header_name',
-        'width',
+        'action_type_description',
         'status',
         'created_by',
         'updated_by',
@@ -62,11 +57,6 @@ class ModuleHeaders extends Model
             $search = $request->input('search');
             $query->where(function ($query) use ($search) {
                 foreach ($this->filterable as $field) {
-                    if ($field === 'module_id') {
-                        $query->orWhereHas('getModule', function ($query) use ($search) {
-                            $query->where('name', 'LIKE', "%$search%");
-                        });
-                    }
                     if ($field === 'created_by') {
                         $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
@@ -106,7 +96,4 @@ class ModuleHeaders extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
-    public function getModule() {
-        return $this->belongsTo(AdmModules::class, 'module_id', 'id');
-    }
 }

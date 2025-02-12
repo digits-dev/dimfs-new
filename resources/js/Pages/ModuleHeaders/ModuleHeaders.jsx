@@ -32,6 +32,7 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
         module_id: "",
         module_name: "",
         name: "",
+        width: "",
         header_name: "",
         status: "",
     });
@@ -79,6 +80,7 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                     module_id: "",
                                     module_name: "",
                                     name: "",
+                                    width: "",
                                     header_name: "",
                                     status: "",
                                 })
@@ -111,21 +113,28 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="model_description"
+                                name="header_name"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Header Name
                             </TableHeader>
                             <TableHeader
-                                name="model_description"
+                                name="name"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Name
                             </TableHeader>
                             <TableHeader
-                                name="model_description"
+                                name="width"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Width
+                            </TableHeader>
+                            <TableHeader
+                                name="module_name"
                                 queryParams={queryParams}
                                 width="lg"
                             >
@@ -175,6 +184,7 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                                     module_id: item.module_id,
                                                     module_name: item.get_module.name,
                                                     name: item.name,
+                                                    width: item.width,
                                                     header_name: item.header_name,
                                                     status: item.status,
                                                 })
@@ -190,6 +200,7 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                                     module_id: item.module_id,
                                                     module_name: item.get_module.name,
                                                     name: item.name,
+                                                    width: item.width,
                                                     header_name: item.header_name,
                                                     status: item.status,
                                                 })
@@ -215,6 +226,9 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.name}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.width}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_module.name}

@@ -67,13 +67,13 @@ class SkuStatusesController extends Controller
                 'created_by' => CommonHelpers::myId(),
             ]);
     
-            return back()->with(['message' => 'Sku Status Creation Success!', 'type' => 'success']);
+            return back()->with(['message' => 'SKU Status Creation Success!', 'type' => 'success']);
 
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('SkuStatuses', $e->getMessage());
-            return back()->with(['message' => 'Sku Status Creation Failed!', 'type' => 'error']);
+            CommonHelpers::LogSystemError('SKU Statuses', $e->getMessage());
+            return back()->with(['message' => 'SKU Status Creation Failed!', 'type' => 'error']);
         }
         
     }
@@ -100,7 +100,7 @@ class SkuStatusesController extends Controller
                 if (!$SkuStatusCodeExist) {
                     $sku_statuses->sku_status_code = $validatedFields['sku_status_code'];
                 } else {
-                    return back()->with(['message' => 'Sku Status Code already exists!', 'type' => 'error']);
+                    return back()->with(['message' => 'SKU Status Code already exists!', 'type' => 'error']);
                 }
             }
     
@@ -111,13 +111,13 @@ class SkuStatusesController extends Controller
     
             $sku_statuses->save();
     
-            return back()->with(['message' => 'Sku Status Updating Success!', 'type' => 'success']);
+            return back()->with(['message' => 'SKU Status Updating Success!', 'type' => 'success']);
         }  
 
         catch (\Exception $e) {
 
             CommonHelpers::LogSystemError('SKU Statuses', $e->getMessage());
-            return back()->with(['message' => 'Sku Status Updating Failed!', 'type' => 'error']);
+            return back()->with(['message' => 'SKU Status Updating Failed!', 'type' => 'error']);
         }
     }
     public function export(Request $request)

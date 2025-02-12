@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '../../Components/Table/Buttons/Button';
 import { useTheme } from '../../Context/ThemeContext';
 import { useToast } from '../../Context/ToastContext';
@@ -7,18 +7,14 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules}) => {
+const ActionTypesAction = ({action, onClose, updateData}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        module_id: "" || updateData.module_id,
-        module_name: "" || updateData.module_name,
-        name: "" || updateData.name,
-        width: "" || updateData.width,
-        header_name: "" || updateData.header_name,
+        action_type_description: "" || updateData.action_type_description,
         status: "" || updateData.status,
     });
 
@@ -33,10 +29,11 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
         },
     ]
 
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Module Header?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want ${action == 'Add' ? 'add' : 'update'} Action Type?</p>`,
             showCancelButton: true,
             confirmButtonText: `${action == 'Add' ? 'Confirm' : 'Update'}`,
             confirmButtonColor: buttonSwalColor,
@@ -47,25 +44,24 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             if (result.isConfirmed) {
 
                 if (action == 'Add'){
-                    post('module_headers/create', {
+                    post('action_types/create', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["module_headers"] });
+                            router.reload({ only: ["action_types"] });
                             reset();
                             onClose();
                         },
                         onError: (error) => {
-
                         }
                     });
                 }
                 else{
-                    post('module_headers/update', {
+                    post('action_types/update', {
                         onSuccess: (data) => {
                             const { message, type } = data.props.auth.sessions;
                             handleToast(message, type);
-                            router.reload({ only: ["module_headers"] });
+                            router.reload({ only: ["action_types"] });
                             reset();
                             onClose();
                         },
@@ -80,75 +76,17 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
 
   return (
     <form onSubmit={handleFormSubmit} className='space-y-2'>
-        {/* MODULE NAME */}
-        {action == 'View' && 
-            <InputComponent
-                name="Module Name"
-                value={data.module_name}
-                disabled={action === 'View'}
-                placeholder="Module Name"
-            />
-        }
-        {(action == 'Update' || action == 'Add') && 
-            (   <DropdownSelect
-                    placeholder="Choose Module"
-                    selectType="react-select"
-                    defaultSelect="Select Module"
-                    onChange={(selectedOption) => setData((prevData) => ({
-                        ...prevData,
-                        module_id: selectedOption?.value,
-                        module_name: selectedOption?.label
-                    }))}
-                    name="module_name"
-                    isStatus={action == "Update"}
-                    options={action == 'Update' ? all_modules : all_active_modules}
-                    value={data.module_id ? { label: data.module_name, value: data.module_id } : null}
-                />
-            )
-        }
-        {(errors.module_name) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.module_name}
-            </div>
-        )}
-        {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Module is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
-        {/* HEADER NAME */}
+        {/* MODEL DESCRIPTION */}
         <InputComponent
-            name="header_name"
-            value={data.header_name}
+            name="action_type_description"
+            value={data.action_type_description}
             disabled={action === 'View'}
-            placeholder="Enter Header Name (ex. Header Name)"
-            onChange={(e)=> setData("header_name", e.target.value)}
+            placeholder="Enter Action Type Description"
+            onChange={(e)=> setData("action_type_description", e.target.value)}
         />
-        {(errors.header_name) && (
+        {(errors.action_type_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.header_name}
-            </div>
-        )}
-        {/* NAME */}
-        <InputComponent
-            name="name"
-            value={data.name}
-            disabled={action === 'View'}
-            placeholder="Enter Name (ex. header_name)"
-            onChange={(e)=> setData("name", e.target.value)}
-        />
-        {(errors.name) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.name}
-            </div>
-        )}
-        {/* WIDTH */}
-        <InputComponent
-            name="width"
-            value={data.width}
-            disabled={action === 'View'}
-            placeholder="Enter width (sm, md, lg, xl ,2xl)"
-            onChange={(e)=> setData("width", e.target.value)}
-        />
-        {(errors.width) && (
-            <div classwidth="font-poppins text-xs font-semibold text-red-600">
-                {errors.width}
+                {errors.action_type_description}
             </div>
         )}
         {action == 'Update' && 
@@ -197,7 +135,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                     : 
                     (
                         <span>
-                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Module Header' : 'Update Module Header'}
+                            <i className={`fa-solid ${action === "Add" ? 'fa-plus' : 'fa-pen-to-square' } mr-1`}></i> {action === "Add" ? 'Add Action Type' : 'Update Action Type'}
                         </span>
                     )
                 }
@@ -209,4 +147,4 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
   )
 }
 
-export default ColorsAction
+export default ActionTypesAction
