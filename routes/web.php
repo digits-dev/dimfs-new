@@ -184,6 +184,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('module_headers')->group(function() {
         Route::post('/create', [ModuleHeadersController::class, 'create']);
         Route::post('/update', [ModuleHeadersController::class, 'update']);
+        Route::get('/export', [ModuleHeadersController::class, 'export']);
     });
 
     Route::prefix('table_settings')->group(function() {

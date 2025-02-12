@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use app\Helpers\CommonHelpers;
 use App\Models\AdmModels\AdmModules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 class ModuleHeaders extends Model
 {
     use HasFactory;
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
 
     protected $fillable = [
         'id',
