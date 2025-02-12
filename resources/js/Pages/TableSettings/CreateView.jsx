@@ -78,7 +78,7 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                 reverseButtons: true,
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    post('table_settings/create_view/create', {
+                    post('/table_settings/create', {
                         onSuccess: (data) => {
                   
                             reset();
@@ -138,10 +138,11 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 selectType="react-select"
                                 defaultSelect="Select Action Type"
                                 onChange={(selectedOption) =>
-                                    setData(
-                                        "action_type_id",
-                                        selectedOption?.value
-                                    )
+                                    setData((prevData) => ({
+                                        ...prevData,
+                                        action_type_id: selectedOption?.value,
+                                        action_name: selectedOption?.label,
+                                    }))
                                 }
                                 name="action_type"
                                 options={action_types}
@@ -166,10 +167,11 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 selectType="react-select"
                                 defaultSelect="Select Privilege"
                                 onChange={(selectedOption) =>
-                                    setData(
-                                        "privilege_id",
-                                        selectedOption?.value
-                                    )
+                                    setData((prevData) => ({
+                                        ...prevData,
+                                        privilege_id: selectedOption?.value,
+                                        privilege_name: selectedOption?.label,
+                                    }))
                                 }
                                 name="privilege Name"
                                 options={privileges}
