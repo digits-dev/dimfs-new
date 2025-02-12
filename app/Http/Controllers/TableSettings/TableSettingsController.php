@@ -59,7 +59,8 @@ class TableSettingsController extends Controller
     
         $data = [];
         $data['privileges'] = AdmPrivileges::getData()->get();
-        $data['action_types'] = ActionTypes::get();
+        $data['action_types'] = ActionTypes::select('id', 'action_type_description as name', 'status')     
+            ->get();
     
         return Inertia::render('TableSettings/CreateView',$data);
     }

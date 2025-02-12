@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CheckboxWithText = ({id="custom-checkbox", text= "Show Password", type="checkbox", name="exampleCheckbox"  , color="blue-500", handleClick, isChecked, disabled, addMainClass }) => {
+const CheckboxWithText = ({key, id="custom-checkbox", text= "Show Password", type="checkbox", name="exampleCheckbox"  , color="blue-500", handleClick, isChecked, disabled, addMainClass, textColor = "text-white" }) => {
   return (
     <div className={`inline-flex items-center w-full ${addMainClass}`}>
         <label
@@ -9,6 +9,7 @@ const CheckboxWithText = ({id="custom-checkbox", text= "Show Password", type="ch
             data-ripple-dark="true"
         >
             <input
+                key={key}
                 id={id}
                 name={name}
                 type={type}
@@ -46,7 +47,7 @@ const CheckboxWithText = ({id="custom-checkbox", text= "Show Password", type="ch
                 </svg>
             </div>
         </label>
-        <p className='text-xs md:text-sm text-white'>{text}</p>
+        <p className={`${textColor} text-xs md:text-sm`}>{text}</p>
     </div>
   )
 }
