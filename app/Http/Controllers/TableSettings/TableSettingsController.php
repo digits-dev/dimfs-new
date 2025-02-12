@@ -67,6 +67,8 @@ class TableSettingsController extends Controller
 
     public function create(Request $request){
 
+        dd($request->all());
+
         $validatedFields = $request->validate([
             'adm_privileges_id' => 'required|string|max:3',
             'adm_moduls_id' => 'required|string|max:3',

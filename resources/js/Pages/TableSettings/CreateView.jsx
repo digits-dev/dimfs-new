@@ -2,6 +2,7 @@ import { Head, router, useForm } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "../../Context/ThemeContext";
 import useThemeStyles from "../../Hooks/useThemeStyles";
+import Button from '../../Components/Table/Buttons/Button';
 import ContentPanel from "../../Components/Table/ContentPanel";
 import axios from "axios";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
@@ -9,9 +10,12 @@ import CheckboxWithText from "../../Components/Checkbox/CheckboxWithText";
 import LoadingIcon from "../../Components/Table/Icons/LoadingIcon";
 
 const CreateTableSetting = ({ privileges, action_types }) => {
+    const { theme } = useTheme();
     const [moduleData, setModuleData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
         module_id: "",
@@ -33,10 +37,6 @@ const CreateTableSetting = ({ privileges, action_types }) => {
             name: "Gashapon Item Master",
         },
     ];
-
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
 
     const handleCheckboxChange = (item) => {
         setData((prevData) => ({
@@ -66,6 +66,32 @@ const CreateTableSetting = ({ privileges, action_types }) => {
         }
     }, [data.module_id]);
 
+     const handleFormSubmit = (e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: `<p class="font-poppins text-3xl" >Do you want to create Table Setting?</p>`,
+                showCancelButton: true,
+                confirmButtonText: `Create Table`,
+                confirmButtonColor: buttonSwalColor,
+                icon: 'question',
+                iconColor: buttonSwalColor,
+                reverseButtons: true,
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    post('table_settings/create_view/create', {
+                        onSuccess: (data) => {
+                  
+                            reset();
+                        },
+                        onError: (error) => {
+                        }
+                    });
+                   
+                    
+                }
+            });
+        }
+
     return (
         <div className="h-full font-poppins">
             <Head title="Create Table Setting" />
@@ -73,7 +99,7 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                 <p className="text-lg font-semibold mb-2">
                     Create Table Setting
                 </p>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleFormSubmit}>
                     <div className="flex justify-center items-stretch gap-4 h-full">
                         {/* CARD 1 */}
                         <div className="w-[30%] flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
@@ -173,20 +199,22 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 <>
                                     {moduleData ? (
                                         moduleData?.map((item, index) => (
-                                            <CheckboxWithText
-                                                id={`checkbox-${index}`}
-                                                type="checkbox"
-                                                name="exampleCheckbox"
-                                                text={item}
-                                                textColor="text-black"
-                                                handleClick={() =>
-                                                    handleCheckboxChange(item)
-                                                }
-                                                isChecked={data.checked_items.includes(
-                                                    item
-                                                )}
-                                                disabled={false}
-                                            />
+                                            <div key={item}>
+                                                <CheckboxWithText
+                                                    id={`checkbox-${index}`}
+                                                    type="checkbox"
+                                                    name="exampleCheckbox"
+                                                    text={item}
+                                                    textColor="text-black"
+                                                    handleClick={() =>
+                                                        handleCheckboxChange(item)
+                                                    }
+                                                    isChecked={data.checked_items.includes(
+                                                        item
+                                                    )}
+                                                    disabled={false}
+                                                />
+                                            </div>
                                         ))
                                     ) : (
                                         <div className="select-none w-full h-full flex items-center justify-center border border-dashed rounded-lg border-gray-300">
@@ -199,6 +227,26 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                             )}
                             {error && <p className="text-red-500">{error}</p>}
                         </div>
+                    </div>
+                    <div>
+                    <Button
+                        type="button"
+                        extendClass={`${theme === 'bg-skin-white' ? primayActiveColor : theme}`}
+                        fontColor={textColorActive}
+                        disabled={processing}
+                    >
+                    {processing ? 
+                        (
+                            'Create Table'
+                        ) 
+                        : 
+                        (
+                            <span>
+                                <i className={`fa-solid fa-plus mr-1`}></i> Create Table
+                            </span>
+                        )
+                    }
+                    </Button>  
                     </div>
                 </form>
             </ContentPanel>

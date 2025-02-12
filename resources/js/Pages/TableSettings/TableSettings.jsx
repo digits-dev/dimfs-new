@@ -63,7 +63,7 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                             type="button"
                             fontColor={textColorActive}
                             onClick={() =>
-                                router.get("/table_settings/create-view")
+                                router.get("/table_settings/create_view")
                             }
                         >
                             <i className="fa-solid fa-plus mr-1"></i> Add Table
