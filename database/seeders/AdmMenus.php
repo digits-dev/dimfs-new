@@ -1235,6 +1235,25 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
+                'sorting'           => 3
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Module Headers',
+            ],
+            [
+                'name'              => 'Module Headers',
+                'type'              => 'Route',
+                'path'              => 'ModuleHeaders\ModuleHeadersControllerGetIndex',
+                'slug'              => 'module_headers',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 62,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
                 'sorting'           => 2
             ]
         );

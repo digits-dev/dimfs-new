@@ -1,5 +1,6 @@
 <?php
 use App\Helpers\CommonHelpers;
+use App\Http\Controllers\ActionTypes\ActionTypesController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
+use App\Http\Controllers\ModuleHeaders\ModuleHeadersController;
 use App\Http\Controllers\Platforms\PlatformsController;
 use App\Http\Controllers\PromoTypes\PromoTypesController;
 use App\Http\Controllers\RmaCategories\RmaCategoriesController;
@@ -64,6 +66,7 @@ use App\Http\Controllers\StoreCategories\StoreCategoriesController;
 use App\Http\Controllers\SubCategories\SubCategoriesController;
 use App\Http\Controllers\SubClassifications\SubClassificationsController;
 use App\Http\Controllers\SupportTypes\SupportTypesController;
+use App\Http\Controllers\TableSettings\TableSettingsController;
 use App\Http\Controllers\Uoms\UomsController;
 use App\Http\Controllers\Users\ChangePasswordController;
 use App\Http\Controllers\Users\ProfilePageController;
@@ -176,12 +179,30 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export', [SystemErrorLogsController::class, 'export']);
     });
 
+    // --------------------------------------- TABLE SETTINGS -------------------------------------//
+
+    Route::prefix('module_headers')->group(function() {
+        Route::post('/create', [ModuleHeadersController::class, 'create']);
+        Route::post('/update', [ModuleHeadersController::class, 'update']);
+    });
+
+    Route::prefix('table_settings')->group(function() {
+        Route::post('/create', [TableSettingsController::class, 'create']);
+        Route::post('/update', [TableSettingsController::class, 'update']);
+    });
+
+    Route::prefix('action_types')->group(function() {
+        Route::post('/create', [ActionTypesController::class, 'create']);
+        Route::post('/update', [ActionTypesController::class, 'update']);
+    });
+
     // ---------------------------------------- ITEM MASTER ----------------------------------------//
 
     Route::prefix('item_masters')->group(function() {
         Route::post('/create', [ItemMastersController::class, 'create']);
         Route::post('/update', [ItemMastersController::class, 'update']);
     });
+   
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//
 

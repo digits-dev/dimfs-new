@@ -811,6 +811,17 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+
+            [
+                'name' => 'Module Headers',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'module_headers',
+                'table_name' => 'module_headers',
+                'controller' => 'ModuleHeaders\ModuleHeadersController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {
