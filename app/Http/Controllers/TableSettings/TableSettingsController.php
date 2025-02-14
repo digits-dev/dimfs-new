@@ -76,6 +76,10 @@ class TableSettingsController extends Controller
             return back()->with(['message' => 'Table Setting already exists!', 'type' => 'error']);
         }
 
+        if ($request->checked_items == null) {
+            return back()->with(['message' => 'Please select at least one header!', 'type' => 'error']);
+        }
+
         $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->get();
         $headerName = $selected->pluck('header_name')->implode(',');
         $headerQuery = $selected->pluck('name')->implode(',');
@@ -135,6 +139,10 @@ class TableSettingsController extends Controller
             return back()->with(['message' => 'Table Setting already exists!', 'type' => 'error']);
         }
 
+        if ($request->checked_items == null) {
+            return back()->with(['message' => 'Please select at least one header!', 'type' => 'error']);
+        }
+        
         $validatedFields = $request->validate([
             'privilege_id' => 'required|integer',
             'module_id' => 'required|integer',
