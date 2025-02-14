@@ -30,7 +30,7 @@ class TableSettingsController extends Controller
     }
 
     public function getAllData(){
-        $query = TableSettings::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = TableSettings::query()->with(['getCreatedBy', 'getUpdatedBy', 'getPrivilegeName', 'getModuleName', 'getActionTypes']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -66,27 +66,27 @@ class TableSettingsController extends Controller
     }
 
     public function create(Request $request){
+        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
 
-        dd($request->all());
-
+        $headerName = $selected->pluck('header_name')->implode(',');
+        $headerQuery = $selected->pluck('name')->implode(',');
+       
         $validatedFields = $request->validate([
-            'adm_privileges_id' => 'required|string|max:3',
-            'adm_moduls_id' => 'required|string|max:3',
-            'action_types_id' => 'required|string|max:3',
-            'table_name' => 'required|string|max:255',
-            'report_header' => 'required|string|max:255',
-            'report_query' => 'required|string',
-        ]);
-
+                'privilege_id' => 'required|integer',
+                'module_id' => 'required|string|max:3',
+                'action_type_id' => 'required|integer',
+                'module_name' => 'required|string|max:255',
+            ]);
+            
         try {
 
             TableSettings::create([
-                'adm_privileges_id' => $validatedFields['adm_privileges_id'],
-                'adm_moduls_id' => $validatedFields['adm_moduls_id'],
-                'action_types_id' => $validatedFields['action_types_id'],
-                'table_name' => $validatedFields['table_name'],
-                'report_header' => $validatedFields['report_header'],
-                'report_query' => $validatedFields['report_query'],
+                'adm_privileges_id' => $request->privilege_id,
+                'adm_moduls_id' => $request->module_id,
+                'action_types_id' =>$request->action_type_id,
+                'table_name' => $request->module_name,
+                'report_header' => $headerName,
+                'report_query' => $headerQuery,
                 'status' => 'ACTIVE',
                 'created_by' => CommonHelpers::myId(),
             ]);
@@ -102,32 +102,46 @@ class TableSettingsController extends Controller
         
     }
 
-    public function update(Request $request){
+    public function EditView($id)
+    {
+        $data = [];
+        $data['table_settings'] = TableSettings::find($id);
+        $data['module_headers'] = ModuleHeaders::where('module_id', $data['table_settings']->adm_moduls_id)->pluck('header_name');
+        $data['privileges'] = AdmPrivileges::getData()->get();
+        $data['action_types'] = ActionTypes::select('id', 'action_type_description as name', 'status')     
+        ->get();
+    
+        return Inertia::render('TableSettings/EditView',$data);
+    }
 
+
+    public function update(Request $request){
+        
         $validatedFields = $request->validate([
-            'adm_privileges_id' => 'required|string|max:3',
-            'adm_moduls_id' => 'required|string|max:3',
-            'action_types_id' => 'required|string|max:3',
-            'table_name' => 'required|string|max:255',
-            'report_header' => 'required|string|max:255',
-            'report_query' => 'required|string',
+            'privilege_id' => 'required|integer',
+            'module_id' => 'required|integer',
+            'action_type_id' => 'required|integer',
+            'module_name' => 'required|string|max:255',
             'status' => 'required|string',
         ]);
-
         try {
     
             $table_settings = TableSettings::find($request->id);
-
             if (!$table_settings) {
                 return back()->with(['message' => 'Table Setting not found!', 'type' => 'error']);
             }
-    
-            $table_settings->adm_privileges_id = $validatedFields['adm_privileges_id'];
-            $table_settings->adm_moduls_id = $validatedFields['adm_moduls_id'];
-            $table_settings->action_types_id = $validatedFields['action_types_id'];
-            $table_settings->table_name = $validatedFields['table_name'];
-            $table_settings->report_header = $validatedFields['report_header'];
-            $table_settings->report_query = $validatedFields['report_query'];
+            
+            $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
+
+            $headerName = $selected->pluck('header_name')->implode(',');
+            $headerQuery = $selected->pluck('name')->implode(',');
+            
+            $table_settings->adm_privileges_id = $validatedFields['privilege_id'];
+            $table_settings->adm_moduls_id = $validatedFields['module_id'];
+            $table_settings->action_types_id = $validatedFields['action_type_id'];
+            $table_settings->table_name = $validatedFields['module_name'];
+            $table_settings->report_header = $headerName;
+            $table_settings->report_query = $headerQuery;
             $table_settings->status = $validatedFields['status'];
             $table_settings->updated_by = CommonHelpers::myId();
             $table_settings->updated_at = now();
@@ -147,7 +161,7 @@ class TableSettingsController extends Controller
     public function getHeader($header_name)
     {
 
-        $headerName = ModuleHeaders::where('module_id', $header_name)->pluck('header_name');
+        $headerName = ModuleHeaders::where('module_id', $header_name)->where('status', 'ACTIVE')->pluck('header_name');
 
         return response()->json($headerName);
       

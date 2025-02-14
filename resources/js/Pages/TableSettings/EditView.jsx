@@ -9,7 +9,12 @@ import DropdownSelect from "../../Components/Dropdown/Dropdown";
 import CheckboxWithText from "../../Components/Checkbox/CheckboxWithText";
 import LoadingIcon from "../../Components/Table/Icons/LoadingIcon";
 
-const CreateTableSetting = ({ privileges, action_types }) => {
+const CreateTableSetting = ({
+    table_settings,
+    module_headers,
+    privileges,
+    action_types,
+}) => {
     const { theme } = useTheme();
     const [moduleData, setModuleData] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,14 +24,28 @@ const CreateTableSetting = ({ privileges, action_types }) => {
     const { primayActiveColor, textColorActive, buttonSwalColor } =
         useThemeStyles(theme);
 
+    const actionName =
+        action_types.find(
+            (action) => action.id === table_settings.action_types_id
+        )?.name || "";
+
+    const privilegeName =
+        privileges.find(
+            (privilege) => privilege.id === table_settings.adm_privileges_id
+        )?.name || "";
+
+    const reportHeaders = table_settings.report_header.split(",");
+
     const { data, setData, processing, reset, post, errors } = useForm({
-        module_id: "",
-        module_name: "",
-        action_type_id: "",
-        action_name: "",
-        privilege_id: "",
-        privilege_name: "",
-        checked_items: [],
+        id: table_settings.id,
+        module_id: table_settings.adm_moduls_id,
+        module_name: table_settings.table_name,
+        action_type_id: table_settings.action_types_id,
+        action_name: actionName,
+        privilege_id: table_settings.adm_privileges_id,
+        privilege_name: privilegeName,
+        checked_items: reportHeaders,
+        status: table_settings.status,
     });
 
     const modules = [
@@ -40,7 +59,17 @@ const CreateTableSetting = ({ privileges, action_types }) => {
         },
     ];
 
-    console.log(moduleData);
+    const statuses = [
+        {
+            id: "ACTIVE",
+            name: "ACTIVE",
+        },
+        {
+            id: "INACTIVE",
+            name: "INACTIVE",
+        },
+    ];
+
     const handleCheckboxChange = (item) => {
         setData((prevData) => ({
             ...prevData,
@@ -91,7 +120,7 @@ const CreateTableSetting = ({ privileges, action_types }) => {
             reverseButtons: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
-                post("/table_settings/create", {
+                post("/table_settings/update", {
                     onSuccess: (data) => {
                         reset();
                     },
@@ -105,9 +134,7 @@ const CreateTableSetting = ({ privileges, action_types }) => {
         <div className="h-full font-poppins">
             <Head title="Create Table Setting" />
             <ContentPanel>
-                <p className="text-lg font-semibold mb-2">
-                    Create Table Setting
-                </p>
+                <p className="text-lg font-semibold mb-2">Edit Table Setting</p>
                 <form className="space-y-4" onSubmit={handleFormSubmit}>
                     <div className="flex justify-center items-stretch gap-4 h-full">
                         {/* CARD 1 */}
@@ -126,20 +153,11 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 }
                                 name="module_name"
                                 options={modules}
-                                value={
-                                    data.module_id
-                                        ? {
-                                              label: data.module_name,
-                                              value: data.module_id,
-                                          }
-                                        : null
-                                }
+                                value={{
+                                    label: table_settings.table_name,
+                                    value: table_settings.adm_moduls_id,
+                                }}
                             />
-                            {errors.module_name && (
-                                <div className="font-poppins text-xs font-semibold text-red-600">
-                                    {errors.module_name}
-                                </div>
-                            )}
 
                             <DropdownSelect
                                 addMainClass="mt-3"
@@ -155,14 +173,10 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 }
                                 name="action_type"
                                 options={action_types}
-                                value={
-                                    data.action_type_id
-                                        ? {
-                                              label: data.action_type_id,
-                                              value: data.action_type_id,
-                                          }
-                                        : null
-                                }
+                                value={{
+                                    label: data.action_name,
+                                    value: data.action_type_id,
+                                }}
                             />
                             {errors.action_type_id && (
                                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -184,18 +198,37 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 }
                                 name="privilege Name"
                                 options={privileges}
-                                value={
-                                    data.privilege_id
-                                        ? {
-                                              label: data.privilege_id,
-                                              value: data.privilege_id,
-                                          }
-                                        : null
-                                }
+                                value={{
+                                    label: data.privilege_name,
+                                    value: table_settings.adm_privileges_id,
+                                }}
                             />
                             {errors.privilege_id && (
                                 <div className="font-poppins text-xs font-semibold text-red-600">
                                     {errors.privilege_id}
+                                </div>
+                            )}
+                            <DropdownSelect
+                                placeholder="Choose Status"
+                                selectType="react-select"
+                                defaultSelect="Select Status"
+                                onChange={(selectedOption) =>
+                                    setData("status", selectedOption?.value)
+                                }
+                                name="status"
+                                options={statuses}
+                                value={
+                                    data.status
+                                        ? {
+                                              label: data.status,
+                                              value: data.status,
+                                          }
+                                        : null
+                                }
+                            />
+                            {errors.status && (
+                                <div className="font-poppins text-xs font-semibold text-red-600">
+                                    {errors.status}
                                 </div>
                             )}
                         </div>
@@ -208,28 +241,30 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                 </div>
                             ) : (
                                 <>
+                                    {/* Select All Checkbox */}
+                                    <div className="mb-2">
+                                        <CheckboxWithText
+                                            id="select-all"
+                                            type="checkbox"
+                                            name="selectAll"
+                                            text="Select All"
+                                            textColor="text-black font-bold"
+                                            handleClick={handleSelectAllChange}
+                                            isChecked={
+                                                moduleData
+                                                    ? data.checked_items
+                                                          .length ===
+                                                      moduleData.length
+                                                    : data.checked_items
+                                                          .length ===
+                                                      module_headers.length
+                                            }
+                                            disabled={false}
+                                        />
+                                    </div>
+
                                     {moduleData ? (
                                         <>
-                                            {/* Select All Checkbox */}
-                                            <div className="mb-2">
-                                                <CheckboxWithText
-                                                    id="select-all"
-                                                    type="checkbox"
-                                                    name="selectAll"
-                                                    text="Select All"
-                                                    textColor="text-black font-bold"
-                                                    handleClick={
-                                                        handleSelectAllChange
-                                                    }
-                                                    isChecked={
-                                                        data.checked_items
-                                                            .length ===
-                                                        moduleData.length
-                                                    }
-                                                    disabled={false}
-                                                />
-                                            </div>
-
                                             {/* Individual Checkboxes */}
                                             <div className="grid grid-cols-3">
                                                 {moduleData.map(
@@ -257,10 +292,29 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                                             </div>
                                         </>
                                     ) : (
-                                        <div className="select-none w-full h-full flex items-center justify-center border border-dashed rounded-lg border-gray-300">
-                                            <p className="font-semibold text-gray-300">
-                                                Please Select Module
-                                            </p>
+                                        <div className="grid grid-cols-3">
+                                            {module_headers.map(
+                                                (item, index) => (
+                                                    <div key={item}>
+                                                        <CheckboxWithText
+                                                            id={`checkbox-${index}`}
+                                                            type="checkbox"
+                                                            name="exampleCheckbox"
+                                                            text={item}
+                                                            textColor="text-black"
+                                                            handleClick={() =>
+                                                                handleCheckboxChange(
+                                                                    item
+                                                                )
+                                                            }
+                                                            isChecked={data.checked_items.includes(
+                                                                item
+                                                            )}
+                                                            disabled={false}
+                                                        />
+                                                    </div>
+                                                )
+                                            )}
                                         </div>
                                     )}
                                 </>
@@ -284,7 +338,7 @@ const CreateTableSetting = ({ privileges, action_types }) => {
                             ) : (
                                 <span>
                                     <i className={`fa-solid fa-plus mr-1`}></i>{" "}
-                                    Create Table
+                                    Edit Table
                                 </span>
                             )}
                         </Button>

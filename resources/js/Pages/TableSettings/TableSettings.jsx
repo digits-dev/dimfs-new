@@ -127,13 +127,6 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                 Report Header
                             </TableHeader>
                             <TableHeader
-                                name="report_query"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Report Query
-                            </TableHeader>
-                            <TableHeader
                                 name="created_by"
                                 queryParams={queryParams}
                                 width="md"
@@ -173,31 +166,49 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                             action="edit"
                                             onClick={() =>
                                                 router.get(
-                                                    `/table_settings/edit/${item.id}`
+                                                    `/table_settings/edit_view/${item.id}`
                                                 )
                                             }
                                         />
                                     </RowData>
-                                    <RowStatus isLoading={loading}>
-                                        {item.status}
+                                    <RowStatus
+                                        isLoading={loading}
+                                        systemStatus={
+                                            item.status === "ACTIVE"
+                                                ? "active"
+                                                : "inactive"
+                                        }
+                                    >
+                                        {item.status === "ACTIVE"
+                                            ? "ACTIVE"
+                                            : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.adm_privileges_id}
+                                        {item.get_privilege_name?.name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.adm_moduls_id}
+                                        {item.get_module_name?.name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.action_types_id}
+                                        {
+                                            item.get_action_types
+                                                .action_type_description
+                                        }
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.table_name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.report_header}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.report_query}
+                                        {item.report_header
+                                            ?.split(",")
+                                            .map((header, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="bg-blue-200 text-black px-2 py-1 rounded-lg font-semibold mr-1"
+                                                >
+                                                    {header}
+                                                </span>
+                                            ))}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}

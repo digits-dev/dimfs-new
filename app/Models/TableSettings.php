@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\AdmModels\AdmPrivileges;
+use App\Models\AdmModels\AdmModules;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -143,5 +146,17 @@ class TableSettings extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function getPrivilegeName() {
+        return $this->belongsTo(AdmPrivileges::class, 'adm_privileges_id', 'id');
+    }
+
+    public function getModuleName() {
+        return $this->belongsTo(AdmModules::class, 'adm_moduls_id', 'id');
+    }
+    public function getActionTypes() {
+        return $this->belongsTo(ActionTypes::class, 'action_types_id', 'id');
+    }
+    
 
 }

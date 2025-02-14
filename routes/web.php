@@ -190,8 +190,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('table_settings')->group(function() {
         Route::post('/create', [TableSettingsController::class, 'create']);
-        Route::post('/update', [TableSettingsController::class, 'update']);
         Route::get('/create_view', [TableSettingsController::class, 'createView']); 
+        Route::get('/edit_view/{id}', [TableSettingsController::class, 'EditView']); 
+        Route::post('/update', [TableSettingsController::class, 'update']);
         Route::get('/get_header/{header_name}', [TableSettingsController::class, 'getHeader']); 
     });
 
