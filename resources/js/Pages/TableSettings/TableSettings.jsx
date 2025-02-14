@@ -96,28 +96,22 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Adm Privileges ID
+                                Privilege Name
                             </TableHeader>
                             <TableHeader
                                 name="adm_moduls_id"
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Adm Moduls ID
+                                Module Name
                             </TableHeader>
+
                             <TableHeader
                                 name="action_types_id"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Action Types ID
-                            </TableHeader>
-                            <TableHeader
-                                name="table_name"
-                                queryParams={queryParams}
-                                width="lg"
-                            >
-                                Table Name
                             </TableHeader>
                             <TableHeader
                                 name="report_header"
@@ -194,9 +188,6 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                             item.get_action_types
                                                 .action_type_description
                                         }
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.table_name}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.report_header

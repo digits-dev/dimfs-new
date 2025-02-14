@@ -66,11 +66,20 @@ class TableSettingsController extends Controller
     }
 
     public function create(Request $request){
-        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
+        
+        $existing = TableSettings::where('adm_privileges_id', $request->privilege_id)
+            ->where('action_types_id', $request->action_type_id)
+            ->where('table_name', $request->module_name)
+            ->first();
 
+        if ($existing) {
+            return back()->with(['message' => 'Table Setting already exists!', 'type' => 'error']);
+        }
+
+        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
         $headerName = $selected->pluck('header_name')->implode(',');
         $headerQuery = $selected->pluck('name')->implode(',');
-       
+        
         $validatedFields = $request->validate([
                 'privilege_id' => 'required|integer',
                 'module_id' => 'required|string|max:3',
@@ -117,6 +126,15 @@ class TableSettingsController extends Controller
 
     public function update(Request $request){
         
+        $existing = TableSettings::where('adm_privileges_id', $request->privilege_id)
+        ->where('action_types_id', $request->action_type_id)
+        ->where('table_name', $request->module_name)
+        ->first();
+
+        if ($existing && $existing->id != $request->id) {
+            return back()->with(['message' => 'Table Setting already exists!', 'type' => 'error']);
+        }
+
         $validatedFields = $request->validate([
             'privilege_id' => 'required|integer',
             'module_id' => 'required|integer',
@@ -148,7 +166,7 @@ class TableSettingsController extends Controller
     
             $table_settings->save();
     
-            return back()->with(['message' => 'Table Setting Updating Success!', 'type' => 'success']);
+            return redirect('/table_settings')->with(['message' => 'Table Setting Updating Success!', 'type' => 'success']);
         }  
 
         catch (\Exception $e) {

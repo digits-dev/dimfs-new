@@ -8,6 +8,7 @@ import axios from "axios";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 import CheckboxWithText from "../../Components/Checkbox/CheckboxWithText";
 import LoadingIcon from "../../Components/Table/Icons/LoadingIcon";
+import { useToast } from "../../Context/ToastContext";
 
 const CreateTableSetting = ({
     table_settings,
@@ -19,7 +20,7 @@ const CreateTableSetting = ({
     const [moduleData, setModuleData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectAll, setSelectAll] = useState(false);
+    const { handleToast } = useToast();
 
     const { primayActiveColor, textColorActive, buttonSwalColor } =
         useThemeStyles(theme);
@@ -122,9 +123,13 @@ const CreateTableSetting = ({
             if (result.isConfirmed) {
                 post("/table_settings/update", {
                     onSuccess: (data) => {
-                        reset();
+                        const { message, type } = data.props.auth.sessions;
+                        handleToast(message, type);
                     },
-                    onError: (error) => {},
+                    onError: (data) => {
+                        const { message, type } = data.props.auth.sessions;
+                        handleToast(message, type);
+                    },
                 });
             }
         });

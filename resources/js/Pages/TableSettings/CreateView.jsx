@@ -1,7 +1,7 @@
 import { Head, router, useForm } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 import { useTheme } from "../../Context/ThemeContext";
-import { useToast } from '../../Context/ToastContext';
+import { useToast } from "../../Context/ToastContext";
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from "../../Components/Table/Buttons/Button";
 import ContentPanel from "../../Components/Table/ContentPanel";
@@ -15,7 +15,6 @@ const CreateTableSetting = ({ privileges, action_types }) => {
     const [moduleData, setModuleData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [selectAll, setSelectAll] = useState(false);
     const { handleToast } = useToast();
 
     const { primayActiveColor, textColorActive, buttonSwalColor } =
@@ -42,7 +41,6 @@ const CreateTableSetting = ({ privileges, action_types }) => {
         },
     ];
 
-    console.log(moduleData);
     const handleCheckboxChange = (item) => {
         setData((prevData) => ({
             ...prevData,
@@ -95,7 +93,6 @@ const CreateTableSetting = ({ privileges, action_types }) => {
             if (result.isConfirmed) {
                 post("/table_settings/create", {
                     onSuccess: (data) => {
-                        reset();
                         const { message, type } = data.props.auth.sessions;
                         handleToast(message, type);
                     },
