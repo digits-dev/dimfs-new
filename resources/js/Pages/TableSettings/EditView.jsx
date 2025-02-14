@@ -10,7 +10,7 @@ import CheckboxWithText from "../../Components/Checkbox/CheckboxWithText";
 import LoadingIcon from "../../Components/Table/Icons/LoadingIcon";
 import { useToast } from "../../Context/ToastContext";
 
-const CreateTableSetting = ({
+const UpdateTableSetting = ({
     table_settings,
     module_headers,
     privileges,
@@ -112,9 +112,9 @@ const CreateTableSetting = ({
     const handleFormSubmit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want to create Table Setting?</p>`,
+            title: `<p class="font-poppins text-3xl" >Do you want to update Table Setting?</p>`,
             showCancelButton: true,
-            confirmButtonText: `Create Table`,
+            confirmButtonText: `Update Table`,
             confirmButtonColor: buttonSwalColor,
             icon: "question",
             iconColor: buttonSwalColor,
@@ -137,9 +137,11 @@ const CreateTableSetting = ({
 
     return (
         <div className="h-full font-poppins">
-            <Head title="Create Table Setting" />
+            <Head title="Update Table Setting" />
             <ContentPanel>
-                <p className="text-lg font-semibold mb-2">Edit Table Setting</p>
+                <p className="text-lg font-semibold mb-2">
+                    Update Table Setting
+                </p>
                 <form className="space-y-4" onSubmit={handleFormSubmit}>
                     <div className="flex justify-center items-stretch gap-4 h-full">
                         {/* CARD 1 */}
@@ -339,11 +341,11 @@ const CreateTableSetting = ({
                             disabled={processing}
                         >
                             {processing ? (
-                                "Create Table"
+                                "Update Table"
                             ) : (
                                 <span>
                                     <i className={`fa-solid fa-plus mr-1`}></i>{" "}
-                                    Edit Table
+                                    Update Table
                                 </span>
                             )}
                         </Button>
@@ -354,4 +356,4 @@ const CreateTableSetting = ({
     );
 };
 
-export default CreateTableSetting;
+export default UpdateTableSetting;
