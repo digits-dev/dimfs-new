@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('header_name')->nullable();
             $table->string('type')->nullable();
             $table->string('table')->nullable();
+            $table->string('table_join')->nullable();
             $table->string('table_select_value')->nullable();
             $table->string('table_select_label')->nullable();
             $table->string('width')->nullable();
