@@ -7,7 +7,7 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules}) => {
+const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -30,6 +30,33 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
         {
             id: 'INACTIVE',
             name:'INACTIVE',
+        },
+    ]
+
+    const widths = [
+        {
+            id: 'auto',
+            name:'auto',
+        },
+        {
+            id: 'sm',
+            name:'sm',
+        },
+        {
+            id: 'md',
+            name:'md',
+        },
+        {
+            id: 'lg',
+            name:'lg',
+        },
+        {
+            id: 'xl',
+            name:'xl',
+        },
+        {
+            id: '2xl',
+            name:'2xl',
         },
     ]
 
@@ -111,6 +138,22 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                 {errors.module_name}
             </div>
         )}
+        {/* NAME */}
+        <DropdownSelect
+            placeholder="Choose Table Name"
+            selectType="react-select"
+            defaultSelect="Select Table Name"
+            isDisabled={!data.module_id}
+            onChange={(selectedOption) => setData("name", selectedOption?.value)}
+            name="table_name"
+            options={data.module_name == 'Item Master' ? item_master_columns : gashapon_item_master_columns}
+            value={data.name ? { label: data.name, value: data.name } : null}
+        />
+        {(errors.name) && (
+            <div className="font-poppins text-xs font-semibold text-red-600">
+                {errors.name}
+            </div>
+        )}
         {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Module is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
         {/* HEADER NAME */}
         <InputComponent
@@ -125,32 +168,22 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                 {errors.header_name}
             </div>
         )}
-        {/* NAME */}
-        <InputComponent
-            name="name"
-            value={data.name}
-            disabled={action === 'View'}
-            placeholder="Enter Name (ex. header_name)"
-            onChange={(e)=> setData("name", e.target.value)}
-        />
-        {(errors.name) && (
-            <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.name}
-            </div>
-        )}
         {/* WIDTH */}
-        <InputComponent
+        <DropdownSelect
+            placeholder="Choose Width"
+            selectType="react-select"
+            defaultSelect="Select Width"
+            onChange={(selectedOption) => setData("width", selectedOption?.value)}
             name="width"
-            value={data.width}
-            disabled={action === 'View'}
-            placeholder="Enter width (sm, md, lg, xl ,2xl)"
-            onChange={(e)=> setData("width", e.target.value)}
+            options={widths}
+            value={data.width ? { label: data.width, value: data.width } : null}
         />
         {(errors.width) && (
-            <div classwidth="font-poppins text-xs font-semibold text-red-600">
+            <div className="font-poppins text-xs font-semibold text-red-600">
                 {errors.width}
             </div>
         )}
+       
         {action == 'Update' && 
             <>
                 <DropdownSelect

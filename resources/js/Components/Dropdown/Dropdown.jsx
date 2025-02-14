@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const DropdownSelect = ({isStatus = false, options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const DropdownSelect = ({isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -57,6 +57,7 @@ const DropdownSelect = ({isStatus = false, options, onChange, value, name, defau
                 placeholder={placeholder}
                 defaultValue={value}
                 name={name}
+                isDisabled={isDisabled}
                 className={`block w-full bg-gray-800 border-gray-300 mt-1  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 onChange={onChange}
                 options={options.map(opt => ({ value: opt.id, label: opt.name, name: name, status: opt.status}))}
@@ -69,6 +70,7 @@ const DropdownSelect = ({isStatus = false, options, onChange, value, name, defau
                     name={name}
                     value={value}
                     onChange={onChange}
+                    disabled={isDisabled}
                     className={`appearance-none px-4 pr-7 py-2 text-sm text-left outline-none border border-gray-300 rounded-lg ${theme === 'bg-skin-black' ? theme+' text-gray-300' : 'bg-white'} w-full cursor-pointer hover:border-gray-400 focus:ring-2 focus:ring-blue-500 transition duration-200 truncate ${extendClass}`}
                 >
                     <option value="" className="truncate">{defaultSelect}</option>

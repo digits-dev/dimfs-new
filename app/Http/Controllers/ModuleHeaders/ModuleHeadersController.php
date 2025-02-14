@@ -6,6 +6,8 @@ use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdmModels\AdmModules;
+use App\Models\GashaponItemMaster;
+use App\Models\ItemMaster;
 use App\Models\ModuleHeaders;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ModuleHeadersController extends Controller
@@ -49,18 +52,34 @@ class ModuleHeadersController extends Controller
 
         $data['all_active_modules'] = AdmModules::select('id', 'name', 'is_active as status')
             ->where('is_active', 1)
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
                 return $module;
             });
 
-        $data['all_modules'] = AdmModules::select('id', 'name', 'is_active as status')     
+        $data['all_modules'] = AdmModules::select('id', 'name', 'is_active as status')    
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
                 return $module;
             });
+
+        $data['item_master_columns'] = array_map(function($column) {
+            return [
+                'id' => $column,
+                'name' => $column
+            ];
+        }, Schema::getColumnListing((new ItemMaster())->getTable()));
+
+        $data['gashapon_item_master_columns'] =  array_map(function($column) {
+            return [
+                'id' => $column,
+                'name' => $column
+            ];
+        }, Schema::getColumnListing((new GashaponItemMaster())->getTable()));
 
         return Inertia::render("ModuleHeaders/ModuleHeaders", $data);
     }
@@ -73,6 +92,15 @@ class ModuleHeadersController extends Controller
             'header_name' => 'required|string|max:255',
             'width' => 'required|string|max:10',
         ]);
+
+        $isHeaderExist = ModuleHeaders::where('module_id', $request->module_id)
+            ->where('name', $request->name )
+            ->exists();
+
+        if ($isHeaderExist){
+
+            return back()->with(['message' => 'Module Header already exists!', 'type' => 'error']);
+        }
 
         try {
 
@@ -112,9 +140,21 @@ class ModuleHeadersController extends Controller
             if (!$module_headers) {
                 return back()->with(['message' => 'Module Header not found!', 'type' => 'error']);
             }
-    
-            $module_headers->module_id = $validatedFields['module_id'];
-            $module_headers->name = $validatedFields['name'];
+
+            $isHeaderExist = ModuleHeaders::where('module_id', $request->module_id)
+            ->where('name', $request->name )
+            ->exists();
+
+            if ($request->module_id !== $module_headers->module_id || $request->name !== $module_headers->name) {
+                if (!$isHeaderExist) {
+                    $module_headers->module_id = $validatedFields['module_id'];
+                    $module_headers->name = $validatedFields['name'];
+
+                } else {
+                    return back()->with(['message' => 'Module Header already exists!', 'type' => 'error']);
+                }
+            }
+
             $module_headers->header_name = $validatedFields['header_name'];
             $module_headers->width = $validatedFields['width'];
             $module_headers->status = $validatedFields['status'];
