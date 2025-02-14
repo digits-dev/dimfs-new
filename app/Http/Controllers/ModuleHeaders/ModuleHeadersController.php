@@ -67,19 +67,33 @@ class ModuleHeadersController extends Controller
                 return $module;
             });
 
-        $data['item_master_columns'] = array_map(function($column) {
-            return [
-                'id' => $column,
-                'name' => $column
-            ];
-        }, Schema::getColumnListing((new ItemMaster())->getTable()));
+        $data['item_master_columns'] = array_values(array_map(
+            function ($column) {
+                return ['id' => $column, 'name' => $column];
+            },
+            array_filter(
+                Schema::getColumnListing((new ItemMaster())->getTable()), 
+                function ($column) {
+                    return !ModuleHeaders::where('name', $column)->where('module_id', '38')->exists();
+                }
+            )
+        ));
 
-        $data['gashapon_item_master_columns'] =  array_map(function($column) {
-            return [
-                'id' => $column,
-                'name' => $column
-            ];
-        }, Schema::getColumnListing((new GashaponItemMaster())->getTable()));
+        $data['gashapon_item_master_columns'] = array_values(array_map(
+            function ($column) {
+                return [
+                    'id' => $column,
+                    'name' => $column
+                ];
+            },
+            array_filter(
+                Schema::getColumnListing((new GashaponItemMaster())->getTable()),
+                function ($column) {
+                    return !ModuleHeaders::where('name', $column)->where('module_id', '28')->exists();
+                }
+            )
+        ));
+        
 
         return Inertia::render("ModuleHeaders/ModuleHeaders", $data);
     }
