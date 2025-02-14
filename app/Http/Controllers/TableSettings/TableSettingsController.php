@@ -91,7 +91,7 @@ class TableSettingsController extends Controller
                 'created_by' => CommonHelpers::myId(),
             ]);
     
-            return back()->with(['message' => 'Table Setting Creation Success!', 'type' => 'success']);
+            return redirect('/table_settings')->with(['message' => 'Table Setting Creation Success!', 'type' => 'success']);
 
         }
 
