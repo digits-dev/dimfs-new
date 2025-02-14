@@ -116,21 +116,21 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                             <TableHeader
                                 name="report_header"
                                 queryParams={queryParams}
-                                width="lg"
+                                width="2xl"
                             >
                                 Report Header
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
                                 queryParams={queryParams}
-                                width="md"
+                                width="lg"
                             >
                                 Created By
                             </TableHeader>
                             <TableHeader
                                 name="updated_by"
                                 queryParams={queryParams}
-                                width="md"
+                                width="lg"
                             >
                                 Updated By
                             </TableHeader>
@@ -154,16 +154,18 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                         {table_settings &&
                             table_settings?.data.map((item, index) => (
                                 <Row key={item.id}>
-                                    <RowData center>
-                                        <RowAction
-                                            type="button"
-                                            action="edit"
-                                            onClick={() =>
-                                                router.get(
-                                                    `/table_settings/edit_view/${item.id}`
-                                                )
-                                            }
-                                        />
+                                    <RowData center addClass="align-top">
+                                        <div className="mt-0.5">
+                                            <RowAction
+                                                type="button"
+                                                action="edit"
+                                                onClick={() =>
+                                                    router.get(
+                                                        `/table_settings/edit_view/${item.id}`
+                                                    )
+                                                }
+                                            />
+                                        </div>
                                     </RowData>
                                     <RowStatus
                                         isLoading={loading}
@@ -172,46 +174,65 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                                 ? "active"
                                                 : "inactive"
                                         }
+                                        addClass="align-top"
+                                        addStatusClass="mt-1"
                                     >
                                         {item.status === "ACTIVE"
                                             ? "ACTIVE"
                                             : "INACTIVE"}
                                     </RowStatus>
-                                    <RowData isLoading={loading}>
-                                        {item.get_privilege_name?.name}
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.get_privilege_name?.name}
+                                        </div>
+                                    </RowData>
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.get_module_name?.name}
+                                        </div>
+                                    </RowData>
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            { item.get_action_types.action_type_description }
+                                        </div>
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.get_module_name?.name}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {
-                                            item.get_action_types
-                                                .action_type_description
-                                        }
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.report_header
-                                            ?.split(",")
-                                            .map((header, index) => (
-                                                <span
-                                                    key={index}
-                                                    className="bg-blue-200 text-black px-2 py-1 rounded-lg font-semibold mr-1"
-                                                >
-                                                    {header}
-                                                </span>
+                                        <div className="flex flex-wrap gap-1">
+                                            {item.report_header
+                                                ?.split(",")
+                                                .map((header, index) => (
+                                                    <p
+                                                        key={index}
+                                                        className={`bg-cyan-400 text-xs text-white px-2  py-1 rounded-md font-semibold`}
+                                                    >
+                                                        {header}
+                                                    </p>
                                             ))}
+                                        </div>
+                                        
                                     </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.get_created_by?.name}
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.get_created_by?.name}
+                                        </div>  
                                     </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.get_updated_by?.name}
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.get_updated_by?.name}
+                                        </div>  
+                                     
                                     </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.created_at}
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.created_at}
+                                        </div>  
+                                     
                                     </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.updated_at}
+                                    <RowData isLoading={loading} addClass="align-top">
+                                        <div className="mt-2">
+                                            {item.updated_at}
+                                        </div>  
+                                       
                                     </RowData>
                                 </Row>
                             ))}

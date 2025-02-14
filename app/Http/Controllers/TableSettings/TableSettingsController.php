@@ -76,7 +76,7 @@ class TableSettingsController extends Controller
             return back()->with(['message' => 'Table Setting already exists!', 'type' => 'error']);
         }
 
-        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
+        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->get();
         $headerName = $selected->pluck('header_name')->implode(',');
         $headerQuery = $selected->pluck('name')->implode(',');
         
@@ -149,7 +149,7 @@ class TableSettingsController extends Controller
                 return back()->with(['message' => 'Table Setting not found!', 'type' => 'error']);
             }
             
-            $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->get();
+            $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->get();
 
             $headerName = $selected->pluck('header_name')->implode(',');
             $headerQuery = $selected->pluck('name')->implode(',');
