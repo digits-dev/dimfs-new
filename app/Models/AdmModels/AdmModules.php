@@ -11,4 +11,7 @@ class AdmModules extends Model
     public function scopeGetData($query){
         return $query->where('is_protected', 0)->where('deleted_at', null);
     }
+
+    public const ITEM_MASTER = 38;
+    public const GASHAPON_ITEM_MASTER = 28;
 }

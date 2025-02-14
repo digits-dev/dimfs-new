@@ -143,9 +143,9 @@ const UpdateTableSetting = ({
                     Update Table Setting
                 </p>
                 <form className="space-y-4" onSubmit={handleFormSubmit}>
-                    <div className="flex justify-center items-stretch gap-4 h-full">
+                    <div className="flex flex-col md:flex-row justify-center items-stretch gap-4 h-full">
                         {/* CARD 1 */}
-                        <div className="w-[30%] flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
+                        <div className="md:w-[30%] flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
                             <DropdownSelect
                                 placeholder="Select Module"
                                 selectType="react-select"
@@ -241,7 +241,7 @@ const UpdateTableSetting = ({
                         </div>
 
                         {/* CARD 2 */}
-                        <div className="w-[70%] flex-1 flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
+                        <div className="md:w-[70%] flex-1 flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
                             {loading ? (
                                 <div className="w-full h-full flex items-center justify-center">
                                     <LoadingIcon />
@@ -329,7 +329,22 @@ const UpdateTableSetting = ({
                             {error && <p className="text-red-500">{error}</p>}
                         </div>
                     </div>
-                    <div>
+                    <div className="flex justify-between">
+                        <Button
+                            type="link"
+                            href="/table_settings"
+                            extendClass={`${
+                                theme === "bg-skin-white"
+                                    ? primayActiveColor
+                                    : theme
+                            }`}
+                            fontColor={textColorActive}
+                            disabled={processing}
+                        >
+                                <span>
+                                    Back
+                                </span>
+                        </Button>
                         <Button
                             type="button"
                             extendClass={`${

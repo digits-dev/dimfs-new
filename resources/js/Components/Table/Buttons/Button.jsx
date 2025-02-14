@@ -16,14 +16,14 @@ const Button = ({
                 <button
                     onClick={onClick}
                     disabled={disabled}
-                    className={`${fontColor} overflow-hidden border border-[1px] border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
+                    className={`${fontColor} overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
                 >
                     {children}
                 </button>
             ) : (
                 <Link
                     href={href}
-                    className={`${fontColor} overflow-hidden border border-[1px] border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
+                    className={`${fontColor} pt-2 overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
                 >
                     {children}
                 </Link>

@@ -10,6 +10,13 @@ class ActionTypes extends Model
 {
     use HasFactory;
 
+    public const CREATE = 1;
+    public const CREATE_READONLY = 2;
+    public const EXPORT = 3;
+    public const UPDATE = 4;
+    public const UPDATE_READONLY = 5;
+    public const VIEW = 6;
+
     public static function boot()
     {
         parent::boot();

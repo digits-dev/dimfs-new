@@ -4,7 +4,11 @@ namespace App\Http\Controllers\ItemMasters;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\ActionTypes;
+use App\Models\AdmModels\AdmModules;
 use App\Models\ItemMaster;
+use App\Models\ModuleHeaders;
+use App\Models\TableSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +48,33 @@ class ItemMastersController extends Controller
         $data['item_masters'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
-        return Inertia("ItemMasters/ItemMasters", $data);
+        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::VIEW)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        ->where('module_id', AdmModules::ITEM_MASTER)
+        ->select('name', 'header_name', 'width')
+        ->get();
+
+        return Inertia::render("ItemMasters/ItemMasters", $data);
+    }
+
+    public function getCreate(){
+        if(!CommonHelpers::isCreate()) {
+            return Inertia::render('Errors/RestrictionPage');
+        }
+
+        $data = [];
+        $data['page_title'] = 'Item Master - Create';
+
+        return Inertia::render("ItemMasters/ItemMasterCreate", $data);
+    }
+
+    public function getUpdate(){
+
     }
 }

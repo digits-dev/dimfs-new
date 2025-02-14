@@ -1,8 +1,17 @@
+import { Head } from '@inertiajs/react'
 import React from 'react'
+import ContentPanel from '../../Components/Table/ContentPanel'
+import InputComponent from '../../Components/Forms/Input';
 
-const ItemMasterCreate = () => {
+const ItemMasterCreate = ({page_title}) => {
   return (
-    <div>ItemMasterCreate</div>
+    <>
+      <Head title={page_title}/>
+      <ContentPanel>
+          
+      </ContentPanel>
+    </>
+   
   )
 }
 

@@ -16,6 +16,10 @@ return new class extends Migration
             $table->unsignedInteger('module_id')->nullable();
             $table->string('name', 50)->nullable();
             $table->string('header_name')->nullable();
+            $table->string('type')->nullable();
+            $table->string('table')->nullable();
+            $table->string('table_select_value')->nullable();
+            $table->string('table_select_label')->nullable();
             $table->string('width')->nullable();
             $table->string('status',10)->default('ACTIVE');
             $table->unsignedInteger('created_by')->nullable();
