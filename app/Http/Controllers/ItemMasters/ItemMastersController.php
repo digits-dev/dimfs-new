@@ -32,7 +32,7 @@ class ItemMastersController extends Controller
     }
 
     public function getAllData(){
-        $query = ItemMaster::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = ItemMaster::query()->with(['getCreatedBy', 'getUpdatedBy', 'getBrand', 'getBrandGroup']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -57,9 +57,15 @@ class ItemMastersController extends Controller
         ->pluck('report_header')
         ->first());
 
+        $data['can_create'] = TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::CREATE)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->exists();
+
         $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
         ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name', 'width')
+        ->select('name', 'header_name', 'width', 'table_join')
         ->get();
 
         return Inertia::render("ItemMasters/ItemMasters", $data);

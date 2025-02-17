@@ -200,4 +200,12 @@ class ItemMaster extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function getBrand() {
+        return $this->belongsTo(Brands::class, 'brands_id', 'id');
+    }
+
+    public function getBrandGroup() {
+        return $this->belongsTo(BrandGroups::class, 'brand_groups_id', 'id');
+    }
 }

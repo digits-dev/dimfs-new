@@ -18,14 +18,11 @@ import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
 
 
-const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers}) => {
+const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [action, setAction] = useState(null);
-
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -36,10 +33,6 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
         e.preventDefault();
         router.get(pathname);
     };
-
-    const handleModalClick = () => {
-        setIsModalOpen(!isModalOpen);
-    }
 
     return (
         <>
@@ -58,14 +51,17 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                     <i className='fa fa-rotate-right text-base p-[1px]'></i>
                                 </Button>
                             </Tooltip>
-                            <Button
-                                extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
-                                type="link"
-                                fontColor={textColorActive}
-                                href="item_masters/create_view"
-                            > 
-                            <i className="fa-solid fa-plus mr-1"></i>  Add Item Master
-                            </Button>
+                            {can_create &&
+                                <Button
+                                    extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                                    type="link"
+                                    fontColor={textColorActive}
+                                    href="item_masters/create_view"
+                                > 
+                                    <i className="fa-solid fa-plus mr-1"></i>  Add Item Master
+                                </Button>
+                            }
+                           
                         </div>
                         <div className='flex'>
                             <TableSearch queryParams={queryParams} />
@@ -84,6 +80,7 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                 {table_headers && 
                                     table_headers?.map((header, index) => (
                                         <TableHeader
+                                            key={index}
                                             name={header.name}
                                             queryParams={queryParams}
                                             width={header.width}
@@ -102,36 +99,24 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                                 <RowAction
                                                     type="button"
                                                     action="edit"
-                                                    onClick={() => {
-                                                        handleModalClick();
-                                                        setAction('Update');
-                                                        setUpdateData({
-                                                            id: item.id,
-                                                            brand_direction_description: item.brand_direction_description,
-                                                            status: item.status,
-                                                        });
-                                                    }}
                                                 />
                                                 <RowAction
                                                     type="button"
                                                     action="view"
-                                                    onClick={() => {
-                                                        handleModalClick();
-                                                        setAction('View');
-                                                        setUpdateData({
-                                                            id: item.id,
-                                                            brand_direction_description: item.brand_direction_description,
-                                                            status: item.status,
-                                                        });
-                                                    }}
                                                 />
                                             </RowData>
                                             
-                                            {table_headers?.map((header, index) => (
-                                                <RowData key={index} isLoading={loading}>
-                                                    {item[header.name] !== undefined ? item[header.name] : 'N/A'}
-                                                </RowData>
-                                            ))}
+                                            {table_headers?.map((header, index) => {
+                                                const value = header.table_join
+                                                    ? header.table_join.split('.').reduce((acc, key) => acc?.[key], item)
+                                                    : item[header.name];
+
+                                                return (
+                                                    <RowData key={index} isLoading={loading}>
+                                                        {value ?? "-"}
+                                                    </RowData>
+                                                );
+                                            })}
                                         </Row>
                                     ))
                                 }
