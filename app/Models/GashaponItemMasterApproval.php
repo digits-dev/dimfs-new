@@ -6,7 +6,7 @@ use app\Helpers\CommonHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemMasterApproval extends Model
+class GashaponItemMasterApproval extends Model
 {
     use HasFactory;
 

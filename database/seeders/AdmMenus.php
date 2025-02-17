@@ -56,7 +56,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 3
+                'sorting'           => 5
             ]
         );
 
@@ -208,7 +208,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 4
+                'sorting'           => 6
             ]
         );
 
@@ -379,7 +379,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 2
+                'sorting'           => 3
             ]
         );
 
@@ -740,7 +740,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 5
+                'sorting'           => 7
             ]
         );
 
@@ -1197,7 +1197,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 6
+                'sorting'           => 8
             ]
         );
 
@@ -1255,6 +1255,44 @@ class AdmMenus extends Seeder
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 2
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Item Master Approval',
+            ],
+            [
+                'name'              => 'Item Master Approval',
+                'type'              => 'Route',
+                'path'              => 'ItemMasterApprovals\ItemMasterApprovalsControllerGetIndex',
+                'slug'              => 'item_master_approvals',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 2
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Gashapon Item Master Approval',
+            ],
+            [
+                'name'              => 'Gashapon Item Master Approval',
+                'type'              => 'Route',
+                'path'              => 'GashaponItemMasterApprovals\GashaponItemMasterApprovalsControllerGetIndex',
+                'slug'              => 'gashapon_item_master_approvals',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 4
             ]
         );
     }

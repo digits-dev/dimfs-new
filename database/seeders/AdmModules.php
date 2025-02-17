@@ -822,6 +822,28 @@ class AdmModules extends Seeder
                 'is_protected' => 0,
                 'is_active' => 1,
             ],
+
+            [
+                'name' => 'Item Master Approval',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'item_master_approvals',
+                'table_name' => 'item_master_approvals',
+                'controller' => 'ItemMasterApprovals\ItemMasterApprovalsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Gashapon Item Master Approval',
+                'created_at' => date('Y-m-d H:i:s'),
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'gashapon_item_master_approvals',
+                'table_name' => 'gashapon_item_master_approvals',
+                'controller' => 'gashapon_item_master_approvals',
+                'is_protected' => 0,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($data as $module) {
