@@ -7,15 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
 use App\Models\ItemMaster;
+use App\Models\ItemMasterApproval;
 use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use DB;
+
 
 class ItemMastersController extends Controller
 {
@@ -63,6 +65,8 @@ class ItemMastersController extends Controller
         return Inertia::render("ItemMasters/ItemMasters", $data);
     }
 
+    // ------------------------------------------ CREATE ITEM ------------------------------------------ //
+
     public function getCreate(){
         if(!CommonHelpers::isCreate()) {
             return Inertia::render('Errors/RestrictionPage');
@@ -71,10 +75,50 @@ class ItemMastersController extends Controller
         $data = [];
         $data['page_title'] = 'Item Master - Create';
 
+        
+        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::CREATE)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        ->where('module_id', AdmModules::ITEM_MASTER)
+        ->get()
+        ->map(function ($columns) {
+            if ($columns->table) {
+                $columns->table_data = DB::table($columns->table)
+                    ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
+                    ->get();
+            }
+            return $columns;
+        });
+
         return Inertia::render("ItemMasters/ItemMasterCreate", $data);
+    }
+
+    public function create(Request $request){
+
+        try {
+
+            ItemMasterApproval::create([
+               'item_values' => json_encode($request->all()),
+            ]);
+    
+            return redirect('/item_masters')->with(['message' => 'Item Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Item Master', $e->getMessage());
+            return back()->with(['message' => 'Item Creation Failed!', 'type' => 'error']);
+        }
     }
 
     public function getUpdate(){
 
     }
+
+    
 }

@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const DropdownSelect = ({isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -62,6 +62,7 @@ const DropdownSelect = ({isStatus = false, isDisabled,  options, onChange, value
                 onChange={onChange}
                 options={options.map(opt => ({ value: opt.id, label: opt.name, name: name, status: opt.status}))}
                 styles={theme === 'bg-skin-black' ? customStyles : customStatusStyles}
+                menuPlacement={menuPlacement}
             />
              
                

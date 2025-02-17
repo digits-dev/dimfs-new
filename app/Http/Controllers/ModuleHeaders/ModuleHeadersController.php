@@ -12,10 +12,9 @@ use App\Models\ModuleHeaders;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use DB;
 use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -93,6 +92,22 @@ class ModuleHeadersController extends Controller
                 }
             )
         ));
+
+        $databaseName = config('database.connections.mysql.database');
+        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [$databaseName]);
+
+        $data['database_tables_and_columns'] = [];
+        foreach ($tables as $table) {
+            $tableName = $table->TABLE_NAME;
+
+            $columns = Schema::getColumnListing($tableName);
+
+            $data['database_tables_and_columns'][] = [
+                'table_name' => $tableName,
+                'columns' => $columns
+            ];
+        }
+        
         
 
         return Inertia::render("ModuleHeaders/ModuleHeaders", $data);
@@ -100,12 +115,24 @@ class ModuleHeadersController extends Controller
 
     public function create(Request $request){
 
+        // dd($request->all());
+
         $validatedFields = $request->validate([
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
             'header_name' => 'required|string|max:255',
             'width' => 'required|string|max:10',
+            'type' => 'required|string|max:10',
         ]);
+
+        if ($request->type == 'select'){
+            $request->validate([
+                'table' => 'required|string|max:255',
+                'table_join' => 'required|string|max:255',
+                'table_select_value' => 'required|string|max:255',
+                'table_select_label' => 'required|string|max:255',
+            ]);
+        }
 
         $isHeaderExist = ModuleHeaders::where('module_id', $request->module_id)
             ->where('name', $request->name )
@@ -122,7 +149,12 @@ class ModuleHeadersController extends Controller
                 'module_id' => $validatedFields['module_id'],   
                 'name' => $validatedFields['name'],   
                 'width' => $validatedFields['width'],   
-                'header_name' => $validatedFields['header_name'],   
+                'header_name' => $validatedFields['header_name'],
+                'type' => $validatedFields['type'],
+                'table' => $request->table ?? null,
+                'table_join' => $request->table_join ?? null,
+                'table_select_value' => $request->table_select_value ?? null,
+                'table_select_label' => $request->table_select_label ?? null,
             ]);
     
             return back()->with(['message' => 'Module Header Creation Success!', 'type' => 'success']);

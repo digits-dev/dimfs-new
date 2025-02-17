@@ -20,7 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import ModuleHeadersAction from "./ModuleHeadersAction";
 import Export from "../../Components/Table/Buttons/Export";
 
-const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns}) => {
+const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns, database_tables_and_columns}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -268,6 +268,7 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                     all_modules={all_modules} 
                     gashapon_item_master_columns={gashapon_item_master_columns} 
                     item_master_columns={item_master_columns}
+                    database_tables_and_columns={database_tables_and_columns}
                 />
             </Modal>
             

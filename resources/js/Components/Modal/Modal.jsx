@@ -42,9 +42,9 @@ const Modal = ({
                     </div>
                 </div>
             ) : (
-                <div className="modal-backdrop z-[100]">
+                <div className="modal-backdrop z-[100] ">
                     <div
-                        className={`${theme === 'bg-skin-black' ? 'bg-black-table-color text-gray-300' : 'bg-white'} rounded-lg shadow-custom ${maxWidth} w-full m-5`}
+                        className={`${theme === 'bg-skin-black' ? 'bg-black-table-color text-gray-300' : 'bg-white'}   rounded-lg shadow-custom ${maxWidth} w-full m-5`}
                     >
                         <div className={`${theme === 'bg-skin-white' ? 'bg-skin-black' : theme} rounded-t-lg flex justify-between p-3 border-b-2 items-center`}>
                             <p className={`${fontColor} font-poppins font-extrabold text-lg`}>
@@ -55,7 +55,7 @@ const Modal = ({
                                 onClick={(e)=>onClose(e,'close')}
                             ></i>
                         </div>
-                        <main className="py-3 px-3">{children}</main>
+                        <main className="py-3 px-3 max-h-[35rem] overflow-y-auto">{children}</main>
                         {withButton && (
                             <div className="p-2 border-t-2 mt-3">
                                 <Button

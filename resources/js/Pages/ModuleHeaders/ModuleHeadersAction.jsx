@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../Components/Table/Buttons/Button';
 import { useTheme } from '../../Context/ThemeContext';
 import { useToast } from '../../Context/ToastContext';
@@ -7,18 +7,32 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns}) => {
+const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns, database_tables_and_columns}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+    const [columns, setColumns] = useState([]);
+
+    
+
+    useEffect(()=>{
+
+        console.log(columns);
+        
+    })
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         module_id: "" || updateData.module_id,
         module_name: "" || updateData.module_name,
         name: "" || updateData.name,
-        width: "" || updateData.width,
         header_name: "" || updateData.header_name,
+        width: "" || updateData.width,
+        type: "" || updateData.type,
+        table: "" || updateData.table,
+        table_join: "" || updateData.table_join,
+        table_select_value: "" || updateData.table_select_value,
+        table_select_label: "" || updateData.table_select_label,
         status: "" || updateData.status,
     });
 
@@ -59,6 +73,30 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             name:'2xl',
         },
     ]
+
+    const InputTypes = [
+        {
+            id: 'text',
+            name:'Text',
+        },
+        {
+            id: 'select',
+            name:'Select',
+        },
+        {
+            id: 'date',
+            name:'Date',
+        },
+    ]
+
+    const handleTableChange = (selectedOption) => {
+        setData("table", selectedOption?.value)
+        const selectedTableData = database_tables_and_columns.find(table => table.table_name === selectedOption.value);
+        setColumns(selectedTableData ? selectedTableData.columns.map(column => ({
+            id: column,
+            name: column,
+        })) : []);
+    };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -118,7 +156,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
         }
         {(action == 'Update' || action == 'Add') && 
             (   <DropdownSelect
-                    placeholder="Choose Module"
+                    placeholder="Select Module"
                     selectType="react-select"
                     defaultSelect="Select Module"
                     onChange={(selectedOption) => setData((prevData) => ({
@@ -140,12 +178,12 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
         )}
         {/* NAME */}
         <DropdownSelect
-            placeholder="Choose Table Name"
+            placeholder="Select Column Name"
             selectType="react-select"
-            defaultSelect="Select Table Name"
+            defaultSelect="Select Column Name"
             isDisabled={!data.module_id}
             onChange={(selectedOption) => setData("name", selectedOption?.value)}
-            name="table_name"
+            name="column_name"
             options={data.module_name == 'Item Master' ? item_master_columns : gashapon_item_master_columns}
             value={data.name ? { label: data.name, value: data.name } : null}
         />
@@ -173,6 +211,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             placeholder="Choose Width"
             selectType="react-select"
             defaultSelect="Select Width"
+            menuPlacement="top"
             onChange={(selectedOption) => setData("width", selectedOption?.value)}
             name="width"
             options={widths}
@@ -183,6 +222,103 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                 {errors.width}
             </div>
         )}
+        {/* INPUT TYPE */}
+        <DropdownSelect
+            placeholder="Select Input Type"
+            selectType="react-select"
+            defaultSelect="Select Width"
+            menuPlacement="top"
+            onChange={(selectedOption) => setData((prevData) => ({
+                        ...prevData,
+                        type: selectedOption?.value,
+                        table: ""
+                    }))}
+            name="input_type"
+            options={InputTypes}
+            value={data.type ? { label: data.type, value: data.type } : null}
+        />
+        {(errors.type) && (
+            <div className="font-poppins text-xs font-semibold text-red-600">
+                {errors.type}
+            </div>
+        )}
+
+        {data.type == "select" && 
+            <>
+                <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Input Type is select, you need to enter the <span className='text-red-500'>Table Name</span>, <span className='text-red-500'>Select Value</span> and <span className='text-red-500'>Select Label</span>.</div>
+                {/* TABLE NAME */}
+                <DropdownSelect
+                    placeholder="Select Table"
+                    selectType="react-select"
+                    defaultSelect="Select Table"
+                    onChange={handleTableChange}
+                    name="table_name"
+                    menuPlacement="top"
+                    options={database_tables_and_columns.map(table => ({ id : table.table_name, name: table.table_name}))}
+                    value={data.table ? { label: data.table, value: data.table } : null}
+                />
+                {(errors.table) && (
+                    <div className="font-poppins text-xs font-semibold text-red-600">
+                        {errors.table}
+                    </div>
+                )}
+            </>
+        }
+
+        {data.table && 
+            <>
+                <DropdownSelect
+                    placeholder="Enter Select Input Value"
+                    selectType="react-select"
+                    defaultSelect="Enter Select Input Value"
+                    onChange={(selectedOption) => setData("table_select_value", selectedOption?.value)}
+                    name="select_input_value"
+                    menuPlacement="top"
+                    options={columns}
+                    value={data.table_select_value ? { label: data.table_select_value, value: data.table_select_value } : null}
+                />
+                {(errors.table_select_value) && (
+                    <div className="font-poppins text-xs font-semibold text-red-600">
+                        {errors.table_select_value}
+                    </div>
+                )}
+                <DropdownSelect
+                    placeholder="Enter Select Input Label"
+                    selectType="react-select"
+                    defaultSelect="Enter Select Input Label"
+                    onChange={(selectedOption) => setData("table_select_label", selectedOption?.value)}
+                    name="select_input_label"
+                    menuPlacement="top"
+                    options={columns}
+                    value={data.table_select_label ? { label: data.table_select_label, value: data.table_select_label } : null}
+                />
+                {(errors.table_select_label) && (
+                    <div className="font-poppins text-xs font-semibold text-red-600">
+                        {errors.table_select_label}
+                    </div>
+                )}
+
+                {/* HEADER NAME */}
+                <InputComponent
+                    name="table_join"
+                    value={data.table_join}
+                    disabled={action === 'View'}
+                    placeholder="Enter Table Join (ex. get_table.table_column)"
+                    onChange={(e)=> setData("table_join", e.target.value)}
+                />
+                {(errors.table_join) && (
+                    <div className="font-poppins text-xs font-semibold text-red-600">
+                        {errors.table_join}
+                    </div>
+                )}
+            </>
+        
+        }
+
+        
+        
+
+        
        
         {action == 'Update' && 
             <>

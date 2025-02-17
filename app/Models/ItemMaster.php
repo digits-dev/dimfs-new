@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use app\Helpers\CommonHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,21 @@ class ItemMaster extends Model
     use HasFactory;
 
     protected $table = 'item_masters';
+
+    
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
+
 
     protected $fillable = [
 
