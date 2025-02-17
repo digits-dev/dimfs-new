@@ -13,20 +13,13 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
     const [columns, setColumns] = useState([]);
 
-    
-
-    useEffect(()=>{
-
-        console.log(columns);
-        
-    })
-
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
         module_id: "" || updateData.module_id,
         module_name: "" || updateData.module_name,
         name: "" || updateData.name,
         header_name: "" || updateData.header_name,
+        validation: "" || updateData.validation,
         width: "" || updateData.width,
         type: "" || updateData.type,
         table: "" || updateData.table,
@@ -35,6 +28,14 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
         table_select_label: "" || updateData.table_select_label,
         status: "" || updateData.status,
     });
+    
+    useEffect(()=>{
+        const selectedTableData = database_tables_and_columns.find(table => table.table_name === data.table);
+        setColumns(selectedTableData ? selectedTableData.columns.map(column => ({
+            id: column,
+            name: column,
+        })) : []);
+    }, [data.table])
 
     const statuses = [
         {
@@ -177,6 +178,15 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             </div>
         )}
         {/* NAME */}
+        {action == 'View' && 
+            <InputComponent
+                name="Column Name"
+                value={data.name}
+                disabled={action === 'View'}
+                placeholder="Column Name"
+            />
+        }
+        {(action == 'Update' || action == 'Add') && 
         <DropdownSelect
             placeholder="Select Column Name"
             selectType="react-select"
@@ -187,6 +197,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             options={data.module_name == 'Item Master' ? item_master_columns : gashapon_item_master_columns}
             value={data.name ? { label: data.name, value: data.name } : null}
         />
+        }
         {(errors.name) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
                 {errors.name}
@@ -206,7 +217,29 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                 {errors.header_name}
             </div>
         )}
+        {/* VALIDATION */}
+        <InputComponent
+            name="validation"
+            value={data.validation}
+            disabled={action === 'View'}
+            placeholder="Enter Validation (ex. required|string)"
+            onChange={(e)=> setData("validation", e.target.value)}
+        />
+        {(errors.validation) && (
+            <div className="font-poppins text-xs font-semibold text-red-600">
+                {errors.validation}
+            </div>
+        )}
         {/* WIDTH */}
+        {action == 'View' && 
+            <InputComponent
+                name="Width"
+                value={data.width}
+                disabled={action === 'View'}
+                placeholder="Width"
+            />
+        }
+        {(action == 'Update' || action == 'Add') && 
         <DropdownSelect
             placeholder="Choose Width"
             selectType="react-select"
@@ -217,12 +250,22 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             options={widths}
             value={data.width ? { label: data.width, value: data.width } : null}
         />
+        }
         {(errors.width) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
                 {errors.width}
             </div>
         )}
         {/* INPUT TYPE */}
+        {action == 'View' && 
+            <InputComponent
+                name="Input Type"
+                value={data.type}
+                disabled={action === 'View'}
+                placeholder="Input Type"
+            />
+        }
+        {(action == 'Update' || action == 'Add') && 
         <DropdownSelect
             placeholder="Select Input Type"
             selectType="react-select"
@@ -237,6 +280,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             options={InputTypes}
             value={data.type ? { label: data.type, value: data.type } : null}
         />
+        }
         {(errors.type) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
                 {errors.type}
@@ -245,8 +289,17 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
 
         {data.type == "select" && 
             <>
-                <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Input Type is select, you need to enter the <span className='text-red-500'>Table Name</span>, <span className='text-red-500'>Select Value</span> and <span className='text-red-500'>Select Label</span>.</div>
+                {(action == 'Update' || action == 'Add') && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the Input Type is select, you need to enter the <span className='text-red-500'>Table Name</span>, <span className='text-red-500'>Select Value</span> and <span className='text-red-500'>Select Label</span>.</div>}
                 {/* TABLE NAME */}
+                {action == 'View' && 
+                    <InputComponent
+                        name="Table"
+                        value={data.table}
+                        disabled={action === 'View'}
+                        placeholder="Table"
+                    />
+                }
+                {(action == 'Update' || action == 'Add') && 
                 <DropdownSelect
                     placeholder="Select Table"
                     selectType="react-select"
@@ -257,6 +310,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                     options={database_tables_and_columns.map(table => ({ id : table.table_name, name: table.table_name}))}
                     value={data.table ? { label: data.table, value: data.table } : null}
                 />
+                }
                 {(errors.table) && (
                     <div className="font-poppins text-xs font-semibold text-red-600">
                         {errors.table}
@@ -267,6 +321,15 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
 
         {data.table && 
             <>
+                {action == 'View' && 
+                    <InputComponent
+                        name="Select Input Value"
+                        value={data.table_select_value}
+                        disabled={action === 'View'}
+                        placeholder="Select Input Value"
+                    />
+                }
+                {(action == 'Update' || action == 'Add') && 
                 <DropdownSelect
                     placeholder="Enter Select Input Value"
                     selectType="react-select"
@@ -277,11 +340,21 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                     options={columns}
                     value={data.table_select_value ? { label: data.table_select_value, value: data.table_select_value } : null}
                 />
+                }
                 {(errors.table_select_value) && (
                     <div className="font-poppins text-xs font-semibold text-red-600">
                         {errors.table_select_value}
                     </div>
                 )}
+                {action == 'View' && 
+                    <InputComponent
+                        name="Select Input Label"
+                        value={data.table_select_label}
+                        disabled={action === 'View'}
+                        placeholder="Select Input Label"
+                    />
+                }
+                {(action == 'Update' || action == 'Add') && 
                 <DropdownSelect
                     placeholder="Enter Select Input Label"
                     selectType="react-select"
@@ -292,6 +365,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                     options={columns}
                     value={data.table_select_label ? { label: data.table_select_label, value: data.table_select_label } : null}
                 />
+                }
                 {(errors.table_select_label) && (
                     <div className="font-poppins text-xs font-semibold text-red-600">
                         {errors.table_select_label}

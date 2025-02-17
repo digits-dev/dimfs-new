@@ -16,10 +16,19 @@ const ItemMasterCreate = ({page_title, create_inputs}) => {
   const initialFormData = create_inputs.reduce((acc, item) => {
     acc[item.name] = "";
     return acc;
-  }, {});
+  }, { validation: "" });
 
   const { data, setData, processing, reset, post, errors } = useForm(initialFormData);
 
+  // APPLYING VALIDATION
+  useEffect(()=>{
+    setData('validation', Object.fromEntries(
+      create_inputs.map((input) => [input.name, input.validation])
+    ));
+
+  }, [])
+
+  // ONCHANGE
   const handleInputChange = (name, type, selectedValue) => {
         if (type == 'text' || type == 'date'){
           setData(name, selectedValue.target.value)
@@ -33,6 +42,7 @@ const ItemMasterCreate = ({page_title, create_inputs}) => {
       
     };
 
+  // FORM SUBMIT
   const handleFormSubmit = (e) => {
       e.preventDefault();
       Swal.fire({
@@ -79,6 +89,11 @@ const ItemMasterCreate = ({page_title, create_inputs}) => {
                       placeholder={`Enter ${input.header_name}`}
                       selectInputOptions={input.table_data ? input.table_data : []}
                     />
+                    {(errors[input.name]) && (
+                        <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
+                            {errors[input.name]}
+                        </div>
+                    )}
                   </div>
                 ))}
               </div>

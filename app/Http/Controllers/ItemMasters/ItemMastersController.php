@@ -100,6 +100,8 @@ class ItemMastersController extends Controller
 
     public function create(Request $request){
 
+        $request->validate($request->validation);
+
         try {
 
             ItemMasterApproval::create([

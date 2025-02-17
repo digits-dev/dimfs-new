@@ -32,8 +32,14 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
         module_id: "",
         module_name: "",
         name: "",
-        width: "",
         header_name: "",
+        validation: "",
+        width: "",
+        type: "",
+        table: "",
+        table_join: "",
+        table_select_value: "",
+        table_select_label: "",
         status: "",
     });
 
@@ -80,8 +86,14 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                     module_id: "",
                                     module_name: "",
                                     name: "",
-                                    width: "",
                                     header_name: "",
+                                    validation: "",
+                                    width: "",
+                                    type: "",
+                                    table: "",
+                                    table_join: "",
+                                    table_select_value: "",
+                                    table_select_label: "",
                                     status: "",
                                 })
                             
@@ -127,11 +139,53 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                 Name
                             </TableHeader>
                             <TableHeader
+                                name="validation"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Validation
+                            </TableHeader>
+                            <TableHeader
                                 name="width"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Width
+                            </TableHeader>
+                            <TableHeader
+                                name="type"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Type
+                            </TableHeader>
+                            <TableHeader
+                                name="table"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Table
+                            </TableHeader>
+                            <TableHeader
+                                name="table"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Join
+                            </TableHeader>
+                            <TableHeader
+                                name="table_select_value"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Table Select Value
+                            </TableHeader>
+                            <TableHeader
+                                name="table_select_label"
+                                queryParams={queryParams}
+                                width="lg"
+                            >
+                                Table Select Label
                             </TableHeader>
                             <TableHeader
                                 name="module_name"
@@ -184,8 +238,14 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                                     module_id: item.module_id,
                                                     module_name: item.get_module.name,
                                                     name: item.name,
-                                                    width: item.width,
                                                     header_name: item.header_name,
+                                                    validation: item.validation,
+                                                    width: item.width,
+                                                    type: item.type,
+                                                    table: item.table,
+                                                    table_join: item.table_join,
+                                                    table_select_value: item.table_select_value,
+                                                    table_select_label: item.table_select_label,
                                                     status: item.status,
                                                 })
                                             
@@ -200,8 +260,14 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                                     module_id: item.module_id,
                                                     module_name: item.get_module.name,
                                                     name: item.name,
-                                                    width: item.width,
                                                     header_name: item.header_name,
+                                                    validation: item.validation,
+                                                    width: item.width,
+                                                    type: item.type,
+                                                    table: item.table,
+                                                    table_join: item.table_join,
+                                                    table_select_value: item.table_select_value,
+                                                    table_select_label: item.table_select_label,
                                                     status: item.status,
                                                 })
                                             
@@ -228,7 +294,25 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                                         {item.name}
                                     </RowData>
                                     <RowData isLoading={loading}>
+                                        {item.validation}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
                                         {item.width}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.type}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.table}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.table_join}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.table_select_value}
+                                    </RowData>
+                                    <RowData isLoading={loading}>
+                                        {item.table_select_label}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_module.name}

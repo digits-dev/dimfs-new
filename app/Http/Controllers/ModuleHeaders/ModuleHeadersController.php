@@ -121,6 +121,7 @@ class ModuleHeadersController extends Controller
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
             'header_name' => 'required|string|max:255',
+            'validation' => 'required|string|max:255',
             'width' => 'required|string|max:10',
             'type' => 'required|string|max:10',
         ]);
@@ -150,6 +151,7 @@ class ModuleHeadersController extends Controller
                 'name' => $validatedFields['name'],   
                 'width' => $validatedFields['width'],   
                 'header_name' => $validatedFields['header_name'],
+                'validation' => $validatedFields['validation'],
                 'type' => $validatedFields['type'],
                 'table' => $request->table ?? null,
                 'table_join' => $request->table_join ?? null,
@@ -175,7 +177,9 @@ class ModuleHeadersController extends Controller
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
             'header_name' => 'required|string|max:255',
+            'validation' => 'required|string|max:255',
             'width' => 'required|string|max:10',
+            'type' => 'required|string|max:10',
             'status' => 'required|string',
         ]);
 
@@ -203,6 +207,12 @@ class ModuleHeadersController extends Controller
 
             $module_headers->header_name = $validatedFields['header_name'];
             $module_headers->width = $validatedFields['width'];
+            $module_headers->validation = $validatedFields['validation'];
+            $module_headers->type = $validatedFields['type'];
+            $module_headers->table = $request->table ?? null;
+            $module_headers->table_join = $request->table_join ?? null;
+            $module_headers->table_select_value = $request->table_select_value ?? null;
+            $module_headers->table_select_label = $request->table_select_label ?? null;
             $module_headers->status = $validatedFields['status'];
             $module_headers->updated_at = now();
     
@@ -227,6 +237,13 @@ class ModuleHeadersController extends Controller
                 'Header Name',
                 'Name',
                 'Module Name',
+                'Validation',
+                'Width',
+                'Type',
+                'Table',
+                'Join',
+                'Table Select Value',
+                'Table Select Label',
                 'Status',
                 'Created By',
                 'Updated By',
@@ -238,6 +255,13 @@ class ModuleHeadersController extends Controller
                 'header_name',
                 'name',
                 'getModule.name',
+                'validation',
+                'width',
+                'type',
+                'table',
+                'table_join',
+                'table_select_value',
+                'table_select_label',
                 'status',
                 'getCreatedBy.name',
                 'getUpdatedBy.name',
