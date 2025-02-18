@@ -63,6 +63,15 @@ class ModuleHeaders extends Model
         'deleted_at',
     ];
 
+    public static function getModuleHeaders()
+    {
+        return self::query()
+            ->whereNotNull('table_select_label')
+            ->select('name', 'table', 'table_select_label')
+            ->get()
+            ->keyBy('name');
+    }
+
     public function scopeSearchAndFilter($query, $request){
 
         if ($request->filled('search')) {

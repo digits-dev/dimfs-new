@@ -109,7 +109,7 @@ class TableSettingsController extends Controller
         }
 
         catch (\Exception $e) {
-            CommonHelpers::LogSystemError('TableSettings', $e->getMessage());
+            CommonHelpers::LogSystemError('Table Settings', $e->getMessage());
             return back()->with(['message' => 'Table Setting Creation Failed!', 'type' => 'error']);
         }
         
@@ -179,7 +179,7 @@ class TableSettingsController extends Controller
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('TableSettings', $e->getMessage());
+            CommonHelpers::LogSystemError('Table Settings', $e->getMessage());
             return back()->with(['message' => 'Table Setting Updating Failed!', 'type' => 'error']);
         }
     }
