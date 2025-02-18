@@ -25,6 +25,34 @@ class ItemMastersController extends Controller
     private $sortDir;
     private $perPage;
 
+    private $joins = [
+        'getCreatedBy',
+        'getUpdatedBy', 
+        'getApprovedBy', 
+        'getDeletedBy', 
+        'getApprovedByAcctg', 
+        'getBrand', 
+        'getBrandGroup',
+        'getBrandDirection',
+        'getBrandMarketing',
+        'getCategory',
+        'getClassification',
+        'getSubClassification',
+        'getStoreCategory',
+        'getMarginCategory',
+        'getWarehouseCategory',
+        'getModelSpecific',
+        'getColor',
+        'getVendor',
+        'getVendorType',
+        'getIncoterm',
+        'getInventoryType',
+        'getSkuStatus',
+        'getSkuLegend',
+        'getCurrency',
+        'getWarranty',
+    ];
+
     public function __construct() {
         $this->sortBy = request()->get('sortBy', 'item_masters.created_at');
         $this->sortDir = request()->get('sortDir', 'desc');
@@ -32,7 +60,7 @@ class ItemMastersController extends Controller
     }
 
     public function getAllData(){
-        $query = ItemMaster::query()->with(['getCreatedBy', 'getUpdatedBy', 'getBrand', 'getBrandGroup']);
+        $query = ItemMaster::query()->with($this->joins);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -140,7 +168,7 @@ class ItemMastersController extends Controller
 
         $data = [];
         $data['page_title'] = 'Item Master - Item Details';
-        $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with(['getCreatedBy', 'getUpdatedBy', 'getBrand', 'getBrandGroup'])->first();
+        $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with($this->joins)->first();
 
         $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
         ->where('action_types_id', ActionTypes::VIEW)
