@@ -26,6 +26,8 @@ class ItemMasterApproval extends Model
     protected $fillable = [
         'id',
         'item_values',
+        'action',
+        'item_master_id',
         'status',
         'created_by',
         'updated_by',
@@ -41,6 +43,8 @@ class ItemMasterApproval extends Model
 
     protected $filterable = [
         'item_values',
+        'action',
+        'item_master_id',
         'status',
         'created_by',
         'updated_by',

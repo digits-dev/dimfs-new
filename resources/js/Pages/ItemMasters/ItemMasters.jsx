@@ -97,11 +97,12 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                         <Row key={item.id}>
                                             <RowData center>
                                                 <RowAction
-                                                    type="button"
+                                                    type="link"
                                                     action="edit"
+                                                    href={`item_masters/update_view/${item.id}`}
                                                 />
                                                 <RowAction
-                                                    type="href"
+                                                    type="link"
                                                     action="view"
                                                     href={`item_masters/view_details/${item.id}`}
                                                 />

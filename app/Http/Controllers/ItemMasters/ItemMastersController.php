@@ -140,6 +140,7 @@ class ItemMastersController extends Controller
 
             ItemMasterApproval::create([
                'item_values' => json_encode($request->all()),
+               'action' => 'CREATE'
             ]);
     
             return redirect('/item_masters')->with(['message' => 'Item Creation Success!', 'type' => 'success']);
@@ -154,8 +155,61 @@ class ItemMastersController extends Controller
 
     // ---------------------------------------- UPDATE ITEM ---------------------------------------- //
 
-    public function getUpdate(){
+    public function getUpdate(ItemMaster $item){
 
+        if(!CommonHelpers::isView()) {
+            return Inertia::render('Errors/RestrictionPage');
+        }
+
+        $data = [];
+        $data['page_title'] = 'Item Master - Update';
+
+        $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with($this->joins)->first();
+        
+        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::CREATE)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['update_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        ->where('module_id', AdmModules::ITEM_MASTER)
+        ->get()
+        ->map(function ($columns) {
+            if ($columns->table) {
+                $columns->table_data = DB::table($columns->table)
+                    ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
+                    ->get();
+            }
+            return $columns;
+        });
+
+        return Inertia::render("ItemMasters/ItemMasterUpdate", $data);
+    }
+
+    public function update(Request $request){
+
+        // dd($request->all());
+
+        $request->validate($request->validation);
+
+        try {
+
+            ItemMasterApproval::create([
+                'item_values' => json_encode($request->all()),
+                'action' => 'UPDATE',
+                'item_master_id' => $request->id,
+             ]);
+
+            return redirect('/item_masters')->with(['message' => 'Item Update Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Item Master', $e->getMessage());
+            return back()->with(['message' => 'Item Update Failed!', 'type' => 'error']);
+        }
     }
 
     // ---------------------------------------- VIEW ITEM -------------------------------------------//

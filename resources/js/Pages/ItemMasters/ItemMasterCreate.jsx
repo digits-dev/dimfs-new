@@ -78,7 +78,7 @@ const ItemMasterCreate = ({page_title, create_inputs}) => {
         <div className='border p-4 rounded-lg'>
           {create_inputs &&
             <form onSubmit={handleFormSubmit}>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0">
                 {create_inputs.map((input, index) => (
                   <div key={index} className="w-full">
                     <MultiTypeInput

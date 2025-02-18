@@ -205,9 +205,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('item_masters')->group(function() {
         Route::get('/create_view', [ItemMastersController::class, 'getCreate']);
-        Route::get('/view_details/{item}', [ItemMastersController::class, 'getView']);
         Route::post('/create', [ItemMastersController::class, 'create']);
+        Route::get('/update_view/{item}', [ItemMastersController::class, 'getUpdate']);
         Route::post('/update', [ItemMastersController::class, 'update']);
+        Route::get('/view_details/{item}', [ItemMastersController::class, 'getView']);
     });
    
 
