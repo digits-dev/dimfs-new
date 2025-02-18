@@ -39,7 +39,7 @@ const ItemMasterApprovalView = ({
             icon: "question",
             iconColor: buttonSwalColor,
             reverseButtons: true,
-        }).then(async (result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 post("/item_masters_approval/approval", {
                     // data: updatedData,
@@ -54,6 +54,7 @@ const ItemMasterApprovalView = ({
                 });
             }
         });
+        
     };
 
     return (

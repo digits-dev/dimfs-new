@@ -36,6 +36,7 @@ use App\Http\Controllers\GashaponCategories\GashaponCategoriesController;
 use App\Http\Controllers\GashaponCountries\GashaponCountriesController;
 use App\Http\Controllers\GashaponIncoterms\GashaponIncotermsController;
 use App\Http\Controllers\GashaponInventoryTypes\GashaponInventoryTypesController;
+use App\Http\Controllers\GashaponItemMasters\GashaponItemMastersController;
 use App\Http\Controllers\GashaponModels\GashaponModelsController;
 use App\Http\Controllers\GashaponProductTypes\GashaponProductTypesController;
 use App\Http\Controllers\GashaponSkuStatuses\GashaponSkuStatusesController;
@@ -77,6 +78,7 @@ use App\Http\Controllers\Vendors\VendorsController;
 use App\Http\Controllers\VendorTypes\VendorTypesController;
 use App\Http\Controllers\WarehouseCategories\WarehouseCategoriesController;
 use App\Http\Controllers\Warranties\WarrantiesController;
+use App\Models\GashaponItemMaster;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia; 
 /*
@@ -218,6 +220,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
     });
    
+    
+    // ---------------------------------------- GASHAPON ITEM MASTER ----------------------------------------//
+
+    Route::prefix('gashapon_item_masters')->group(function() {
+        Route::get('/create_view', [GashaponItemMastersController::class, 'getCreate']);
+        Route::post('/create', [GashaponItemMastersController::class, 'create']);
+        Route::get('/update_view/{item}', [GashaponItemMastersController::class, 'getUpdate']);
+        Route::post('/update', [GashaponItemMastersController::class, 'update']);
+        Route::get('/view_details/{item}', [GashaponItemMastersController::class, 'getView']);
+        Route::get('/export', [GashaponItemMastersController::class, 'export']);
+    });
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//
 
