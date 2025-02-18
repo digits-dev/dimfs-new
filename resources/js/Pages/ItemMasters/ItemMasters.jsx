@@ -101,8 +101,9 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                                     action="edit"
                                                 />
                                                 <RowAction
-                                                    type="button"
+                                                    type="href"
                                                     action="view"
+                                                    href={`item_masters/view_details/${item.id}`}
                                                 />
                                             </RowData>
                                             

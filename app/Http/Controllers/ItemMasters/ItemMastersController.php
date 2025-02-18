@@ -124,9 +124,37 @@ class ItemMastersController extends Controller
         }
     }
 
+    // ---------------------------------------- UPDATE ITEM ---------------------------------------- //
+
     public function getUpdate(){
 
     }
 
+    // ---------------------------------------- VIEW ITEM -------------------------------------------//
+
+    public function getView(ItemMaster $item){
+
+        if(!CommonHelpers::isView()) {
+            return Inertia::render('Errors/RestrictionPage');
+        }
+
+        $data = [];
+        $data['page_title'] = 'Item Master - Item Details';
+        $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with(['getCreatedBy', 'getUpdatedBy', 'getBrand', 'getBrandGroup'])->first();
+
+        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::VIEW)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        ->where('module_id', AdmModules::ITEM_MASTER)
+        ->select('name', 'header_name', 'width', 'table_join')
+        ->get();
+
+        return Inertia::render("ItemMasters/ItemMasterView", $data);
+    }
     
 }
