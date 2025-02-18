@@ -16,9 +16,10 @@ import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
 import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
+import Export from "../../Components/Table/Buttons/Export";
 
 
-const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create, can_update}) => {
+const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create, can_update, can_export}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -61,7 +62,12 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                     <i className="fa-solid fa-plus mr-1"></i>  Add Item Master
                                 </Button>
                             }
-                           
+                            {can_export && 
+                                <Export
+                                    page_title="Item"
+                                    path="/item_masters/export"
+                                />
+                            }
                         </div>
                         <div className='flex'>
                             <TableSearch queryParams={queryParams} />

@@ -209,6 +209,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/update_view/{item}', [ItemMastersController::class, 'getUpdate']);
         Route::post('/update', [ItemMastersController::class, 'update']);
         Route::get('/view_details/{item}', [ItemMastersController::class, 'getView']);
+        Route::get('/export', [ItemMastersController::class, 'export']);
     });
    
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ItemMasters;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\ActionTypes;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemMastersController extends Controller
 {
@@ -85,22 +86,23 @@ class ItemMastersController extends Controller
         ->pluck('report_header')
         ->first());
 
-        $data['can_create'] = TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::CREATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->exists();
-
-        $data['can_update'] = TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::UPDATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->exists();
-
         $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
         ->where('module_id', AdmModules::ITEM_MASTER)
         ->select('name', 'header_name', 'width', 'table_join')
         ->get();
+
+        // PERMISSIONS
+
+        $permissions = TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->whereIn('action_types_id', [ActionTypes::CREATE, ActionTypes::UPDATE, ActionTypes::EXPORT])
+        ->pluck('action_types_id')
+        ->toArray();
+
+        $data['can_create'] = in_array(ActionTypes::CREATE, $permissions);
+        $data['can_update'] = in_array(ActionTypes::UPDATE, $permissions);
+        $data['can_export'] = in_array(ActionTypes::EXPORT, $permissions);
 
         return Inertia::render("ItemMasters/ItemMasters", $data);
     }
@@ -196,8 +198,6 @@ class ItemMastersController extends Controller
 
     public function update(Request $request){
 
-        // dd($request->all());
-
         $request->validate($request->validation);
 
         try {
@@ -242,7 +242,46 @@ class ItemMastersController extends Controller
         ->select('name', 'header_name', 'width', 'table_join')
         ->get();
 
+
         return Inertia::render("ItemMasters/ItemMasterView", $data);
+    }
+
+    // -------------------------------------- EXPORT --------------------------------------------//
+
+    public function export()
+    {
+
+        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::EXPORT)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        ->where('module_id', AdmModules::ITEM_MASTER)
+        ->select('name', 'header_name', 'width', 'table_join')
+        ->get();
+
+        $headers = [];
+        $columns = [];
+        
+        foreach ($data['table_headers'] as $header) {
+            $headers[] = $header->header_name;
+            if (!empty($header->table_join)) {
+                $columns[] = preg_replace_callback('/(\w+)\.(\w+)/', function ($matches) {
+                    $camelCaseFirstPart = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $matches[1]))));
+                    return $camelCaseFirstPart . '.' . $matches[2];
+                }, $header->table_join);
+            } else {
+                $columns[] = $header->name;
+            }
+        }
+        
+        $filename = "Item Masters - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
     
 }
