@@ -91,6 +91,12 @@ class ItemMastersController extends Controller
         ->where('status', 'ACTIVE')
         ->exists();
 
+        $data['can_update'] = TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::UPDATE)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->exists();
+
         $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
         ->where('module_id', AdmModules::ITEM_MASTER)
         ->select('name', 'header_name', 'width', 'table_join')
@@ -167,7 +173,7 @@ class ItemMastersController extends Controller
         $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with($this->joins)->first();
         
         $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::CREATE)
+        ->where('action_types_id', ActionTypes::UPDATE)
         ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
         ->where('status', 'ACTIVE')
         ->pluck('report_header')

@@ -18,7 +18,7 @@ import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
 
 
-const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create}) => {
+const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create, can_update}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -96,11 +96,13 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                                 item_masters?.data?.map((item) => (
                                         <Row key={item.id}>
                                             <RowData center>
-                                                <RowAction
-                                                    type="link"
-                                                    action="edit"
-                                                    href={`item_masters/update_view/${item.id}`}
-                                                />
+                                                {can_update && 
+                                                    <RowAction
+                                                        type="link"
+                                                        action="edit"
+                                                        href={`item_masters/update_view/${item.id}`}
+                                                    />
+                                                }
                                                 <RowAction
                                                     type="link"
                                                     action="view"
