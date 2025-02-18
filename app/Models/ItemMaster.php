@@ -70,14 +70,14 @@ class ItemMaster extends Model
         'effective_date',
         'moq',
         'purchase_price',
-        'dtp_rf',
-        'dtp_rf_percentage',
-        'dtp_dcon',
-        'dtp_dcon_percentage',
+        'store_cost',
+        'store_cost_percentage',
+        'consignment_store_cost',
+        'consignment_store_cost_percentage',
         'landed_cost',
         'working_landed_cost',
-        'working_dtp_rf',
-        'working_dtp_rf_percentage',
+        'working_store_cost',
+        'working_store_cost_percentage',
         'approved_by',
         'approved_at',
         'approved_by_acctg',
@@ -137,14 +137,14 @@ class ItemMaster extends Model
         'effective_date',
         'moq',
         'purchase_price',
-        'dtp_rf',
-        'dtp_rf_percentage',
-        'dtp_dcon',
-        'dtp_dcon_percentage',
+        'store_cost',
+        'store_cost_percentage',
+        'consignment_store_cost',
+        'consignment_store_cost_percentage',
         'landed_cost',
         'working_landed_cost',
-        'working_dtp_rf',
-        'working_dtp_rf_percentage',
+        'working_store_cost',
+        'working_store_cost_percentage',
         'approved_by',
         'approved_at',
         'approved_by_acctg',
@@ -163,20 +163,47 @@ class ItemMaster extends Model
             $search = $request->input('search');
             $query->where(function ($query) use ($search) {
                 foreach ($this->filterable as $field) {
-                    if ($field === 'created_by') {
-                        $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
-                            $query->where('name', 'LIKE', "%$search%");
-                        });
-                    }
-                    elseif ($field === 'updated_by')  {
-                        $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
-                            $query->where('name', 'LIKE', "%$search%");
-                        });
-                    } elseif (in_array($field, ['created_at', 'updated_at'])) {
-                        $query->orWhereDate($field, $search);
-                    }
-                    else {
-                        $query->orWhere($field, 'LIKE', "%$search%");
+
+                    $relationMappings = [
+                        'created_by' => ['getCreatedBy', 'name'],
+                        'updated_by' => ['getUpdatedBy', 'name'],
+                        'approved_by' => ['getApprovedBy', 'name'],
+                        'deleted_by' => ['getDeletedBy', 'name'],
+                        'approved_by_acctg' => ['getApprovedByAcctg', 'name'],
+                        'brands_id' => ['getBrand', 'brand_description'],
+                        'brand_groups_id' => ['getBrandGroup', 'brand_group_description'],
+                        'brand_directions_id' => ['getBrandDirection', 'brand_direction_description'],
+                        'brand_marketings_id' => ['getBrandMarketing', 'brand_marketing_description'],
+                        'categories_id' => ['getCategory', 'category_description'],
+                        'classifications_id' => ['getClassification', 'class_description'],
+                        'sub_classifications_id' => ['getSubClassification', 'subclass_description'],
+                        'store_categories_id' => ['getStoreCategory', 'store_category_description'],
+                        'margin_categories_id' => ['getMarginCategory', 'margin_category_description'],
+                        'warehouse_categories_id' => ['getWarehouseCategory', 'warehouse_category_description'],
+                        'model_specifics_id' => ['getModelSpecific', 'model_specific_description'],
+                        'colors_id' => ['getColor', 'color_description'],
+                        'vendors_id' => ['getVendor', 'vendor_name'],
+                        'vendor_types_id' => ['getVendorType', 'vendor_type_description'],
+                        'incoterms_id' => ['getIncoterm', 'incoterms_description'],
+                        'inventory_types_id' => ['getInventoryType', 'inventory_type_description'],
+                        'sku_statuses_id' => ['getSkuStatus', 'sku_status_description'],
+                        'sku_legends_id' => ['getSkuLegend', 'sku_legend_description'],
+                        'currencies_id' => ['getCurrency', 'currency_description'],
+                        'warranties_id' => ['getWarranty', 'warranty_description'],
+                    ];
+                    
+                
+                    foreach ($this->filterable as $field) {
+                        if (isset($relationMappings[$field])) {
+                            [$relation, $column] = $relationMappings[$field];
+                            $query->orWhereHas($relation, function ($query) use ($search, $column) {
+                                $query->where($column, 'LIKE', "%$search%");
+                            });
+                        } elseif (in_array($field, ['created_at', 'updated_at'])) {
+                            $query->orWhereDate($field, $search);
+                        } else {
+                            $query->orWhere($field, 'LIKE', "%$search%");
+                        }
                     }
                 }
             });

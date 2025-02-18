@@ -25,9 +25,9 @@ const RowStatus = ({
 			) : (
         <>
         {systemStatusColor ? 
-          <div className={`mx-auto ${addStatusClass} rounded-full text-[12px] text-white px-[9px] py-[2px] ${systemStatusColor} `}>{children}</div> 
+          <div className={`mx-auto ${addStatusClass} rounded-full w-fit text-[12px] text-white px-[9px] py-[2px] ${systemStatusColor} `}>{children}</div> 
         :
-				  <div style={{background: color}} className={`mx-auto ${addStatusClass} text-[12px] rounded-[9px] ${color && 'text-white'} px-3 py-1 `}>{children}</div>
+				  <div style={{background: color}} className={`mx-auto ${addStatusClass} w-fit text-[12px] rounded-[9px] ${color && 'text-white'} px-3 py-1 `}>{children}</div>
         }
 				
         </>
