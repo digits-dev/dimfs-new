@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useTheme } from "../../Context/ThemeContext";
 import { useToast } from "../../Context/ToastContext";
 import ContentPanel from "../../Components/Table/ContentPanel";
-import MultiTypeInput from "../../Components/Forms/MultiTypeInput";
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from "../../Components/Table/Buttons/Button";
 import InputComponent from "../../Components/Forms/Input";
@@ -22,14 +21,10 @@ const ItemMasterApprovalView = ({
         id: item_master_approval.id,
         action: "",
     });
+
     // FORM SUBMIT
     const handleFormSubmit = (e) => {
         e.preventDefault();
-
-        // setData("action", action);
-        // const actionText = action === "approve" ? "approve" : "reject";
-        // console.log("Updated Data before submission:", updatedData);
-        console.log(data);
 
         Swal.fire({
             title: `<p class="font-poppins text-3xl" >Do you want to ${data.action} this Item Master?</p>`,
@@ -42,7 +37,6 @@ const ItemMasterApprovalView = ({
         }).then((result) => {
             if (result.isConfirmed) {
                 post("/item_masters_approval/approval", {
-                    // data: updatedData,
                     onSuccess: (data) => {
                         const { message, type } = data.props.auth.sessions;
                         handleToast(message, type);
@@ -54,7 +48,6 @@ const ItemMasterApprovalView = ({
                 });
             }
         });
-        
     };
 
     return (
@@ -62,7 +55,7 @@ const ItemMasterApprovalView = ({
             <Head title={page_title} />
             <ContentPanel>
                 <div className="border p-4 rounded-lg">
-                    <form>
+                    <form onSubmit={handleFormSubmit}>
                         <div className="md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0">
                             {table_headers?.map((header, index) => (
                                 <InputComponent
@@ -95,10 +88,7 @@ const ItemMasterApprovalView = ({
                             <div className="inline-flex gap-1">
                                 <Button
                                     type="button"
-                                    onClick={(e) => {
-                                        handleFormSubmit(e);
-                                        setData("action", "reject");
-                                    }}
+                                    onClick={() => setData("action", "reject")}
                                     extendClass={`${
                                         theme === "bg-skin-white"
                                             ? primayActiveColor
@@ -121,10 +111,7 @@ const ItemMasterApprovalView = ({
 
                                 <Button
                                     type="button"
-                                    onClick={(e) => {
-                                        handleFormSubmit(e);
-                                        setData("action", "approve");
-                                    }}
+                                    onClick={() => setData("action", "approve")}
                                     extendClass={`${
                                         theme === "bg-skin-white"
                                             ? primayActiveColor

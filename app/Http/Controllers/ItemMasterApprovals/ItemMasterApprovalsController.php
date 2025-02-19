@@ -33,7 +33,7 @@ class ItemMasterApprovalsController extends Controller
     }
 
     public function getAllData(){
-        $query = ItemMasterApproval::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = ItemMasterApproval::query()->with(['getCreatedBy', 'getUpdatedBy', 'getApprovedBy']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -64,8 +64,7 @@ class ItemMasterApprovalsController extends Controller
                 }
             }
 
-            $item->item_values = $itemValues; // No json_encode()
-
+            $item->item_values = $itemValues; 
             return $item;
         });
 
@@ -128,6 +127,39 @@ class ItemMasterApprovalsController extends Controller
     }
     
     public function approval(Request $request) {
-        dd($request->all());
+        // dd($request->all());
+
+        $approval = ItemMasterApproval::find($request->id);
+        $itemValues = json_decode($approval->item_values, true) ?? [];
+        $validColumns = Schema::getColumnListing('item_masters');
+
+
+        if ($request->action === 'approve') {
+
+            $itemMasterData = array_filter($itemValues, function ($key) use ($validColumns) {
+                return in_array($key, $validColumns);
+            }, ARRAY_FILTER_USE_KEY);
+    
+            $itemMasterData['approved_by'] = CommonHelpers::myId();
+            $itemMasterData['approved_at'] = now();
+    
+            $approval->update(['status' => 'APPROVED',
+                'approved_by' => CommonHelpers::myId(),
+                'approved_at' => now()
+            ]);
+    
+            $newItem = ItemMaster::create($itemMasterData);
+            return redirect('/item_master_approvals')->with(['message' => 'New item inserted successfully!', 'type' => 'success']);
+        }
+        else {
+            $approval->update(['status' => 'REJECTED',
+            'rejected_by' => CommonHelpers::myId(),
+            'rejected_at' => now()
+            ]);
+
+        return redirect('/item_master_approvals')->with(['message' => 'Item Rejected successfully!', 'type' => 'success']);
+        }
+
+
     }
 }

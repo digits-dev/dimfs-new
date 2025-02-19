@@ -29,6 +29,10 @@ class ItemMasterApproval extends Model
         'action',
         'item_master_id',
         'status',
+        'approved_by',
+        'approved_at',
+        'rejected_by',
+        'rejected_at',
         'created_by',
         'updated_by',
         'created_at',
@@ -42,14 +46,14 @@ class ItemMasterApproval extends Model
     ];
 
     protected $filterable = [
-        'item_values',
         'action',
-        'item_master_id',
         'status',
         'created_by',
         'updated_by',
         'created_at',
         'updated_at',
+        'rejected_by',
+        'rejected_at',
     ];
 
     public function scopeSearchAndFilter($query, $request){
@@ -95,4 +99,9 @@ class ItemMasterApproval extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function getApprovedBy() {
+        return $this->belongsTo(AdmUser::class, 'approved_by', 'id');
+    }
+  
 }

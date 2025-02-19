@@ -40,12 +40,6 @@ const ItemMasterApprovals = ({
         router.get(pathname);
     };
 
-    const handleModalClick = () => {
-        setIsModalOpen(!isModalOpen);
-    };
-
-    console.log(item_master_approvals);
-
     return (
         <>
             <Head title={page_title} />
@@ -82,9 +76,24 @@ const ItemMasterApprovals = ({
                                     >
                                         Action
                                     </TableHeader>
+                                    <TableHeader
+                                        name="status"
+                                        width="md"
+                                        queryParams={queryParams}
+                                    >
+                                        Status
+                                    </TableHeader>
+                                    <TableHeader
+                                        width="md"
+                                        justify="center"
+                                        queryParams={queryParams}
+                                    >
+                                        Method
+                                    </TableHeader>
                                     {table_headers &&
                                         table_headers?.map((header, index) => (
                                             <TableHeader
+                                                sortable={false}
                                                 name={header.name}
                                                 queryParams={queryParams}
                                                 width={header.width}
@@ -92,6 +101,20 @@ const ItemMasterApprovals = ({
                                                 {header.header_name}
                                             </TableHeader>
                                         ))}
+                                    <TableHeader
+                                        name="created_by"
+                                        queryParams={queryParams}
+                                        width="md"
+                                    >
+                                        Approved By
+                                    </TableHeader>
+                                    <TableHeader
+                                        name="updated_by"
+                                        queryParams={queryParams}
+                                        width="lg"
+                                    >
+                                        Approved At
+                                    </TableHeader>{" "}
                                     <TableHeader
                                         name="created_by"
                                         queryParams={queryParams}
@@ -114,19 +137,41 @@ const ItemMasterApprovals = ({
                                     (item, index) => (
                                         <Row key={index}>
                                             <RowData center>
-                                                <RowAction
-                                                    type="button"
-                                                    action="edit"
-                                                    onClick={() =>
-                                                        router.get(
-                                                            `/item_masters_approval/approval_view/${item.id}`
-                                                        )
-                                                    }
-                                                />
+                                                {item.status ===
+                                                    "FOR APPROVAL" && (
+                                                    <RowAction
+                                                        type="button"
+                                                        action="edit"
+                                                        onClick={() =>
+                                                            router.get(
+                                                                `/item_masters_approval/approval_view/${item.id}`
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+
                                                 <RowAction
                                                     type="button"
                                                     action="view"
                                                 />
+                                            </RowData>
+
+                                            <RowStatus
+                                                isLoading={loading}
+                                                systemStatus={
+                                                    item.status ===
+                                                    "FOR APPROVAL"
+                                                        ? "yellow"
+                                                        : item.status ===
+                                                          "APPROVED"
+                                                        ? "green"
+                                                        : "red"
+                                                }
+                                            >
+                                                {item.status}
+                                            </RowStatus>
+                                            <RowData isLoading={loading}>
+                                                {item.action}
                                             </RowData>
                                             {table_headers.map(
                                                 (header, idx) => (
@@ -140,6 +185,13 @@ const ItemMasterApprovals = ({
                                                     </RowData>
                                                 )
                                             )}
+                                            <RowData isLoading={loading}>
+                                                {item.get_approved_by?.name}
+                                            </RowData>
+
+                                            <RowData isLoading={loading}>
+                                                {item.approved_at}
+                                            </RowData>
                                             <RowData isLoading={loading}>
                                                 {item.get_created_by?.name}
                                             </RowData>
