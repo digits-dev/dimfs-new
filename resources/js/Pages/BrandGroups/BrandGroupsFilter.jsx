@@ -7,13 +7,13 @@ import InputComponent from '../../Components/Forms/Input'
 import TableButton from '../../Components/Table/Buttons/TableButton'
 import { router } from '@inertiajs/react';
 
-const BrandDirectionsFilter = () => {
+const BrandGroupsFilter = () => {
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
 
     const [filters, setFilters] = useState({
-        brand_direction_description: "",
+        brand_group_description: "",
         status: "",
     });
 
@@ -70,10 +70,10 @@ const BrandDirectionsFilter = () => {
                 value={filters.status ? { label: filters.status, value: filters.status } : null}
             />
             <InputComponent
-                name="brand_direction_description"
-                value={filters.brand_direction_description}
-                placeholder="Enter Brand Direction Description"
-                onChange={(e) => handleFilter(e, "brand_direction_description")}
+                name="brand_group_description"
+                value={filters.brand_group_description}
+                placeholder="Enter Brand Group Description"
+                onChange={(e) => handleFilter(e, "brand_group_description")}
             />
         </form>
         <div className='mt-5 flex justify-end'>
@@ -90,4 +90,4 @@ const BrandDirectionsFilter = () => {
   )
 }
 
-export default BrandDirectionsFilter
+export default BrandGroupsFilter

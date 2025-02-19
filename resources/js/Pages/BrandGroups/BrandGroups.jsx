@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandGroupsAction from "./BrandGroupsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import BrandGroupsFilter from "./BrandGroupsFilter";
 
 const BrandGroups = ({ page_title, tableName, brand_groups, queryParams }) => {
     const { theme } = useTheme();
@@ -93,6 +95,9 @@ const BrandGroups = ({ page_title, tableName, brand_groups, queryParams }) => {
                         <Export path="/brand_groups/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <BrandGroupsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
