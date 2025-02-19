@@ -70,7 +70,7 @@ class Currencies extends Model
             if ($request->filled($field)) {
                 $value = $request->input($field);
                 if ($field === 'status') {
-                    $query->orWhere($field, '=', $value);
+                    $query->where($field, '=', $value);
                 }
                 else{
                     $query->where($field, 'LIKE', "%$value%");

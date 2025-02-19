@@ -19,6 +19,10 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandDirectionsAction from "./BrandDirectionsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import DropdownSelect from "../../Components/Dropdown/Dropdown";
+import InputComponent from "../../Components/Forms/Input";
+import BrandsDirectionsFilter from "./BrandDirectionsFilter";
 
 const BrandDirections = ({ page_title, tableName, brand_directions, queryParams }) => {
     const { theme } = useTheme();
@@ -93,6 +97,9 @@ const BrandDirections = ({ page_title, tableName, brand_directions, queryParams 
                         <Export path="/brand_directions/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <BrandsDirectionsFilter/>    
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
