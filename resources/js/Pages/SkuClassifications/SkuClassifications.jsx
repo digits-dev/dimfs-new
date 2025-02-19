@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuClassificationsAction from "./SkuClassificationsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SkuClassificationsFilter from "./SkuClassificationsFilter";
 
 const SkuClassifications = ({
     page_title,
@@ -99,6 +101,9 @@ const SkuClassifications = ({
                         <Export path="/sku_classifications/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SkuClassificationsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

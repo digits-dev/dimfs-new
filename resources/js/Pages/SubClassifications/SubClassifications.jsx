@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SubClassificationsAction from "./SubClassificationsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SubClassificationsFilter from "./SubClassificationsFilter";
 
 const SubClassifications = ({page_title, tableName, sub_classifications, queryParams, all_classifications, all_active_classifications}) => {
     const { theme } = useTheme();
@@ -96,6 +98,9 @@ const SubClassifications = ({page_title, tableName, sub_classifications, queryPa
                         <Export path="/sub_classifications/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SubClassificationsFilter all_classifications={all_classifications}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

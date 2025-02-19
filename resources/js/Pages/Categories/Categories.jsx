@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import CategoriesAction from "./CategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import CategoriesFilter from "./CategoriesFilter";
 
 const Categories = ({ page_title, tableName, categories, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +97,9 @@ const Categories = ({ page_title, tableName, categories, queryParams }) => {
                         <Export path="/categories/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <CategoriesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

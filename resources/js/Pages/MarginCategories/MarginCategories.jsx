@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import MarginCategoriesAction from "./MarginCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import MarginCategoriesFilter from "./MarginCategoriesFilter";
 
 const MarginCategories = ({
     page_title,
@@ -108,6 +110,9 @@ const MarginCategories = ({
                         <Export path="/margin_categories/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <MarginCategoriesFilter all_sub_classifications={all_sub_classifications}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

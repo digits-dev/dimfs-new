@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuLegendsAction from "./SkuLegendsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SkuLegendsFilter from "./SkuLegendsFilter";
 
 const SkuLegends = ({ page_title, tableName, sku_legends, queryParams }) => {
     const { theme } = useTheme();
@@ -93,6 +95,9 @@ const SkuLegends = ({ page_title, tableName, sku_legends, queryParams }) => {
                         <Export path="/sku_legends/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SkuLegendsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

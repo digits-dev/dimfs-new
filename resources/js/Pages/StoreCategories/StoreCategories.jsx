@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import StoreCategoriesAction from "./StoreCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import StoreCategoriesFilter from "./StoreCategoriesFilter";
 
 const StoreCategories = ({
     page_title,
@@ -105,6 +107,9 @@ const StoreCategories = ({
                         <Export path="/store_categories/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <StoreCategoriesFilter all_sub_classifications={all_sub_classifications}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

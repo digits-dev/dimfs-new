@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import PlatformsAction from "./PlatformsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import PlatformsFilter from "./PlatformsFilter";
 
 const Platforms = ({ page_title, tableName, platforms, queryParams }) => {
     const { theme } = useTheme();
@@ -96,6 +98,9 @@ const Platforms = ({ page_title, tableName, platforms, queryParams }) => {
                         
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <PlatformsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

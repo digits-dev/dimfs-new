@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SegmentationsAction from "./SegmentationsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SegmentationsFilter from "./SegmentationsFilter";
 
 const Segmentations = ({
     page_title,
@@ -104,6 +106,9 @@ const Segmentations = ({
                         <Export path="/segmentations/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SegmentationsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

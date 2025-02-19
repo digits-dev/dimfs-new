@@ -18,7 +18,9 @@ import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import ColorsAction from "./ColorsAction";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
 import Export from "../../Components/Table/Buttons/Export";
+import ColorsFilter from "./ColorsFilter";
 
 const Colors = ({ page_title, tableName, colors, queryParams }) => {
     const { theme } = useTheme();
@@ -96,6 +98,9 @@ const Colors = ({ page_title, tableName, colors, queryParams }) => {
                         <Export path="/colors/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <ColorsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

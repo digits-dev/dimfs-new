@@ -19,6 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import RmaClassificationsAction from "./RmaClassificationsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
 
 const RmaClassifications = ({page_title, tableName, rma_classifications, queryParams, all_active_rma_categories, all_rma_categories}) => {
     const {theme} = useTheme();

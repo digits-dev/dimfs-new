@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import IncotermsAction from "./IncotermsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import IncotermsFilter from "./IncotermsFilter";
 
 const Incoterms = ({ page_title, tableName, incoterms, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +97,9 @@ const Incoterms = ({ page_title, tableName, incoterms, queryParams }) => {
                         <Export path="/incoterms/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <IncotermsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

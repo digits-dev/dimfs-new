@@ -25,6 +25,12 @@ const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, 
             ...provided,
             backgroundColor: "#1f2937", // Dark background for dropdown menu
             color: "#9CA3AF", // Dropdown text color
+            maxHeight: "200px",
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: "150px", 
+            overflowY: "auto", 
         }),
         option: (provided, state) => ({
             ...provided,
@@ -40,6 +46,15 @@ const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, 
         option: (provided, state) => ({
           ...provided,
           color: isStatus ? state.data.status === "INACTIVE" ? "#EB4034" : "" : "", // Make text red for INACTIVE status
+        }),
+        menu: (provided) => ({
+            ...provided,
+            maxHeight: "150px",
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: "150px", 
+            overflowY: "auto", 
         }),
       };
       

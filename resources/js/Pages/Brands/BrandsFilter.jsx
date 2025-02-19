@@ -62,8 +62,8 @@ const BrandsFilter = ({all_brand_groups}) => {
     };
 
   return (
-    <>
-        <form onSubmit={handleFilterSubmit} className='md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0'>
+    <form>
+        <div onSubmit={handleFilterSubmit} className='md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0'>
             <DropdownSelect
                 placeholder="Choose Status"
                 selectType="react-select"
@@ -106,7 +106,7 @@ const BrandsFilter = ({all_brand_groups}) => {
                 placeholder="Enter Contact Email"
                 onChange={(e) => handleFilter(e, "contact_email", "text")}
             />
-        </form>
+        </div>
         <div className='mt-5 flex justify-end'>
             <TableButton 
                 extendClass={["bg-skin-white"].includes(theme)? primayActiveColor : theme} 
@@ -116,7 +116,7 @@ const BrandsFilter = ({all_brand_groups}) => {
                 <i className="fa fa-filter"></i> Filter
             </TableButton>
         </div>
-    </>
+    </form>
     
   )
 }

@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import IdentifiersAction from "./IdentifiersAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import IdentifiersFilter from "./IdentifiersFilter";
 
 const Identifiers = ({ page_title, tableName, identifiers, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +97,9 @@ const Identifiers = ({ page_title, tableName, identifiers, queryParams }) => {
                         <Export path="/identifiers/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <IdentifiersFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

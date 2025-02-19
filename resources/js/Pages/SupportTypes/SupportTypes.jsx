@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SupportTypesAction from "./SupportTypesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SupportTypesFilter from "./SupportTypesFilter";
 
 const SupportTypes = ({page_title, tableName, support_types, queryParams}) => {
     const { theme } = useTheme();
@@ -93,6 +95,9 @@ const SupportTypes = ({page_title, tableName, support_types, queryParams}) => {
                         <Export path="support_types/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SupportTypesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

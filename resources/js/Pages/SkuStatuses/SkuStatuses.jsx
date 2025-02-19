@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SkuStatusesAction from "./SkuStatusesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SkuStatusesFilter from "./SkuStatusesFilter";
 
 const SkuStatuses = ({ page_title, tableName, sku_statuses, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +97,9 @@ const SkuStatuses = ({ page_title, tableName, sku_statuses, queryParams }) => {
                         <Export path="/sku_statuses/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SkuStatusesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

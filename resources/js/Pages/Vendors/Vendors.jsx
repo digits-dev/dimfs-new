@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorsAction from "./VendorsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import VendorsFilter from "./VendorsFilter";
 
 const Vendors = ({ 
     page_title, 
@@ -116,6 +118,9 @@ const Vendors = ({
                         <Export path="/vendors/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <VendorsFilter all_brands={all_brands} all_vendor_types={all_vendor_types} all_incoterms={all_incoterms}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

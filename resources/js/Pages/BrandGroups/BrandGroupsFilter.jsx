@@ -58,8 +58,8 @@ const BrandGroupsFilter = () => {
     };
 
   return (
-    <>
-        <form onSubmit={handleFilterSubmit} className='flex flex-col space-y-2 md:space-y-2'>
+    <form>
+        <div onSubmit={handleFilterSubmit} className='flex flex-col space-y-2 md:space-y-2'>
             <DropdownSelect
                 placeholder="Choose Status"
                 selectType="react-select"
@@ -75,7 +75,7 @@ const BrandGroupsFilter = () => {
                 placeholder="Enter Brand Group Description"
                 onChange={(e) => handleFilter(e, "brand_group_description")}
             />
-        </form>
+        </div>
         <div className='mt-5 flex justify-end'>
             <TableButton 
                 extendClass={["bg-skin-white"].includes(theme)? primayActiveColor : theme} 
@@ -85,7 +85,7 @@ const BrandGroupsFilter = () => {
                 <i className="fa fa-filter"></i> Filter
             </TableButton>
         </div>
-    </>
+    </form>
     
   )
 }

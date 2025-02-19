@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import WarrantiesAction from "./WarrantiesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import WarrantiesFilter from "./WarrantiesFilter";
 
 const Warranties = ({ page_title, tableName, warranties, queryParams }) => {
     const { theme } = useTheme();
@@ -92,6 +94,9 @@ const Warranties = ({ page_title, tableName, warranties, queryParams }) => {
                         <Export path="/warranties/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <WarrantiesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

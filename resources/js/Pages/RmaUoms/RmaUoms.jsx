@@ -19,6 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import RmaUomsAction from "./RmaUomsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
 
 const RmaUoms = ({page_title, tableName, rma_uoms, queryParams}) => {
     const {theme} = useTheme();

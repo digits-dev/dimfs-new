@@ -19,6 +19,7 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import RmaStoreCategoriesAction from "./RmaStoreCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
 
 const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryParams, all_active_rma_sub_classifications, all_rma_sub_classifications}) => {
     const {theme} = useTheme();

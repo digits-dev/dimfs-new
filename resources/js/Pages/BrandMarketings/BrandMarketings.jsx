@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandMarketingsAction from "./BrandMarketingsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import BrandMarketingsFilter from "./BrandMarketingsFilter";
 
 const BrandMarketings = ({
     page_title,
@@ -99,6 +101,9 @@ const BrandMarketings = ({
                         <Export path="/brand_marketings/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <BrandMarketingsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

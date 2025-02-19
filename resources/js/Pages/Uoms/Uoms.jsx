@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import UomsAction from "./UomsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import UomsFilter from "./UomsFilter";
 
 const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
     const { theme } = useTheme();
@@ -94,6 +96,9 @@ const Uoms = ({ page_title, tableName, uoms, queryParams }) => {
                         <Export path="/uoms/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <UomsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

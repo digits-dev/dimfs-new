@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import AppleLobsAction from "./AppleLobsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import AppleLobsFilter from "./AppleLobsFilter";
 
 const AppleLobs = ({page_title, tableName, apple_lobs, queryParams}) => {
     const {theme} = useTheme();
@@ -84,6 +86,9 @@ const AppleLobs = ({page_title, tableName, apple_lobs, queryParams}) => {
                         <Export path="/apple_lobs/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <AppleLobsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

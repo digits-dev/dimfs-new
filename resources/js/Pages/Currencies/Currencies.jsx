@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import CurrenciesAction from "./CurrenciesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import CurrenciesFilter from "./CurrenciesFilter";
 
 const Currencies = ({ page_title, tableName, currencies, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +97,9 @@ const Currencies = ({ page_title, tableName, currencies, queryParams }) => {
                         <Export path="/currencies/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <CurrenciesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

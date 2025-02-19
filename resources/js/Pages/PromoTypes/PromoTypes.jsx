@@ -19,6 +19,9 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import PromoTypesAction from "./PromoTypesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import PromoTypesFilter from "./PromoTypesFilter";
+
 
 const PromoTypes = ({ page_title, tableName, promo_types, queryParams }) => {
     const { theme } = useTheme();
@@ -95,6 +98,9 @@ const PromoTypes = ({ page_title, tableName, promo_types, queryParams }) => {
                         <Export path="/promo_types/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <PromoTypesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

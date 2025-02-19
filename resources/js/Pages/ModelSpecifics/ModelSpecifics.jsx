@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import ModelSpecificsAction from "./ModelSpecificsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import ModelSpecificsFilter from "./ModelSpecificsFilter";
 
 const ModelSpecifics = ({
     page_title,
@@ -100,6 +102,9 @@ const ModelSpecifics = ({
                         <Export path="/model_specifics/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <ModelSpecificsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

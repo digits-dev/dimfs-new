@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import SizesAction from "./SizesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import SizesFilter from "./SizesFilter";
 
 const Sizes = ({ page_title, tableName, sizes, queryParams }) => {
     const { theme } = useTheme();
@@ -94,6 +96,9 @@ const Sizes = ({ page_title, tableName, sizes, queryParams }) => {
                         <Export path="/sizes/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <SizesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

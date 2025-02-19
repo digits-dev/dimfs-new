@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import ClassificationsAction from "./ClassificationsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import ClassificationsFilter from "./ClassificationsFilter";
 
 const Classifications = ({
     page_title,
@@ -105,6 +107,9 @@ const Classifications = ({
                         <Export path="/classifications/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <ClassificationsFilter all_categories={all_categories}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
@@ -144,7 +149,7 @@ const Classifications = ({
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Category Description
+                                Category Name
                             </TableHeader>
                             <TableHeader
                                 name="created_by"

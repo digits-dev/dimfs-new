@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import InventoryTypesAction from "./InventoryTypesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import InventoryTypesFilter from "./InventoryTypesFilter";
 
 const InventoryTypes = ({
     page_title,
@@ -101,6 +103,9 @@ const InventoryTypes = ({
                         <Export path="/inventory_types/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <InventoryTypesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

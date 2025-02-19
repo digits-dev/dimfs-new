@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import WarehouseCategoriesAction from "./WarehouseCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import WarehouseCategoriesFilter from "./WarehouseCategoriesFilter";
 
 const WarehouseCategories = ({
     page_title,
@@ -100,6 +102,9 @@ const WarehouseCategories = ({
                         <Export path="/warehouse_categories/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <WarehouseCategoriesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

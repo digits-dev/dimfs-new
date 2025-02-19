@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import VendorGroupsAction from "./VendorGroupsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import VendorGroupsFilter from "./VendorGroupsFilter";
 
 const VendorGroups = ({ page_title, vendor_groups, queryParams, all_active_vendors, all_vendors }) => {
     const { theme } = useTheme();
@@ -97,6 +99,9 @@ const VendorGroups = ({ page_title, vendor_groups, queryParams, all_active_vendo
                         <Export path="/vendor_groups/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                            <VendorGroupsFilter all_vendors={all_vendors}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
