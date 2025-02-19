@@ -49,11 +49,15 @@ class InventoryTypes extends Model
                             $query->where('name', 'LIKE', "%$search%");
                         });
                     }
+                    else if ($field === 'status') {
+                        $query->orWhere($field, '=', $search);
+                    }
                     elseif ($field === 'updated_by')  {
                         $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
                         });
-                    } elseif (in_array($field, ['created_at', 'updated_at'])) {
+                    } 
+                    elseif (in_array($field, ['created_at', 'updated_at'])) {
                         $query->orWhereDate($field, $search);
                     }
                     else {
@@ -66,7 +70,12 @@ class InventoryTypes extends Model
         foreach ($this->filterable as $field) {
             if ($request->filled($field)) {
                 $value = $request->input($field);
-                $query->where($field, 'LIKE', "%$value%");
+                if ($field === 'status') {
+                    $query->orWhere($field, '=', $value);
+                }
+                else{
+                    $query->where($field, 'LIKE', "%$value%");
+                }
             }
         }
     

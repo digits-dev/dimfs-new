@@ -161,7 +161,11 @@ class GashaponItemMaster extends Model
                         $query->orWhereHas($relation, function ($query) use ($search, $column) {
                             $query->where($column, 'LIKE', "%$search%");
                         });
-                    } elseif (in_array($field, ['created_at', 'updated_at'])) {
+                    } 
+                    else if ($field === 'status') {
+                        $query->orWhere($field, '=', $search);
+                    }
+                    elseif (in_array($field, ['created_at', 'updated_at'])) {
                         $query->orWhereDate($field, $search);
                     } else {
                         $query->orWhere($field, 'LIKE', "%$search%");
@@ -173,7 +177,12 @@ class GashaponItemMaster extends Model
         foreach ($this->filterable as $field) {
             if ($request->filled($field)) {
                 $value = $request->input($field);
-                $query->where($field, 'LIKE', "%$value%");
+                if ($field === 'status') {
+                    $query->orWhere($field, '=', $value);
+                }
+                else{
+                    $query->where($field, 'LIKE', "%$value%");
+                }
             }
         }
     

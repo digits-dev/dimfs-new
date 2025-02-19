@@ -19,6 +19,10 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import BrandAction from "./BrandAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import DropdownSelect from "../../Components/Dropdown/Dropdown";
+import InputComponent from "../../Components/Forms/Input";
+import BrandsFilter from "./BrandsFilter";
 
 const Brands = ({
     page_title,
@@ -34,6 +38,7 @@ const Brands = ({
     const [pathname, setPathname] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
+
     const [updateData, setUpdateData] = useState({
         id: "",
         brand_code: "",
@@ -109,6 +114,9 @@ const Brands = ({
                         <Export path="/brands/export" page_title={page_title}/>
                     </div>
                     <div className="flex">
+                        <CustomFilter>
+                          <BrandsFilter all_brand_groups={all_brand_groups}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

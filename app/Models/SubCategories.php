@@ -51,6 +51,9 @@ class SubCategories extends Model
                             $query->where('category_description', 'LIKE', "%$search%");
                         });
                     }
+                    else if ($field === 'status') {
+                        $query->orWhere($field, '=', $search);
+                    }
                     if ($field === 'created_by') {
                         $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
@@ -74,7 +77,12 @@ class SubCategories extends Model
         foreach ($this->filterable as $field) {
             if ($request->filled($field)) {
                 $value = $request->input($field);
-                $query->where($field, 'LIKE', "%$value%");
+                if ($field === 'status') {
+                    $query->orWhere($field, '=', $value);
+                }
+                else{
+                    $query->where($field, 'LIKE', "%$value%");
+                }
             }
         }
     

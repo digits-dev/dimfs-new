@@ -49,6 +49,9 @@ class RmaStoreCategories extends Model
                             $query->where('name', 'LIKE', "%$search%");
                         });
                     }
+                    else if ($field === 'status') {
+                        $query->orWhere($field, '=', $search);
+                    }
                     elseif ($field === 'rma_sub_classifications_id')  {
                         $query->orWhereHas('getRmaSubClassification', function ($query) use ($search) {
                             $query->where('sub_classification_description', 'LIKE', "%$search%");
@@ -72,7 +75,12 @@ class RmaStoreCategories extends Model
         foreach ($this->filterable as $field) {
             if ($request->filled($field)) {
                 $value = $request->input($field);
-                $query->where($field, 'LIKE', "%$value%");
+                if ($field === 'status') {
+                    $query->orWhere($field, '=', $value);
+                }
+                else{
+                    $query->where($field, 'LIKE', "%$value%");
+                }
             }
         }
     
