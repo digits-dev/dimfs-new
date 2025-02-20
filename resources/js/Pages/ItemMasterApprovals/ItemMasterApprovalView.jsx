@@ -11,6 +11,7 @@ const ItemMasterApprovalView = ({
     page_title,
     item_master_approval,
     table_headers,
+    action,
 }) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
@@ -85,53 +86,59 @@ const ItemMasterApprovalView = ({
                             >
                                 <span>Back</span>
                             </Button>
-                            <div className="inline-flex gap-1">
-                                <Button
-                                    type="button"
-                                    onClick={() => setData("action", "reject")}
-                                    extendClass={`${
-                                        theme === "bg-skin-white"
-                                            ? primayActiveColor
-                                            : theme
-                                    }`}
-                                    fontColor={textColorActive}
-                                    disabled={processing}
-                                >
-                                    {processing ? (
-                                        "Processing..."
-                                    ) : (
-                                        <span>
-                                            <i
-                                                className={`fa-solid fa-times mr-1`}
-                                            ></i>
-                                            REJECT
-                                        </span>
-                                    )}
-                                </Button>
+                            {action === "approval" && (
+                                <div className="inline-flex gap-1">
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            setData("action", "reject")
+                                        }
+                                        extendClass={`${
+                                            theme === "bg-skin-white"
+                                                ? primayActiveColor
+                                                : theme
+                                        }`}
+                                        fontColor={textColorActive}
+                                        disabled={processing}
+                                    >
+                                        {processing ? (
+                                            "Processing..."
+                                        ) : (
+                                            <span>
+                                                <i
+                                                    className={`fa-solid fa-times mr-1`}
+                                                ></i>
+                                                REJECT
+                                            </span>
+                                        )}
+                                    </Button>
 
-                                <Button
-                                    type="button"
-                                    onClick={() => setData("action", "approve")}
-                                    extendClass={`${
-                                        theme === "bg-skin-white"
-                                            ? primayActiveColor
-                                            : theme
-                                    }`}
-                                    fontColor={textColorActive}
-                                    disabled={processing}
-                                >
-                                    {processing ? (
-                                        "Processing..."
-                                    ) : (
-                                        <span>
-                                            <i
-                                                className={`fa-solid fa-check mr-1`}
-                                            ></i>
-                                            APPROVE
-                                        </span>
-                                    )}
-                                </Button>
-                            </div>
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            setData("action", "approve")
+                                        }
+                                        extendClass={`${
+                                            theme === "bg-skin-white"
+                                                ? primayActiveColor
+                                                : theme
+                                        }`}
+                                        fontColor={textColorActive}
+                                        disabled={processing}
+                                    >
+                                        {processing ? (
+                                            "Processing..."
+                                        ) : (
+                                            <span>
+                                                <i
+                                                    className={`fa-solid fa-check mr-1`}
+                                                ></i>
+                                                APPROVE
+                                            </span>
+                                        )}
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </form>
                 </div>

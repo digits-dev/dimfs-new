@@ -104,4 +104,8 @@ class ItemMasterApproval extends Model
         return $this->belongsTo(AdmUser::class, 'approved_by', 'id');
     }
   
+    public function getRejectedBy() {
+        return $this->belongsTo(AdmUser::class, 'rejected_by', 'id');
+    }
+  
 }

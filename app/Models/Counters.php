@@ -113,4 +113,13 @@ class Counters extends Model
         return $this->belongsTo(AdmModules::class, 'adm_module_id', 'id');
     }
 
+    public function scopeGetCode($query, $module_name, $code_identifier) {
+        return $query->where('adm_module_id', self::getItemModuleId($module_name))->where('code_identifier', $code_identifier)
+        ->pluck('counter_code')->first();
+    }
+    
+    public function getItemModuleId($module_name){
+        return AdmModules::where('table_name', $module_name)->value('id');
+    }
+
 }

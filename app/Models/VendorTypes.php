@@ -92,4 +92,8 @@ class VendorTypes extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
+    public function scopeGetCodeById($query, $id){
+        return $query->where('id',$id)->value('vendor_type_code');
+    }
+
 }

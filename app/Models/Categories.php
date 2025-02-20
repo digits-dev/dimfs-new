@@ -90,4 +90,9 @@ class Categories extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function scopeGetCodeById($query, $id){
+        return $query->where('id',$id)->value('category_code');
+    }
+
 }

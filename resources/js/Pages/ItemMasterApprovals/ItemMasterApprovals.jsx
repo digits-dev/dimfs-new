@@ -120,6 +120,20 @@ const ItemMasterApprovals = ({
                                         queryParams={queryParams}
                                         width="md"
                                     >
+                                        Rejected By
+                                    </TableHeader>
+                                    <TableHeader
+                                        name="updated_by"
+                                        queryParams={queryParams}
+                                        width="lg"
+                                    >
+                                        Rejected At
+                                    </TableHeader>{" "}
+                                    <TableHeader
+                                        name="created_by"
+                                        queryParams={queryParams}
+                                        width="md"
+                                    >
                                         Created By
                                     </TableHeader>
                                     <TableHeader
@@ -144,7 +158,7 @@ const ItemMasterApprovals = ({
                                                         action="edit"
                                                         onClick={() =>
                                                             router.get(
-                                                                `/item_masters_approval/approval_view/${item.id}`
+                                                                `/item_masters_approval/approval_view/approval/${item.id}`
                                                             )
                                                         }
                                                     />
@@ -153,6 +167,11 @@ const ItemMasterApprovals = ({
                                                 <RowAction
                                                     type="button"
                                                     action="view"
+                                                    onClick={() =>
+                                                        router.get(
+                                                            `/item_masters_approval/approval_view/view/${item.id}`
+                                                        )
+                                                    }
                                                 />
                                             </RowData>
 
@@ -191,6 +210,13 @@ const ItemMasterApprovals = ({
 
                                             <RowData isLoading={loading}>
                                                 {item.approved_at}
+                                            </RowData>
+                                            <RowData isLoading={loading}>
+                                                {item.get_rejected_by?.name}
+                                            </RowData>
+
+                                            <RowData isLoading={loading}>
+                                                {item.rejected_at}
                                             </RowData>
                                             <RowData isLoading={loading}>
                                                 {item.get_created_by?.name}
