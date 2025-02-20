@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import GashaponProductTypesAction from "./GashaponProductTypesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import GashaponProductTypesFilter from "./GashaponProductTypesFilter";
 
 const GashaponProductTypes = ({page_title, tableName, gashapon_product_types, queryParams}) => {
     const {theme} = useTheme();
@@ -84,6 +86,9 @@ const GashaponProductTypes = ({page_title, tableName, gashapon_product_types, qu
                         <Export path="/gashapon_product_types/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <GashaponProductTypesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import GashaponVendorGroupsAction from "./GashaponVendorGroupsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import GashaponVendorGroupsFilter from "./GashaponVendorGroupsFilter";
 
 const GashaponVendorGroups = ({page_title, tableName, gashapon_vendor_groups, queryParams}) => {
     const {theme} = useTheme();
@@ -83,6 +85,9 @@ const GashaponVendorGroups = ({page_title, tableName, gashapon_vendor_groups, qu
                         <Export path="/gashapon_vendor_groups/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <GashaponVendorGroupsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

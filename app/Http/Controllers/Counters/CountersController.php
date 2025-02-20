@@ -28,7 +28,7 @@ class CountersController extends Controller
     }
 
     public function getAllData(){
-        $query = Counters::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = Counters::query()->with(['getCreatedBy', 'getUpdatedBy', 'getModule']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -65,38 +65,25 @@ class CountersController extends Controller
 
     public function create(Request $request){
 
-        // dd($request->all());
-
         $validatedFields = $request->validate([
-            'cms_modules_id' => 'required',
-            'module_name' => 'required|string|unique:counters,module_name',
-            'code_1' => 'required|integer',
-            'code_2' => 'required|integer',
-            'code_3' => 'required|integer',
-            'code_4' => 'required|integer',
-            'code_5' => 'required|integer',
-            'code_6' => 'required|integer',
-            'code_7' => 'required|integer',
-            'code_8' => 'required|integer',
-            'code_9' => 'required|integer',
+            'adm_module_id' => 'required',
+            'counter_code' => 'required|unique:counters,counter_code',
+            'code_identifier' => 'required',
         ]);
+
+        $CodeIdentifierExist = Counters::where('code_identifier', $request->code_identifier)->where('adm_module_id', $request->adm_module_id)->exists();
+
+        if ($CodeIdentifierExist){
+            return back()->withErrors(['code_identifier' => 'Code Identifier already exists']);
+        }
 
         try {
 
             Counters::create([
-                'cms_moduls_id' => $validatedFields['cms_modules_id'], 
-                'module_name' => $validatedFields['module_name'],   
-                'code_1' => $validatedFields['code_1'],   
-                'code_2' => $validatedFields['code_2'],   
-                'code_3' => $validatedFields['code_3'],   
-                'code_4' => $validatedFields['code_4'],   
-                'code_5' => $validatedFields['code_5'],   
-                'code_6' => $validatedFields['code_6'],   
-                'code_7' => $validatedFields['code_7'],   
-                'code_8' => $validatedFields['code_8'],   
-                'code_9' => $validatedFields['code_9'],
+                'adm_module_id' => $validatedFields['adm_module_id'], 
+                'counter_code' => $validatedFields['counter_code'], 
+                'code_identifier' => $validatedFields['code_identifier'], 
                 'status' => $validatedFields['status'] ?? 'ACTIVE',   
-                'created_by' => CommonHelpers::myId(),
             ]);
     
             return back()->with(['message' => 'Counter Creation Success!', 'type' => 'success']);
@@ -111,21 +98,11 @@ class CountersController extends Controller
     }
 
     public function update(Request $request){
-
-        dd($request->all());
         
         $validatedFields = $request->validate([
-            'cms_modules_id' => 'required',
-            'module_name' => 'required|string',
-            'code_1' => 'required|integer',
-            'code_2' => 'required|integer',
-            'code_3' => 'required|integer',
-            'code_4' => 'required|integer',
-            'code_5' => 'required|integer',
-            'code_6' => 'required|integer',
-            'code_7' => 'required|integer',
-            'code_8' => 'required|integer',
-            'code_9' => 'required|integer',
+            'adm_module_id' => 'required',
+            'counter_code' => 'required',
+            'code_identifier' => 'required',
             'status' => 'required',
         ]);
 
@@ -137,41 +114,41 @@ class CountersController extends Controller
                 return back()->with(['message' => 'Counter not found!', 'type' => 'error']);
             }
 
-            $counters->cms_moduls_id = $validatedFields['cms_modules_id'];
+            $counters->adm_module_id = $validatedFields['adm_module_id'];
     
-            $moduleNameExist = Counters::where('module_name', $request->module_name)->exists();
-          
+            $CodeIdentifierExist = Counters::where('code_identifier', $request->code_identifier)->where('adm_module_id', $request->adm_module_id)->exists();
 
-            if ($request->module_name !== $counters->module_name) {
-                if (!$moduleNameExist) {
-                    $counters->module_name = $validatedFields['module_name'];
+            $counterCodeExist = Counters::where('counter_code', $request->counter_code)->exists();
+        
+            if ($request->code_identifier !== $counters->code_identifier) {
+                if (!$CodeIdentifierExist) {
+                    $counters->code_identifier = $validatedFields['code_identifier'];
                 } else {
-                    return back()->with(['message' => 'Module Name already exists!', 'type' => 'error']);
+                    return back()->withErrors(['code_identifier' => 'Code Identifier already exists']);
+                }
+            }
+
+            if ($request->counter_code !== $counters->counter_code) {
+                if (!$counterCodeExist) {
+                    $counters->counter_code = $validatedFields['counter_code'];
+                } else {
+                    return back()->withErrors(['counter_code' => 'Counter Code already exists']);
                 }
             }
     
-            $counters->code_1 = $validatedFields['code_1'];
-            $counters->code_2 = $validatedFields['code_2'];
-            $counters->code_3 = $validatedFields['code_3'];
-            $counters->code_4 = $validatedFields['code_4'];
-            $counters->code_5 = $validatedFields['code_5'];
-            $counters->code_6 = $validatedFields['code_6'];
-            $counters->code_7 = $validatedFields['code_7'];
-            $counters->code_8 = $validatedFields['code_8'];
-            $counters->code_9 = $validatedFields['code_9'];
+            $counters->counter_code = $validatedFields['counter_code'];
             $counters->status = $validatedFields['status'];
-            $counters->updated_by = CommonHelpers::myId();
             $counters->updated_at = now();
     
             $counters->save();
     
-            return back()->with(['message' => 'Classification Updating Success!', 'type' => 'success']);
+            return back()->with(['message' => 'Counter Updating Success!', 'type' => 'success']);
         }  
 
         catch (\Exception $e) {
 
-            CommonHelpers::LogSystemError('Classifications', $e->getMessage());
-            return back()->with(['message' => 'Classification Updating Failed!', 'type' => 'error']);
+            CommonHelpers::LogSystemError('Counters', $e->getMessage());
+            return back()->with(['message' => 'Counter Updating Failed!', 'type' => 'error']);
         }
     }
 }

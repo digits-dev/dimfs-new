@@ -14,19 +14,51 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
-        cms_modules_id: "" || updateData.cms_modules_id,
+        adm_module_id: "" || updateData.adm_module_id,
         module_name: "" || updateData.module_name,
-        code_1: "" || updateData.code_1,
-        code_2: "" || updateData.code_2,
-        code_3: "" || updateData.code_3,
-        code_4: "" || updateData.code_4,
-        code_5: "" || updateData.code_5,
-        code_6: "" || updateData.code_6,
-        code_7: "" || updateData.code_7,
-        code_8: "" || updateData.code_8,
-        code_9: "" || updateData.code_9,
+        counter_code: "" || updateData.counter_code,
+        code_identifier: "" || updateData.code_identifier,
         status: "" || updateData.status,
     });
+
+    const codeIdentifiers = [
+        {
+            id: 'Code 1',
+            name:'Code 1',
+        },
+        {
+            id: 'Code 2',
+            name:'Code 2',
+        },
+        {
+            id: 'Code 3',
+            name:'Code 3',
+        },
+        {
+            id: 'Code 4',
+            name:'Code 4',
+        },
+        {
+            id: 'Code 5',
+            name:'Code 5',
+        },
+        {
+            id: 'Code 6',
+            name:'Code 6',
+        },
+        {
+            id: 'Code 7',
+            name:'Code 7',
+        },
+        {
+            id: 'Code 8',
+            name:'Code 8',
+        },
+        {
+            id: 'Code 9',
+            name:'Code 9',
+        },
+    ]
 
     const statuses = [
         {
@@ -102,161 +134,59 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
                     defaultSelect="Select Module"
                     onChange={(selectedOption) => setData((prevData) => ({
                         ...prevData,
-                        cms_modules_id: selectedOption?.value,
+                        adm_module_id: selectedOption?.value,
                         module_name: selectedOption?.label
                     }))}
                     name="module_name"
                     isStatus={action == "Update"}
                     options={action == 'Update' ? all_modules : all_active_modules}
-                    value={data.cms_modules_id ? { label: data.module_name, value: data.cms_modules_id } : null}
+                    value={data.adm_module_id ? { label: data.module_name, value: data.adm_module_id } : null}
                 />
             )
         }
-        {(errors.module_name) && (
+        {(errors.adm_module_id) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.module_name}
+                {errors.adm_module_id}
             </div>
         )}
         {action == 'Update' && <div className='font-semibold text-xs'><span className='text-red-500'>Note: </span>If the module is in red text, it means it is <span className='text-red-500'>INACTIVE</span>.</div> }
-        <div className='flex space-x-3'>
-            <div className='flex-1'>
-                {/* CODE 1 */}
-                <InputComponent
-                    name="code_1"
-                    value={data.code_1}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 1"
-                    onChange={(e)=> setData("code_1", e.target.value)}
-                />
-                {(errors.code_1) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_1}
-                    </div>
-                )}
-            </div>
-            <div className='flex-1'>
-            {/* CODE 2 */}
-                <InputComponent
-                    name="code_2"
-                    value={data.code_2}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 2"
-                    onChange={(e)=> setData("code_2", e.target.value)}
-                />
-                {(errors.code_2) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_2}
-                    </div>
-                )}
-            </div>
-        </div>
-        <div className='flex space-x-3'>
-            <div className='flex-1'>
-                {/* CODE 3 */}
-                <InputComponent
-                    name="code_3"
-                    value={data.code_3}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 3"
-                    onChange={(e)=> setData("code_3", e.target.value)}
-                />
-                {(errors.code_3) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_3}
-                    </div>
-                )}
-            </div>
-            <div className='flex-1'>
-                {/* CODE 4 */}
-                <InputComponent
-                    name="code_4"
-                    value={data.code_4}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 4"
-                    onChange={(e)=> setData("code_4", e.target.value)}
-                />
-                {(errors.code_4) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_4}
-                    </div>
-                )}
-            </div>
-        </div>
-        <div className='flex space-x-3'>
-            <div className='flex-1'>
-                {/* CODE 5 */}
-                <InputComponent
-                    name="code_5"
-                    value={data.code_5}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 5"
-                    onChange={(e)=> setData("code_5", e.target.value)}
-                />
-                {(errors.code_5) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_5}
-                    </div>
-                )}
-            </div>
-            <div className='flex-1'>
-                {/* CODE 6 */}
-                <InputComponent
-                    name="code_6"
-                    value={data.code_6}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 6"
-                    onChange={(e)=> setData("code_6", e.target.value)}
-                />
-                {(errors.code_6) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_6}
-                    </div>
-                )}
-            </div>
-        </div>
-        <div className='flex space-x-3'>
-            <div className='flex-1'>
-                {/* CODE 7 */}
-                <InputComponent
-                    name="code_7"
-                    value={data.code_7}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 7"
-                    onChange={(e)=> setData("code_7", e.target.value)}
-                />
-                {(errors.code_7) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_7}
-                    </div>
-                )}
-            </div>
-            <div className='flex-1'>
-                {/* CODE 8 */}
-                <InputComponent
-                    name="code_8"
-                    value={data.code_8}
-                    disabled={action === 'View'}
-                    placeholder="Enter Code 8"
-                    onChange={(e)=> setData("code_8", e.target.value)}
-                />
-                {(errors.code_8) && (
-                    <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                        {errors.code_8}
-                    </div>
-                )}
-            </div>
-        </div>
-        {/* CODE 9 */}
+        {/* COUNTER CODE */}
         <InputComponent
-            name="code_9"
-            value={data.code_9}
+            name="counter_code"
+            value={data.counter_code}
             disabled={action === 'View'}
-            placeholder="Enter Code 9"
-            onChange={(e)=> setData("code_9", e.target.value)}
+            placeholder="Enter Counter Code"
+            onChange={(e)=> setData("counter_code", e.target.value)}
         />
-        {(errors.code_9) && (
+        {(errors.counter_code) && (
+            <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
+                {errors.counter_code}
+            </div>
+        )}
+        {action == 'View' && 
+            <InputComponent
+                name="Code Identifier"
+                value={data.code_identifier}
+                disabled={action === 'View'}
+                placeholder="Code Identifier"
+            />
+        }
+        {/* CODE IDENTIFIER */}
+        {(action == 'Update' || action == 'Add') && 
+        <DropdownSelect
+            placeholder="Choose Code Identifier"
+            selectType="react-select"
+            defaultSelect="Select Code Identifier"
+            onChange={(selectedOption) => setData("code_identifier", selectedOption?.value)}
+            name="code_identifier"
+            menuPlacement="top"
+            options={codeIdentifiers}
+            value={data.code_identifier ? { label: data.code_identifier, value: data.code_identifier } : null}
+        />
+        }
+        {(errors.code_identifier) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
-                {errors.code_9}
+                {errors.code_identifier}
             </div>
         )}
         {action == 'Update' && 

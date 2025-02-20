@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import GashaponInventoryTypesAction from "./GashaponInventoryTypesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import GashaponInventoryTypesFilter from "./GashaponInventoryTypesFilter";
 
 const GashaponInventoryTypes = ({page_title, tableName, gashapon_inventory_types, queryParams}) => {
     const {theme} = useTheme();
@@ -83,6 +85,9 @@ const GashaponInventoryTypes = ({page_title, tableName, gashapon_inventory_types
                         <Export path="/gashapon_inventory_types/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <GashaponInventoryTypesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

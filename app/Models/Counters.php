@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use app\Helpers\CommonHelpers;
 use App\Models\AdmModels\AdmModules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,19 +13,25 @@ class Counters extends Model
 
     protected $table = 'counters';
 
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
+
     protected $fillable = [
         'id',
-        'cms_moduls_id',
+        'adm_module_id',
         'module_name',
-        'code_1',
-        'code_2',
-        'code_3',
-        'code_4',
-        'code_5',
-        'code_6',
-        'code_7',
-        'code_8',
-        'code_9',
+        'counter_code',
+        'code_identifier',
         'status',
         'created_by',
         'updated_by',
@@ -39,17 +46,10 @@ class Counters extends Model
     ];
 
     protected $filterable = [
-        'cms_moduls_id',
+        'adm_module_id',
         'module_name',
-        'code_1',
-        'code_2',
-        'code_3',
-        'code_4',
-        'code_5',
-        'code_6',
-        'code_7',
-        'code_8',
-        'code_9',
+        'counter_code',
+        'code_identifier',
         'status',
         'created_by',
         'updated_by',
@@ -107,6 +107,10 @@ class Counters extends Model
     
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+    }
+
+    public function getModule() {
+        return $this->belongsTo(AdmModules::class, 'adm_module_id', 'id');
     }
 
 }

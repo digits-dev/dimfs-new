@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import GashaponIncotermsAction from "./GashaponIncotermsAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import GashaponIncotermsFilter from "./GashaponIncotermsFilter";
 
 const GashaponIncoterms = ({page_title, tableName, gashapon_incoterms, queryParams}) => {
     const {theme} = useTheme();
@@ -83,6 +85,9 @@ const GashaponIncoterms = ({page_title, tableName, gashapon_incoterms, queryPara
                         <Export path="/gashapon_incoterms/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <GashaponIncotermsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

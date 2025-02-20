@@ -19,6 +19,8 @@ import Pagination from "../../Components/Table/Pagination";
 import Modal from "../../Components/Modal/Modal";
 import GashaponWarehouseCategoriesAction from "./GashaponWarehouseCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import GashaponWarehouseCategoriesFilter from "./GashaponWarehouseCategoriesFilter";
 
 const GashaponWarehouseCategories = ({page_title, tableName, gashapon_warehouse_categories, queryParams}) => {
     const {theme} = useTheme();
@@ -83,6 +85,9 @@ const GashaponWarehouseCategories = ({page_title, tableName, gashapon_warehouse_
                         <Export path="/gashapon_warehouse_categories/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <GashaponWarehouseCategoriesFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

@@ -29,17 +29,10 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
     const [action, setAction] = useState(null);
     const [updateData, setUpdateData] = useState({
         id: "",
-        cms_modules_id: "",
+        adm_module_id: "",
         module_name: "",
-        code_1: "",
-        code_2: "",
-        code_3: "",
-        code_4: "",
-        code_5: "",
-        code_6: "",
-        code_7: "",
-        code_8: "",
-        code_9: "",
+        counter_code: "",
+        code_identifier: "",
         status: "",
     });
 
@@ -47,6 +40,7 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
     router.on('finish', () => setLoading(false));
 
     useEffect(() => {
+        console.log(counters)
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
     }, []);
@@ -82,17 +76,10 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
                             onClick={()=>{handleModalClick(); setAction('Add');
                                 setUpdateData({
                                     id: "",
-                                    cms_modules_id: "",
+                                    adm_module_id: "",
                                     module_name: "",
-                                    code_1: "",
-                                    code_2: "",
-                                    code_3: "",
-                                    code_4: "",
-                                    code_5: "",
-                                    code_6: "",
-                                    code_7: "",
-                                    code_8: "",
-                                    code_9: "",
+                                    counter_code: "",
+                                    code_identifier: "",
                                     status: "",
                                 })
                             
@@ -123,74 +110,25 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
                                 Status
                             </TableHeader>
                             <TableHeader
-                                name="module_name"
+                                name="adm_module_id"
                                 queryParams={queryParams}
                                 width="lg"
                             >
                                 Module Name
                             </TableHeader>
                             <TableHeader
-                                name="code_1"
+                                name="counter_code"
                                 queryParams={queryParams}
                                 width="md"
                             >
-                                Code 1
+                                Counter Code
                             </TableHeader>
                             <TableHeader
-                                name="code_2"
+                                name="code_identifier"
                                 queryParams={queryParams}
-                                width="md"
+                                width="lg"
                             >
-                                Code 2
-                            </TableHeader>
-                            <TableHeader
-                                name="code_3"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 3
-                            </TableHeader>
-                            <TableHeader
-                                name="code_4"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 4
-                            </TableHeader>
-                            <TableHeader
-                                name="code_5"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 5
-                            </TableHeader>
-                            <TableHeader
-                                name="code_6"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 6
-                            </TableHeader>
-                            <TableHeader
-                                name="code_7"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 7
-                            </TableHeader>
-                            <TableHeader
-                                name="code_8"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 8
-                            </TableHeader>
-                            <TableHeader
-                                name="code_9"
-                                queryParams={queryParams}
-                                width="md"
-                            >
-                                Code 9
+                                Code Identifier
                             </TableHeader>
                             <TableHeader
                                 name="created_by"
@@ -233,17 +171,10 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
                                             onClick={()=>{handleModalClick(); setAction('Update'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    cms_modules_id: item.cms_moduls_id,
-                                                    module_name: item.module_name,
-                                                    code_1: item.code_1,
-                                                    code_2: item.code_2,
-                                                    code_3: item.code_3,
-                                                    code_4: item.code_4,
-                                                    code_5: item.code_5,
-                                                    code_6: item.code_6,
-                                                    code_7: item.code_7,
-                                                    code_8: item.code_8,
-                                                    code_9: item.code_9,
+                                                    adm_module_id: item.adm_module_id,
+                                                    module_name: item.get_module?.name,
+                                                    counter_code: item.counter_code,
+                                                    code_identifier: item.code_identifier,
                                                     status: item.status,
                                                 })
                                             
@@ -255,17 +186,10 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
                                             onClick={()=>{handleModalClick(); setAction('View'); 
                                                 setUpdateData({
                                                     id: item.id,
-                                                    cms_modules_id: item.cms_moduls_id,
-                                                    module_name: item.module_name,
-                                                    code_1: item.code_1,
-                                                    code_2: item.code_2,
-                                                    code_3: item.code_3,
-                                                    code_4: item.code_4,
-                                                    code_5: item.code_5,
-                                                    code_6: item.code_6,
-                                                    code_7: item.code_7,
-                                                    code_8: item.code_8,
-                                                    code_9: item.code_9,
+                                                    adm_module_id: item.adm_module_id,
+                                                    module_name: item.get_module?.name,
+                                                    counter_code: item.counter_code,
+                                                    code_identifier: item.code_identifier,
                                                     status: item.status,
                                                 })
                                             
@@ -285,34 +209,13 @@ const Counters = ({page_title, tableName, counters, queryParams, all_active_modu
                                             : "INACTIVE"}
                                     </RowStatus>
                                     <RowData isLoading={loading}>
-                                        {item.module_name}
+                                        {item.get_module?.name}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.code_1}
+                                        {item.counter_code}
                                     </RowData>
                                     <RowData isLoading={loading}>
-                                        {item.code_2}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_3}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_4}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_5}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_6}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_7}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_8}
-                                    </RowData>
-                                    <RowData isLoading={loading}>
-                                        {item.code_9}
+                                        {item.code_identifier}
                                     </RowData>
                                     <RowData isLoading={loading}>
                                         {item.get_created_by?.name}
