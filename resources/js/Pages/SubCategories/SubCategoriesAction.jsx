@@ -148,6 +148,7 @@ const SubCategoriesAction = ({ action, onClose, updateData, all_active_categorie
                             setData("status", selectedOption?.value)
                         }
                         name="status"
+                        menuPlacement="top"
                         options={statuses}
                         value={
                             data.status

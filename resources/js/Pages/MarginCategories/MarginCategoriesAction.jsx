@@ -149,6 +149,7 @@ const MarginCategoriesAction = ({ action, onClose, updateData, all_sub_classific
                             setData("status", selectedOption?.value)
                         }
                         name="status"
+                        menuPlacement="top"
                         options={statuses}
                         value={
                             data.status

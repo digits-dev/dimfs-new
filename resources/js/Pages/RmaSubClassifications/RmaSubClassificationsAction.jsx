@@ -132,6 +132,7 @@ const RmaSubClassificationsAction = ({action, onClose, updateData, all_active_rm
                     defaultSelect="Select Status"
                     onChange={(selectedOption) => setData("status", selectedOption?.value)}
                     name="status"
+                    menuPlacement="top"
                     options={statuses}
                     value={data.status ? { label: data.status, value: data.status } : null}
                 />

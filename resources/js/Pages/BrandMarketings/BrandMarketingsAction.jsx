@@ -99,6 +99,7 @@ const BrandMarketingsAction = ({action, onClose, updateData}) => {
                     defaultSelect="Select Status"
                     onChange={(selectedOption) => setData("status", selectedOption?.value)}
                     name="status"
+                    menuPlacement="top"
                     options={statuses}
                     value={data.status ? { label: data.status, value: data.status } : null}
                 />

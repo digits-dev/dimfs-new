@@ -216,6 +216,7 @@ const UpdateTableSetting = ({
                                 </div>
                             )}
                             <DropdownSelect
+                                addMainClass="mt-3"
                                 placeholder="Choose Status"
                                 selectType="react-select"
                                 defaultSelect="Select Status"

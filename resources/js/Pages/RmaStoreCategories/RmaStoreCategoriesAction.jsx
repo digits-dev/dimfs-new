@@ -133,6 +133,7 @@ const RmaStoreCategoriesAction = ({action, onClose, updateData, all_active_rma_s
                     defaultSelect="Select Status"
                     onChange={(selectedOption) => setData("status", selectedOption?.value)}
                     name="status"
+                    menuPlacement="top"
                     options={statuses}
                     value={data.status ? { label: data.status, value: data.status } : null}
                 />

@@ -20,6 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import RmaUomsAction from "./RmaUomsAction";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import RmaUomsFilter from "./RmaUomsFilter";
 
 const RmaUoms = ({page_title, tableName, rma_uoms, queryParams}) => {
     const {theme} = useTheme();
@@ -86,6 +87,9 @@ const RmaUoms = ({page_title, tableName, rma_uoms, queryParams}) => {
                         <Export path="/rma_uoms/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <RmaUomsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

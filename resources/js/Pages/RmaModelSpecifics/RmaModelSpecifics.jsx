@@ -20,6 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import RmaModelSpecificsAction from "./RmaModelSpecificsAction";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import RmaModelSpecificsFilter from "./RmaModelSpecificsFilter";
 
 const RmaModelSpecifics = ({page_title, tableName, rma_model_specifics, queryParams}) => {
     const {theme} = useTheme();
@@ -86,6 +87,9 @@ const RmaModelSpecifics = ({page_title, tableName, rma_model_specifics, queryPar
                         <Export path="/rma_model_specifics/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <RmaModelSpecificsFilter/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

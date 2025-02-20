@@ -130,6 +130,7 @@ const VendorGroupsAction = ({ action, onClose, updateData, all_active_vendors, a
                             setData("status", selectedOption?.value)
                         }
                         name="status"
+                        menuPlacement="top"
                         options={statuses}
                         value={
                             data.status

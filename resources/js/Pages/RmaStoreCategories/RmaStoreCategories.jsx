@@ -20,6 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import RmaStoreCategoriesAction from "./RmaStoreCategoriesAction";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import RmaStoreCategoriesFilter from "./RmaStoreCategoriesFilter";
 
 const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryParams, all_active_rma_sub_classifications, all_rma_sub_classifications}) => {
     const {theme} = useTheme();
@@ -89,6 +90,9 @@ const RmaStoreCategories = ({page_title, tableName, rma_store_categories, queryP
                         <Export path="/rma_store_categories/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <RmaStoreCategoriesFilter all_rma_sub_classifications={all_rma_sub_classifications}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>

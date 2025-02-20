@@ -98,6 +98,7 @@ const SkuLegendsAction = ({ action, onClose, updateData }) => {
                             setData("status", selectedOption?.value)
                         }
                         name="status"
+                        menuPlacement="top"
                         options={statuses}
                         value={
                             data.status

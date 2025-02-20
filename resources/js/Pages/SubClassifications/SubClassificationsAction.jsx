@@ -146,6 +146,7 @@ const SubClassificationsAction = ({ action, onClose, updateData, all_classificat
                             setData("status", selectedOption?.value)
                         }
                         name="status"
+                        menuPlacement="top"
                         options={statuses}
                         value={
                             data.status

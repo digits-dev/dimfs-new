@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const DropdownSelect = ({maxMenuHeight = "100px", menuPlacement, isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -25,11 +25,11 @@ const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, 
             ...provided,
             backgroundColor: "#1f2937", // Dark background for dropdown menu
             color: "#9CA3AF", // Dropdown text color
-            maxHeight: "200px",
+            maxHeight: maxMenuHeight,
         }),
         menuList: (provided) => ({
             ...provided,
-            maxHeight: "150px", 
+            maxHeight: maxMenuHeight, 
             overflowY: "auto", 
         }),
         option: (provided, state) => ({
@@ -49,11 +49,11 @@ const DropdownSelect = ({menuPlacement, isStatus = false, isDisabled,  options, 
         }),
         menu: (provided) => ({
             ...provided,
-            maxHeight: "150px",
+            maxHeight: maxMenuHeight,
         }),
         menuList: (provided) => ({
             ...provided,
-            maxHeight: "150px", 
+            maxHeight: maxMenuHeight, 
             overflowY: "auto", 
         }),
       };

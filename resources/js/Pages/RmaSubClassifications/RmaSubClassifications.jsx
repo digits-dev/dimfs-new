@@ -20,6 +20,7 @@ import Modal from "../../Components/Modal/Modal";
 import RmaSubClassificationsAction from "./RmaSubClassificationsAction";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import RmaSubClassificationsFilter from "./RmaSubClassificationsFilter";
 
 const RmaSubClassifications = ({page_title, tableName, rma_sub_classifications, queryParams, all_active_rma_classifications, all_rma_classifications}) => {
     const {theme} = useTheme();
@@ -88,6 +89,9 @@ const RmaSubClassifications = ({page_title, tableName, rma_sub_classifications, 
                         <Export path="/rma_sub_classifications/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>
+                        <CustomFilter>
+                            <RmaSubClassificationsFilter all_rma_classifications={all_active_rma_classifications}/>
+                        </CustomFilter>
                         <TableSearch queryParams={queryParams} />
                     </div>
                 </TopPanel>
