@@ -13,6 +13,7 @@ use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -153,10 +154,12 @@ class ItemMastersController extends Controller
 
         $request->validate($request->validation);
 
+        $itemValues = json_encode(Arr::except($request->all(), ['validation']));
+
         try {
 
             ItemMasterApproval::create([
-               'item_values' => json_encode($request->all()),
+               'item_values' => $itemValues,
                'action' => 'CREATE'
             ]);
     
@@ -209,13 +212,21 @@ class ItemMastersController extends Controller
 
         $request->validate($request->validation);
 
+        $itemValues = json_encode(Arr::except($request->all(), ['validation']));
+
         try {
 
-            ItemMasterApproval::create([
-                'item_values' => json_encode($request->all()),
-                'action' => 'UPDATE',
-                'item_master_id' => $request->id,
-             ]);
+            ItemMasterApproval::updateOrCreate(
+                [
+                    'action' => 'UPDATE', 
+                    'item_master_id' => $request->id
+                ],
+                [
+                    'item_values' => $itemValues,
+                    'action' => 'UPDATE',
+                    'item_master_id' => $request->id,
+                ]
+            );
 
             return redirect('/item_masters')->with(['message' => 'Item Update Success!', 'type' => 'success']);
 
