@@ -225,7 +225,7 @@ class ItemMasterApprovalsController extends Controller
     }
 
     public function bulkActions(Request $request){
-
+        $selected_items = ItemMasterApproval::whereIn('id',$request->selectedIds)->where('status', "FOR APPROVAL")->get();
 
     
         return back()->with(['message' => 'Item Approval Success', 'type' => 'success']);

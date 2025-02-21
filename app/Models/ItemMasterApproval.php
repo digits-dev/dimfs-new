@@ -48,6 +48,7 @@ class ItemMasterApproval extends Model
     protected $filterable = [
         'action',
         'status',
+        'item_master_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -71,7 +72,13 @@ class ItemMasterApproval extends Model
                         $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
                         });
-                    } elseif (in_array($field, ['created_at', 'updated_at'])) {
+                    } 
+                    elseif ($field === 'item_master_id')  {
+                        $query->orWhereHas('getItem', function ($query) use ($search) {
+                            $query->where('digits_code', 'LIKE', "%$search%");
+                        });
+                    } 
+                    elseif (in_array($field, ['created_at', 'updated_at'])) {
                         $query->orWhereDate($field, $search);
                     }
                     else {
@@ -106,6 +113,10 @@ class ItemMasterApproval extends Model
   
     public function getRejectedBy() {
         return $this->belongsTo(AdmUser::class, 'rejected_by', 'id');
+    }
+
+    public function getItem() {
+        return $this->belongsTo(ItemMaster::class, 'item_master_id', 'id');
     }
   
 }
