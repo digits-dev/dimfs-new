@@ -14,12 +14,13 @@ import RowAction from '../../Components/Table/RowAction';
 import Row from "../../Components/Table/Row";
 import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
-import RowStatus from '../../Components/Table/RowStatus';
 import Pagination from "../../Components/Table/Pagination";
 import Export from "../../Components/Table/Buttons/Export";
+import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
+import ItemMastersFilter from "./ItemMasterFilters";
 
 
-const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_headers, can_create, can_update, can_export}) => {
+const ItemMasters = ({page_title, tableName, item_masters, filter_inputs, queryParams, table_headers, can_create, can_update, can_export}) => {
     const {theme} = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -70,6 +71,9 @@ const ItemMasters = ({page_title, tableName, item_masters, queryParams, table_he
                             }
                         </div>
                         <div className='flex'>
+                            <CustomFilter>
+                                <ItemMastersFilter filter_inputs={filter_inputs}/>
+                            </CustomFilter>
                             <TableSearch queryParams={queryParams} />
                         </div>
                     </TopPanel>

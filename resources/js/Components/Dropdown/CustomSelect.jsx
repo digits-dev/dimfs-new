@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const CustomSelect = ({isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const CustomSelect = ({maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -25,6 +25,13 @@ const CustomSelect = ({isStatus = false, menuPlacement, isDisabled,  options, on
             ...provided,
             backgroundColor: "#1f2937", // Dark background for dropdown menu
             color: "#9CA3AF", // Dropdown text color
+            maxHeight: maxMenuHeight,
+            
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: maxMenuHeight, 
+            overflowY: "auto", 
         }),
         option: (provided, state) => ({
             ...provided,
@@ -40,6 +47,15 @@ const CustomSelect = ({isStatus = false, menuPlacement, isDisabled,  options, on
         option: (provided, state) => ({
           ...provided,
           color: isStatus ? state.data.status === "INACTIVE" ? "#EB4034" : "" : "", // Make text red for INACTIVE status
+        }),
+        menu: (provided) => ({
+            ...provided,
+            maxHeight: maxMenuHeight,
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: maxMenuHeight, 
+            overflowY: "auto", 
         }),
       };
       

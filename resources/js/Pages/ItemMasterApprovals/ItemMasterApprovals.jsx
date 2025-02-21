@@ -55,10 +55,6 @@ const ItemMasterApprovals = ({
         bulkAction: "",
     });
 
-    useEffect(() => {
-        console.log(data)
-    }, [data]);
-
     const handleSelectAll = () => {
         if (isSelectAllChecked) {
             setData("selectedIds", []);

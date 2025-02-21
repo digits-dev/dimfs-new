@@ -88,8 +88,17 @@ class ItemMastersController extends Controller
 
         $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
         ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name', 'width', 'table_join')
         ->get();
+
+        $data['filter_inputs'] = $data['table_headers']
+        ->map(function ($columns) {
+            if ($columns->table) {
+                $columns->table_data = DB::table($columns->table)
+                    ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
+                    ->get();
+            }
+            return $columns;
+        });
 
         // PERMISSIONS
 
