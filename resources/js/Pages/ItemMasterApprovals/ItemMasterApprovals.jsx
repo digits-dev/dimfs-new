@@ -1,6 +1,7 @@
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../Context/ThemeContext";
+import { useToast } from "../../Context/ToastContext";
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import ContentPanel from "../../Components/Table/ContentPanel";
 import TopPanel from "../../Components/Table/TopPanel";
@@ -16,6 +17,9 @@ import TableHeader from "../../Components/Table/TableHeader";
 import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
+import ApprovalBulkActions from "../../Components/Table/Buttons/ApprovalBulkActions";
+import Checkbox from "../../Components/Checkbox/Checkbox"
+
 
 const ItemMasterApprovals = ({
     page_title,
@@ -24,12 +28,14 @@ const ItemMasterApprovals = ({
     queryParams,
     table_headers,
 }) => {
+
+    const { handleToast } = useToast();
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [action, setAction] = useState(null);
+
+
     useEffect(() => {
         const segments = window.location.pathname.split("/");
         setPathname(segments.pop());
@@ -40,6 +46,72 @@ const ItemMasterApprovals = ({
         router.get(pathname);
     };
 
+    // BULK ACTIONS
+
+    const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
+
+    const { data, setData, processing, reset, post, errors } = useForm({
+        selectedIds: [],
+        bulkAction: "",
+    });
+
+    useEffect(() => {
+        console.log(data)
+    }, [data]);
+
+    const handleSelectAll = () => {
+        if (isSelectAllChecked) {
+            setData("selectedIds", []);
+        }
+        else {
+            setData("selectedIds", item_master_approvals.data.map((item) => item.id));
+        }
+        setIsSelectAllChecked(!isSelectAllChecked);
+    };
+
+    const handleRowSelection = (id) => {
+        setData((prevData) => {
+            const selectedIds = prevData.selectedIds || [];
+            let updatedSelectedIds;
+    
+            if (selectedIds.includes(id)) {
+                updatedSelectedIds = selectedIds.filter((item) => item !== id);
+            } else {
+                updatedSelectedIds = [...selectedIds, id];
+            }
+    
+            if (updatedSelectedIds.length === item_master_approvals.data.length) {
+                setIsSelectAllChecked(true);
+            }
+            else{
+                setIsSelectAllChecked(false);
+
+            }
+    
+            return { ...prevData, selectedIds: updatedSelectedIds };
+        });
+    };
+
+    const handleBulkAction = () => {
+
+        if (data.selectedIds.length === 0) {
+            handleToast('No Data Selected', 'error');
+            return;
+        }
+        post('item_master_approvals/bulk_action', {
+            onSuccess: (data) => {
+                const { message, type } = data.props.auth.sessions;
+                handleToast(message, type);
+                reset();
+            },
+            onError: (error) => {
+            }
+        })
+        
+        setData("selectedIds", []);
+        setIsSelectAllChecked(false);
+    };
+
     return (
         <>
             <Head title={page_title} />
@@ -48,7 +120,8 @@ const ItemMasterApprovals = ({
                     <>
                         <TopPanel>
                             <div className="inline-flex gap-1">
-                                <Tooltip text="Refresh data" arrow="bottom">
+                                <ApprovalBulkActions setData={setData} onConfirm={handleBulkAction}/>
+                                <Tooltip text="Refresh data" arrow="top">
                                     <Button
                                         extendClass={
                                             (["bg-skin-white"].includes(theme)
@@ -69,6 +142,19 @@ const ItemMasterApprovals = ({
                         <TableContainer data={item_master_approvals?.data}>
                             <Thead>
                                 <Row>
+                                <TableHeader
+                                    name="id"
+                                    width="xm"
+                                    sortable={false}
+                                    justify="center"
+                                >
+                                    <Checkbox
+                                        handleClick={handleSelectAll} 
+                                        isChecked={isSelectAllChecked}        
+                                        disabled={false}
+                                    />
+
+                                </TableHeader>
                                     <TableHeader
                                         sortable={false}
                                         width="md"
@@ -93,6 +179,7 @@ const ItemMasterApprovals = ({
                                     {table_headers &&
                                         table_headers?.map((header, index) => (
                                             <TableHeader
+                                                key={index}
                                                 sortable={false}
                                                 name={header.name}
                                                 queryParams={queryParams}
@@ -150,6 +237,13 @@ const ItemMasterApprovals = ({
                                 {item_master_approvals?.data?.map(
                                     (item, index) => (
                                         <Row key={index}>
+                                            <RowData isLoading={loading} center>
+                                                <Checkbox          
+                                                    handleClick={() => handleRowSelection(item.id)} 
+                                                    isChecked={data.selectedIds.includes(item.id)}        
+                                                    disabled={false}
+                                                />
+                                            </RowData>
                                             <RowData center>
                                                 {item.status ===
                                                     "FOR APPROVAL" && (

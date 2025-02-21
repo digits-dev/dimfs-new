@@ -182,7 +182,7 @@ const useThemeStyles = (theme) => {
             "bg-skin-white": "bg-skin-white-light"
         },
         borderTheme: {
-            'bg-skin-blue': 'border-teal-500',
+            'bg-skin-blue': 'border-skin-blue',
             'bg-skin-blue-light': 'border-cyan-700',
             'bg-skin-yellow': 'border-yellow-500',
             'bg-skin-yellow-light': 'border-yellow-400',
@@ -192,7 +192,7 @@ const useThemeStyles = (theme) => {
             'bg-skin-purple-light': 'border-fuchsia-400',
             'bg-skin-red': 'border-red-500',
             'bg-skin-red-light': 'border-red-400',
-            'bg-skin-black': 'border-black',
+            'bg-skin-black': 'border-gray-300',
             'bg-skin-black-light': 'border-black',
             'bg-skin-white': 'border-blue-300',
         },
@@ -257,7 +257,57 @@ const useThemeStyles = (theme) => {
             'bg-skin-black': 'scrollbar-thumb-gray-900',
             'bg-skin-black-light': 'scrollbar-thumb-gray-800',
             'bg-skin-white': 'scrollbar-thumb-sky-700',
-        }
+        },
+
+        bulkActionTextColor: {
+            'bg-skin-blue': 'text-skin-blue',
+            'bg-skin-blue-light': 'text-skin-blue-light',
+            'bg-skin-yellow': 'text-skin-yellow',
+            'bg-skin-yellow-light': 'text-skin-yellow-light',
+            'bg-skin-green': 'text-green',
+            'bg-skin-green-light': 'text-green-light',
+            'bg-skin-purple': 'text-purple',
+            'bg-skin-purple-light': 'text-purple-light',
+            'bg-skin-red': 'text-red',
+            'bg-skin-red-light': 'text-red-light',
+            'bg-skin-black': 'text-gray-300',
+            'bg-skin-black-light': 'text-black',
+            'bg-skin-white': 'text-black',
+        },
+
+        bulkActionTextColor: {
+            'bg-skin-blue': 'text-skin-blue',
+            'bg-skin-blue-light': 'text-skin-blue-light',
+            'bg-skin-yellow': 'text-skin-yellow',
+            'bg-skin-yellow-light': 'text-skin-yellow-light',
+            'bg-skin-green': 'text-green',
+            'bg-skin-green-light': 'text-green-light',
+            'bg-skin-purple': 'text-purple',
+            'bg-skin-purple-light': 'text-purple-light',
+            'bg-skin-red': 'text-red',
+            'bg-skin-red-light': 'text-red-light',
+            'bg-skin-black': 'text-gray-300',
+            'bg-skin-black-light': 'text-black',
+            'bg-skin-white': 'text-black',
+        },
+
+        bulkActionCancelButtonColor: {
+            'bg-skin-blue': 'bg-gray-200',
+            'bg-skin-blue-light': 'bg-gray-200',
+            'bg-skin-yellow': 'bg-gray-200',
+            'bg-skin-yellow-light': 'bg-gray-200',
+            'bg-skin-green': 'bg-gray-200',
+            'bg-skin-green-light': 'bg-gray-200',
+            'bg-skin-purple': 'bg-gray-200',
+            'bg-skin-purple-light': 'bg-gray-200',
+            'bg-skin-red': 'bg-gray-200',
+            'bg-skin-red-light': 'bg-gray-200',
+            'bg-skin-black': 'bg-gray-200',
+            'bg-skin-black-light': 'bg-gray-200',
+            'bg-skin-white': 'bg-gray-200',
+        },
+
+
 
     };
 
@@ -278,7 +328,9 @@ const useThemeStyles = (theme) => {
         secondaryHoverBorderTheme: styles.secondaryHoverBorderTheme[theme],
         calendarDateTimeColor: styles.calendarDateTimeColor[theme],
         iconThemeColor: styles.iconThemeColor[theme],
-        scrollbarTheme: styles.scrollbarTheme[theme]
+        scrollbarTheme: styles.scrollbarTheme[theme],
+        bulkActionTextColor: styles.bulkActionTextColor[theme],
+        bulkActionCancelButtonColor: styles.bulkActionCancelButtonColor[theme],
     };
 };
 

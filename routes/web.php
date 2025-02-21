@@ -218,6 +218,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('item_master_approvals')->group(function() {
         Route::get('/approval_view/{action}/{id}', [ItemMasterApprovalsController::class, 'approvalView']);
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
+        Route::post('/bulk_action', [ItemMasterApprovalsController::class, 'bulkActions']);
     });
    
     

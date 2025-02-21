@@ -224,5 +224,13 @@ class ItemMasterApprovalsController extends Controller
 		}
     }
 
+    public function bulkActions(Request $request){
+
+
+    
+        return back()->with(['message' => 'Item Approval Success', 'type' => 'success']);
+    
+    }
+
     
 }
