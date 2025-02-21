@@ -224,6 +224,7 @@ class ItemMastersController extends Controller
                 [
                     'item_values' => $itemValues,
                     'action' => 'UPDATE',
+                    'status' => 'FOR APPROVAL',
                     'item_master_id' => $request->id,
                 ]
             );
