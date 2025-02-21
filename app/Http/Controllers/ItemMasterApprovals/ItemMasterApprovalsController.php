@@ -131,7 +131,6 @@ class ItemMasterApprovalsController extends Controller
     
     public function approval(Request $request)
     {
-        // dd(Counters::getCode('item_masters', 'Code 1'));
         $approval = ItemMasterApproval::find($request->id);
     
         if (!$approval) {
@@ -140,6 +139,7 @@ class ItemMasterApprovalsController extends Controller
     
         $itemValues = json_decode($approval->item_values, true) ?? [];
         $validColumns = Schema::getColumnListing('item_masters');
+        
         // Reject
         if ($request->action !== 'approve') {
             $approval->update([
@@ -159,68 +159,66 @@ class ItemMasterApprovalsController extends Controller
         $itemMasterData['approved_by'] = CommonHelpers::myId();
         $itemMasterData['approved_at'] = now();
         
-        $digits_code = $this->generateItemCode(
-            $itemValues['categories_id'],
-            $itemValues['inventory_types_id'],
-            $itemValues['vendor_types_id']
-        ) + 1;
-    
-        $itemValues['digits_code']      = $digits_code;
-        $itemMasterData['digits_code']  = $digits_code;
-        
-        $approval->update([
-            'item_values' => json_encode($itemValues),
+            // Generate digits code only if item_master_id is null
+        $updateData = [
             'status'      => 'APPROVED',
             'approved_by' => CommonHelpers::myId(),
             'approved_at' => now(),
-        ]);
+        ];
+        
+        // If item_master_id is null, generate a new digits_code and include item_values
+        if (is_null($approval->item_master_id)) {
+            $digits_code = $this->getDigitsCode(
+                $itemValues['categories_id'],
+                $itemValues['inventory_types_id'],
+                $itemValues['vendor_types_id']
+            );
     
-        ItemMaster::updateOrCreate(
+            $itemMasterData['digits_code']  = $digits_code['counter_code'];
+            $itemValues['digits_code']      = $digits_code['counter_code'];
+            $updateData['item_values'] = json_encode($itemValues);
+
+            // Increment the counter
+            Counters::incrementCode('item_masters', $digits_code['code_identifier']);
+        }
+
+        $itemMaster = ItemMaster::updateOrCreate(
             ['id' => $approval->item_master_id],
             $itemMasterData
         );
-    
+        
+        $updateData['item_master_id'] = $itemMaster->id;
+        $approval->update($updateData);
+
         return redirect('/item_master_approvals')->with(['message' => 'New item inserted successfully!', 'type' => 'success']);
     }
     
-    public function generateItemCode($categories_id, $inventory_types_id, $vendor_types_id) {
 
-        $data=[
-            'categories_id' => $categories_id,
-            'inventory_types_id' => $inventory_types_id,
-            'vendor_types_id' => $vendor_types_id
-        ];
-        return $this->getDigitsCode($data);
-        
-    }
+    public function getDigitsCode($categories_id, $inventory_types_id, $vendor_types_id) {
 
-
-    public function getDigitsCode($params) {
-
-        $category_code = Categories::getCodeById($params['categories_id']);
-		$inventory_type_code = InventoryTypes::getCodeById($params['inventory_types_id']);
-		$vendor_type_code = VendorTypes::getCodeById($params['vendor_types_id']);
+        $category_code = Categories::getCodeById($categories_id,);
+		$inventory_type_code = InventoryTypes::getCodeById($inventory_types_id);
+		$vendor_type_code = VendorTypes::getCodeById($vendor_types_id);
 
 		if($category_code == 'SPR') {
-			return Counters::getCode('item_master','code_2');
+			return Counters::getCode('item_masters','code_2');
 		}
 		elseif(in_array($category_code,['DEM','SAM'])) {
-            // dd(Counters::getCode('item_masters', 'Code 9'));
 			return Counters::getCode('item_masters', 'Code 9');
 		}
 		elseif(in_array($category_code,['MKT','PPB','OTH'])) {
-			return Counters::getCode('code_3');
+			return Counters::getCode('item_masters','Code 3');
 		}
 		else {
 			if($inventory_type_code == 'N-TRADE') {
-				return Counters::getCode('code_3');
+                return Counters::getCode('item_masters','Code 3');
 			}
 			else {
 				if(in_array($vendor_type_code,['IMP-OUT','LR-OUT','LOC-OUT'])) {
-					return Counters::getCode('code_8');
+                    return Counters::getCode('item_masters','Code 8');
 				}
 				elseif(in_array($vendor_type_code,['IMP-CON','LOC-CON','LR-CON'])){
-					return Counters::getCode('code_7');
+                    return Counters::getCode('item_masters','Code 7');
 				}
 			}
 		}

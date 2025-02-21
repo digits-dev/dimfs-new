@@ -115,11 +115,19 @@ class Counters extends Model
 
     public function scopeGetCode($query, $module_name, $code_identifier) {
         return $query->where('adm_module_id', self::getItemModuleId($module_name))->where('code_identifier', $code_identifier)
-        ->pluck('counter_code')->first();
+        ->select('counter_code', 'code_identifier')
+        ->first();
     }
     
-    public function getItemModuleId($module_name){
+    public static function getItemModuleId($module_name) {
         return AdmModules::where('table_name', $module_name)->value('id');
     }
-
+    
+    public static function incrementCode($module_name, $code_identifier) {
+        return self::where('adm_module_id', self::getItemModuleId($module_name))
+            ->where('code_identifier', $code_identifier)
+            ->increment('counter_code');
+    }
+    
+    
 }

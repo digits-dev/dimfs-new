@@ -215,7 +215,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export', [ItemMastersController::class, 'export']);
     });
    
-    Route::prefix('item_masters_approval')->group(function() {
+    Route::prefix('item_master_approvals')->group(function() {
         Route::get('/approval_view/{action}/{id}', [ItemMasterApprovalsController::class, 'approvalView']);
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
     });

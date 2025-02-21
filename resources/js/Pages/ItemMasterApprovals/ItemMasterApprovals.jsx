@@ -158,7 +158,7 @@ const ItemMasterApprovals = ({
                                                         action="edit"
                                                         onClick={() =>
                                                             router.get(
-                                                                `/item_masters_approval/approval_view/approval/${item.id}`
+                                                                `/item_master_approvals/approval_view/approval/${item.id}`
                                                             )
                                                         }
                                                     />
@@ -169,7 +169,7 @@ const ItemMasterApprovals = ({
                                                     action="view"
                                                     onClick={() =>
                                                         router.get(
-                                                            `/item_masters_approval/approval_view/view/${item.id}`
+                                                            `/item_master_approvals/approval_view/view/${item.id}`
                                                         )
                                                     }
                                                 />

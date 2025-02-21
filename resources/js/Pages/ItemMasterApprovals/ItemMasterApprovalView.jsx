@@ -37,7 +37,7 @@ const ItemMasterApprovalView = ({
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                post("/item_masters_approval/approval", {
+                post("/item_master_approvals/approval", {
                     onSuccess: (data) => {
                         const { message, type } = data.props.auth.sessions;
                         handleToast(message, type);
@@ -76,7 +76,7 @@ const ItemMasterApprovalView = ({
                         <div className="flex justify-between mt-4">
                             <Button
                                 type="link"
-                                href="/item_masters_approval"
+                                href="/item_master_approvals"
                                 extendClass={`${
                                     theme === "bg-skin-white"
                                         ? primayActiveColor
@@ -93,11 +93,7 @@ const ItemMasterApprovalView = ({
                                         onClick={() =>
                                             setData("action", "reject")
                                         }
-                                        extendClass={`${
-                                            theme === "bg-skin-white"
-                                                ? primayActiveColor
-                                                : theme
-                                        }`}
+                                        extendClass={"bg-red-500 border-none"}
                                         fontColor={textColorActive}
                                         disabled={processing}
                                     >
@@ -118,11 +114,7 @@ const ItemMasterApprovalView = ({
                                         onClick={() =>
                                             setData("action", "approve")
                                         }
-                                        extendClass={`${
-                                            theme === "bg-skin-white"
-                                                ? primayActiveColor
-                                                : theme
-                                        }`}
+                                        extendClass={"bg-green-500 border-none"}
                                         fontColor={textColorActive}
                                         disabled={processing}
                                     >
