@@ -46,7 +46,7 @@ class DashboardController extends Controller
                 'href' => '/item_masters',
             ],
             [
-                'value' => Brands::count(),
+                'value' => Brands::where('status', 'ACTIVE')->count(),
                 'label' => 'Brands',
                 'sublabel' => 'Active Brands',
                 'icon' => $brandsIcon,
@@ -54,7 +54,7 @@ class DashboardController extends Controller
                 'href' => '/brands',
             ],
             [
-                'value' => Classifications::count(),
+                'value' => Classifications::where('status', 'ACTIVE')->count(),
                 'label' => 'Classes',
                 'sublabel' => 'Active Classes',
                 'icon' => $classIcon,
@@ -62,7 +62,7 @@ class DashboardController extends Controller
                 'href' => '/classifications',
             ],
             [
-                'value' => SubClassifications::count(),
+                'value' => SubClassifications::where('status', 'ACTIVE')->count(),
                 'label' => 'Sub Classes',
                 'sublabel' => 'Active Sub Classes',
                 'icon' => $subClassIcon,
