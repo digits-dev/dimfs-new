@@ -7,6 +7,7 @@ const BreadCrumbs = ({data, title}) => {
     const {theme} = useTheme();
     const { iconThemeColor, primayActiveColor } = useThemeStyles(theme);
     const [icon, setIcon] = useState(null);
+    
     useEffect(() => {   
         if ((data.module[0].name ?? title) === 'Dashboard') {
             setIcon('chart-simple');

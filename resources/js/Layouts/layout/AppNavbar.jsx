@@ -383,7 +383,7 @@ const AppNavbar = () => {
                                         <img
                                             src={`/images/profile/`+(profile ?? auth.profile.file_name)}
                                             alt="User Avatar"
-                                            className="w-20 h-20 border-2 border-gray-400 rounded-full object-cover"
+                                            className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"
                                         />
                                     ) : (
                                         <div
@@ -394,7 +394,7 @@ const AppNavbar = () => {
                                             </p>
                                         </div>
                                     )}
-                                    <p className={`font-poppins ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
+                                    <p className={`flex-1 font-poppins ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
                                         <span className="font-semibold text-[15px]">{auth.user.name}</span>
                                         <span className="text-[13px]"> {auth.user.email}</span>
                                     </p>

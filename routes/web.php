@@ -139,8 +139,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update-theme', [ProfilePageController::class, 'updateTheme'])->name('update-theme');
 
     //CHANGE PASSWORD
-    Route::get('/change_password', [ChangePasswordController::class, 'getIndex'])->name('change_password');
-    Route::post('/postChangePassword', [AdminUsersController::class, 'postUpdatePassword'])-> name('postChangePassword');
+    
+    Route::prefix('change_password')->group(function() {
+        Route::get('/', [ChangePasswordController::class, 'getIndex'])->name('change_password');
+        Route::post('/update', [ChangePasswordController::class, 'changePassword'])-> name('changePassword');
+    });
 
     //PRIVILEGES
     Route::get('privileges/create-privileges', [PrivilegesController::class, 'createPrivilegesView'])->name('create-privileges');

@@ -1,38 +1,32 @@
-import React from "react";
+import React from 'react'
+import LoginInputTooltip from '../Tooltip/LoginInputTooltip'
 
-const InputWithLogo = ({
-    label,
-    type,
-    placeholder,
-    onChange,
-    value,
-    logo,
-    marginBottom = 0,
-    marginTop,
-    name,
-}) => {
-    return (
-        <>
-            <div className={`mb-${marginBottom} mt-${marginTop}`}>
-                <label className="font-poppins font-semibold">
-                    {label}
-                </label>
-                <div className="border-2 border-black rounded-[10px] overflow-hidden flex items-center mt-2">
-                    <div className="border-r-2 h-full p-[10px] border-black">
-                        <img src={logo} className="w-[22px] h-[22px]" />
-                    </div>
-                    <input
-                        name={name}
-                        className="flex-1 mx-2 outline-none"
-                        type={type}
-                        value={value}
-                        placeholder={placeholder}
-                        onChange={onChange}
-                    />
-                </div>
-            </div>
-        </>
-    );
-};
+const InputWithLogo = ({title, value, name, icon, type, placeholder, onError, onChange, addMainClass, addTitleClass, addInputClass}) => {
+  return (
+    <div className={`w-full font-open-sans text-sm md:text-base ${addMainClass} relative`}>
+        {title && 
+          <p className={`text-xs md:text-base mb-1 font-semibold ${addTitleClass} `}>{title}</p>
+        }
+        <div className={`flex items-center relative border ${onError ? 'border-red-600' : 'border-accent'} overflow-hidden rounded-md md:rounded-lg md:border-2`}>
+          <i className={`${icon} px-3 h-full ${onError ? 'text-red-600' : 'text-accent'} `}></i>
+          <input 
+              className={`px-2 border-l md:border-l-2 ${onError ? 'border-red-600' : 'border-accent' } py-1 bg-transparent w-full outline-none placeholder:text-gray-400 md:px-3 md:py-2 placeholder:font-parkinsans placeholder:text-xs md:placeholder:text-base  ${addInputClass}`} 
+              placeholder={placeholder}
+              name={name}
+              value={value}
+              onChange={onChange}
+              type={type}
+          />
+          {onError && 
+            <LoginInputTooltip content={onError}>
+              <i
+                className="fa-solid fa-circle-info text-red-600 absolute cursor-pointer top-1/2 text-xs md:text-base right-1.5 md:right-3 transform -translate-y-1/2">
+              </i>
+            </LoginInputTooltip>
+          }
+          </div> 
+    </div>
+  )
+}
 
-export default InputWithLogo;
+export default InputWithLogo

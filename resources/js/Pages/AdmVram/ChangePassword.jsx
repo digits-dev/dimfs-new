@@ -1,334 +1,199 @@
 import React, { useContext, useEffect, useState } from 'react';
-import AppContent from '../../Layouts/layout/AppContent';
 import ContentPanel from '../../Components/Table/ContentPanel';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
+import AnimationData from '../../../../public/Animations/changepass-anim.json'
 import InputWithLogo from '../../Components/Forms/InputWithLogo';
-import TableButton from '../../Components/Table/Buttons/TableButton';
-import axios from 'axios';
 import { useToast } from '../../Context/ToastContext';
 import { useTheme } from '../../Context/ThemeContext';
-import useSwalColor from "../../Hooks/useThemeSwalColor";
-import useThemeSwalColor from '../../Hooks/useThemeSwalColor';
-import InputComponentPassword from '../../Components/Forms/InputPassword';
 import { NavbarContext } from '../../Context/NavbarContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
+import Lottie from 'lottie-react';
+import CheckboxWithText from '../../Components/Checkbox/CheckboxWithText';
+import Modalv2 from '../../Components/Modal/Modalv2';
+import Buttonv2 from '../../Components/Table/Buttons/Buttonv2';
+
 const ChangePassword = () => {
-    const { auth, csrf_token } = usePage().props;
+
     const {theme} = useTheme();
     const { textColor, primayActiveColor } = useThemeStyles(theme);
     const { handleToast } = useToast();
-    const swalColor = useThemeSwalColor(theme);
     const { setTitle } = useContext(NavbarContext);
-    const [showModal, setShowModal] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(true);
-    const [passwordMismatch, setPasswordMismatch] = useState(false);
-    const [isExistPassword, setIsExistPassword] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [forms, setForms] = useState({
-        current_password: '',
-        new_password: '',
-        confirm_password: ''
-    });
 
-    const [isVerified, setIsVerified] = useState(false);
-    const [verificationError, setVerificationError] = useState('');
-    const [activeText, setActiveText] = useState({
-        Uppercase: false,
-        Length: false,
-        Number: false,
-        Character: false
-    });
+    const [isChecked, setIsChecked] = useState(false);
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
-    const [isPasswordQwerty, setIsPasswordQwerty] = useState(false);
-    const [checkCountWaive, setCheckCountWaive] = useState(false);
     useEffect(() => {
         setTimeout(()=>{
             setTitle("Change Password");
         },5);
     }, []);
-    useEffect(() => {
-        const checkPassword = async () => {
-            try {
-            // Replace this URL with your actual API endpoint
-            const response = await axios.post('/check-password', {
-                current_password: 'qwerty', // This is the plain-text password to check
-            });
-            // Assuming your API returns a boolean indicating if the password is correct
-            setIsPasswordQwerty(response.data.success);
-            } catch (error) {
-                handleToast('An error occurred while connecting server', 'error');
-            }
-        };
-        checkPassword();
-    }, []);
-    // Check if the passwords match and validate form
-    useEffect(() => {
-        validateInputs();
-    }, [forms]);
 
-    // Show modal when user needs to change password
-    useEffect(() => {
-        if (auth.check_user) {
-            setShowModal(true);
-        }
-    }, [auth.check_user]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForms(prevForms => ({
-            ...prevForms,
-            [name]: value
-        }));
+    
+    const handleCheckboxClick = () => {
+        setIsChecked(!isChecked);
     };
 
-    // Validate inputs for password match and required fields
-    const validateInputs = () => {
-        let isValid = true;
+    const [passwordStrength, setPasswordStrength] = useState('');
+    const [isUpperCase, setIsUpperCase] = useState(false);
+    const [isLowerCase, setIsLowerCase] = useState(false);
+    const [isCorrectLength, setIsCorrectLength] = useState(false);
+    const [isSpecialChar, setIsSpecialChar] = useState(false);
+    const [isNumber, setIsNumber] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
 
-        const textActive = checkPasswordTextActive(forms.new_password);
+    const { data, setData, processing, reset, post, errors } = useForm({
+        current_password: "",
+        new_password: "",
+        confirm_password: "",
+    });
 
-        setActiveText({
-            Uppercase: textActive.includes('Uppercase'),
-            Length: textActive.includes('Length'),
-            Number: textActive.includes('Number'),
-            Character: textActive.includes('Character')
-        });
+    const handlePasswordChange = (e) => {
+
+
+    const newPassword = e.target.value;
+        setData("new_password", newPassword);
+        setPasswordStrength(checkPasswordStrength(newPassword));
+    };[]
+
+    const handleSubmit = (e) =>{
+        post("change_password/update", {
+          onSuccess: (data) => {
+              const { message, type } = data.props.auth.sessions;
+              handleToast(message, type)
+              setTimeout(() => router.post('logout'), 3000);
+          },
+          onError: (newErrors) => {
+              console.log(newErrors);
+          }
+      }); 
+    }
+
+    const checkPasswordStrength = (password) => {
+        let strength = 0;
+    
+        // 8 characters
+        setIsCorrectLength(password.length >= 8);
+        strength += password.length >= 8 ? 1 : 0;
+    
+        // is Uppercase
+        setIsUpperCase(/[A-Z]/.test(password));
+        strength += /[A-Z]/.test(password) ? 1 : 0;
         
-        const passwordChecks = {
-            weak: false,
-            strong: false,
-            excellent: false
-        };
-
-        // Check password length, case, digits, and special characters independently
-        if (forms.new_password) {
-            // Check criteria for Weak
-            if (forms.new_password.length > 0 && forms.new_password.length < 6) {
-                passwordChecks.weak = true;
-            }
-
-            // Check criteria for Strong
-            const hasLowerCase = /[a-z]/.test(forms.new_password);
-            const hasNumber = /\d/.test(forms.new_password);
-            if (forms.new_password.length >= 6 && hasLowerCase && hasNumber) {
-                passwordChecks.strong = true;
-            }
-
-            // Check criteria for Excellent
-            const hasUpperCase = /[A-Z]/.test(forms.new_password);
-            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>;]/.test(forms.new_password);
-            if (forms.new_password.length >= 8 && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar) {
-                passwordChecks.excellent = true;
-            }
-            passwordChecks.weak = true;
+        // is Lowercase
+        setIsLowerCase(/[a-z]/.test(password));
+        strength += /[a-z]/.test(password) ? 1 : 0;
+        
+        // is Number
+        setIsNumber(/[0-9]/.test(password));
+        strength += /[0-9]/.test(password) ? 1 : 0;
+        
+        // is Special Char
+        setIsSpecialChar(/[^A-Za-z0-9]/.test(password));
+        strength += /[^A-Za-z0-9]/.test(password) ? 1 : 0;
+    
+        if (strength == 5){
+            setIsDisabled(false)
         }
-
-        // Now update `isExistPassword` based on the passwordChecks object
-        setIsExistPassword(() => {
-            const updatedPasswordStates = [];
-            if (passwordChecks.weak) {
-                updatedPasswordStates.push('Weak');
-            }
-            if (passwordChecks.strong) {
-                updatedPasswordStates.push('Strong');
-            }
-            if (passwordChecks.excellent) {
-                updatedPasswordStates.push('Excellent');
-            }
-            return updatedPasswordStates;
-        });
-
-        // Ensure "Submit" is only enabled if password is "Excellent"
-        if (!passwordChecks.excellent) {
-            isValid = false;
+        else {
+            setIsDisabled(true)
         }
-
-        if (forms.new_password !== forms.confirm_password) {
-            setPasswordMismatch(true);
-            isValid = false;
-        } else {
-            setPasswordMismatch(false);
-        }
-
-        // Check if any form field is empty
-        Object.values(forms).forEach(val => {
-            if (!val) {
-                isValid = false;
-            }
-        });
-
-        setIsDisabled(!isValid);
+    
+        return (strength / 5) * 100;
     };
 
-    const checkPasswordTextActive = (password) => {
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasNumber = /\d/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>;]/.test(password);
-
-        const allCharacters = [];
-
-        if (hasUpperCase) allCharacters.push('Uppercase');
-        if (password.length >= 8) allCharacters.push('Length');
-        if (hasNumber) allCharacters.push('Number');
-        if (hasSpecialChar) allCharacters.push('Character');
-
-        return allCharacters;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Proceed with password change if the current password is verified
-        if (isDisabled) return; // Check if the form is disabled
-        setLoading(true);
-        try {
-            const response = await axios.post('/save-change-password', {
-                current_password: forms.current_password,
-                new_password: forms.new_password,
-                confirm_password: forms.confirm_password
-            });
-
-            if (response.data.status === 'success') {
-                Swal.fire({
-                    type: response.data.status,
-                    title: response.data.message,
-                    icon: response.data.status,
-                    confirmButtonColor: swalColor,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        setShowModal(false);
-                        setTimeout(() => router.post('logout'), 3000);
-                    }
-                });
-            } else {
-                Swal.fire({
-                    type: response.data.status,
-                    title: response.data.message,
-                    icon: response.data.status,
-                    confirmButtonColor: swalColor,
-                });
-            }
-        } catch (error) {
-            Swal.fire({
-                type: 'error',
-                title: 'An error occurred while changing the password',
-                icon: 'error',
-                confirmButtonColor: swalColor,
-            });
-        } finally {
-            setLoading(false);
-        }
-       
-    };
 
     return (
         <>
             <Head title="Change Password" />
-                <ContentPanel>
-                    <Link
-                        href="dashboard"
-                        className="font-poppins text-red-500 font-semibold"
-                    >
-                        Go to Dashboard
-                    </Link>
-                    <form
-                        onSubmit={handleSubmit}
-                        className="flex justify-center my-8 font-poppins gap-x-16 gap-y-5 items-center flex-wrap m-5"
-                    >
-                        <img
-                            src="images/others/changepass-image.png"
-                            className="w-80"
+            <ContentPanel>
+                <div className={`flex flex-col md:flex-row h-full py-10 md:p-0 font-parkinsans select-none ${textColor}`}>
+                    <div className='flex items-center justify-center flex-1 md:ml-10'>
+                        <Lottie animationData={AnimationData} className='w-full h-full max-w-48 max-h-48 md:max-w-[26rem] md:max-h-[26rem]' style={{background: 'transparent'}}/>
+                    </div>
+                    <form className='p-5 md:p-10 mt-5 md:mt-0 flex-1' onSubmit={handlePasswordChange}>
+                        <div className='border-2 border-accent2 border-dashed rounded-xl p-5 md:p-10 flex flex-col h-full  md:w-[500px]'>
+                        <p className="mb-5 text-[10px] md:text-sm"><span className="text-red-500 font-bold mr-1"> Note: </span>If you would like to update your account password, please provide your current password, followed by your new desired password. To confirm the change, kindly re-enter the new password to ensure accuracy and completion of the update process.</p>
+                        <InputWithLogo 
+                            title="Current Password" 
+                            icon="fa-solid fa-lock"
+                            placeholder="Enter Current Password"
+                            onError={errors.current_password} 
+                            onChange={(e) =>
+                            setData("current_password", e.target.value)
+                            }
+                            type={isChecked ? 'text' : 'password'}
+                            value={data.current_password}
                         />
-                        <div className="max-w-md">
-                            <p className={`mb-5 ${theme === 'bg-skin-black' ? ' text-gray-300' : ''}`}>
-                                If you wish to change the account password,
-                                kindly fill in the current password, new
-                                password, and re-type new password.
-                            </p>
-
-                            <div className="flex flex-col mb-3 w-full">
-                                <InputComponentPassword   
-                                    name="current_password"
-                                    value={forms.current_password}
-                                    onChange={handleChange}
-                                    placeholder="Enter Current Password"
-                                    logo="images/login-page/password-icon.png"
-                                    // onBlur={verifyCurrentPassword} // Trigger verification when the input loses focus
-                                />
-                                {verificationError && (
-                                    <div className="text-red-600">
-                                        <i className="fa fa-warning"></i> {verificationError}
+                        <InputWithLogo 
+                            title="New Password" 
+                            icon="fa-solid fa-lock"
+                            placeholder="Enter New Password"
+                            onError={errors.new_password}
+                            addMainClass="mt-2"
+                            onChange={handlePasswordChange}
+                            type={isChecked ? 'text' : 'password'}
+                            value={data.new_password}
+                        />
+                        {data.new_password && (
+                                <div className="mt-3">
+                                    <div className="relative w-full h-1.5 md:h-3 bg-gray-200 rounded">
+                                        <div
+                                            className={`absolute top-0 left-0 h-full rounded transition-all ${passwordStrength < 40 ? 'bg-red-500': passwordStrength < 70 ? 'bg-yellow-400': 'bg-green-500'}`}
+                                            style={{
+                                                width: `${passwordStrength}%`
+                                            }}
+                                        ></div>
                                     </div>
-                                )}
-                            </div>
-                            <div className="flex flex-col mb-3 w-full">
-                                <InputComponentPassword   
-                                    name="new_password"
-                                    value={forms.new_password}
-                                    onChange={handleChange}
-                                    placeholder="Enter New Password"
-                                    logo="images/login-page/password-icon.png"
-                                />
-                                <div className={`flex items-center justify-between w-full p-1 ${theme === 'bg-skin-black' ? theme+' text-gray-300' : 'bg-white'} border border-gray-300 rounded-lg mt-1`}>
-                                    {/* Step 1 */}
-                                    <div className="flex flex-col items-center w-1/3 p-2">
-                                        <div className={isExistPassword.includes('Weak') ? `w-full h-1 bg-red-600` : `w-full h-1 bg-gray-200`}></div>
-                                        <div className="flex items-center mt-2 space-x-2">
-                                            <span className={isExistPassword.includes('Weak')  ? `text-sm text-red-600` : `text-sm text-gray-400`}>Weak</span>
-                                        </div>
+                                    <div className="text-xs mt-1">
+                                        {passwordStrength < 40
+                                            ? 'Weak Password'
+                                            : passwordStrength < 70
+                                            ? 'Medium Password'
+                                            : 'Strong Password'}
                                     </div>
-
-                                    {/* Step 2 */}
-                                    <div className="flex flex-col items-center w-1/3 p-2">
-                                        <div className={isExistPassword.includes('Strong') ? `w-full h-1 bg-orange-600` : `w-full h-1 bg-gray-200`}></div>
-                                        <div className="flex items-center mt-2 space-x-2">
-                                            <span className={isExistPassword.includes('Strong') ? `text-sm text-orange-600` : `text-sm text-gray-400`}>Strong</span>
-                                        </div>
+                                    <div className="text-xs mt-1 text-gray-500">
+                                        <div className={`${isUpperCase && 'text-green-500'}`}><i className={`${isUpperCase ? 'fa-solid fa-check' : 'fa-solid fa-circle-info text-xs'} mr-1`}></i><span className='text-[10px] md:text-xs'>Must include at least one uppercase letter</span></div>
+                                        <div className={`${isLowerCase && 'text-green-500'}`}><i className={`${isLowerCase ? 'fa-solid fa-check' : 'fa-solid fa-circle-info text-xs'} mr-1`}></i><span className='text-[10px] md:text-xs'>Must include at least one uppercase letter</span></div>
+                                        <div className={`${isCorrectLength && 'text-green-500'}`}><i className={`${isCorrectLength ? 'fa-solid fa-check' : 'fa-solid fa-circle-info text-xs'} mr-1`}></i><span className='text-[10px] md:text-xs'>Minimum length of 8 characters</span></div>
+                                        <div className={`${isSpecialChar && 'text-green-500'}`}><i className={`${isSpecialChar ? 'fa-solid fa-check' : 'fa-solid fa-circle-info text-xs'} mr-1`}></i><span className='text-[10px] md:text-xs'>Must include at least one special character (e.g., @$;!%*#?&)</span></div>
+                                        <div className={`${isNumber && 'text-green-500'}`}><i className={`${isNumber ? 'fa-solid fa-check' : 'fa-solid fa-circle-info text-xs'} mr-1`}></i><span className='text-[10px] md:text-xs'>Must contain at least one number</span></div>
                                     </div>
-
-                                    {/* Step 3 */}
-                                    <div className="flex flex-col items-center w-1/3 p-2">
-                                        <div className={isExistPassword.includes('Excellent') ? `w-full h-1 bg-green-600` : `w-full h-1 bg-gray-200`}></div>
-                                        <div className="flex items-center mt-2 space-x-2">
-                                        <span className={isExistPassword.includes('Excellent') ? `text-sm text-green-600` : `text-sm text-gray-400`}>Excellent</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="password-criteria mb-2">
-                                <p id="textUppercase" className={activeText.Uppercase ? 'text-green-600 text-sm' : 'text-sm text-gray-500'}>Password contains an uppercase letter</p>
-                                <p id="textLength" className={activeText.Length ? 'text-green-600 text-sm' : 'text-sm text-gray-500'}>Password is at least 8 characters long</p>
-                                <p id="textNumber" className={activeText.Number ? 'text-green-600 text-sm' : 'text-sm text-gray-500'}>Password contains a number</p>
-                                <p id="textChar" className={activeText.Character ? 'text-green-600 text-sm' : 'text-sm text-gray-500'}>Password contains a special character</p>
-                            </div>
-                            <div className="flex flex-col mb-3 w-full">
-                                <InputComponentPassword   
-                                    name="confirm_password"
-                                    value={forms.confirm_password}
-                                    onChange={handleChange}
-                                    placeholder="Confirm New Password"
-                                    logo="images/login-page/password-icon.png"
-                                />
-                            </div>
-                            {passwordMismatch && (
-                                <div id="pass_not_match" className="text-red-600">
-                                <i className='fa fa-warning'></i> Passwords do not match.
                                 </div>
                             )}
-        
-                            <div className="flex justify-end">
-                                <TableButton 
-                                    disabled={isDisabled} 
-                                    fontColor={theme === 'bg-skin-white' ? 'text-white' : textColor} 
-                                    extendClass={theme === 'bg-skin-white' ? primayActiveColor : theme} 
-                                    type="submit"
-                                >
-                                   <i className='fa fa-key'></i> {loading ? "Changing..." : "Change password"}
-                                </TableButton>
-                            </div>
+                        <InputWithLogo 
+                            title="Confirm Password" 
+                            icon="fa-solid fa-lock"
+                            placeholder="Confirm New Password"
+                            onError={errors.confirm_password}
+                            addMainClass="mt-2"
+                            onChange={(e) =>
+                            setData("confirm_password", e.target.value)
+                            }
+                            type={isChecked ? 'text' : 'password'}
+                            value={data.confirm_password}
+                        />
+                        <CheckboxWithText
+                            id="custom-checkbox"         
+                            type="checkbox"             
+                            name="exampleCheckbox"
+                            textColor={textColor}
+                            handleClick={handleCheckboxClick} 
+                            isChecked={isChecked}        
+                            disabled={false}   
+                            addMainClass="justify-end mt-2"         
+                        />
+                        <Buttonv2 name="Change Password" addClass="w-full !p-3 mt-2" onClick={()=>{setOpenConfirmModal(true)}} disabled={isDisabled || processing}/>
                         </div>
                     </form>
-                </ContentPanel>
+                    <Modalv2 
+                        isOpen={openConfirmModal} 
+                        setIsOpen={setOpenConfirmModal}
+                        title="Confirm Password Change"
+                        content="Are you sure you want to change your password? This action cannot be undone"
+                        onConfirm={handleSubmit}
+                    />
+                </div>
+            </ContentPanel>
         </>
     );
 };
