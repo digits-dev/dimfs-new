@@ -470,16 +470,6 @@ const AppNavbar = () => {
                             />
                         </label>
                         <label className="flex items-center justify-between space-x-2">
-                            <span className={`${textColor}`}>Light mode</span>
-                            <input
-                                type="radio"
-                                name="theme"
-                                value="skin-white"
-                                onChange={handleRadioInput}
-                                className="form-radio h-5 w-5 text-blue-600 ml-auto"
-                            />
-                        </label>
-                        <label className="flex items-center justify-between space-x-2">
                             <span className={`${textColor}`}>System default</span>
                             <input
                                 type="radio"
