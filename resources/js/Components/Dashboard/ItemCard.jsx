@@ -17,6 +17,7 @@ const ItemCard = ({title = "Sample Title", data, create_data, update_data }) => 
               icon={item.icon}
               gradient={item.gradient}
               href={item.href}
+              total={item.total}
             />
           ))}
         </div>
