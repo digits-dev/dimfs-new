@@ -65,13 +65,13 @@ const Tooltip = ({ children, text, extendClass, arrow = 'left' }) => {
           className={`relative ${text ? 'flex items-center' : ''}`}
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
-          style={{ overflow: 'visible', zIndex: 40 }}
+          style={{ overflow: 'visible', zIndex: 100 }}
         >
           {children}
           {showTooltip && (
             <div
               className={`absolute ${currentArrowPosition.tooltip} ${extendClass} w-max px-2 py-[2px] ${textColor} ${tooltipColor} rounded shadow-lg text-sm`}
-              style={{ overflow: 'visible', zIndex: 40 }}
+              style={{ overflow: 'visible', zIndex: 100 }}
             >
               <div
                 className={`absolute ${currentArrowPosition.arrow}`}
@@ -86,7 +86,7 @@ const Tooltip = ({ children, text, extendClass, arrow = 'left' }) => {
           className={` relative ${text ? 'flex items-center ' : ''} w-full`}
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
-          style={{ overflow: 'visible', zIndex: 40 }}
+          style={{ overflow: 'visible', zIndex: 100 }}
         >
           {children}
         </div>

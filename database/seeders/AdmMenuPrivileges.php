@@ -283,6 +283,18 @@ class AdmMenuPrivileges extends Seeder
                 'id_adm_menus' => 67,
                 'id_adm_privileges' => 1
             ],
+            [
+                'id_adm_menus' => 68,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 69,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 70,
+                'id_adm_privileges' => 1
+            ],
         ];
 
         if (DB::table('adm_menus_privileges')->count() == 0) {

@@ -840,9 +840,31 @@ class AdmModules extends Seeder
                 'icon' => 'fa-regular fa-circle',
                 'path' => 'gashapon_item_master_approvals',
                 'table_name' => 'gashapon_item_master_approvals',
-                'controller' => 'gashapon_item_master_approvals',
+                'controller' => 'GashaponItemMasterApprovals\GashaponItemMasterApprovalsController',
                 'is_protected' => 0,
                 'is_active' => 1,
+            ],
+
+            [
+                'name' => 'Item Master History',
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'item_master_histories',
+                'table_name' => 'item_master_histories',
+                'controller' => 'ItemMasterHistories\ItemMasterHistoriesController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+
+            [
+                'name' => 'Gashapon Item Master Approval',
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'gashapon_item_master_approvals',
+                'table_name' => 'gashapon_item_master_approvals',
+                'controller' => 'GashaponItemMasterApprovals\GashaponItemMasterApprovalsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
             ],
         ];
 

@@ -1295,6 +1295,62 @@ class AdmMenus extends Seeder
                 'sorting'           => 4
             ]
         );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'History',
+            ],
+            [
+                'name'              => 'History',
+                'type'              => 'URL',
+                'path'              => '######',
+                'slug'              => NULL,
+                'color'             => NULL,
+                'icon'              => 'fa-solid fa-bars',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 9
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Item Master History',
+            ],
+            [
+                'name'              => 'Item Master History',
+                'type'              => 'Route',
+                'path'              => 'ItemMasterHistories\ItemMasterHistoriesControllerGetIndex',
+                'slug'              => 'item_master_histories',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 68,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 1
+            ]
+        );
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'Gashapon Item Master History',
+            ],
+            [
+                'name'              => 'Gashapon Item Master History',
+                'type'              => 'Route',
+                'path'              => 'GashaponItemMasterHistories\GashaponItemMasterHistoriesControllerGetIndex',
+                'slug'              => 'gashapon_item_master_histories',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 68,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 1
+            ]
+        );
     }
 
 }
