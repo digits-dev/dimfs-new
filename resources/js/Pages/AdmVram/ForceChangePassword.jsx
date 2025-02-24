@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useTheme } from '../../Context/ThemeContext';
-import Overview from '../../Components/Dashboard/Overview';
 import ChangePassModal from '../../Components/Modal/ChangePassModal';
 import InputComponentPassword from '../../Components/Forms/InputPassword';
 import axios from 'axios';
@@ -290,7 +289,6 @@ const ForceChangePassword = () => {
     return (
         <>
             <Head title="Change Password" />
-            <Overview/>
 
             <ChangePassModal
                 theme={theme === 'bg-skin-white' ? primayActiveColor : theme}

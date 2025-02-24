@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
-import Overview from "../../Components/Dashboard/Overview";
+import ContentPanel from "../../Components/Table/ContentPanel";
+import useThemeStyles from "../../Hooks/useThemeStyles";
+import { useTheme } from "../../Context/ThemeContext";
+import ItemCard from "../../Components/Dashboard/ItemCard";
 
-const Dashboard = ({ customer, orders, devices, orders_count_wdate }) => {
+const Dashboard = ({ item_master_stats, item_master_creation_counter, item_master_update_counter }) => {
     const { auth } = usePage().props;
+    const { theme } = useTheme();
+    const { textColor } = useThemeStyles(theme);
     useEffect(() => {
         if (auth.user) {
             window.history.pushState(
@@ -24,17 +29,18 @@ const Dashboard = ({ customer, orders, devices, orders_count_wdate }) => {
     }, [auth.user]);
    
     return (
-        <>
+        <div className={`${textColor}`}>
             <Head title="Dashboard" />
             {auth.access.isView && auth.access.isRead && 
-              <Overview
-                customer={customer}
-                orders={orders}
-                devices={devices}
-            />
+              <ContentPanel>
+                <p className="font-semibold  mb-2">Overview</p>
+                <div className="font-poppins flex flex-col gap-3">
+                    <ItemCard title="Item Master" data={item_master_stats} create_data={item_master_creation_counter} update_data={item_master_update_counter}/>
+                </div>
+              </ContentPanel>
             }
           
-        </>
+        </div>
     );
 };
 

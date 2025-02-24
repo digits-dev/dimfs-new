@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import { useTheme } from '../../Context/ThemeContext';
-import Overview from '../../Components/Dashboard/Overview';
 import AnnouncementsModal from '../../Components/Modal/AnnouncementsModal';
 import axios from 'axios';
 import useThemeStyles from '../../Hooks/useThemeStyles';
@@ -56,7 +55,6 @@ const Announcement = ({ unreadAnnouncements }) => {
     return (
         <>
             <Head title="Announcements" />
-            <Overview />
             <AnnouncementsModal
                 theme={theme === 'bg-skin-white' ? primayActiveColor : theme}
                 show={showModal}

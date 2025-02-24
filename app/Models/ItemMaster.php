@@ -19,6 +19,7 @@ class ItemMaster extends Model
         static::creating(function($model)
         {
             $model->created_by = CommonHelpers::myId();
+            $model->updated_at = null;
         });
         static::updating(function($model)
         {
