@@ -10,7 +10,7 @@ const RowData = ({ children, sticky, center, isLoading, addClass }) => {
 
     return (
         <td
-            className={`px-4 py-2 ${theme === 'bg-skin-black' ? theme+' text-gray-400' : 'bg-white'} ${addClass}  text-[13px] border first:border-l-0 last:border-r-0 border-secondary ${stickyClass} ${
+            className={`px-4 py-2 ${theme === 'bg-skin-black' ? theme+' text-gray-400' : 'bg-white'} ${addClass}  text-[13px] border border-secondary border-t-0 border-b-0 first:border-l-0 last:border-r-0  ${stickyClass} ${
                 center && "text-center"
             }`}
         >

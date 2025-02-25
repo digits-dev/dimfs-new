@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AnnouncementsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\NotificationsController;
 use App\Http\Controllers\Admin\AdmRequestController;
+use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\Admin\SystemErrorLogsController;
 use App\Http\Controllers\AppleLobs\AppleLobsController;
 use App\Http\Controllers\BrandDirections\BrandDirectionsController;
@@ -183,6 +184,11 @@ Route::middleware(['auth'])->group(function () {
     //SYSTEM ERROR LOGS
     Route::prefix('system_error_logs')->group(function() {
         Route::get('/export', [SystemErrorLogsController::class, 'export']);
+    });
+
+    // LOG USER ACCESS
+    Route::prefix('logs')->group(function() {
+        Route::get('/export', [LogsController::class, 'export']);
     });
 
     // --------------------------------------- TABLE SETTINGS -------------------------------------//
