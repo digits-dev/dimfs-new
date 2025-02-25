@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brands;
 use App\Models\Classifications;
 use App\Models\ItemMaster;
+use App\Models\ItemMasterHistory;
 use App\Models\SubClassifications;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -82,15 +83,11 @@ class DashboardController extends Controller
         ->orderBy('date', 'desc')
         ->get();
 
-        $data['item_master_update_counter'] = ItemMaster::select(DB::raw('DATE(updated_at) as date'), DB::raw('count(*) as count'))
-        ->where('updated_at', '!=', null)
+        $data['item_master_update_counter'] = ItemMasterHistory::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+        ->where('action', 'UPDATE-APPROVED')
         ->groupBy('date')
         ->orderBy('date', 'desc')
         ->get();
-
-
-
-        // dd($data['item_master_stats']);
 
         return Inertia::render('Dashboard/Dashboard', $data);
     }
