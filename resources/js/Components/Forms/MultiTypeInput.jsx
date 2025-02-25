@@ -35,6 +35,7 @@ const MultiTypeInput = ({type, name, value, disabled, placeholder, onChange, sel
                 onChange={onChange}
                 displayName={displayName}
                 name={name}
+                isDisabled={disabled}
                 menuPlacement={menuPlacement}
                 options={selectInputOptions}
                 value={value}

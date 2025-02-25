@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
 import debounce from "lodash/debounce";
 import PerPage from "./PerPage";
-import TableButton from "./Buttons/TableButton";
 import { useTheme } from "../../Context/ThemeContext";
-import Filters from "./Buttons/Filters";
+import useThemeStyles from "../../Hooks/useThemeStyles";
 
 const TableSearch = ({ queryParams }) => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
+  const {textColor, bulkActionTextColor, borderTheme, textColorActive, primayActiveColor, bulkActionCancelButtonColor} = useThemeStyles(theme)
   const [searchValue, setSearchValue] = useState(queryParams?.search || "");
   const path = window.location.pathname;
 
@@ -32,10 +32,10 @@ const TableSearch = ({ queryParams }) => {
 
   return (
     <>
-      <div className="flex justify-items-ends font-poppins w-full max-w-[550px]">
+      <div className="flex justify-items-ends font-poppins w-full max-w-[550px] ">
       
         <input
-          className={`${theme === 'bg-skin-black' ? theme+' text-gray-300' : ''} border font-poppins border-secondary rounded-l-md overflow-hidden h-9.5 w-full block px-4 text-sm outline-none`}
+          className={`${theme === 'bg-skin-black' ? theme+' text-gray-300' : ''}  font-poppins border-2 ${borderTheme} rounded-l-md overflow-hidden h-9.5 w-full block px-4 text-sm outline-none`}
           type="text"
           name="search"
           id="search"

@@ -41,7 +41,7 @@ const ApprovalBulkActions = ({disabled, setData, onConfirm}) => {
   return (
     <>
         <div ref={notifRef} className={`z-[60] select-none relative inline-block text-left font-poppins ${disabled ? 'opacity-50' : 'opacity-100' }`}>
-            <div className={`${theme === 'bg-skin-black' ? 'bg-black-table-color text-gray-300' : 'bg-white'} outline-none rounded-md flex gap-3 items-center justify-center font-semibold border-2 ${borderTheme} px-3 py-2 md:px-3.5 md:py-2.5  w-full h-10 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer' }`} onClick={handleMenuToggle}>
+            <div className={`${theme === 'bg-skin-black' ? 'bg-black-table-color text-gray-300' : 'bg-white'} outline-none rounded-md flex gap-3 items-center justify-center font-semibold border-2 ${borderTheme} px-3 py-2 md:px-3.5 md:py-2.5  w-full h-[2.4rem] ${disabled ? 'cursor-not-allowed' : 'cursor-pointer' }`} onClick={handleMenuToggle}>
                 <i className={`${bulkActionTextColor}  ${isMenuOpen ? 'fa-solid' : 'fa-regular'} fa-square-check text-xs md:text-base transform transition-transform duration-200 `}></i>
                 <p className={`${bulkActionTextColor} text-[10px] md:text-xs`}>Bulk Actions</p>
                 <i className={`${bulkActionTextColor} fa-solid fa-caret-down text-xs md:text-base transform transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`}></i>
