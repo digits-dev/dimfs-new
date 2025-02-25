@@ -47,6 +47,7 @@ use App\Http\Controllers\GashaponVendorTypes\GashaponVendorTypesController;
 use App\Http\Controllers\GashaponWarehouseCategories\GashaponWarehouseCategoriesController;
 use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
+use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
@@ -228,8 +229,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/approval_view/{action}/{id}', [ItemMasterApprovalsController::class, 'approvalView']);
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
         Route::post('/bulk_action', [ItemMasterApprovalsController::class, 'bulkActions']);
+        Route::get('/export', [ItemMasterApprovalsController::class, 'export']);
     });
-   
+
+    Route::prefix('item_master_histories')->group(function() {
+        Route::get('/view/{id}', [ItemMasterHistoriesController::class, 'view']);
+        
+    });
+
     
     // ---------------------------------------- GASHAPON ITEM MASTER ----------------------------------------//
 

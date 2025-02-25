@@ -20,14 +20,13 @@ import Pagination from "../../Components/Table/Pagination";
 import ApprovalBulkActions from "../../Components/Table/Buttons/ApprovalBulkActions";
 import Checkbox from "../../Components/Checkbox/Checkbox";
 
-const ItemMasterApprovals = ({
+const ItemMasterHistories = ({
     page_title,
     tableName,
     item_master_approvals,
     queryParams,
     table_headers,
 }) => {
-    const { handleToast } = useToast();
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -43,68 +42,6 @@ const ItemMasterApprovals = ({
         router.get(pathname);
     };
 
-    // BULK ACTIONS
-
-    const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
-
-    const { data, setData, processing, reset, post, errors } = useForm({
-        selectedIds: [],
-        bulkAction: "",
-    });
-
-    const handleSelectAll = () => {
-        if (isSelectAllChecked) {
-            setData("selectedIds", []);
-        } else {
-            setData(
-                "selectedIds",
-                item_master_approvals.data.map((item) => item.id)
-            );
-        }
-        setIsSelectAllChecked(!isSelectAllChecked);
-    };
-
-    const handleRowSelection = (id) => {
-        setData((prevData) => {
-            const selectedIds = prevData.selectedIds || [];
-            let updatedSelectedIds;
-
-            if (selectedIds.includes(id)) {
-                updatedSelectedIds = selectedIds.filter((item) => item !== id);
-            } else {
-                updatedSelectedIds = [...selectedIds, id];
-            }
-
-            if (
-                updatedSelectedIds.length === item_master_approvals.data.length
-            ) {
-                setIsSelectAllChecked(true);
-            } else {
-                setIsSelectAllChecked(false);
-            }
-
-            return { ...prevData, selectedIds: updatedSelectedIds };
-        });
-    };
-
-    const handleBulkAction = () => {
-        if (data.selectedIds.length === 0) {
-            handleToast("No Data Selected", "error");
-            return;
-        }
-        post("item_master_approvals/bulk_action", {
-            onSuccess: (data) => {
-                const { message, type } = data.props.auth.sessions;
-                handleToast(message, type);
-                reset();
-            },
-            onError: (error) => {},
-        });
-
-        setData("selectedIds", []);
-        setIsSelectAllChecked(false);
-    };
-
     return (
         <>
             <Head title={page_title} />
@@ -113,10 +50,6 @@ const ItemMasterApprovals = ({
                     <>
                         <TopPanel>
                             <div className="inline-flex gap-1">
-                                <ApprovalBulkActions
-                                    setData={setData}
-                                    onConfirm={handleBulkAction}
-                                />
                                 <Tooltip text="Refresh data" arrow="top">
                                     <Button
                                         extendClass={
@@ -138,18 +71,6 @@ const ItemMasterApprovals = ({
                         <TableContainer data={item_master_approvals?.data}>
                             <Thead>
                                 <Row>
-                                    <TableHeader
-                                        name="id"
-                                        width="xm"
-                                        sortable={false}
-                                        justify="center"
-                                    >
-                                        <Checkbox
-                                            handleClick={handleSelectAll}
-                                            isChecked={isSelectAllChecked}
-                                            disabled={false}
-                                        />
-                                    </TableHeader>
                                     <TableHeader
                                         sortable={false}
                                         width="md"
@@ -232,39 +153,13 @@ const ItemMasterApprovals = ({
                                 {item_master_approvals?.data?.map(
                                     (item, index) => (
                                         <Row key={index}>
-                                            <RowData isLoading={loading} center>
-                                                <Checkbox
-                                                    handleClick={() =>
-                                                        handleRowSelection(
-                                                            item.id
-                                                        )
-                                                    }
-                                                    isChecked={data.selectedIds.includes(
-                                                        item.id
-                                                    )}
-                                                    disabled={false}
-                                                />
-                                            </RowData>
                                             <RowData center>
-                                                {item.status ===
-                                                    "FOR APPROVAL" && (
-                                                    <RowAction
-                                                        type="button"
-                                                        action="edit"
-                                                        onClick={() =>
-                                                            router.get(
-                                                                `/item_master_approvals/approval_view/approval/${item.id}`
-                                                            )
-                                                        }
-                                                    />
-                                                )}
-
                                                 <RowAction
                                                     type="button"
                                                     action="view"
                                                     onClick={() =>
                                                         router.get(
-                                                            `/item_master_approvals/approval_view/view/${item.id}`
+                                                            `/item_master_histories/view/${item.id}`
                                                         )
                                                     }
                                                 />
@@ -348,4 +243,4 @@ const ItemMasterApprovals = ({
     );
 };
 
-export default ItemMasterApprovals;
+export default ItemMasterHistories;

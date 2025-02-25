@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Schema;
+use App\Exports\ItemMasterApprovalsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class ItemMasterApprovalsController extends Controller
@@ -337,7 +340,10 @@ class ItemMasterApprovalsController extends Controller
 		}
     }
 
-
-
+    public function export() {
+     
+        $fileName = 'Pending Items for Approval-'.date("d M Y - h.i.sa").'.xlsx';
+        return Excel::download(new ItemMasterApprovalsExport, $fileName);
+    }
     
 }

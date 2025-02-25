@@ -18,8 +18,8 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import Pagination from "../../Components/Table/Pagination";
 import ApprovalBulkActions from "../../Components/Table/Buttons/ApprovalBulkActions";
-import Checkbox from "../../Components/Checkbox/Checkbox"
-
+import Checkbox from "../../Components/Checkbox/Checkbox";
+import Export from "../../Components/Table/Buttons/Export";
 
 const ItemMasterApprovals = ({
     page_title,
@@ -28,13 +28,12 @@ const ItemMasterApprovals = ({
     queryParams,
     table_headers,
 }) => {
-
     const { handleToast } = useToast();
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
-    const { primayActiveColor, textColorActive } = useThemeStyles(theme);
+    const { primayActiveColor, textColorActive, buttonSwalColor } =
+        useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
-
 
     useEffect(() => {
         const segments = window.location.pathname.split("/");
@@ -58,9 +57,11 @@ const ItemMasterApprovals = ({
     const handleSelectAll = () => {
         if (isSelectAllChecked) {
             setData("selectedIds", []);
-        }
-        else {
-            setData("selectedIds", item_master_approvals.data.map((item) => item.id));
+        } else {
+            setData(
+                "selectedIds",
+                item_master_approvals.data.map((item) => item.id)
+            );
         }
         setIsSelectAllChecked(!isSelectAllChecked);
     };
@@ -69,45 +70,68 @@ const ItemMasterApprovals = ({
         setData((prevData) => {
             const selectedIds = prevData.selectedIds || [];
             let updatedSelectedIds;
-    
+
             if (selectedIds.includes(id)) {
                 updatedSelectedIds = selectedIds.filter((item) => item !== id);
             } else {
                 updatedSelectedIds = [...selectedIds, id];
             }
-    
-            if (updatedSelectedIds.length === item_master_approvals.data.length) {
-                setIsSelectAllChecked(true);
-            }
-            else{
-                setIsSelectAllChecked(false);
 
+            if (
+                updatedSelectedIds.length === item_master_approvals.data.length
+            ) {
+                setIsSelectAllChecked(true);
+            } else {
+                setIsSelectAllChecked(false);
             }
-    
+
             return { ...prevData, selectedIds: updatedSelectedIds };
         });
     };
 
     const handleBulkAction = () => {
-
         if (data.selectedIds.length === 0) {
-            handleToast('No Data Selected', 'error');
+            handleToast("No Data Selected", "error");
             return;
         }
-        post('item_master_approvals/bulk_action', {
+        post("item_master_approvals/bulk_action", {
             onSuccess: (data) => {
                 const { message, type } = data.props.auth.sessions;
                 handleToast(message, type);
                 reset();
             },
-            onError: (error) => {
-            }
-        })
-        
+            onError: (error) => {},
+        });
+
         setData("selectedIds", []);
         setIsSelectAllChecked(false);
     };
 
+    const handleExport = () => {
+        Swal.fire({
+            title: `<p class="font-poppins text-3xl">Do you want to Export Pending Items?</p>`,
+            showCancelButton: true,
+            confirmButtonText: "Export",
+            confirmButtonColor: buttonSwalColor,
+            icon: "question",
+            iconColor: buttonSwalColor,
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    window.location.href = `/item_master_approvals/export`;
+                } catch (error) {
+                    {
+                        handleToast &&
+                            handleToast(
+                                "Something went wrong, please try again later.",
+                                "Error"
+                            );
+                    }
+                }
+            }
+        });
+    };
     return (
         <>
             <Head title={page_title} />
@@ -116,7 +140,10 @@ const ItemMasterApprovals = ({
                     <>
                         <TopPanel>
                             <div className="inline-flex gap-1">
-                                <ApprovalBulkActions setData={setData} onConfirm={handleBulkAction}/>
+                                <ApprovalBulkActions
+                                    setData={setData}
+                                    onConfirm={handleBulkAction}
+                                />
                                 <Tooltip text="Refresh data" arrow="top">
                                     <Button
                                         extendClass={
@@ -130,6 +157,19 @@ const ItemMasterApprovals = ({
                                         <i className="fa fa-rotate-right text-base p-[1px]"></i>
                                     </Button>
                                 </Tooltip>
+                                <Button
+                                    extendClass={
+                                        (["bg-skin-white"].includes(theme)
+                                            ? primayActiveColor
+                                            : theme) + " py-[5px] px-[10px]"
+                                    }
+                                    type="button"
+                                    fontColor={textColorActive}
+                                    onClick={handleExport}
+                                >
+                                    <i className="fa-solid fa-download mr-1"></i>{" "}
+                                    Export Pending Items
+                                </Button>
                             </div>
                             <div className="flex">
                                 <TableSearch queryParams={queryParams} />
@@ -138,19 +178,18 @@ const ItemMasterApprovals = ({
                         <TableContainer data={item_master_approvals?.data}>
                             <Thead>
                                 <Row>
-                                <TableHeader
-                                    name="id"
-                                    width="xm"
-                                    sortable={false}
-                                    justify="center"
-                                >
-                                    <Checkbox
-                                        handleClick={handleSelectAll} 
-                                        isChecked={isSelectAllChecked}        
-                                        disabled={false}
-                                    />
-
-                                </TableHeader>
+                                    <TableHeader
+                                        name="id"
+                                        width="xm"
+                                        sortable={false}
+                                        justify="center"
+                                    >
+                                        <Checkbox
+                                            handleClick={handleSelectAll}
+                                            isChecked={isSelectAllChecked}
+                                            disabled={false}
+                                        />
+                                    </TableHeader>
                                     <TableHeader
                                         sortable={false}
                                         width="md"
@@ -234,9 +273,15 @@ const ItemMasterApprovals = ({
                                     (item, index) => (
                                         <Row key={index}>
                                             <RowData isLoading={loading} center>
-                                                <Checkbox          
-                                                    handleClick={() => handleRowSelection(item.id)} 
-                                                    isChecked={data.selectedIds.includes(item.id)}        
+                                                <Checkbox
+                                                    handleClick={() =>
+                                                        handleRowSelection(
+                                                            item.id
+                                                        )
+                                                    }
+                                                    isChecked={data.selectedIds.includes(
+                                                        item.id
+                                                    )}
                                                     disabled={false}
                                                 />
                                             </RowData>

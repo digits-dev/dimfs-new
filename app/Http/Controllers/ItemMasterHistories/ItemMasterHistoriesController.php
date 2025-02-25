@@ -73,9 +73,39 @@ class ItemMasterHistoriesController extends Controller
         });
 
         $data['item_master_approvals'] = $approvals;
-
         $data['queryParams'] = request()->query();
-        
+        $data['table_headers'] = $this->getTableHeaders();
+
+        return Inertia::render("ItemMasterHistories/ItemMasterHistories", $data);
+    }
+
+    public function view ($id) {
+        $data = [];
+        $data['page_title'] = 'Item Master History View';
+        $approval = ItemMasterHistory::find($id);
+        $moduleHeaders = ModuleHeaders::getModuleHeaders();
+    
+        $itemValues = json_decode($approval->item_values, true) ?? [];
+    
+        foreach ($itemValues as $key => $value) {
+            if (isset($moduleHeaders[$key])) {
+                $tableName = $moduleHeaders[$key]->table;
+                $labelColumn = $moduleHeaders[$key]->table_select_label;
+    
+                $description = DB::table($tableName)->where('id', $value)->value($labelColumn);
+                $itemValues[$key] = $description ?? $value;
+            }
+        }
+    
+        $approval->item_values = $itemValues; 
+        $data['item_master_approval'] = $approval;
+        $data['table_headers'] = $this->getTableHeaders();
+
+        return Inertia::render("ItemMasterHistories/ItemMasterHistoriesView", $data);
+    }
+
+        private function getTableHeaders()
+    {
         $table_setting = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
         ->where('action_types_id', ActionTypes::VIEW)
         ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
@@ -83,13 +113,11 @@ class ItemMasterHistoriesController extends Controller
         ->pluck('report_header')
         ->first());
 
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $table_setting)
+        return ModuleHeaders::whereIn('header_name', $table_setting)
         ->where('module_id', AdmModules::ITEM_MASTER)
         ->select('name', 'header_name', 'width')
         ->get();
-
-
-        return Inertia::render("ItemMasterApprovals/ItemMasterApprovals", $data);
     }
+
     
 }
