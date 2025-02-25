@@ -8,7 +8,7 @@ import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from '../../Components/Table/Buttons/Button';
 
 
-const ItemMasterCreate = ({page_title, create_inputs}) => {
+const ItemMasterCreate = ({page_title, create_inputs, table_setting_read_only}) => {
   const { theme } = useTheme();
   const { handleToast } = useToast();
   const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -84,6 +84,7 @@ const ItemMasterCreate = ({page_title, create_inputs}) => {
                     <MultiTypeInput
                       name={input.name}
                       type={input.type}
+                      disabled={table_setting_read_only.includes(input.header_name)}
                       onChange={(selectedValue) => handleInputChange(input.name, input.type, selectedValue)}
                       displayName={input.header_name}
                       placeholder={`Enter ${input.header_name}`}

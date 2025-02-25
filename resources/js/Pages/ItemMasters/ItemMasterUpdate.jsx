@@ -8,7 +8,7 @@ import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from '../../Components/Table/Buttons/Button';
 
 
-const ItemMasterUpdate = ({page_title, update_inputs, item_master_detail}) => {
+const ItemMasterUpdate = ({page_title, update_inputs, item_master_detail, table_setting_read_only}) => {
   const { theme } = useTheme();
   const { handleToast } = useToast();
   const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -85,6 +85,7 @@ const ItemMasterUpdate = ({page_title, update_inputs, item_master_detail}) => {
                     <MultiTypeInput
                       name={input.name}
                       type={input.type}
+                      disabled={table_setting_read_only.includes(input.header_name)}
                       value={input.type == 'select' ? { label: input.table_join.split('.').reduce((acc, key) => acc?.[key], item_master_detail), value: item_master_detail[input.name] }  
                           : data[input.name]
                       }

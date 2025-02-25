@@ -136,6 +136,13 @@ class ItemMastersController extends Controller
         ->pluck('report_header')
         ->first());
 
+        $data['table_setting_read_only'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::CREATE_READONLY)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
         $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
         ->where('module_id', AdmModules::ITEM_MASTER)
         ->get()
@@ -195,6 +202,13 @@ class ItemMastersController extends Controller
         
         $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
         ->where('action_types_id', ActionTypes::UPDATE)
+        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
+        ->where('status', 'ACTIVE')
+        ->pluck('report_header')
+        ->first());
+
+        $data['table_setting_read_only'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
+        ->where('action_types_id', ActionTypes::UPDATE_READONLY)
         ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
         ->where('status', 'ACTIVE')
         ->pluck('report_header')
