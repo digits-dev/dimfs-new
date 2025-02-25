@@ -166,7 +166,8 @@ class ItemMastersController extends Controller
 
             ItemMasterHistory::create([
                 'item_values' => $itemValues,
-                'action' => 'CREATE'
+                'action' => 'CREATE',
+                'status' => 'FOR APPROVAL'
             ]);
     
             return redirect('/item_masters')->with(['message' => 'Item Creation Success!', 'type' => 'success']);
