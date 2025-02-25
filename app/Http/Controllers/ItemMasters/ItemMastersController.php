@@ -9,6 +9,7 @@ use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
 use App\Models\ItemMaster;
 use App\Models\ItemMasterApproval;
+use App\Models\ItemMasterHistory;
 use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
 use Illuminate\Http\Request;
@@ -162,6 +163,11 @@ class ItemMastersController extends Controller
                'item_values' => $itemValues,
                'action' => 'CREATE'
             ]);
+
+            ItemMasterHistory::create([
+                'item_values' => $itemValues,
+                'action' => 'CREATE'
+            ]);
     
             return redirect('/item_masters')->with(['message' => 'Item Creation Success!', 'type' => 'success']);
 
@@ -228,6 +234,13 @@ class ItemMastersController extends Controller
                     'item_master_id' => $request->id,
                 ]
             );
+
+            ItemMasterHistory::create([
+                'item_values' => $itemValues,
+                'action' => 'UPDATE',
+                'status' => 'FOR APPROVAL',
+                'item_master_id' => $request->id,
+            ]);
 
             return redirect('/item_masters')->with(['message' => 'Item Update Success!', 'type' => 'success']);
 
