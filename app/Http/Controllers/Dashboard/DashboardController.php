@@ -44,7 +44,7 @@ class DashboardController extends Controller
                 'label' => 'Items',
                 'sublabel' => 'Total Items',
                 'icon' => $icons['items'],
-                'gradient' => 'bg-gradient-to-br from-orange-400 to-pink-600',
+                'gradient' => 'linear-gradient(to bottom right, #fb923c, #db2777)',
                 'href' => '/item_masters',
                 'total' => $item_master_count,
             ],
@@ -53,7 +53,7 @@ class DashboardController extends Controller
                 'label' => 'Brands',
                 'sublabel' => 'Active Brands',
                 'icon' => $icons['brands'],
-                'gradient' => 'bg-gradient-to-br from-green-400 to-emerald-600',
+                'gradient' => 'linear-gradient(to bottom right, #4ade80, #059669)',
                 'href' => '/brands',
                 'total' => Brands::count(),
             ],
@@ -62,7 +62,7 @@ class DashboardController extends Controller
                 'label' => 'Classes',
                 'sublabel' => 'Active Classes',
                 'icon' => $icons['classes'],
-                'gradient' => 'bg-gradient-to-br from-red-400 to-rose-600',
+                'gradient' => 'linear-gradient(to bottom right, #f87171, #e11d48)',
                 'href' => '/classifications',
                 'total' => Classifications::count(),
             ],
@@ -71,7 +71,7 @@ class DashboardController extends Controller
                 'label' => 'Sub Classes',
                 'sublabel' => 'Active Sub Classes',
                 'icon' => $icons['sub_classes'],
-                'gradient' => 'bg-gradient-to-br from-blue-400 to-cyan-600',
+                'gradient' => 'linear-gradient(to bottom right, #60a5fa, #0891b2)',
                 'href' => '/sub_classifications',
                 'total' => SubClassifications::count(),
             ],
@@ -88,7 +88,9 @@ class DashboardController extends Controller
         ->orderBy('date', 'desc')
         ->get();
 
-        // dd($data['item_master_update_counter']);
+
+
+        // dd($data['item_master_stats']);
 
         return Inertia::render('Dashboard/Dashboard', $data);
     }

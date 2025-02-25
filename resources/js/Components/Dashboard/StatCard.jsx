@@ -29,7 +29,7 @@ const StatCard = ({ value, label, sublabel, icon, gradient, href, total }) => {
     const progress = total > 0 ? (count / total) * 100 : 0;
 
     return (
-        <div className={`relative select-none overflow-hidden p-5 rounded-xl shadow-lg ${gradient} hover:scale-[1.02] transition-all duration-300 group`}>
+        <div style={{background: gradient}} className={`relative select-none overflow-hidden p-5 rounded-xl shadow-lg hover:scale-[1.02] transition-all duration-300 group`}>
             {/* Floating orbs */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-300" />
             <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-300" />

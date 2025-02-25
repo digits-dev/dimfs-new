@@ -33,7 +33,7 @@ const Dashboard = ({ item_master_stats, item_master_creation_counter, item_maste
             <Head title="Dashboard" />
             {auth.access.isView && auth.access.isRead && 
               <ContentPanel>
-                <p className="font-semibold  mb-2">Overview</p>
+                <p className="font-semibold mb-2">Overview</p>
                 <div className="font-poppins flex flex-col gap-3">
                     <ItemCard title="Item Master" data={item_master_stats} create_data={item_master_creation_counter} update_data={item_master_update_counter}/>
                 </div>
