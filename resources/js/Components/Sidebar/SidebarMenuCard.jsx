@@ -26,7 +26,7 @@ const SidebarMenuCard = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa-chart-s
   return (
     <Link 
       onClick={()=>{onClick(); setActiveChildMenu(null)}} 
-      href={href} 
+      href={'/' + href} 
       className={`cursor-pointer select-none px-3 py-2.5 overflow-hidden flex ${sideBarTextColor} items-center border-2 ${sidebarBorderColor} rounded-xl ${isMenuActive && sidebarActiveMenuBorderColor + ' ' + sidebarActiveMenuBgColor + ' ' + sidebarActiveTextColor } ${sidebarHoverMenuBgColor} ${sidebarHoverMenuBorderColor} ${sidebarHoverTextColor}`}>
         <div className='w-5 h-5  flex items-center justify-center mr-2 flex-shrink-0'>
             <i className={icon}></i>
