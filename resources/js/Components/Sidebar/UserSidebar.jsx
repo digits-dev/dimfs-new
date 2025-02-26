@@ -10,8 +10,13 @@ const UserSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChild
     const { setTitle } = useContext(NavbarContext);
 
 
-    const handleMenuClick = (menuTitle) => {
-        setActiveMenu((prev) => (prev === menuTitle ? null : menuTitle));
+    const handleMenuClick = (menuTitle, type) => {
+        if (type === 'Route'){
+            setActiveMenu(menuTitle);
+        }else {
+            setActiveMenu((prev) => (prev === menuTitle ? null : menuTitle));
+        }
+      
         setTitle(menuTitle);
     };
 
@@ -36,7 +41,7 @@ const UserSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChild
                                     icon={menu.icon}
                                     setActiveChildMenu={setActiveChildMenu}
                                     isMenuActive={activeMenu === menu.name} 
-                                    onClick={() => handleMenuClick(menu.name)}
+                                    onClick={() => handleMenuClick(menu.name, menu.type)}
                                 />
                     }
                     else
