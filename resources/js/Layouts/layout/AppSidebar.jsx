@@ -1,88 +1,39 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link, usePage } from '@inertiajs/react';
-import { NavbarContext } from '../../Context/NavbarContext';
-import SidebarAccordion from '../../Components/Sidebar/SidebarAccordion';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../Context/ThemeContext';
-import getAppName from '../../Components/SystemSettings/ApplicationName';
-import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
 import useThemeStyles from '../../Hooks/useThemeStyles';
+import UserSidebar from '../../Components/Sidebar/UserSidebar';
+import AdminSidebar from '../../Components/Sidebar/AdminSidebar';
 
 const AppSidebar = () => {
-    const [open, setOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [activeMenu, setActiveMenu] = useState('Dashboard');
+    const [activeChildMenu, setActiveChildMenu] = useState(null);
+
     const {theme} = useTheme();
-    const [appname, setAppname] = useState('');
-    const [applogo, setApplogo] = useState('');
     const { textColor, bgColor, borderColor } = useThemeStyles(theme);
 
-    useEffect(() => {
-        getAppName().then(appName => {
-            setAppname(appName);
-        });
-        getAppLogo().then(appLogo => {
-            setApplogo(appLogo);
-        });
-    }, [getAppName, getAppLogo]);
-
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 768) {
-                setOpen(false);
-            }else{
-                setOpen(true);
-            }
-        };
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-
-    // Function to close the sidebar
-    const closeSidebar = () => {
-        if (window.innerWidth < 768) {
-            setOpen(false);
-        }
+    const handleSidebarToggle = () => {
+        setIsSidebarOpen(!isSidebarOpen);
     };
  
     return (
         <>
-          
             <div
                 className={`${theme} absolute z-100 cursor-pointer rounded-full -left-[-14px] md:-left-[-233px] top-[66px] md:top-[15px] lg:top-[15px] border-2 ${borderColor} p-2 flex items-center justify-center`}
-                onClick={() => setOpen(!open)}
+                onClick={() => handleSidebarToggle()}
             >
                 <img
                     src={`${theme == 'bg-skin-white' ? `/images/navigation/dashboard-arrow-icon-black.png` : `/images/navigation/dashboard-arrow-icon.png`}`}
-                    className={`w-2 h-2 ${!open && "rotate-180"} select-none`}
+                    className={`w-2 h-2 ${!isSidebarOpen && "rotate-180"} select-none`}
                 />
             </div>
-                
-            <div
-                className={` ${theme === 'bg-skin-black' ? theme : ''} ${
-                    open ? "w-[292px]" : "hidden"
-                }  transition-transform duration-500 p-5 pt-5 pr-1 select-none shadow-customLight`}
-            >
-              
-                {
-                    !open ? 
-                    <div className={`mt-5 ${textColor} border-t p-2 ${borderColor} opacity-30`}></div>
-                    :
-                    <div
-                        className={`font-poppins ${['bg-skin-black','bg-skin-black-light'].includes(theme) ? `text-gray-400` : `text-gray-500`} text-[14px] mt-5 ${
-                            !open ? "text-center" : ""
-                        }`}
-                        style={{
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                        }}
-                    >
-                        <div>MENU</div>
-                    </div>
-                }
-                {/* SIDEBAR */}
-                <SidebarAccordion open={open} closeSidebar={closeSidebar}/>
+            <div className={`${isSidebarOpen ? 'w-[21rem]' : 'w-0'} transition-all duration-500`}>
+                <div className=' max-h-[85vh] overflow-y-auto scrollbar-none'>
+                    <UserSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
+                    <AdminSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
+                </div>
             </div>
+            
         </>
     );
 };

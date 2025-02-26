@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
             <div className="fixed w-full z-100">
                 <AppNavbar />   
             </div>
-            <div className={`h-screen pt-[100px] md:pt-[60px] lg:pt-[60px] flex`}>
+            <div className={`h-screen pt-[100px] md:pt-[60px] lg:pt-[60px] flex overflow-hidden`}>
                 <AppSidebar />
                 <div className="bg-red-100 w-full flex flex-col md:overflow-hidden lg:overflow-hidden">
                     <div className="bg-white flex-1 w-full flex flex-col overflow-auto ">

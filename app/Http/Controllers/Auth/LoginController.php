@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Auth;
 use app\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\AdmModels\AdmMenus;
+use App\Models\AdmModels\admMenusPrivileges;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\Announcement;
 use App\Models\AdmModels\AdmSettings;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -40,6 +43,7 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        
         $users = DB::table("adm_users")->where("email", $credentials['email'])->first();
        
         if(!$users){
@@ -62,6 +66,23 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            $menus_privileges = admMenusPrivileges::where('id_adm_privileges',  $session_details['priv']->id)
+                ->pluck('id_adm_menus');
+
+            $menus = AdmMenus::with([
+                'children' => function ($query) use ($menus_privileges) {
+                    $query->whereIn('id', $menus_privileges)->orderBy('sorting');
+                }
+            ])
+                ->whereIn('id', $menus_privileges)
+                ->where('parent_id', 0)
+                ->where('is_active', 1)
+                ->orderBy('sorting')
+                ->get();
+
+            Session::put('user_menus', $menus);
+            
             Session::put('admin_id', $users->id);
             Session::put('admin_is_superadmin', $session_details['priv']->is_superadmin);
             Session::put("admin_privileges", $session_details['priv']->id);
@@ -69,11 +90,12 @@ class LoginController extends Controller
             Session::put('theme_color', $session_details['priv']->theme_color);
             Session::put('dark_theme', $users->theme ?? NULL);
             Session::put('profile', $session_details['profile']->file_name ?? NULL);
+            
             CommonHelpers::insertLog(trans("adm_default.log_login", ['email' => $users->email, 'ip' => $request->server('REMOTE_ADDR')]));
             
             $today = Carbon::now();
             $lastChangePass = Carbon::parse($users->last_password_updated);
-            $needsPasswordChange = \Hash::check('qwerty', $users->password) || $lastChangePass->diffInMonths($today) > 3;
+            $needsPasswordChange = Hash::check('qwerty', $users->password) || $lastChangePass->diffInMonths($today) > 3;
             if($needsPasswordChange){
                 Log::debug("message: {$needsPasswordChange}");
                 Session::put('check_user',true);
