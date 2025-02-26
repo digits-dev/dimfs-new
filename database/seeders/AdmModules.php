@@ -857,11 +857,11 @@ class AdmModules extends Seeder
             ],
 
             [
-                'name' => 'Gashapon Item Master Approval',
+                'name' => 'Gashapon Item Master History',
                 'icon' => 'fa-regular fa-circle',
-                'path' => 'gashapon_item_master_approvals',
-                'table_name' => 'gashapon_item_master_approvals',
-                'controller' => 'GashaponItemMasterApprovals\GashaponItemMasterApprovalsController',
+                'path' => 'gashapon_item_master_histories',
+                'table_name' => 'gashapon_item_master_histories',
+                'controller' => 'GashaponItemMasterHistories\GashaponItemMasterHistoriesController',
                 'is_protected' => 0,
                 'is_active' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
