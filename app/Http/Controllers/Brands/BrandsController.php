@@ -63,6 +63,7 @@ class BrandsController extends Controller
             'brand_code' => 'required|string|max:3|unique:brands,brand_code',
             'brand_description' => 'required|string|max:30|unique:brands,brand_description',
             'brand_groups_id' => 'required|integer',
+            'contact_email' => 'nullable|email',
         ]);
 
         try {
