@@ -10,7 +10,7 @@ const AppSidebar = () => {
     const [activeChildMenu, setActiveChildMenu] = useState(null);
 
     const {theme} = useTheme();
-    const { textColor, bgColor, borderColor } = useThemeStyles(theme);
+    const { sideBarBgColor, bgColor, borderColor } = useThemeStyles(theme);
 
     const handleSidebarToggle = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -27,7 +27,7 @@ const AppSidebar = () => {
                     className={`w-2 h-2 ${!isSidebarOpen && "rotate-180"} select-none`}
                 />
             </div>
-            <div className={`${isSidebarOpen ? 'w-[21rem]' : 'w-0'} transition-all duration-500`}>
+            <div className={`${isSidebarOpen ? 'w-[21rem]' : 'w-0'} transition-all duration-500 ${sideBarBgColor}`}>
                 <div className=' max-h-[85vh] overflow-y-auto scrollbar-none'>
                     <UserSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
                     <AdminSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
