@@ -29,6 +29,10 @@ class GashaponItemMasterApproval extends Model
         'action',
         'gashapon_item_master_id',
         'status',
+        'approved_by',
+        'approved_at',
+        'rejected_by',
+        'rejected_at',
         'created_by',
         'updated_by',
         'created_at',
@@ -103,5 +107,17 @@ class GashaponItemMasterApproval extends Model
     
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+    }
+
+    public function getApprovedBy() {
+        return $this->belongsTo(AdmUser::class, 'approved_by', 'id');
+    }
+  
+    public function getRejectedBy() {
+        return $this->belongsTo(AdmUser::class, 'rejected_by', 'id');
+    }
+
+    public function getItem() {
+        return $this->belongsTo(ItemMaster::class, 'item_master_id', 'id');
     }
 }

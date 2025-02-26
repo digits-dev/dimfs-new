@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\CommonHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,21 @@ class GashaponItemMaster extends Model
 
     
     protected $table = 'gashapon_item_masters';
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+            $model->updated_at = null;
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
+
 
     protected $fillable = [
 

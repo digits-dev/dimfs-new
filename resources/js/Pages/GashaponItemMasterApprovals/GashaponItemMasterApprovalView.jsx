@@ -1,0 +1,141 @@
+import { Head, useForm } from "@inertiajs/react";
+import React, { useEffect } from "react";
+import { useTheme } from "../../Context/ThemeContext";
+import { useToast } from "../../Context/ToastContext";
+import ContentPanel from "../../Components/Table/ContentPanel";
+import useThemeStyles from "../../Hooks/useThemeStyles";
+import Button from "../../Components/Table/Buttons/Button";
+import InputComponent from "../../Components/Forms/Input";
+
+const GashaponItemMasterApprovalView = ({
+    page_title,
+    gashapon_item_master_approval,
+    table_headers,
+    action,
+}) => {
+    const { theme } = useTheme();
+    const { handleToast } = useToast();
+    const { primayActiveColor, textColorActive, buttonSwalColor } =
+        useThemeStyles(theme);
+
+    const { data, setData, processing, reset, post, errors } = useForm({
+        id: gashapon_item_master_approval.id,
+        action: "",
+    });
+
+    // FORM SUBMIT
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: `<p class="font-poppins text-3xl" >Do you want to ${data.action} this Item Master?</p>`,
+            showCancelButton: true,
+            confirmButtonText: `Add Item`,
+            confirmButtonColor: buttonSwalColor,
+            icon: "question",
+            iconColor: buttonSwalColor,
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                post("/gashapon_item_master_approvals/approval", {
+                    onSuccess: (data) => {
+                        const { message, type } = data.props.auth.sessions;
+                        handleToast(message, type);
+                    },
+                    onError: (data) => {
+                        const { message, type } = data.props.auth.sessions;
+                        handleToast(message, type);
+                    },
+                });
+            }
+        });
+    };
+
+    return (
+        <>
+            <Head title={page_title} />
+            <ContentPanel>
+                <div className="border p-4 rounded-lg">
+                    <form onSubmit={handleFormSubmit}>
+                        <div className="md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0">
+                            {table_headers?.map((header, index) => (
+                                <InputComponent
+                                    key={index}
+                                    type="text"
+                                    name={header.name}
+                                    displayName={header.header_name}
+                                    value={
+                                        gashapon_item_master_approval
+                                            ?.item_values?.[header.name] ?? ""
+                                    }
+                                    disabled={true}
+                                />
+                            ))}
+                        </div>
+                        <div className="flex justify-between mt-4">
+                            <Button
+                                type="link"
+                                href="/gashapon_item_master_approvals"
+                                extendClass={`${
+                                    theme === "bg-skin-white"
+                                        ? primayActiveColor
+                                        : theme
+                                }`}
+                                fontColor={textColorActive}
+                            >
+                                <span>Back</span>
+                            </Button>
+                            {action === "approval" && (
+                                <div className="inline-flex gap-1">
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            setData("action", "reject")
+                                        }
+                                        extendClass={"bg-red-500 border-none"}
+                                        fontColor={textColorActive}
+                                        disabled={processing}
+                                    >
+                                        {processing ? (
+                                            "Processing..."
+                                        ) : (
+                                            <span>
+                                                <i
+                                                    className={`fa-solid fa-times mr-1`}
+                                                ></i>
+                                                REJECT
+                                            </span>
+                                        )}
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            setData("action", "approve")
+                                        }
+                                        extendClass={"bg-green-500 border-none"}
+                                        fontColor={textColorActive}
+                                        disabled={processing}
+                                    >
+                                        {processing ? (
+                                            "Processing..."
+                                        ) : (
+                                            <span>
+                                                <i
+                                                    className={`fa-solid fa-check mr-1`}
+                                                ></i>
+                                                APPROVE
+                                            </span>
+                                        )}
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </form>
+                </div>
+            </ContentPanel>
+        </>
+    );
+};
+
+export default GashaponItemMasterApprovalView;

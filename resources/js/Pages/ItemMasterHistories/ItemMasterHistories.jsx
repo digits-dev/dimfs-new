@@ -22,8 +22,7 @@ import Checkbox from "../../Components/Checkbox/Checkbox";
 
 const ItemMasterHistories = ({
     page_title,
-    tableName,
-    item_master_approvals,
+    item_master_histories,
     queryParams,
     table_headers,
 }) => {
@@ -68,7 +67,7 @@ const ItemMasterHistories = ({
                                 <TableSearch queryParams={queryParams} />
                             </div>
                         </TopPanel>
-                        <TableContainer data={item_master_approvals?.data}>
+                        <TableContainer data={item_master_histories?.data}>
                             <Thead>
                                 <Row>
                                     <TableHeader
@@ -77,13 +76,6 @@ const ItemMasterHistories = ({
                                         justify="center"
                                     >
                                         Action
-                                    </TableHeader>
-                                    <TableHeader
-                                        name="status"
-                                        width="md"
-                                        queryParams={queryParams}
-                                    >
-                                        Status
                                     </TableHeader>
                                     <TableHeader
                                         width="md"
@@ -149,8 +141,8 @@ const ItemMasterHistories = ({
                                 </Row>
                             </Thead>
 
-                            <Tbody data={item_master_approvals?.data}>
-                                {item_master_approvals?.data?.map(
+                            <Tbody data={item_master_histories?.data}>
+                                {item_master_histories?.data?.map(
                                     (item, index) => (
                                         <Row key={index}>
                                             <RowData center>
@@ -165,20 +157,6 @@ const ItemMasterHistories = ({
                                                 />
                                             </RowData>
 
-                                            <RowStatus
-                                                isLoading={loading}
-                                                systemStatus={
-                                                    item.status ===
-                                                    "FOR APPROVAL"
-                                                        ? "yellow"
-                                                        : item.status ===
-                                                          "APPROVED"
-                                                        ? "green"
-                                                        : "red"
-                                                }
-                                            >
-                                                {item.status}
-                                            </RowStatus>
                                             <RowData isLoading={loading}>
                                                 {item.action}
                                             </RowData>
@@ -221,7 +199,7 @@ const ItemMasterHistories = ({
                         </TableContainer>
                         <Pagination
                             extendClass={theme}
-                            paginate={item_master_approvals}
+                            paginate={item_master_histories}
                         />
                     </>
                 ) : (

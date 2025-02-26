@@ -6,7 +6,6 @@ use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
-use App\Models\ItemMaster;
 use App\Models\ItemMasterHistory;
 use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
@@ -50,12 +49,11 @@ class ItemMasterHistoriesController extends Controller
         $data = [];
 
         $data['page_title'] = 'Item Master Approvals';
-        $data['tableName'] = 'item_master_approvals';
         
         $moduleHeaders = ModuleHeaders::getModuleHeaders();
-        $approvals = self::getAllData()->paginate($this->perPage)->withQueryString();
+        $itemMaster = self::getAllData()->paginate($this->perPage)->withQueryString();
         
-        $approvals->getCollection()->transform(function ($item) use ($moduleHeaders) {
+        $itemMaster->getCollection()->transform(function ($item) use ($moduleHeaders) {
             $itemValues = json_decode($item->item_values, true) ?? [];
 
             foreach ($itemValues as $key => $value) {
@@ -72,7 +70,7 @@ class ItemMasterHistoriesController extends Controller
             return $item;
         });
 
-        $data['item_master_approvals'] = $approvals;
+        $data['item_master_histories'] = $itemMaster;
         $data['queryParams'] = request()->query();
         $data['table_headers'] = $this->getTableHeaders();
 
@@ -82,10 +80,11 @@ class ItemMasterHistoriesController extends Controller
     public function view ($id) {
         $data = [];
         $data['page_title'] = 'Item Master History View';
-        $approval = ItemMasterHistory::find($id);
+        
+        $itemMaster = ItemMasterHistory::find($id);
         $moduleHeaders = ModuleHeaders::getModuleHeaders();
     
-        $itemValues = json_decode($approval->item_values, true) ?? [];
+        $itemValues = json_decode($itemMaster->item_values, true) ?? [];
     
         foreach ($itemValues as $key => $value) {
             if (isset($moduleHeaders[$key])) {
@@ -97,8 +96,8 @@ class ItemMasterHistoriesController extends Controller
             }
         }
     
-        $approval->item_values = $itemValues; 
-        $data['item_master_approval'] = $approval;
+        $itemMaster->item_values = $itemValues; 
+        $data['item_master_histories'] = $itemMaster;
         $data['table_headers'] = $this->getTableHeaders();
 
         return Inertia::render("ItemMasterHistories/ItemMasterHistoriesView", $data);

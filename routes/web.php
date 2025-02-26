@@ -38,6 +38,7 @@ use App\Http\Controllers\GashaponCountries\GashaponCountriesController;
 use App\Http\Controllers\GashaponIncoterms\GashaponIncotermsController;
 use App\Http\Controllers\GashaponInventoryTypes\GashaponInventoryTypesController;
 use App\Http\Controllers\GashaponItemMasters\GashaponItemMastersController;
+use App\Http\Controllers\GashaponItemMasterHistories\GashaponItemMasterHistoriesController;
 use App\Http\Controllers\GashaponModels\GashaponModelsController;
 use App\Http\Controllers\GashaponProductTypes\GashaponProductTypesController;
 use App\Http\Controllers\GashaponSkuStatuses\GashaponSkuStatusesController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\GashaponWarehouseCategories\GashaponWarehouseCategories
 use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
 use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
+use App\Http\Controllers\GashaponItemMasterApprovals\GashaponItemMasterApprovalsController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
@@ -234,7 +236,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('item_master_histories')->group(function() {
         Route::get('/view/{id}', [ItemMasterHistoriesController::class, 'view']);
-        
     });
 
     
@@ -247,6 +248,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/update', [GashaponItemMastersController::class, 'update']);
         Route::get('/view_details/{item}', [GashaponItemMastersController::class, 'getView']);
         Route::get('/export', [GashaponItemMastersController::class, 'export']);
+    });
+
+    Route::prefix('gashapon_item_master_approvals')->group(function() {
+        Route::get('/approval_view/{action}/{id}', [GashaponItemMasterApprovalsController::class, 'approvalView']);
+        Route::post('/approval', [GashaponItemMasterApprovalsController::class, 'approval']);
+        Route::post('/bulk_action', [GashaponItemMasterApprovalsController::class, 'bulkActions']);
+        Route::get('/export', [GashaponItemMasterApprovalsController::class, 'export']);
+    });
+
+    Route::prefix('gashapon_item_master_histories')->group(function() {
+        Route::get('/view/{id}', [GashaponItemMasterHistoriesController::class, 'view']);
     });
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//

@@ -7,14 +7,14 @@ import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from "../../Components/Table/Buttons/Button";
 import InputComponent from "../../Components/Forms/Input";
 
-const ItemMasterHistoriesView = ({
+const GashaponItemMasterHistoriesView = ({
     page_title,
-    item_master_histories,
+    gashapon_item_master_histories,
     table_headers,
 }) => {
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
-
+    console.log(gashapon_item_master_histories);
     return (
         <>
             <Head title={page_title} />
@@ -29,9 +29,8 @@ const ItemMasterHistoriesView = ({
                                     name={header.name}
                                     displayName={header.header_name}
                                     value={
-                                        item_master_histories?.item_values?.[
-                                            header.name
-                                        ] ?? ""
+                                        gashapon_item_master_histories
+                                            ?.item_values?.[header.name] ?? ""
                                     }
                                     disabled={true}
                                 />
@@ -40,7 +39,7 @@ const ItemMasterHistoriesView = ({
                         <div className="flex justify-between mt-4">
                             <Button
                                 type="link"
-                                href="/item_master_histories"
+                                href="/gashapon_item_master_histories"
                                 extendClass={`${
                                     theme === "bg-skin-white"
                                         ? primayActiveColor
@@ -58,4 +57,4 @@ const ItemMasterHistoriesView = ({
     );
 };
 
-export default ItemMasterHistoriesView;
+export default GashaponItemMasterHistoriesView;
