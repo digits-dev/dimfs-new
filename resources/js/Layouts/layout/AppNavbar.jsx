@@ -12,9 +12,7 @@ import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
 import Modal from '../../Components/Modal/Modal';
 import useThemeSwalColor from '../../Hooks/useThemeSwalColor';
 const AppNavbar = () => {
-    const { title } = useContext(NavbarContext);
     const { auth } = usePage().props;
-    const [loading, setLoading] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState(auth.notifications || []);
@@ -160,7 +158,7 @@ const AppNavbar = () => {
 
     const handleThemeUpdate = async (e, id, action) => {
         e.preventDefault();
-        setLoading(true);
+
     
         try {
             const config = {
@@ -198,14 +196,14 @@ const AppNavbar = () => {
                 confirmButtonColor: swalColor,
             });
         } finally {
-            setLoading(false);
+       
         }
     };
     return (
         <>
         <div className='flex flex-col lg:flex-row'>
             <div
-                className={`${theme} h-[50px] lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
+                className={`${theme == 'bg-skin-blue' ? 'md:bg-none bg-skin-blue ' : ''} h-[50px] md:absolute lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
                     !['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'
                 }`}
                 ref={menuRef}

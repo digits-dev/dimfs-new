@@ -24,7 +24,7 @@ module.exports = {
                 customTextGray: "#3c8dbc",
                 "custom-gray": "#F5F5F5",
                 "sidebar-hover-color": "#323232",
-                "skin-blue": "#134B70",
+                // "skin-blue": "#134B70",
                 "skin-blue-light": "#508C9B",
                 "skin-yellow": "#e08e0b",
                 "skin-yellow-light": "#FFB200",
@@ -46,6 +46,7 @@ module.exports = {
                 
             },
             backgroundImage: {
+                "skin-blue": "linear-gradient(to bottom right, #1e3a8a, #172554)",
                 "mobile-gradient":
                     "linear-gradient(to bottom, #060505, #333232)",
                 "overview-gradient":

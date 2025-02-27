@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/react';
-import React from 'react'
+import { Link, router } from '@inertiajs/react';
+import React, { useState } from 'react'
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import { useTheme } from '../../Context/ThemeContext';
 
@@ -22,10 +22,23 @@ const SidebarMenuCard = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa-chart-s
     return 'text-[11px]';
   };
 
+  const [loading, setLoading] = useState(false);
+
+  router.on("start", () => setLoading(true));
+  router.on("finish", () => setLoading(false));
+
 
   return (
     <Link 
-      onClick={()=>{onClick(); setActiveChildMenu(null)}} 
+      onClick={(e) => {
+        if (loading) {
+            e.preventDefault(); // Prevent navigation
+            return;
+        }
+        onClick();
+        setActiveChildMenu(null);
+    }}
+      disabled={true}
       href={'/' + href} 
       className={`cursor-pointer select-none px-3 py-2.5 overflow-hidden flex ${sideBarTextColor} items-center border-2 ${sidebarBorderColor} rounded-xl ${isMenuActive && sidebarActiveMenuBorderColor + ' ' + sidebarActiveMenuBgColor + ' ' + sidebarActiveTextColor } ${sidebarHoverMenuBgColor} ${sidebarHoverMenuBorderColor} ${sidebarHoverTextColor}`}>
         <div className='w-5 h-5  flex items-center justify-center mr-2 flex-shrink-0'>

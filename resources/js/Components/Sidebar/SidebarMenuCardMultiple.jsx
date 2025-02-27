@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react'
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import { useTheme } from '../../Context/ThemeContext';
@@ -6,6 +6,12 @@ import { useTheme } from '../../Context/ThemeContext';
 const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa-chart-simple', isMenuOpen , onMenuClick, onChildMenuClick, isMenuActive, isChildMenuActive, childMenus}) => {
 
     const {theme} = useTheme();
+
+    const [loading, setLoading] = useState(false);
+
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
+
     const { 
               sidebarHoverTextColor,
               sidebarHoverMenuBgColor, 
@@ -50,7 +56,15 @@ const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa
             {childMenus && childMenus.map((child_menu, index)=>{
 
                 const colorClass = colors[index % colors.length];
-                return <Link href={'/' + child_menu.slug} onClick={() => onChildMenuClick(child_menu.name, menuTitle)}  key={child_menu.name + index} 
+                return <Link href={'/' + child_menu.slug}
+                            onClick={(e) => {
+                                if (loading) {
+                                    e.preventDefault(); // Prevent navigation
+                                    return;
+                                }
+                                onChildMenuClick(child_menu.name, menuTitle)
+                            }}
+                            key={child_menu.name + index} 
                             className={`p-1 flex items-center flex-1 ml-1 cursor-pointer border ${sidebarBorderColor} rounded-lg first:mt-1 ${sidebarHoverMenuBgColor} ${sidebarHoverMenuBorderColor} ${sidebarHoverTextColor} ${isChildMenuActive == child_menu.name && sidebarActiveMenuBorderColor + ' ' + sidebarActiveMenuBgColor + ' ' + sidebarActiveTextColor  }`}>
                                 <div className='w-5 h-5 flex items-center justify-center mr-1 flex-shrink-0'>
                                     <i className={`fa-solid fa-circle text-[7px] ${colorClass}`}></i>
