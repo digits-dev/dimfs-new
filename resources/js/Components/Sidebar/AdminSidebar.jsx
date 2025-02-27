@@ -34,6 +34,12 @@ const AdminSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChil
             icon: "fa fa-th",
         },
         {
+            name: "API Generator",
+            type: "Route",
+            slug: "api_generator",
+            icon: "fa fa-code-merge",
+        },
+        {
             name: "Admin Settings",
             type: "URL",
             slug: "adm_settings",
