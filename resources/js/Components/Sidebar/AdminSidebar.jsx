@@ -69,6 +69,12 @@ const AdminSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChil
             icon: "fa fa-history",
         },
         {
+            name: "Module Activity History",
+            type: "Route",
+            slug: "module_activity_history",
+            icon: "fa fa-history",
+        },
+        {
             name: "System Error Logs",
             type: "Route",
             slug: "system_error_logs",

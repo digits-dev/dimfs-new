@@ -866,6 +866,16 @@ class AdmModules extends Seeder
                 'is_active' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'name' => 'Module Activity History',
+                'icon' => 'fa fa-history',
+                'path' => 'module_activity_history',
+                'table_name' => 'module_activity_history',
+                'controller' => 'ModuleActivityHistoryController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
         ];
 
         foreach ($data as $module) {
