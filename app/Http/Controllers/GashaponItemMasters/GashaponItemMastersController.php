@@ -9,6 +9,7 @@ use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
 use App\Models\GashaponItemMaster;
 use App\Models\GashaponItemMasterApproval;
+use App\Models\GashaponItemMasterHistory;
 use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Arr;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -137,12 +139,20 @@ class GashaponItemMastersController extends Controller
 
         $request->validate($request->validation);
 
+        $itemValues = json_encode(Arr::except($request->all(), ['validation']));
         try {
 
             GashaponItemMasterApproval::create([
                'item_values' => json_encode($request->all()),
                'action' => 'CREATE'
             ]);
+
+            GashaponItemMasterHistory::create([
+                'item_values' => $itemValues,
+                'action' => 'CREATE',
+                'status' => 'CREATE'
+            ]);
+    
     
             return redirect('/gashapon_item_masters')->with(['message' => 'Gashapon Item Creation Success!', 'type' => 'success']);
 
@@ -192,14 +202,30 @@ class GashaponItemMastersController extends Controller
     public function update(Request $request){
 
         $request->validate($request->validation);
-
+        $itemValues = json_encode(Arr::except($request->all(), ['validation']));
+        
         try {
 
-            GashaponItemMasterApproval::create([
-                'item_values' => json_encode($request->all()),
+             GashaponItemMasterApproval::updateOrCreate(
+                [
+                    'action' => 'UPDATE', 
+                    'gashapon_item_master_id' => $request->id
+                ],
+                [
+                    'item_values' => $itemValues,
+                    'action' => 'UPDATE',
+                    'status' => 'FOR APPROVAL',
+                    'gashapon_item_master_id' => $request->id,
+                ]
+            );
+
+             GashaponItemMasterHistory::create([
+                'item_values' => $itemValues,
                 'action' => 'UPDATE',
+                'status' => 'UPDATE',
                 'gashapon_item_master_id' => $request->id,
-             ]);
+            ]);
+
 
             return redirect('/gashapon_item_masters')->with(['message' => 'Gashapon Item Update Success!', 'type' => 'success']);
 

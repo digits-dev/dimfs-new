@@ -173,7 +173,7 @@ class ItemMastersController extends Controller
 
             ItemMasterHistory::create([
                 'item_values' => $itemValues,
-                'action' => 'CREATE-FOR APPROVAL',
+                'action' => 'CREATE',
                 'status' => 'CREATE'
             ]);
     
@@ -252,7 +252,7 @@ class ItemMastersController extends Controller
 
             ItemMasterHistory::create([
                 'item_values' => $itemValues,
-                'action' => 'UPDATE-FOR APPROVAL',
+                'action' => 'UPDATE',
                 'status' => 'UPDATE',
                 'item_master_id' => $request->id,
             ]);

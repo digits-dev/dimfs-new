@@ -296,7 +296,7 @@ class GashaponItemMasterApprovalsController extends Controller
 
     public function export() {
      
-        $fileName = 'Pending Items for Approval-'.date("d M Y - h.i.sa").'.xlsx';
+        $fileName = 'Pending Gashapon Items for Approval-'.date("d M Y - h.i.sa").'.xlsx';
         return Excel::download(new ItemMasterApprovalsExport, $fileName);
     }
 }
