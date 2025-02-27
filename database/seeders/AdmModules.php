@@ -112,7 +112,7 @@ class AdmModules extends Seeder
                 'icon' => 'fa fa-cloud-download',
                 'path' => 'api_generator',
                 'table_name' => '',
-                'controller' => 'ApiCustomController',
+                'controller' => 'AdminApiController',
                 'is_protected' => 1,
                 'is_active' => 1,
             ],
