@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use app\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\AdmAdminMenus;
 use App\Models\AdmModels\AdmMenus;
 use App\Models\AdmModels\admMenusPrivileges;
 use App\Providers\AppServiceProvider;
@@ -81,7 +82,19 @@ class LoginController extends Controller
                 ->orderBy('sorting')
                 ->get();
 
+            $admin_menus = AdmAdminMenus::with([
+                'children' => function ($query)  {
+                    $query->orderBy('sorting');
+                }
+            ])
+                ->where('parent_id', 0)
+                ->where('is_active', 1)
+                ->orderBy('sorting')
+                ->get();
+
+
             Session::put('user_menus', $menus);
+            Session::put('admin_menus', $admin_menus);
             
             Session::put('admin_id', $users->id);
             Session::put('admin_is_superadmin', $session_details['priv']->is_superadmin);

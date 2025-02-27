@@ -2,6 +2,7 @@
 
 namespace app\Helpers;
 
+use App\Models\AdmAdminMenus;
 use App\Models\AdmModels\AdmMenus;
 use App\Models\LogSystemError;
 use Illuminate\Support\Facades\Session;
@@ -114,81 +115,6 @@ class CommonHelpers {
         return $menu;
     }
 
-    public static function sidebarMenu(){
-        $menu_active = DB::table('adm_menuses')
-        ->whereRaw("adm_menuses.id IN (select id_adm_menus from adm_menus_privileges where id_adm_privileges = '".CommonHelpers::myPrivilegeId()."')")
-        ->where('parent_id', 0)
-        ->where('is_active', 1)
-        ->where('is_dashboard', 0)
-        ->orderby('sorting', 'asc')
-        ->select('adm_menuses.*')->get();
- 
-        foreach ($menu_active as &$menu) {
-            try {
-                switch ($menu->type) {
-                    case 'Route':
-                        $url = route($menu->path);
-                        break;
-                    default:
-                    case 'URL':
-                        $url = $menu->path;
-                        break;
-                    case 'Controller & Method':
-                        $url = action($menu->path);
-                        break;
-                    case 'Module':
-                    case 'Statistic':
-                        $url = self::adminPath($menu->path);
-                        break;
-                }
-
-                $menu->is_broken = false;
-            } catch (\Exception $e) {
-                $url = "#";
-                $menu->is_broken = true;
-            }
-
-            $menu->url = $url;
-            $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
-
-            $child = DB::table('adm_menuses')->whereRaw("adm_menuses.id IN (select id_adm_menus from adm_menus_privileges where id_adm_privileges = '".CommonHelpers::myPrivilegeId()."')")->where('is_dashboard', 0)->where('is_active', 1)->where('parent_id', $menu->id)->select('adm_menuses.*')->orderby('sorting', 'asc')->get();
-            if (count($child)) {
-
-                foreach ($child as &$c) {
-
-                    try {
-                        switch ($c->type) {
-                            case 'Route':
-                                $url = route($c->path);
-                                break;
-                            default:
-                            case 'URL':
-                                $url = $c->path;
-                                break;
-                            case 'Controller & Method':
-                                $url = action($c->path);
-                                break;
-                            case 'Module':
-                            case 'Statistic':
-                                $url = self::adminPath($c->path);
-                                break;
-                        }
-                        $c->is_broken = false;
-                    } catch (\Exception $e) {
-                        $url = "#";
-                        $c->is_broken = true;
-                    }
-
-                    $c->url = $url;
-                    $c->url_path = trim(str_replace(url('/'), '', $url), "/");
-                }
-
-                $menu->children = $child;
-            }
-        }
-    
-        return $menu_active;
-    }
 
     public static function adminPath($path = null)
     {
@@ -444,10 +370,10 @@ class CommonHelpers {
     }
 
     public static function getCurrentMenu()
-    {
-        return AdmMenus::where('slug', self::getModulePath())->first();
-
-    }
+        {
+            return AdmMenus::where('slug', self::getModulePath())->first()
+                ?: AdmAdminMenus::where('slug', self::getModulePath())->first();
+        }
 
     public static function getCurrentMethod()
     {

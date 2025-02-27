@@ -16,21 +16,22 @@ const AppSidebar = () => {
 
     const menu = auth.menu;
 
-    // console.log(menu)
-    // const user_menus = auth.sessions.user_menus;
-    // const parent_menu = user_menus.find(user_menu => user_menu.id === menu.parent_id)
+    const user_menus = auth.sessions.user_menus;
+    const admin_menu = auth.sessions.admin_menus;
+    const parent_menu = user_menus.find(user_menu => user_menu.id === menu.parent_id) ?? admin_menu.find(admin_menu => admin_menu.id === menu.parent_id)
+
     
 
-    // useEffect(()=>{
-    //     if (menu.parent_id == 0){
-    //         setActiveMenu(menu.name);
-    //         setActiveChildMenu(null);
-    //     }
-    //     else{
-    //         setActiveMenu(parent_menu.name);
-    //         setActiveChildMenu(menu.name);
-    //     }
-    // },[menu])
+    useEffect(()=>{
+        if (menu.parent_id == 0){
+            setActiveMenu(menu.name);
+            setActiveChildMenu(null);
+        }
+        else{
+            setActiveMenu(parent_menu.name);
+            setActiveChildMenu(menu.name);
+        }
+    },[menu])
 
 
 

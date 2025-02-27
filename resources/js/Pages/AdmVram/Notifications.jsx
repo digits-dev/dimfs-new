@@ -18,7 +18,6 @@ const Notifications = ({ notifications, queryParams, page_title }) => {
     const {theme} = useTheme();
     queryParams = queryParams || {};
     const [loading, setLoading] = useState(false);
-    console.log(notifications)
     return (
         <>
             <Head title={page_title} />

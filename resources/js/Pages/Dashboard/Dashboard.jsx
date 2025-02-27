@@ -9,25 +9,7 @@ const Dashboard = ({ item_master_stats, item_master_creation_counter, item_maste
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { textColor } = useThemeStyles(theme);
-    useEffect(() => {
-        if (auth.user) {
-            window.history.pushState(
-                null,
-                document.title,
-                window.location.href
-            );
 
-            window.addEventListener("popstate", (event) => {
-                window.history.pushState(
-                    null,
-                    document.title,
-                    window.location.href
-                );
-            });
-        }
-
-    }, [auth.user]);
-   
     return (
         <div className={`${textColor}`}>
             <Head title="Dashboard" />

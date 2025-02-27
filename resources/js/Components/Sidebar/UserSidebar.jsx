@@ -13,11 +13,12 @@ const UserSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChild
     const handleMenuClick = (menuTitle, type) => {
         if (type === 'Route'){
             setActiveMenu(menuTitle);
+            setTitle(menuTitle);
         }else {
             setActiveMenu((prev) => (prev === menuTitle ? null : menuTitle));
         }
       
-        setTitle(menuTitle);
+       
     };
 
     const handleChildMenuClick = (childTitle, parentTitle) => {

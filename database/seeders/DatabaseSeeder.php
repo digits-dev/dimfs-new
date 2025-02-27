@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Action;
+use App\Models\AdmAdminMenus;
 use App\Models\Customer;
 use App\Models\DepStatus;
 use App\Models\Device;
@@ -20,10 +21,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // $this->call([AdmSeeders::class]);
-        $this->call([AdmModules::class]);
-        $this->call([AdmMenus::class]);
+        // $this->call([AdmModules::class]);
+        // $this->call([AdmMenus::class]);
+        $this->call([AdmAdminMenusSeeder::class]);
         // $this->call([AdmPrivileges::class]);
-        $this->call([AdmMenuPrivileges::class]);
+        // $this->call([AdmMenuPrivileges::class]);
         // $this->call([AdmUsersSeeders::class]);
     }
 }
