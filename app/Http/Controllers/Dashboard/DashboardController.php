@@ -41,6 +41,7 @@ class DashboardController extends Controller
 
         $data['item_master_stats'] = [
             [
+                'name' => 'Item Master',
                 'value' => $item_master_count,
                 'label' => 'Items',
                 'sublabel' => 'Total Items',
@@ -50,6 +51,7 @@ class DashboardController extends Controller
                 'total' => $item_master_count,
             ],
             [
+                'name' => 'Brands',
                 'value' => Brands::where('status', 'ACTIVE')->count(),
                 'label' => 'Brands',
                 'sublabel' => 'Active Brands',
@@ -59,6 +61,7 @@ class DashboardController extends Controller
                 'total' => Brands::count(),
             ],
             [
+                'name' => 'Classification',
                 'value' => Classifications::where('status', 'ACTIVE')->count(),
                 'label' => 'Classes',
                 'sublabel' => 'Active Classes',
@@ -68,6 +71,7 @@ class DashboardController extends Controller
                 'total' => Classifications::count(),
             ],
             [
+                'name' => 'Sub Classification',
                 'value' => SubClassifications::where('status', 'ACTIVE')->count(),
                 'label' => 'Sub Classes',
                 'sublabel' => 'Active Sub Classes',

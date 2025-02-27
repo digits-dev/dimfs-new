@@ -1,9 +1,11 @@
 import { Link } from '@inertiajs/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { NavbarContext } from '../../Context/NavbarContext';
 
-const StatCard = ({ value, label, sublabel, icon, gradient, href, total }) => {
+const StatCard = ({name, value, label, sublabel, icon, gradient, href, total }) => {
     const [count, setCount] = useState(0);
     const countingFinished = useRef(false);
+    const { setTitle } = useContext(NavbarContext);
 
     useEffect(() => {
         if (countingFinished.current) return;
@@ -49,7 +51,7 @@ const StatCard = ({ value, label, sublabel, icon, gradient, href, total }) => {
                     </div>
                 </div>
 
-                <Link className="flex items-center gap-2 text-white/60 text-xs font-medium" href={href}>
+                <Link onClick={()=>{setTitle(name)}} className="flex items-center gap-2 text-white/60 text-xs font-medium" href={href}>
                     <div className="h-1 w-12 rounded-full bg-white/20 overflow-hidden relative">
                         <div
                             className="h-full bg-white/40 rounded-full transition-[width] duration-[2s] ease-out"
