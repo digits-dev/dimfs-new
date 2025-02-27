@@ -14,11 +14,11 @@ const AppSidebar = () => {
     const [activeMenu, setActiveMenu] = useState(null);
     const [activeChildMenu, setActiveChildMenu] = useState(null);
 
-    const menu = auth.menu;
+    const menu = auth.menu ?? '';
 
     const user_menus = auth.sessions.user_menus;
     const admin_menu = auth.sessions.admin_menus;
-    const parent_menu = user_menus.find(user_menu => user_menu.id === menu.parent_id) ?? admin_menu.find(admin_menu => admin_menu.id === menu.parent_id)
+    const parent_menu =  user_menus.find(user_menu => user_menu.id === menu.parent_id) ?? admin_menu.find(admin_menu => admin_menu.id === menu.parent_id) ?? '';
 
     
 

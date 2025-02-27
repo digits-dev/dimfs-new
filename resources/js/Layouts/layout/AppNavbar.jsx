@@ -231,23 +231,16 @@ const AppNavbar = () => {
                 className={`${theme} w-full h-[60px] border-b-[1px] ${!['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'}  flex items-center justify-end px-5 py-7 select-none shodow-customLight`}
                 ref={menuRef}
             >
-                <div className="flex items-center gap-4 pl-[16px] py-10">
-                    <div className={`flex items-center justify-center space-x-2 
-                            ${theme === 'bg-skin-white' ? `bg-skin-white-light` : calendarDateTimeColor} 
-                            ${['bg-skin-white','bg-skin-blue','bg-skin-blue-light'].includes(theme) ? 'text-black' : textColor} 
-                            rounded-md px-[10px] py-[6px] lg:px-[20px] shodow-lg cursor-pointer lg:hidden`}
+                <div className="flex items-center gap-3 pl-[16px] py-10">
+                    <div className={`flex md:hidden items-center  bg-white/20 rounded-lg p-3 text-white`}
                             onClick={toggleDateTime}
                     >
-                        <i className='fa fa-calendar-days text-2xl leading-none'></i>
+                        <i className='fa-solid fa-clock text-xl leading-none'></i>
                     </div>
-                    <div className={`flex items-center justify-center space-x-2 
-                            ${theme === 'bg-skin-white' ? `bg-skin-white-light` : calendarDateTimeColor} 
-                            ${['bg-skin-white','bg-skin-blue','bg-skin-blue-light'].includes(theme) ? 'text-black' : textColor} 
-                            rounded-md px-[10px] py-[6px] lg:px-[25px] shodow-lg hidden lg:block`}
-                            style={{width:'397px'}}
+                    <div className='hidden md:flex items-center w-[23rem] bg-white/20 rounded-lg px-4 py-2 text-white'
                     >
-                        <i className='fa fa-calendar-days text-[20px] leading-none'></i>
-                        <span className="text-sm font-sm leading-none">
+                        <i className='fa-solid fa-clock text-[20px] leading-none mr-2'></i>
+                        <div className="text-sm font-sm flex items-center justify-center flex-1 leading-none">
                             {currentDate.toLocaleString("en-US", {
                                 weekday: "long",
                                 year: "numeric",
@@ -257,7 +250,7 @@ const AppNavbar = () => {
                                 minute: "2-digit",
                                 second: "2-digit",
                             })}
-                        </span>
+                        </div>
                     </div>
                     {
                         showDateTime && (

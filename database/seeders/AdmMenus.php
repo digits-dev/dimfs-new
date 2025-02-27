@@ -32,7 +32,7 @@ class AdmMenus extends Seeder
                 'path'              => 'Dashboard\DashboardControllerGetIndex',
                 'slug'              => 'dashboard',
                 'color'             => NULL,
-                'icon'              => 'fa fa-dashboard',
+                'icon'              => 'fa-solid fa-chart-simple',
                 'parent_id'         => 0,
                 'is_active'         => 1,
                 'is_dashboard'      => 1,

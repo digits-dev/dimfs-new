@@ -7,18 +7,11 @@ import { useTheme } from "../../Context/ThemeContext";
 
 const AppContent = ({ children }) => {
     const {theme} = useTheme();
-    const { auth } = usePage().props;
-    const { title, setTitle } = useContext(NavbarContext);
-    useEffect(() => {
-        setTimeout(() => {
-            setTitle(auth.module[0].name);
-        }, 5);
-    }, []);
 
     return (
         <>
             <div id="app-content" className={`h-full ${theme === 'bg-skin-black' ? 'bg-black-screen-color' : 'bg-screen-color'} p-4`}>
-                <BreadCrumbs data={auth} title={title}></BreadCrumbs>
+                <BreadCrumbs></BreadCrumbs>
                 <ToastProvider>
                     {children}
                 </ToastProvider>

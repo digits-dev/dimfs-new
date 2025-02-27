@@ -142,7 +142,7 @@ class AdmModules extends Seeder
 
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => 'Dashboard',
-                'icon' => 'images/navigation/dashboard-icon.png',
+                'icon' => 'fa-solid fa-chart-simple',
                 'path' => 'dashboard',
                 'table_name' => 'dashboard',
                 'controller' => 'Dashboard\DashboardController',
