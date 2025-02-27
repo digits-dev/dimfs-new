@@ -96,7 +96,7 @@ const AdminSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChil
                     if (menu.type === 'Route'){
                         return <SidebarMenuCard 
                                     href={menu.slug} 
-                                    key={index} 
+                                    key={index + menu.name} 
                                     menuTitle={menu.name} 
                                     icon={menu.icon}
                                     setActiveChildMenu={setActiveChildMenu}
@@ -107,7 +107,7 @@ const AdminSidebar = ({activeMenu, setActiveMenu, activeChildMenu, setActiveChil
                     else
                     {
                         return <SidebarMenuCardMultiple 
-                                    key={index}
+                                    key={index + menu.name}
                                     menuTitle={menu.name} 
                                     icon={menu.icon} 
                                     childMenus={menu.children} 

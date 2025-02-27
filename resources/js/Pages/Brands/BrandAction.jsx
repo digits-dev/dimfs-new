@@ -4,12 +4,15 @@ import { useTheme } from '../../Context/ThemeContext';
 import { useToast } from '../../Context/ToastContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import InputComponent from '../../Components/Forms/Input';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
 const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_brand_groups}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
+    const { auth } = usePage().props;
+    const privilege  = auth.sessions.admin_privileges;
+
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
 
     const { data, setData, processing, reset, post, errors } = useForm({
@@ -85,7 +88,7 @@ const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_
         <InputComponent
             name="brand_code"
             value={data.brand_code}
-            disabled={action === 'View'}
+            disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Brand Code"
             onChange={(e)=> setData("brand_code", e.target.value)}
         />

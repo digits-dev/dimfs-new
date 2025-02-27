@@ -3,13 +3,36 @@ import { useTheme } from '../../Context/ThemeContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import UserSidebar from '../../Components/Sidebar/UserSidebar';
 import AdminSidebar from '../../Components/Sidebar/AdminSidebar';
+import { usePage } from '@inertiajs/react';
 
 const AppSidebar = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [activeMenu, setActiveMenu] = useState('Dashboard');
+    
+    const {theme} = useTheme();
+    const { auth } = usePage().props;
+
+    const [activeMenu, setActiveMenu] = useState(null);
     const [activeChildMenu, setActiveChildMenu] = useState(null);
 
-    const {theme} = useTheme();
+    const menu = auth.menu;
+    const user_menus = auth.sessions.user_menus;
+    const parent_menu = user_menus.find(user_menu => user_menu.id === menu.parent_id)
+    
+
+    useEffect(()=>{
+        if (menu.parent_id == 0){
+            setActiveMenu(menu.name);
+            setActiveChildMenu(null);
+        }
+        else{
+            setActiveMenu(parent_menu.name);
+            setActiveChildMenu(menu.name);
+        }
+    },[menu])
+
+
+
+    const privilege  = auth.sessions.admin_privileges;
     const { sideBarBgColor, bgColor, borderColor } = useThemeStyles(theme);
 
     const handleSidebarToggle = () => {
@@ -30,7 +53,8 @@ const AppSidebar = () => {
             <div className={`${isSidebarOpen ? 'w-[17rem]' : 'w-0'} transition-all duration-500 ${sideBarBgColor} absolute md:relative z-100 `}>
                 <div className=' max-h-[85vh] overflow-y-auto scrollbar-none'>
                     <UserSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
-                    <AdminSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>
+                    {privilege == 1 && <AdminSidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} activeChildMenu={activeChildMenu} setActiveChildMenu={setActiveChildMenu}/>}
+                    
                 </div>
             </div>
             

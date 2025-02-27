@@ -2,6 +2,7 @@
 
 namespace app\Helpers;
 
+use App\Models\AdmModels\AdmMenus;
 use App\Models\LogSystemError;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -440,6 +441,12 @@ class CommonHelpers {
             //supply modulpath instead of $module incase where user decides to create form and custom url that does not exist in cms_moduls table.
             return ($module)?:$modulepath;
         }
+    }
+
+    public static function getCurrentMenu()
+    {
+        return AdmMenus::where('slug', self::getModulePath())->first();
+
     }
 
     public static function getCurrentMethod()
