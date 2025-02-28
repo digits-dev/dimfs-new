@@ -56,7 +56,7 @@ const useThemeStyles = (theme) => {
         
         },
         borderTheme: {
-            'bg-skin-blue': 'border-skin-blue',
+            'bg-skin-blue': 'border-skin-blue-secondary',
             'bg-skin-black': 'border-gray-300',
     
         },
@@ -84,16 +84,11 @@ const useThemeStyles = (theme) => {
         },
 
         bulkActionTextColor: {
-            'bg-skin-blue': 'text-skin-blue',
+            'bg-skin-blue': 'text-skin-blue-secondary',
             'bg-skin-black': 'text-gray-300',
         
         },
 
-        bulkActionTextColor: {
-            'bg-skin-blue': 'text-skin-blue',
-            'bg-skin-black': 'text-gray-300',
-          
-        },
 
         bulkActionCancelButtonColor: {
             'bg-skin-blue': 'bg-gray-200',

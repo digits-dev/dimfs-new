@@ -4,13 +4,15 @@ import { useTheme } from '../../Context/ThemeContext';
 import { useToast } from '../../Context/ToastContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import InputComponent from '../../Components/Forms/Input';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
 const ClassificationsAction = ({action, onClose, updateData, all_active_categories, all_categories}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+    const { auth } = usePage().props;
+    const privilege  = auth.sessions.admin_privileges;
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
@@ -115,7 +117,7 @@ const ClassificationsAction = ({action, onClose, updateData, all_active_categori
         <InputComponent
             name="class_code"
             value={data.class_code}
-            disabled={action === 'View'}
+            disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Class Code"
             onChange={(e)=> setData("class_code", e.target.value)}
         />

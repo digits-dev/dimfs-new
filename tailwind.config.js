@@ -24,7 +24,7 @@ module.exports = {
                 customTextGray: "#3c8dbc",
                 "custom-gray": "#F5F5F5",
                 "sidebar-hover-color": "#323232",
-                // "skin-blue": "#134B70",
+                "skin-blue-secondary": "#1e3a8a",
                 "skin-blue-light": "#508C9B",
                 "skin-yellow": "#e08e0b",
                 "skin-yellow-light": "#FFB200",

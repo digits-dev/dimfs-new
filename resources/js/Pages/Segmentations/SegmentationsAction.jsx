@@ -4,7 +4,7 @@ import { useTheme } from "../../Context/ThemeContext";
 import { useToast } from "../../Context/ToastContext";
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import InputComponent from "../../Components/Forms/Input";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm, usePage } from "@inertiajs/react";
 import DropdownSelect from "../../Components/Dropdown/Dropdown";
 
 const SegmentationsAction = ({ action, onClose, updateData }) => {
@@ -12,6 +12,8 @@ const SegmentationsAction = ({ action, onClose, updateData }) => {
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } =
         useThemeStyles(theme);
+    const { auth } = usePage().props;
+    const privilege  = auth.sessions.admin_privileges;
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
@@ -93,7 +95,7 @@ const SegmentationsAction = ({ action, onClose, updateData }) => {
             <InputComponent
                 name="segmentation_code"
                 value={data.segmentation_code}
-                disabled={action === "View"}
+                disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Segmentation Code"
                 onChange={(e) => setData("segmentation_code", e.target.value)}
             />
