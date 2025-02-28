@@ -876,6 +876,36 @@ class AdmModules extends Seeder
                 'is_active' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'name' => 'RMA Item Master',
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'rma_item_masters',
+                'table_name' => 'rma_item_masters',
+                'controller' => 'RmaItemMasters\RmaItemMastersController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'RMA Item Master Approval',
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'rma_item_master_approvals',
+                'table_name' => 'rma_item_master_approvals',
+                'controller' => 'RmaItemMasterApprovals\RmaItemMasterApprovalsController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'RMA Item Master History',
+                'icon' => 'fa-regular fa-circle',
+                'path' => 'rma_item_master_histories',
+                'table_name' => 'rma_item_master_histories',
+                'controller' => 'RmaItemMasterHistories\RmaItemMasterHistoriesController',
+                'is_protected' => 0,
+                'is_active' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
         ];
 
         foreach ($data as $module) {

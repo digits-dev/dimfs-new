@@ -13,12 +13,7 @@ class AdmMenus extends Seeder
      * @return void
      */
     public function run() {
-        self::submasterMenu();
         self::mainMenu();
-    }
-
-    public function submasterMenu() {
-     
     }
 
     public function mainMenu() {
@@ -56,7 +51,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 5
+                'sorting'           => 7
             ]
         );
 
@@ -208,7 +203,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 6
+                'sorting'           => 8
             ]
         );
 
@@ -740,7 +735,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 7
+                'sorting'           => 9
             ]
         );
 
@@ -1197,7 +1192,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 8
+                'sorting'           => 10
             ]
         );
 
@@ -1311,7 +1306,7 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 9
+                'sorting'           => 11
             ]
         );
 
@@ -1348,7 +1343,63 @@ class AdmMenus extends Seeder
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
-                'sorting'           => 1
+                'sorting'           => 2
+            ]
+        );
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'RMA Item Master',
+            ],
+            [
+                'name'              => 'RMA Item Master',
+                'type'              => 'Route',
+                'path'              => 'RmaItemMasters\RmaItemMastersControllerGetIndex',
+                'slug'              => 'rma_item_masters',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 5
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'RMA Item Master Approval',
+            ],
+            [
+                'name'              => 'RMA Item Master Approval',
+                'type'              => 'Route',
+                'path'              => 'RmaItemMasterApprovals\RmaItemMasterApprovalsControllerGetIndex',
+                'slug'              => 'rma_item_master_approvals',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 6
+            ]
+        );
+
+        DB::table('adm_menuses')->updateOrInsert(
+            [
+                'name'              => 'RMA Item Master History',
+            ],
+            [
+                'name'              => 'RMA Item Master History',
+                'type'              => 'Route',
+                'path'              => 'RmaItemMasterHistories\RmaItemMasterHistoriesControllerGetIndex',
+                'slug'              => 'rma_item_master_histories',
+                'color'             => NULL,
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 68,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges'  => 1,
+                'sorting'           => 3
             ]
         );
     }
