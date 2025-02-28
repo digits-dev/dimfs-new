@@ -14,7 +14,7 @@ import { useToast } from "../../Context/ToastContext";
 const ModuleHeadersSort = () => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
-    const { textColorActive } = useThemeStyles(theme);
+    const { textColorActive, borderTheme, sideBarBgColor } = useThemeStyles(theme);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -89,9 +89,9 @@ const ModuleHeadersSort = () => {
     <>
         <Head title="Module Headers - Sort"/>
         <ContentPanel>
-            <p className="text-lg font-semibold mb-2">Sort Headers</p>
+            <p className={`text-lg font-semibold mb-2 ${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'}`}>Sort Headers</p>
             <div className="space-y-4">
-                <div className="flex flex-col md:flex-row justify-center items-stretch gap-4 h-full">
+                <div className={`flex flex-col md:flex-row justify-center items-stretch gap-4 h-full ${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'}`}>
                     {/* CARD 1 */}
                     <div className="md:w-[40%] flex flex-col min-h-full border rounded-lg p-4 border-gray-300">
                         <DropdownSelect
@@ -158,8 +158,8 @@ const ModuleHeadersSort = () => {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        className={`p-2 select-none bg-white border rounded-lg shadow-sm cursor-grab text-center hover:shadow-md ${
-                                                            snapshot.isDragging ? "bg-blue-100 scale-105" : ""
+                                                        className={`p-2 select-none ${sideBarBgColor} border-2 ${borderTheme} rounded-lg shadow-sm cursor-grab text-center hover:shadow-md ${
+                                                            snapshot.isDragging ? `${sideBarBgColor} scale-105` : ""
                                                         }`}
                                                         >
                                                         {item}

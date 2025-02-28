@@ -291,7 +291,7 @@ class ModuleHeadersController extends Controller
             }
             
     
-            return back()->with(['message' => 'Module Header Sorting Success!', 'type' => 'success']);
+            return redirect('module_headers')->with(['message' => 'Module Header Sorting Success!', 'type' => 'success']);
         }  
 
         catch (\Exception $e) {
