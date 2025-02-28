@@ -281,7 +281,8 @@ class ModuleHeadersController extends Controller
             $sorting = 1;
 
             foreach($request->items as $item){
-                $header = ModuleHeaders::where('header_name', $item)->first();
+                $header = ModuleHeaders::where('header_name', $item)
+                ->where('module_id', $request->module_id)->first();
                 $header->sorting = $sorting;
                 $header->updated_at = now();
                 $header->save();
