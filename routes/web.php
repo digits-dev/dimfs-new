@@ -50,6 +50,9 @@ use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
 use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
 use App\Http\Controllers\GashaponItemMasterApprovals\GashaponItemMasterApprovalsController;
+use App\Http\Controllers\RmaItemMasters\RmaItemMastersController;
+use App\Http\Controllers\RmaItemMasterApprovals\RmaItemMasterApprovalsController;
+use App\Http\Controllers\RmaItemMasterHistories\RmaItemMasterHistoriesController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
@@ -259,6 +262,28 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('gashapon_item_master_histories')->group(function() {
         Route::get('/view/{id}', [GashaponItemMasterHistoriesController::class, 'view']);
+    });
+
+    // ---------------------------------------- RMA ITEM MASTER ----------------------------------------//
+
+    Route::prefix('rma_item_masters')->group(function() {
+        Route::get('/create_view', [RmaItemMastersController::class, 'getCreate']);
+        Route::post('/create', [RmaItemMastersController::class, 'create']);
+        Route::get('/update_view/{item}', [RmaItemMastersController::class, 'getUpdate']);
+        Route::post('/update', [RmaItemMastersController::class, 'update']);
+        Route::get('/view_details/{item}', [RmaItemMastersController::class, 'getView']);
+        Route::get('/export', [RmaItemMastersController::class, 'export']);
+    });
+
+    Route::prefix('rma_item_master_approvals')->group(function() {
+        Route::get('/approval_view/{action}/{id}', [RmaItemMasterApprovalsController::class, 'approvalView']);
+        Route::post('/approval', [RmaItemMasterApprovalsController::class, 'approval']);
+        Route::post('/bulk_action', [RmaItemMasterApprovalsController::class, 'bulkActions']);
+        Route::get('/export', [RmaItemMasterApprovalsController::class, 'export']);
+    });
+
+    Route::prefix('rma_item_master_histories')->group(function() {
+        Route::get('/view/{id}', [RmaItemMasterHistoriesController::class, 'view']);
     });
 
     // ----------------------------------------- SUBMASTERS -----------------------------------------//
