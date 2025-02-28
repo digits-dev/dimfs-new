@@ -58,6 +58,10 @@ const UpdateTableSetting = ({
             id: "28",
             name: "Gashapon Item Master",
         },
+        {
+            id: "79",
+            name: "RMA Item Master",
+        },
     ];
 
     const statuses = [

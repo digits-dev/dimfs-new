@@ -39,6 +39,10 @@ const CreateTableSetting = ({ privileges, action_types }) => {
             id: "28",
             name: "Gashapon Item Master",
         },
+        {
+            id: "79",
+            name: "RMA Item Master",
+        },
     ];
 
     const handleCheckboxChange = (item) => {

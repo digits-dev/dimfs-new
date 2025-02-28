@@ -51,7 +51,7 @@ class ModuleHeadersController extends Controller
 
         $data['all_active_modules'] = AdmModules::select('id', 'name', 'is_active as status')
             ->where('is_active', 1)
-            ->whereIn('name', ['Item Master', 'Gashapon Item Masters'])
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
@@ -59,7 +59,7 @@ class ModuleHeadersController extends Controller
             });
 
         $data['all_modules'] = AdmModules::select('id', 'name', 'is_active as status')    
-            ->whereIn('name', ['Item Master', 'Gashapon Item Masters'])
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
