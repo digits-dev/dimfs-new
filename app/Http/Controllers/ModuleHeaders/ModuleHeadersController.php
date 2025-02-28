@@ -131,8 +131,6 @@ class ModuleHeadersController extends Controller
 
     public function create(Request $request){
 
-        // dd($request->all());
-
         $validatedFields = $request->validate([
             'module_id' => 'required|int',
             'name' => 'required|string|max:50',
@@ -235,6 +233,64 @@ class ModuleHeadersController extends Controller
             $module_headers->save();
     
             return back()->with(['message' => 'Module Header Updating Success!', 'type' => 'success']);
+        }  
+
+        catch (\Exception $e) {
+
+            CommonHelpers::LogSystemError('Module Headers', $e->getMessage());
+            return back()->with(['message' => 'Module Header Updating Failed!', 'type' => 'error']);
+        }
+    }
+
+    public function sortView(){
+        $data = [];
+
+        return Inertia::render("ModuleHeaders/ModuleHeadersSort", $data);
+    }
+
+    public function getHeader($header_name)
+    {
+        $headerName = ModuleHeaders::where('module_id', $header_name)
+            ->where('status', 'ACTIVE')
+            ->orderBy('sorting', 'asc') 
+            ->pluck('header_name');
+
+
+        return response()->json($headerName);
+      
+    }
+
+    public function sort(Request $request){
+
+        $request->validate([
+            'module_name' => 'required',
+        ]);
+
+        try {
+
+            $module_headers = ModuleHeaders::where('module_id', $request->module_id)->get();
+
+            if (empty($request->items)){
+                return back()->with(['message' => 'The Module has no headers', 'type' => 'error']);
+            }
+
+            if ($module_headers->isEmpty()) { // Use isEmpty() instead of empty()
+                return back()->with(['message' => 'Module Not Found', 'type' => 'error']);
+            }
+
+            $sorting = 1;
+
+            foreach($request->items as $item){
+                $header = ModuleHeaders::where('header_name', $item)->first();
+                $header->sorting = $sorting;
+                $header->updated_at = now();
+                $header->save();
+                
+                $sorting++;
+            }
+            
+    
+            return back()->with(['message' => 'Module Header Sorting Success!', 'type' => 'success']);
         }  
 
         catch (\Exception $e) {

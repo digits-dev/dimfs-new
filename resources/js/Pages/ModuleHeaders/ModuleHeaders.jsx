@@ -102,6 +102,14 @@ const ModuleHeaders = ({page_title, tableName, module_headers, queryParams, all_
                         > 
                           <i className="fa-solid fa-plus mr-1"></i>  Add Module Header
                         </Button>
+                        <Button
+                            type="link"
+                            extendClass={(['bg-skin-white'].includes(theme) ? primayActiveColor : theme)+" py-[5px] px-[10px]"}
+                            fontColor={textColorActive}
+                            href="/module_headers/sort_view"
+                        >
+                            <i className="fa-solid fa-arrow-up-1-9"></i> Sort Headers
+                        </Button>
                         <Export path="/module_headers/export" page_title={page_title}/>
                     </div>
                     <div className='flex'>

@@ -203,6 +203,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [ModuleHeadersController::class, 'create']);
         Route::post('/update', [ModuleHeadersController::class, 'update']);
         Route::get('/export', [ModuleHeadersController::class, 'export']);
+        Route::get('/sort_view', [ModuleHeadersController::class, 'sortView']);
+        Route::post('/sort', [ModuleHeadersController::class, 'sort']);
+        Route::get('/get_header/{header_name}', [ModuleHeadersController::class, 'getHeader']);
     });
    
 
