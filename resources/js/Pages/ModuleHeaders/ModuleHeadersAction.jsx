@@ -7,7 +7,7 @@ import InputComponent from '../../Components/Forms/Input';
 import { router, useForm } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
-const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns, database_tables_and_columns}) => {
+const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modules, item_master_columns, gashapon_item_master_columns, database_tables_and_columns, rma_item_master_columns}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
@@ -194,7 +194,7 @@ const ColorsAction = ({action, onClose, updateData, all_active_modules, all_modu
             isDisabled={!data.module_id}
             onChange={(selectedOption) => setData("name", selectedOption?.value)}
             name="column_name"
-            options={data.module_name == 'Item Master' ? item_master_columns : gashapon_item_master_columns}
+            options={data.module_name == 'Item Master' ?  item_master_columns : data.module_name == 'Gashapon Item Masters' ? gashapon_item_master_columns : rma_item_master_columns}
             value={data.name ? { label: data.name, value: data.name } : null}
         />
         }

@@ -9,6 +9,7 @@ use App\Models\AdmModels\AdmModules;
 use App\Models\GashaponItemMaster;
 use App\Models\ItemMaster;
 use App\Models\ModuleHeaders;
+use App\Models\RmaItemMaster;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,21 @@ class ModuleHeadersController extends Controller
                 Schema::getColumnListing((new GashaponItemMaster())->getTable()),
                 function ($column) {
                     return !ModuleHeaders::where('name', $column)->where('module_id', '28')->exists();
+                }
+            )
+        ));
+
+        $data['rma_item_master_columns'] = array_values(array_map(
+            function ($column) {
+                return [
+                    'id' => $column,
+                    'name' => $column
+                ];
+            },
+            array_filter(
+                Schema::getColumnListing((new RmaItemMaster())->getTable()),
+                function ($column) {
+                    return !ModuleHeaders::where('name', $column)->where('module_id', '79')->exists();
                 }
             )
         ));
