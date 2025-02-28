@@ -5,22 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Colors extends BaseModel
+class ModuleActivityHistory extends Model
 {
     use HasFactory;
 
-    protected $table = 'colors';
+    protected $table = 'module_activity_history';
 
     protected $fillable = [
         'id',
-        'color_code',
-        'color_description',
-        'status',
+        'module_name',
+        'action_type',
         'created_by',
-        'updated_by',
         'created_at',
         'updated_at',
-        'deleted_at',
+
     ];
 
     protected $casts = [
@@ -29,11 +27,9 @@ class Colors extends BaseModel
     ];
 
     protected $filterable = [
-        'color_code',
-        'color_description',
-        'status',
+        'module_name',
+        'action_type',
         'created_by',
-        'updated_by',
         'created_at',
         'updated_at',
     ];
@@ -48,9 +44,6 @@ class Colors extends BaseModel
                         $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
                             $query->where('name', 'LIKE', "%$search%");
                         });
-                    }
-                    else if ($field === 'status') {
-                        $query->orWhere($field, '=', $search);
                     }
                     elseif ($field === 'updated_by')  {
                         $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
@@ -69,14 +62,10 @@ class Colors extends BaseModel
         foreach ($this->filterable as $field) {
             if ($request->filled($field)) {
                 $value = $request->input($field);
-                if ($field === 'status') {
-                    $query->where($field, '=', $value);
-                }
-                else{
-                    $query->where($field, 'LIKE', "%$value%");
-                }
+                $query->where($field, 'LIKE', "%$value%");
             }
         }
+    
         return $query;
         
     }
@@ -85,8 +74,4 @@ class Colors extends BaseModel
         return $this->belongsTo(AdmUser::class, 'created_by', 'id');
     }
     
-    public function getUpdatedBy() {
-        return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
-    }
-
 }

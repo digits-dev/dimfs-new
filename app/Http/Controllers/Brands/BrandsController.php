@@ -7,6 +7,7 @@ use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\BrandGroups;
 use App\Models\Brands;
+use App\Models\ModuleActivityHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,12 @@ class BrandsController extends Controller
                 'status' => 'ACTIVE',
                 'created_by' => CommonHelpers::myId(),
             ]);
+
+            // ModuleActivityHistory::create([
+            //     'module_name' => 'Brands',
+            //     'action_type' => 'CREATE',
+            //     'created_by' => CommonHelpers::myId(),
+            // ]);
     
             return back()->with(['message' => 'Brand Creation Success!', 'type' => 'success']);
 
@@ -133,6 +140,13 @@ class BrandsController extends Controller
             $brands->updated_at = now();
     
             $brands->save();
+
+            // ModuleActivityHistory::create([
+            //     'module_name' => 'Brands',
+            //     'action_type' => 'UPDATE',
+            //     'created_by' => CommonHelpers::myId(),
+            // ]);
+    
     
             return back()->with(['message' => 'Brand Updating Success!', 'type' => 'success']);
         }  
