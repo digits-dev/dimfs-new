@@ -4,13 +4,16 @@ import { useTheme } from '../../Context/ThemeContext';
 import { useToast } from '../../Context/ToastContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import InputComponent from '../../Components/Forms/Input';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import DropdownSelect from '../../Components/Dropdown/Dropdown';
 
 const GashaponCountriesAction = ({action, onClose, updateData}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+
+    const { auth } = usePage().props;
+    const privilege  = auth.sessions.admin_privileges;
 
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || updateData.id,
@@ -81,7 +84,7 @@ const GashaponCountriesAction = ({action, onClose, updateData}) => {
         <InputComponent
             name="country_code"
             value={data.country_code}
-            disabled={action === 'View'}
+            disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Gashapon Country Code"
             onChange={(e)=> setData("country_code", e.target.value)}
         />
