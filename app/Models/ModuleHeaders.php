@@ -76,7 +76,6 @@ class ModuleHeaders extends Model
     {
         return self::whereIn('header_name', $tableSetting)
             ->where('module_id', $moduleId)
-            ->select('name', 'header_name', 'width', 'table_join')
             ->orderBy('sorting')
             ->get();
     }

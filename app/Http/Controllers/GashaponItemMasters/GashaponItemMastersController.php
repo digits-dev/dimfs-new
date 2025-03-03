@@ -77,6 +77,16 @@ class GashaponItemMastersController extends Controller
         $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
         $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
 
+        $data['filter_inputs'] = $data['table_headers']
+        ->map(function ($columns) {
+            if ($columns->table) {
+                $columns->table_data = DB::table($columns->table)
+                    ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
+                    ->get();
+            }
+            return $columns;
+        });
+
         // PERMISSIONS
 
         $permissions = TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)

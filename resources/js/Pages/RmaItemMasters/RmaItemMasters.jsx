@@ -17,7 +17,7 @@ import RowData from "../../Components/Table/RowData";
 import Pagination from "../../Components/Table/Pagination";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
-// import ItemMastersFilter from "./ItemMasterFilters";
+import Filters from "../../Components/Filters/Filters";
 
 const RmaItemMasters = ({
     page_title,
@@ -89,11 +89,9 @@ const RmaItemMasters = ({
                                 )}
                             </div>
                             <div className="flex">
-                                {/* <CustomFilter>
-                                    <ItemMastersFilter
-                                        filter_inputs={filter_inputs}
-                                    />
-                                </CustomFilter> */}
+                                <CustomFilter>
+                                    <Filters filter_inputs={filter_inputs} />
+                                </CustomFilter>
                                 <TableSearch queryParams={queryParams} />
                             </div>
                         </TopPanel>
