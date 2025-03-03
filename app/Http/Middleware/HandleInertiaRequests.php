@@ -58,7 +58,8 @@ class HandleInertiaRequests extends Middleware
                 'announcement' => $request->session()->get('unread-announcement'),
                 'notifications' => fn () => Auth::user() ? Auth::user()->notifications()->orderBy('created_at','DESC')->get() : [],
                 'unread_notifications' => fn () => Auth::user() ? Auth::user()->notifications()->where('is_read', 0)->orderBy('created_at','DESC')->count() : [],
-                'profile' => fn () => Auth::user() ? AdmUserProfiles::where('adm_user_id',Auth::user()->id)->whereNull('archived')->first() : [],
+                'user_profile' => AdmUserProfiles::where('status', 'ACTIVE')->where('adm_user_id', CommonHelpers::myId())->first(),
+
             ],
            
             'errors' => function () use ($request) {

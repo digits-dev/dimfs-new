@@ -210,7 +210,7 @@ class AdmUser extends Authenticatable
         return $query;
     }
 
-    public function role()
+    public function privilege()
     {
         return $this->belongsTo(AdmPrivileges::class, 'id_adm_privileges', 'id');
     }

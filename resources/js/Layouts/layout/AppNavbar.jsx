@@ -11,6 +11,7 @@ import getAppName from '../../Components/SystemSettings/ApplicationName';
 import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
 import Modal from '../../Components/Modal/Modal';
 import useThemeSwalColor from '../../Hooks/useThemeSwalColor';
+import Modalv2 from '../../Components/Modal/Modalv2';
 const AppNavbar = () => {
     const { auth } = usePage().props;
     const [showMenu, setShowMenu] = useState(false);
@@ -19,13 +20,15 @@ const AppNavbar = () => {
     const [unreadnNotifications, setUnreadnNotifications] = useState(auth.unread_notifications || false);
     const menuRef = useRef(null);
     const {theme, setTheme} = useTheme();
-    const { profile } = useProfile();
     const { buttonSwalColor, bgColor, calendarDateTimeColor, textColor, textColorActive, borderColor, primayActiveColor } = useThemeStyles(theme);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [showDateTime, setShowDateTime] = useState(false);
     const [appname, setAppname] = useState('');
     const [applogo, setApplogo] = useState('');
     const [showModalTheme, setShowModalTheme] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+
     const swalColor = useThemeSwalColor(theme);
     useEffect(() => {
         getAppName().then(appName => {
@@ -52,7 +55,7 @@ const AppNavbar = () => {
         return () => clearInterval(interval); 
     }, []);
 
-    
+  
    
     const readNotification = async (e, id) => {
         try {
@@ -86,21 +89,11 @@ const AppNavbar = () => {
         };
     }, []);
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-        Swal.fire({
-            title: `<p class="font-poppins text-3xl" >Do you want to Logout</p>`,
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            confirmButtonColor: buttonSwalColor,
-            icon: 'question',
-            iconColor: buttonSwalColor,
-            reverseButtons: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                router.post('/logout');
-            }
-        });
+    const handleLogoutModalToggle = () => {
+        setShowLogoutModal(!showLogoutModal);
+    }
+    const handleLogout = () => {
+        router.post('/logout');
     };
 
     const getInitials = (fullName) => {
@@ -335,27 +328,18 @@ const AppNavbar = () => {
                     <div className={`flex items-center gap-4 border-l-[1px] pl-5 py-[8px] ${theme === 'bg-skin-black'?'border-gray-700':'border-gray-200'} cursor-pointer`} 
                         onClick={handleToggle}
                         style={{
-                            zIndex: '999999999'
+                            zIndex: '80'
                         }}>
-                        {(profile ?? auth.profile) ? (
                             <div
                                 className={`w-11 h-11 border-2 border-gray-400 rounded-full overflow-hidden shadow-md`}
                             >
-                                <img
-                                    src={`/images/profile/`+(profile ?? auth.profile.file_name)}
-                                    alt="User Avatar"
-                                    className="w-full h-full object-cover"
-                                />
+                                {auth.user_profile
+                                    ? 
+                                    <img src={`../storage/${auth.user_profile.file_name}`} className="w-full h-full object-cover"/> 
+                                    :
+                                    <img src="/images/others/user-icon.png" className="w-full h-full object-cover"/>
+                                }
                             </div>
-                        ) : (
-                            <div
-                                className={`${backgroundColor} p-[21px] border-2 border-gray-300 cursor-pointer rounded-full rounded-full rounded-full w-[40px] h-[40px] flex items-center justify-center`}
-                            >
-                                <p className={`${(theme === 'bg-skin-white' ? textColor : textColorActive) } text-center text-[18px] m-0 p-0`}>
-                                        {getInitials(auth.user.name)}
-                                </p>
-                            </div>
-                        )}
                             <p className={`font-poppins ${(theme === 'bg-skin-white' ? textColor : textColorActive) } hidden lg:block`}>
                                 <span className="font-poppins text-[15px]">{auth.user.name}</span>
                             </p>
@@ -366,26 +350,16 @@ const AppNavbar = () => {
                         </div>
                     </div>
                         {showMenu && (
-                            <div className={`absolute z-90 right-1 top-[113px] md:lg:top-[65px] lg:top-[65px] ${theme === 'bg-skin-black' ? 'bg-skin-black' : 'bg-white' } py-3 rounded-[5px] pop-up-boxshadow z-[100] w-[332px]`}
+                            <div className={`absolute z-[90] right-1 top-[113px] md:lg:top-[65px] lg:top-[65px] ${theme === 'bg-skin-black' ? 'bg-skin-black' : 'bg-white' } py-3 rounded-[5px] pop-up-boxshadow z-[100] w-[332px]`}
                             >
                                 <div className="flex items-center justify-center gap-3 border-b-[1px] px-5 pb-2 ">
-                                
-                                    {(profile ?? auth.profile) ? (                   
-                                        <img
-                                            src={`/images/profile/`+(profile ?? auth.profile.file_name)}
-                                            alt="User Avatar"
-                                            className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <div
-                                            className={`${backgroundColor} p-[32px] cursor-pointer rounded-full border-2 border-gray-300  w-[40px] h-[40px] flex items-center justify-center`}
-                                        >
-                                            <p className={`${!['bg-skin-black'].includes(theme) ? textColor : textColorActive} text-center text-[30px] m-0 p-0`}>
-                                                    {getInitials(auth.user.name)}
-                                            </p>
-                                        </div>
-                                    )}
-                                    <p className={`flex-1 font-poppins ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
+                                    {auth.user_profile
+                                        ? 
+                                        <img src={`../storage/${auth.user_profile.file_name}`} className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/> 
+                                        :
+                                        <img src="/images/others/user-icon.png" className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/>
+                                    }
+                                    <p className={`flex-1 flex flex-col font-poppins ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
                                         <span className="font-semibold text-[15px]">{auth.user.name}</span>
                                         <span className="text-[13px]"> {auth.user.email}</span>
                                     </p>
@@ -425,7 +399,7 @@ const AppNavbar = () => {
                                     </span>
                                 </div>
                                 <div
-                                    onClick={handleLogout}
+                                    onClick={handleLogoutModalToggle}
                                 >
                                     <div className={`border-t-[1px] px-5 py-2 flex items-center cursor-pointer ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
                                         <i className='fa fa-power-off py-2 px-[9px] bg-red-500 hover:bg-red-700 rounded-md text-white'></i>
@@ -473,7 +447,15 @@ const AppNavbar = () => {
                     </div>
                 </div>
             </form>
-        </Modal>            
+        </Modal>
+        <Modalv2 
+            isOpen={showLogoutModal} 
+            setIsOpen={handleLogoutModalToggle}
+            title="Confirm Logout"
+            confirmButtonName='Logout'
+            content="Are you sure you want to log out? You'll need to log in again to access your account"
+            onConfirm={handleLogout}
+        />      
         </>
     );
 };
