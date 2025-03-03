@@ -20,7 +20,27 @@ const AppSidebar = () => {
     const admin_menu = auth.sessions.admin_menus;
     const parent_menu =  user_menus.find(user_menu => user_menu.id === menu.parent_id) ?? admin_menu.find(admin_menu => admin_menu.id === menu.parent_id) ?? '';
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 640px)");
     
+        // Function to handle the media query change
+        const handleMediaQueryChange = (e) => {
+          if (e.matches) {
+            setIsSidebarOpen(false);
+          } else {
+            setIsSidebarOpen(true);
+          }
+        };
+    
+        // Initial check
+        handleMediaQueryChange(mediaQuery);
+    
+        // Add event listener
+        mediaQuery.addEventListener("change", handleMediaQueryChange);
+    
+        // Cleanup function
+        return () => mediaQuery.removeEventListener("change", handleMediaQueryChange);
+      }, []);
 
     useEffect(()=>{
         if (menu.parent_id == 0){
