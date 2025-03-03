@@ -47,12 +47,10 @@ module.exports = {
             },
             backgroundImage: {
                 "skin-blue": "linear-gradient(to bottom right, #1e3a8a, #172554)",
-                "mobile-gradient":
-                    "linear-gradient(to bottom, #060505, #333232)",
-                "overview-gradient":
-                    "linear-gradient(to bottom, #060505, #787575)",
-                "radial-gradient-gray":
-                    "radial-gradient(circle, #353131, #191717)",
+                'password-gradient': 'linear-gradient(90deg, #FFD54F 0%, #FF8C00 100%)',
+                'profile-gradient': 'linear-gradient(90deg, #4A90E2 0%, #6A5ACD 100%)',
+                'logout-gradient': 'linear-gradient(90deg, #FF4B4B 0%, #FF6EC7 100%)',
+                'change-theme-gradient': 'linear-gradient(90deg, #A259FF 0%, #4A90E2 100%)',
             },
             fontFamily: {
                 "nunito-sans": ["Nunito Sans", "sans-serif"],

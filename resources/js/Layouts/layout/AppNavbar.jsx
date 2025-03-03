@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
-import { NavbarContext } from '../../Context/NavbarContext';
-import { useProfile, useTheme } from '../../Context/ThemeContext';
+import { useTheme } from '../../Context/ThemeContext';
 import Notification from '../../Components/Notification/Notification';
 import Button from '../../Components/Table/Buttons/Button';
 import colorMap from '../../Components/Notification/ColorMap';
@@ -9,9 +8,9 @@ import axios from 'axios';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import getAppName from '../../Components/SystemSettings/ApplicationName';
 import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
-import Modal from '../../Components/Modal/Modal';
 import useThemeSwalColor from '../../Hooks/useThemeSwalColor';
 import Modalv2 from '../../Components/Modal/Modalv2';
+import ThemeToggleSwitch from '../../Components/Table/Buttons/ThemeToggleSwitch';
 const AppNavbar = () => {
     const { auth } = usePage().props;
     const [showMenu, setShowMenu] = useState(false);
@@ -127,71 +126,7 @@ const AppNavbar = () => {
     const initials = getInitials(auth.user.name);
     const backgroundColor = colorMap[initials.charAt(0)] || theme; 
 
-    //DARK MODE
-    const handleDarkMode = () => {
-        setShowModalTheme(true)
-    }
-    const handleCloseModal = () => {
-        setShowModalTheme(false);
-    }
-    const [formTheme, setFormTheme] = useState({
-        theme: '',
-    })
-    function handleRadioInput(e) {
-        const key = e.target.name;
-        const value = e.target.value;
-        setFormTheme((forms) => ({
-            ...forms,
-            [key]: value,
-        }));
-        if(value){
-            setTheme(`bg-${value}`);
-        }
-    }
 
-    const handleThemeUpdate = async (e, id, action) => {
-        e.preventDefault();
-
-    
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            };
-    
-            const response = await axios.post('/update-theme', formTheme, config);
-            console.log(response.data.status)
-            if (response.data.status === 'success') {
-                Swal.fire({
-                    type: response.data.status,
-                    title: response.data.message,
-                    icon: response.data.status,
-                    confirmButtonColor: swalColor,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        setShowModalTheme(false);
-                    }
-                });
-            } else {
-                Swal.fire({
-                    type: response.data.status,
-                    title: response.data.message,
-                    icon: response.data.status,
-                    confirmButtonColor: swalColor,
-                });
-            }
-        } catch (error) {
-            Swal.fire({
-                type: 'error',
-                title: 'An error occurred while updating profile',
-                icon: 'error',
-                confirmButtonColor: swalColor,
-            });
-        } finally {
-       
-        }
-    };
     return (
         <>
         <div className='flex flex-col lg:flex-row'>
@@ -350,9 +285,9 @@ const AppNavbar = () => {
                         </div>
                     </div>
                         {showMenu && (
-                            <div className={`absolute z-[90] right-1 top-[113px] md:lg:top-[65px] lg:top-[65px] ${theme === 'bg-skin-black' ? 'bg-skin-black' : 'bg-white' } py-3 rounded-[5px] pop-up-boxshadow z-[100] w-[332px]`}
+                            <div className={`absolute z-[90] right-1 top-[113px] md:lg:top-[65px] lg:top-[65px] ${theme === 'bg-skin-black' ? 'bg-skin-black text-white' : 'bg-white text-black' } overflow-hidden rounded-[5px] pop-up-boxshadow z-[100] w-[332px]`}
                             >
-                                <div className="flex items-center justify-center gap-3 border-b-[1px] px-5 pb-2 ">
+                                <div className="flex items-center mt-3 justify-center gap-3 border-b-[1px] px-5 pb-2 ">
                                     {auth.user_profile
                                         ? 
                                         <img src={`../storage/${auth.user_profile.file_name}`} className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/> 
@@ -365,89 +300,58 @@ const AppNavbar = () => {
                                     </p>
                                     
                                 </div>
-                                <Link
-                                    href="/profile"
-                                    className={`px-5 py-2 flex items-center cursor-pointer ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}
-                                    onClick={() => {
-                                        setShowMenu(false);
-                                    }}
-                                >
-                                    <i className='fa fa-id-card-alt p-2 bg-gray-300 rounded-md hover:bg-gray-400 text-black'></i>
-                                    <span className="font-poppins text-[16px] ml-2">
-                                        Profile
-                                    </span>
+                                <Link href="/profile" onClick={()=>{setShowMenu(false)}}>
+                                    <div className="group flex hover:bg-profile-gradient items-center px-3 py-2 border-b relative overflow-hidden">
+                                        <div className="relative z-10 flex items-center">
+                                            <div className="w-8 h-8 bg-blue-500 group-hover:bg-white/30 flex items-center rounded-lg justify-center">
+                                                <i className="fa-solid fa-user text-sm text-white"></i>
+                                            </div>
+                                            <p className={`text-sm ml-3 font-medium  ${theme === 'bg-skin-black' ? 'text-white' : 'text-black' } group-hover:text-white`}>
+                                                Profile
+                                            </p>
+                                        </div>
+                                    </div>
                                 </Link>
-                                <Link
-                                    href="/change_password"
-                                    className={`border-t-[1px]  px-5 py-2 flex items-center cursor-pointer ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}
-                                    onClick={() => {
-                                        setShowMenu(false);
-                                    }}
-                                >
-                                    <i className='fa fa-user-lock py-2 px-[7px] bg-orange-400 rounded-md hover:bg-orange-700 text-white'></i>
-                                    <span className="font-poppins ml-2">
-                                        Change password
-                                    </span>
+                                <Link href="/change_password" onClick={()=>{setShowMenu(false)}}>
+                                    <div className="group flex hover:bg-password-gradient items-center px-3 py-2 border-b relative overflow-hidden">
+                                        <div className="relative z-10 flex items-center">
+                                            <div className="w-8 h-8 bg-yellow-400 group-hover:bg-white/30 flex items-center rounded-lg justify-center">
+                                                <i className="fa-solid fa-key text-sm text-white"></i>
+                                            </div>
+                                            <p className={`text-sm ml-3 font-medium  ${theme === 'bg-skin-black' ? 'text-white' : 'text-black' } group-hover:text-white`}>
+                                                Change Password
+                                            </p>
+                                        </div>
+                                    </div>
                                 </Link>
-                                <div className={`border-t-[1px] px-5 py-2 flex items-center cursor-pointer 
-                                    ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}
-                                    onClick={handleDarkMode}
-                                    >
-                                    <i className='fa fa-moon p-2 bg-gray-300 rounded-md hover:bg-gray-400 text-black'></i>
-                                    <span className="font-poppins text-[16px] ml-2">
-                                        Change Theme
-                                    </span>
+                                <div className="group cursor-pointer flex hover:bg-change-theme-gradient items-center px-3 py-2 border-b relative overflow-hidden">
+                                    <div className="relative z-10 flex items-center flex-1">
+                                        <div className="w-8 h-8 bg-purple-500 group-hover:bg-white/30 flex items-center rounded-lg justify-center">
+                                            <i className="fa-solid fa-swatchbook text-sm text-white"></i>
+                                        </div>
+                                        <p className={`text-sm ml-3 font-medium flex-1 ${theme === 'bg-skin-black' ? 'text-white' : 'text-black' } group-hover:text-white`}>
+                                            Change Theme
+                                        </p>
+                                        <div className=''>
+                                        <ThemeToggleSwitch/>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                <div
-                                    onClick={handleLogoutModalToggle}
-                                >
-                                    <div className={`border-t-[1px] px-5 py-2 flex items-center cursor-pointer ${!['bg-skin-black'].includes(theme) ? textColor : textColorActive}`}>
-                                        <i className='fa fa-power-off py-2 px-[9px] bg-red-500 hover:bg-red-700 rounded-md text-white'></i>
-                                        <span className="font-poppins ml-2">Logout</span>
+                                <div className="group cursor-pointer flex hover:bg-logout-gradient items-center px-3 py-2 relative overflow-hidden" onClick={()=>{handleLogoutModalToggle(); setShowMenu(false);}}>
+                                    <div className="relative z-10 flex items-center">
+                                        <div className="w-8 h-8 bg-red-500 group-hover:bg-white/30 flex items-center rounded-lg justify-center">
+                                            <i className="fa-solid fa-arrow-right-from-bracket text-sm text-white"></i>
+                                        </div>
+                                        <p className={`text-sm ml-3 font-medium  ${theme === 'bg-skin-black' ? 'text-white' : 'text-black' } group-hover:text-white`}>
+                                            Logout
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         )}
             </div>
         </div>
-        <Modal
-            show={showModalTheme}
-            onClose={handleCloseModal}
-            title="Theme"
-            width="xl"
-            fontColor={textColorActive}
-            icon='fa fa-moon'
-            btnIcon='fa fa-refresh'
-            withButton='true'
-            onClick={handleThemeUpdate}
-        >  
-            <form>
-                <div className="p-2">
-                    <div className="space-y-2">
-                        <label className="flex items-center justify-between space-x-2">
-                            <span className={`${textColor}`}>Dark mode</span>
-                            <input
-                                type="radio"
-                                name="theme"
-                                value="skin-black"
-                                onChange={handleRadioInput}
-                                className="form-radio h-5 w-5 text-blue-600 ml-auto"
-                            />
-                        </label>
-                        <label className="flex items-center justify-between space-x-2">
-                            <span className={`${textColor}`}>System default</span>
-                            <input
-                                type="radio"
-                                name="theme"
-                                value={auth.sessions.theme_color}
-                                onChange={handleRadioInput}
-                                className="form-radio h-5 w-5 text-blue-600 ml-auto"
-                            />
-                        </label>
-                    </div>
-                </div>
-            </form>
-        </Modal>
         <Modalv2 
             isOpen={showLogoutModal} 
             setIsOpen={handleLogoutModalToggle}
