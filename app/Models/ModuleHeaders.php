@@ -72,6 +72,15 @@ class ModuleHeaders extends Model
             ->keyBy('name');
     }
 
+    public static function getHeadersByModule($moduleId, $tableSetting)
+    {
+        return self::whereIn('header_name', $tableSetting)
+            ->where('module_id', $moduleId)
+            ->select('name', 'header_name', 'width', 'table_join')
+            ->orderBy('sorting')
+            ->get();
+    }
+
     public function scopeSearchAndFilter($query, $request){
 
         if ($request->filled('search')) {

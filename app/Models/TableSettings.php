@@ -49,6 +49,16 @@ class TableSettings extends Model
         'updated_at',
     ];
 
+    public static function getActiveHeaders($moduleId, $actionTypeId, $privilegeId)
+    {
+        return explode(',', self::where('adm_moduls_id', $moduleId)
+            ->where('action_types_id', $actionTypeId)
+            ->where('adm_privileges_id', $privilegeId)
+            ->where('status', 'ACTIVE')
+            ->pluck('report_header')
+            ->first());
+    }
+
     public function scopeSearchAndFilter($query, $request){
         $filter_column = $request['filter_column'] ?? [];
 

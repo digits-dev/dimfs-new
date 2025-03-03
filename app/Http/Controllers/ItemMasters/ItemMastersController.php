@@ -81,16 +81,8 @@ class ItemMastersController extends Controller
         $data['item_masters'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
-        ->where('module_id', AdmModules::ITEM_MASTER)
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
 
         $data['filter_inputs'] = $data['table_headers']
         ->map(function ($columns) {
@@ -128,33 +120,22 @@ class ItemMastersController extends Controller
         $data = [];
         $data['page_title'] = 'Item Master - Create';
 
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::CREATE, CommonHelpers::myPrivilegeId());
+        $data['table_setting_read_only'] = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::CREATE_READONLY, CommonHelpers::myPrivilegeId());
         
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::CREATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_setting_read_only'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::CREATE_READONLY)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $tableSetting)
         ->where('module_id', AdmModules::ITEM_MASTER)
+        ->orderBy('sorting')
         ->get()
         ->map(function ($columns) {
             if ($columns->table) {
                 $columns->table_data = DB::table($columns->table)
-                    ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
-                    ->get();
+                ->select("{$columns->table_select_value} as value", "{$columns->table_select_label} as label")
+                ->get();
             }
             return $columns;
         });
-
+        
         return Inertia::render("ItemMasters/ItemMasterCreate", $data);
     }
 
@@ -200,22 +181,12 @@ class ItemMastersController extends Controller
 
         $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with($this->joins)->first();
         
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::UPDATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::UPDATE, CommonHelpers::myPrivilegeId());
+        $data['table_setting_read_only'] = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::UPDATE_READONLY, CommonHelpers::myPrivilegeId());
 
-        $data['table_setting_read_only'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::UPDATE_READONLY)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['update_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        $data['update_inputs'] = ModuleHeaders::whereIn('header_name', $tableSetting)
         ->where('module_id', AdmModules::ITEM_MASTER)
+        ->orderBy('sorting')
         ->get()
         ->map(function ($columns) {
             if ($columns->table) {
@@ -278,18 +249,9 @@ class ItemMastersController extends Controller
         $data = [];
         $data['page_title'] = 'Item Master - Item Details';
         $data['item_master_detail'] = ItemMaster::where('id', $item->id)->with($this->joins)->first();
-
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
-        ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name', 'width', 'table_join')
-        ->get();
+        
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
 
 
         return Inertia::render("ItemMasters/ItemMasterView", $data);
@@ -300,17 +262,8 @@ class ItemMastersController extends Controller
     public function export()
     {
 
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::EXPORT)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
-        ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name', 'width', 'table_join')
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::EXPORT, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
 
         $headers = [];
         $columns = [];

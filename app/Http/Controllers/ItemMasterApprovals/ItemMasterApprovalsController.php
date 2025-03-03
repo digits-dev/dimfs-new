@@ -80,17 +80,9 @@ class ItemMasterApprovalsController extends Controller
 
         $data['queryParams'] = request()->query();
         
-        $table_setting = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $table_setting)
-        ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name', 'width')
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
+        
 
         return Inertia::render("ItemMasterApprovals/ItemMasterApprovals", $data);
     }
@@ -117,17 +109,8 @@ class ItemMasterApprovalsController extends Controller
         $approval->item_values = $itemValues; 
         $data['item_master_approval'] = $approval;
         
-        $table_setting = explode(',', TableSettings::where('adm_moduls_id', AdmModules::ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $table_setting)
-        ->where('module_id', AdmModules::ITEM_MASTER)
-        ->select('name', 'header_name')
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
 
         $data['action'] = $action;
         return Inertia::render("ItemMasterApprovals/ItemMasterApprovalView", $data);

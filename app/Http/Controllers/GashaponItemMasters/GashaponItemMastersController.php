@@ -74,17 +74,8 @@ class GashaponItemMastersController extends Controller
         $data['gashapon_item_masters'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
-        ->where('module_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->select('name', 'header_name', 'width', 'table_join')
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
 
         // PERMISSIONS
 
@@ -112,16 +103,12 @@ class GashaponItemMastersController extends Controller
         $data = [];
         $data['page_title'] = 'Gashapon Item Master - Create';
 
-        
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::CREATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::CREATE, CommonHelpers::myPrivilegeId());
+        $data['table_setting_read_only'] = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::CREATE_READONLY, CommonHelpers::myPrivilegeId());
 
-        $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        $data['create_inputs'] = ModuleHeaders::whereIn('header_name', $tableSetting)
         ->where('module_id', AdmModules::GASHAPON_ITEM_MASTER)
+        ->orderBy('sorting')
         ->get()
         ->map(function ($columns) {
             if ($columns->table) {
@@ -177,15 +164,12 @@ class GashaponItemMastersController extends Controller
 
         $data['gashapon_item_master_detail'] = GashaponItemMaster::where('id', $item->id)->with($this->joins)->first();
         
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::UPDATE)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::UPDATE, CommonHelpers::myPrivilegeId());
+        $data['table_setting_read_only'] = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::UPDATE_READONLY, CommonHelpers::myPrivilegeId());
 
-        $data['update_inputs'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
+        $data['update_inputs'] = ModuleHeaders::whereIn('header_name', $tableSetting)
         ->where('module_id', AdmModules::GASHAPON_ITEM_MASTER)
+        ->orderBy('sorting')
         ->get()
         ->map(function ($columns) {
             if ($columns->table) {
@@ -249,17 +233,8 @@ class GashaponItemMastersController extends Controller
         $data['page_title'] = 'Gashapon Item Master - Item Details';
         $data['gashapon_item_master_detail'] = GashaponItemMaster::where('id', $item->id)->with($this->joins)->first();
 
-        $data['table_setting'] = explode(',', TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->where('action_types_id', ActionTypes::VIEW)
-        ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
-        ->where('status', 'ACTIVE')
-        ->pluck('report_header')
-        ->first());
-
-        $data['table_headers'] = ModuleHeaders::whereIn('header_name', $data['table_setting'])
-        ->where('module_id', AdmModules::GASHAPON_ITEM_MASTER)
-        ->select('name', 'header_name', 'width', 'table_join')
-        ->get();
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::VIEW, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
 
 
         return Inertia::render("GashaponItemMasters/GashaponItemMastersView", $data);

@@ -80,7 +80,7 @@ class TableSettingsController extends Controller
             return back()->with(['message' => 'Please select at least one header!', 'type' => 'error']);
         }
 
-        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->get();
+        $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->orderBy('sorting')->get();
         $headerName = $selected->pluck('header_name')->implode(',');
         $headerQuery = $selected->pluck('name')->implode(',');
         
@@ -157,7 +157,7 @@ class TableSettingsController extends Controller
                 return back()->with(['message' => 'Table Setting not found!', 'type' => 'error']);
             }
             
-            $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->get();
+            $selected = ModuleHeaders::whereIn('header_name', $request->checked_items)->where('module_id', $request->module_id)->orderBy('sorting')->get();
 
             $headerName = $selected->pluck('header_name')->implode(',');
             $headerQuery = $selected->pluck('name')->implode(',');
@@ -187,7 +187,7 @@ class TableSettingsController extends Controller
     public function getHeader($header_name)
     {
 
-        $headerName = ModuleHeaders::where('module_id', $header_name)->where('status', 'ACTIVE')->pluck('header_name');
+        $headerName = ModuleHeaders::where('module_id', $header_name)->where('status', 'ACTIVE')->orderBy('sorting')->pluck('header_name');
 
         return response()->json($headerName);
       
