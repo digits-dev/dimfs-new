@@ -6,6 +6,7 @@ use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdmModels\AdmModules;
 use App\Models\Counters;
+use App\Rules\UniqueFirstDigit;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,11 @@ class CountersController extends Controller
 
         $validatedFields = $request->validate([
             'adm_module_id' => 'required',
-            'counter_code' => 'required|unique:counters,counter_code',
+            'counter_code' => [
+                'required',
+                'unique:counters,counter_code',
+                new UniqueFirstDigit,
+            ],
             'code_identifier' => 'required',
         ]);
 

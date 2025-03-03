@@ -30,7 +30,7 @@ use Inertia\Response;
         }
         
         public function getAllData(){
-            $query = AdmUser::query()->with('role');
+            $query = AdmUser::query()->with('privilege');
             $filter = $query->searchAndFilter(request());
             // dd(request());
             $result = $filter->orderBy($this->sortBy, $this->sortDir);

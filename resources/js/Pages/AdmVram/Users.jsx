@@ -348,7 +348,7 @@ const Users = ({ tableName, users, options, queryParams }) => {
                                             {user.email}
                                         </RowData>
                                         <RowData isLoading={loading}>
-                                            {user.role.name}
+                                            {user.privilege.name}
                                         </RowData>
                                         <RowStatus
                                             isLoading={loading}
