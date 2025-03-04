@@ -29,6 +29,7 @@ const GashaponItemMasters = ({
     can_create,
     can_update,
     can_export,
+    can_import,
 }) => {
     const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
@@ -87,6 +88,22 @@ const GashaponItemMasters = ({
                                         path="/gashapon_item_masters/export"
                                     />
                                 )}
+                                {can_import && (
+                                    <Button
+                                        extendClass={
+                                            (["bg-skin-white"].includes(theme)
+                                                ? primayActiveColor
+                                                : theme) + " py-[5px] px-[10px]"
+                                        }
+                                        type="link"
+                                        fontColor={textColorActive}
+                                        href="gashapon_item_masters/import_view"
+                                    >
+                                        <i className="fa-solid fa-upload mr-1"></i>{" "}
+                                        Import
+                                    </Button>
+                                )
+                                }
                             </div>
                             <div className="flex">
                                 <CustomFilter>

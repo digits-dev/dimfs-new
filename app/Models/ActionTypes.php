@@ -16,6 +16,7 @@ class ActionTypes extends Model
     public const UPDATE = 4;
     public const UPDATE_READONLY = 5;
     public const VIEW = 6;
+    public const IMPORT = 7;
 
     public static function boot()
     {

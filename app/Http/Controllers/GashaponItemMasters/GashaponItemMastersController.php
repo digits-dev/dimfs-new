@@ -21,6 +21,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Arr;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GashaponTemplateExport;
 
 class GashaponItemMastersController extends Controller
 {
@@ -92,13 +93,15 @@ class GashaponItemMastersController extends Controller
         $permissions = TableSettings::where('adm_moduls_id', AdmModules::GASHAPON_ITEM_MASTER)
         ->where('adm_privileges_id', CommonHelpers::myPrivilegeId())
         ->where('status', 'ACTIVE')
-        ->whereIn('action_types_id', [ActionTypes::CREATE, ActionTypes::UPDATE, ActionTypes::EXPORT])
+        ->whereIn('action_types_id', [ActionTypes::CREATE, ActionTypes::UPDATE, ActionTypes::EXPORT, ActionTypes::IMPORT])
         ->pluck('action_types_id')
         ->toArray();
 
         $data['can_create'] = in_array(ActionTypes::CREATE, $permissions);
         $data['can_update'] = in_array(ActionTypes::UPDATE, $permissions);
         $data['can_export'] = in_array(ActionTypes::EXPORT, $permissions);
+        $data['can_import'] = in_array(ActionTypes::IMPORT, $permissions);
+        
 
         return Inertia::render("GashaponItemMasters/GashaponItemMasters", $data);
     }
@@ -286,5 +289,16 @@ class GashaponItemMastersController extends Controller
         $query = self::getAllData();
         return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
+    }
+
+    public function importView() {
+        $data = [];
+        $data['page_title'] = 'Gashapon Item Master - Import';
+
+        return Inertia::render("GashaponItemMasters/GashaponItemMastersImportView", $data);
+    }
+
+    public function importGashaponTemplate() {
+        return Excel::download(new GashaponTemplateExport, 'gashapon_template.csv');
     }
 }

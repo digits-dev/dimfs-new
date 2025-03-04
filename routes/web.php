@@ -269,6 +269,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/update', [GashaponItemMastersController::class, 'update']);
         Route::get('/view_details/{item}', [GashaponItemMastersController::class, 'getView']);
         Route::get('/export', [GashaponItemMastersController::class, 'export']);
+        Route::get('/import_view', [GashaponItemMastersController::class, 'importView']);
+        Route::get('/gashapon_template', [GashaponItemMastersController::class, 'importGashaponTemplate']);
     });
 
     // ---------------------------------------- RMA ITEM MASTER ----------------------------------------//
