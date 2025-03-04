@@ -16,6 +16,11 @@ const RowAction = ({ action, size, href, onClick, type = 'link', hasTooltip = fa
 		delete:<i className={`fa fa-trash p-2 bg-red-500 text-white text-[12px] rounded-md hover:bg-red-400 ${iconSize}`}></i>,
 		edit: <i className={`fa fa-edit p-2 bg-green-500 text-white text-[12px] rounded-md hover:bg-green-400 ${iconSize}`}></i>,
 		add_segmentation: <i className={`fa fa-pen p-2 bg-yellow-500 text-white text-[12px] rounded-md hover:bg-yellow-400 ${iconSize}`}></i>,
+		deactivate: <i className={`fa fa-ban p-2 bg-gray-200 text-red-500 text-[12px] rounded-md hover:bg-gray-300 ${iconSize}`}></i>,
+		activate: <i className={`fa fa-check p-2 bg-gray-200 text-green-500 text-[12px] rounded-md hover:bg-gray-300 ${iconSize}`}></i>,
+		add: <i className={`fa fa-plus p-2 bg-skin-blue text-gray-50 text-[12px] rounded-md hover:opacity-75 ${iconSize}`}></i>,
+		remove: <i className={`fa fa-minus p-2 bg-red-500 text-white text-[12px] rounded-md hover:opacity-75 ${iconSize}`}></i>,
+
 	}[action];
 
 	return (

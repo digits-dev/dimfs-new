@@ -4,6 +4,7 @@ import { useTheme } from "../../Context/ThemeContext";
 
 const TextArea = ({
     type = "text",
+    rows,
     name,
     value,
     onChange,
@@ -23,6 +24,7 @@ const TextArea = ({
                 {displayName || FormatLabelName(name)}
             </label>
             <textarea
+                rows={rows}
                 id={name}
                 type={type}
                 value={value}
@@ -30,7 +32,7 @@ const TextArea = ({
                 disabled={disabled}
                 onChange={onChange}
                 placeholder={placeholder}
-                className={`${theme === 'bg-skin-black' ? theme+' text-gray-300' : 'bg-white'} mt-1 block w-full px-3 py-2 border placeholder:text-sm placeholder:text-gray-600 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm`}
+                className={`${theme === 'bg-skin-black' ? theme+' text-gray-300' : 'bg-white'} mt-1 block w-full px-3 py-2 border placeholder:text-sm placeholder:text-gray-400 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm`}
                 checked={checked}
             />
         </div>
