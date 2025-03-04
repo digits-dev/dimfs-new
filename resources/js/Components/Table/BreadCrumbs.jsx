@@ -13,15 +13,15 @@ const BreadCrumbs = () => {
     useEffect(() => {
               
         if ((auth.module[0]) === 'profile') {
-            setIcon('fa-solid fa-id-card-clip');
+            setIcon('fa-solid fa-user');
             setTitle('Profile');
         }
         else if ((auth.module[0]) === 'edit_profile') {
-            setIcon('fa-solid fa-id-card-clip');
+            setIcon('fa-solid fa-user');
             setTitle('Edit Profile');
         } 
         else if ((auth.module[0]) === 'change_password') {
-            setIcon('fa-solid fa-lock');
+            setIcon('fa-solid fa-key');
             setTitle('Change Password');
         } 
         else {

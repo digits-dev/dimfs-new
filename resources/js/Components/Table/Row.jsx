@@ -1,11 +1,13 @@
 import React from "react";
 
-const Row = ({ children }) => {
+const Row = ({children}) => {
     return (
         <tr
             className={`text-sm relative`}
         >
-            {children}
+            {React.Children.toArray(children).filter(
+                (child) => React.isValidElement(child)
+            )}
         </tr>
     );
 };
