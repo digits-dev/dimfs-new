@@ -19,16 +19,13 @@ const AppNavbar = () => {
     const [unreadnNotifications, setUnreadnNotifications] = useState(auth.unread_notifications || false);
     const menuRef = useRef(null);
     const {theme, setTheme} = useTheme();
-    const { buttonSwalColor, bgColor, calendarDateTimeColor, textColor, textColorActive, borderColor, primayActiveColor } = useThemeStyles(theme);
+    const {bgColor, calendarDateTimeColor, textColor, textColorActive, borderColor, primayActiveColor } = useThemeStyles(theme);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [showDateTime, setShowDateTime] = useState(false);
     const [appname, setAppname] = useState('');
     const [applogo, setApplogo] = useState('');
-    const [showModalTheme, setShowModalTheme] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-
-    const swalColor = useThemeSwalColor(theme);
     useEffect(() => {
         getAppName().then(appName => {
             setAppname(appName);
@@ -131,15 +128,15 @@ const AppNavbar = () => {
         <>
         <div className='flex flex-col lg:flex-row'>
             <div
-                className={`${theme == 'bg-skin-blue' ? 'md:bg-none bg-skin-blue ' : ''} h-[50px] md:absolute lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
+                className={`${theme == 'bg-skin-blue' ? 'md:bg-none bg-skin-blue ' : 'md:bg-none bg-skin-black'} h-[50px] md:absolute lg:h-[60px] border-b-[1px] w-full lg:w-[296px] ${
                     !['bg-skin-black'].includes(theme) ? 'border-gray-200' : 'border-gray-700'
                 }`}
                 ref={menuRef}
             >
                     <div className="flex gap-x-4 items-center justify-center lg:justify-start px-[20px] py-[10px] lg:py-[15px]">
                         <img
-                            src={applogo}
-                            className="w-7 h-7 cursor-pointer duration-500 rounded-full"
+                            src="/images/others/digits-icon.png"
+                            className="w-7 h-7 cursor-pointer duration-500"
                             alt="App Logo"
                         />
                         <div
@@ -270,7 +267,7 @@ const AppNavbar = () => {
                             >
                                 {auth.user_profile
                                     ? 
-                                    <img src={`../storage/${auth.user_profile.file_name}`} className="w-full h-full object-cover"/> 
+                                    <img src={`/../storage/${auth.user_profile.file_name}`} className="w-full h-full object-cover"/> 
                                     :
                                     <img src="/images/others/user-icon.png" className="w-full h-full object-cover"/>
                                 }
@@ -290,7 +287,7 @@ const AppNavbar = () => {
                                 <div className="flex items-center mt-3 justify-center gap-3 border-b-[1px] px-5 pb-2 ">
                                     {auth.user_profile
                                         ? 
-                                        <img src={`../storage/${auth.user_profile.file_name}`} className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/> 
+                                        <img src={`/../storage/${auth.user_profile.file_name}`} className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/> 
                                         :
                                         <img src="/images/others/user-icon.png" className="w-14 h-14 border-2 border-gray-400 rounded-full object-cover"/>
                                     }

@@ -6,6 +6,7 @@ import AppNavbar from "@/Layouts/layout/AppNavbar.jsx";
 import AppContent from "@/Layouts/layout/AppContent.jsx";
 import { NavbarProvider } from "../../Context/NavbarContext";
 import { useTheme } from "../../Context/ThemeContext";
+import SessionExpire from "../../Components/Others/SessionExpire";
 
 const Layout = ({ children }) => {
     const {theme} = useTheme();
@@ -25,6 +26,7 @@ const Layout = ({ children }) => {
                     </div>
                 </div>
             </div>
+            <SessionExpire/>
         </NavbarProvider>
     );
 };

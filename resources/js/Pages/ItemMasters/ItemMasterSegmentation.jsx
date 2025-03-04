@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from "../../Context/ThemeContext";
 import { useToast } from "../../Context/ToastContext";
 import ContentPanel from '../../Components/Table/ContentPanel'
@@ -7,12 +7,14 @@ import MultiTypeInput from '../../Components/Forms/MultiTypeInput';
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import Button from '../../Components/Table/Buttons/Button';
 import CustomSelect from '../../Components/Dropdown/CustomSelect';
+import Modalv2 from '../../Components/Modal/Modalv2';
 
 
 const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs, sku_legend_options, item_segmentations}) => {
   const { theme } = useTheme();
   const { handleToast } = useToast();
   const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const initialFormData = segmentation_inputs.reduce((acc, item) => {
     const item_segmentation = item_segmentations.find(seg => seg.get_segmentation.segmentation_column === item.segmentation_column);
@@ -46,31 +48,24 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
       
     };
 
+  const handleConfirmModalToggle = () => {
+    setConfirmModal(!confirmModal);
+  }
+
   // FORM SUBMIT
-  const handleFormSubmit = (e) => {
-      e.preventDefault();
-      Swal.fire({
-          title: `<p class="font-poppins text-3xl" >Do you want to add Item?</p>`,
-          showCancelButton: true,
-          confirmButtonText: `Add Item`,
-          confirmButtonColor: buttonSwalColor,
-          icon: "question",
-          iconColor: buttonSwalColor,
-          reverseButtons: true,
-      }).then(async (result) => {
-          if (result.isConfirmed) {
-              post("/item_masters/post_segmentation", {
-                  onSuccess: (data) => {
-                      const { message, type } = data.props.auth.sessions;
-                      handleToast(message, type);
-                  },
-                  onError: (data) => {
-                      const { message, type } = data.props.auth.sessions;
-                      handleToast(message, type);
-                  },
-              });
-          }
-      });
+  const handleFormSubmit = () => {
+
+      post("/item_masters/post_segmentation", {
+        onSuccess: (data) => {
+            const { message, type } = data.props.auth.sessions;
+            handleToast(message, type);
+        },
+        onError: (data) => {
+            const { message, type } = data.props.auth.sessions;
+            handleToast(message, type);
+        },
+    });
+      
   };
 
   return (
@@ -80,7 +75,7 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
         <p className="text-lg font-semibold mb-2">Item Segmentation</p>
         <div className='border p-4 rounded-lg'>
           {segmentation_inputs &&
-            <form onSubmit={handleFormSubmit}>
+            <div>
               <div className="md:grid md:grid-cols-2 md:gap-2 space-y-2 md:space-y-0">
                 {segmentation_inputs.map((input, index) => {
 
@@ -118,23 +113,29 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
                   </Button>
                   <Button
                       type="button"
+                      onClick={handleConfirmModalToggle}
                       extendClass={`${theme === "bg-skin-white"? primayActiveColor: theme}`}
                       fontColor={textColorActive}
                       disabled={processing}
                   >
-                      {processing ? ("Create Table") : 
+                      {processing ? ("Updating") : 
                       (
                           <span><i className={`fa-solid fa-plus mr-1`}></i>{" "}Update Item Segmentation</span>
                       )}
                   </Button>
               </div>
-            </form>
+            </div>
           }
         </div>
-        
-        
-          
       </ContentPanel>
+      <Modalv2 
+            isOpen={confirmModal} 
+            setIsOpen={handleConfirmModalToggle}
+            title="Confirmation"
+            confirmButtonName='Update Segmentation'
+            content="Are you sure you want to update the Segmentation?"
+            onConfirm={handleFormSubmit}
+        />   
     </>
    
   )
