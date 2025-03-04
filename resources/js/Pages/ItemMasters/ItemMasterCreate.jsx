@@ -74,7 +74,7 @@ const ItemMasterCreate = ({page_title, create_inputs, table_setting_read_only}) 
     <>
       <Head title={page_title}/>
       <ContentPanel>
-        <p className="text-lg font-semibold mb-2">Add Item Master Data</p>
+        <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'} text-lg font-semibold mb-2`}>Add Item Master Data</p>
         <div className='border p-4 rounded-lg'>
           {create_inputs &&
             <form onSubmit={handleFormSubmit}>

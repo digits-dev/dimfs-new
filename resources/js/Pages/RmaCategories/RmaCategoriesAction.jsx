@@ -86,7 +86,7 @@ const RmaCategoriesAction = ({action, onClose, updateData}) => {
             value={data.category_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter RMA Category Code"
-            onChange={(e)=> setData("category_code", e.target.value)}
+            onChange={(e)=> setData("category_code", e.target.value.toUpperCase())}
         />
         {(errors.category_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -99,7 +99,7 @@ const RmaCategoriesAction = ({action, onClose, updateData}) => {
             value={data.category_description}
             disabled={action === 'View'}
             placeholder="Enter RMA Category Description"
-            onChange={(e)=> setData("category_description", e.target.value)}
+            onChange={(e)=> setData("category_description", e.target.value.toUpperCase())}
         />
         {(errors.category_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

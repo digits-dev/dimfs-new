@@ -94,7 +94,7 @@ const PromoTypesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Promo Type Description"
                 onChange={(e) =>
-                    setData("promo_type_description", e.target.value)
+                    setData("promo_type_description", e.target.value.toUpperCase())
                 }
             />
             {errors.promo_type_description && (

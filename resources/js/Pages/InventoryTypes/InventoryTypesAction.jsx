@@ -82,7 +82,7 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
                 value={data.inventory_type_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Inventory Type Code"
-                onChange={(e) => setData("inventory_type_code", e.target.value)}
+                onChange={(e) => setData("inventory_type_code", e.target.value.toUpperCase())}
             />
             {errors.inventory_type_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const InventoryTypesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Inventory Type Description"
                 onChange={(e) =>
-                    setData("inventory_type_description", e.target.value)
+                    setData("inventory_type_description", e.target.value.toUpperCase())
                 }
             />
             {errors.inventory_type_description && (

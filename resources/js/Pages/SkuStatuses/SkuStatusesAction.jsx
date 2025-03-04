@@ -82,7 +82,7 @@ const SkuStatusesAction = ({ action, onClose, updateData }) => {
                 value={data.sku_status_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Sku Status Code"
-                onChange={(e) => setData("sku_status_code", e.target.value)}
+                onChange={(e) => setData("sku_status_code", e.target.value.toUpperCase())}
             />
             {errors.sku_status_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const SkuStatusesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Sku Status Description"
                 onChange={(e) =>
-                    setData("sku_status_description", e.target.value)
+                    setData("sku_status_description", e.target.value.toUpperCase())
                 }
             />
             {errors.sku_status_description && (

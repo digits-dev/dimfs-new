@@ -82,7 +82,7 @@ const GashaponWarehouseCategoriesAction = ({action, onClose, updateData}) => {
             value={data.warehouse_category_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Warehouse Category Description"
-            onChange={(e)=> setData("warehouse_category_description", e.target.value)}
+            onChange={(e)=> setData("warehouse_category_description", e.target.value.toUpperCase())}
         />
         {(errors.warehouse_category_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

@@ -80,7 +80,7 @@ const SkuClassificationsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter SKU Classification Description"
                 onChange={(e) =>
-                    setData("sku_class_description", e.target.value)
+                    setData("sku_class_description", e.target.value.toUpperCase())
                 }
             />
             {errors.sku_class_description && (

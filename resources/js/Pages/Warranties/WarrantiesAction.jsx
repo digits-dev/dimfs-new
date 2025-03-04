@@ -82,7 +82,7 @@ const WarrantiesAction = ({ action, onClose, updateData }) => {
                 value={data.warranty_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Warranty Code"
-                onChange={(e) => setData("warranty_code", e.target.value)}
+                onChange={(e) => setData("warranty_code", e.target.value.toUpperCase())}
             />
             {errors.warranty_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const WarrantiesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Warranty Description"
                 onChange={(e) =>
-                    setData("warranty_description", e.target.value)
+                    setData("warranty_description", e.target.value.toUpperCase())
                 }
             />
             {errors.warranty_description && (

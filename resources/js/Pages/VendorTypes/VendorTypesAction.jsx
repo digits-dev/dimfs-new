@@ -82,7 +82,7 @@ const VendorTypesAction = ({ action, onClose, updateData }) => {
                 value={data.vendor_type_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Vendor Type Code"
-                onChange={(e) => setData("vendor_type_code", e.target.value)}
+                onChange={(e) => setData("vendor_type_code", e.target.value.toUpperCase())}
             />
             {errors.vendor_type_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const VendorTypesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Vendor Type Description"
                 onChange={(e) =>
-                    setData("vendor_type_description", e.target.value)
+                    setData("vendor_type_description", e.target.value.toUpperCase())
                 }
             />
             {errors.vendor_type_description && (

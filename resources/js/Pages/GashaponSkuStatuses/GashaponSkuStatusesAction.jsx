@@ -82,7 +82,7 @@ const GashaponSkuStatusesAction = ({action, onClose, updateData}) => {
             value={data.status_description}
             disabled={action === 'View'}
             placeholder="Enter Status Description"
-            onChange={(e)=> setData("status_description", e.target.value)}
+            onChange={(e)=> setData("status_description", e.target.value.toUpperCase())}
         />
         {(errors.status_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

@@ -83,7 +83,7 @@ const CurrenciesAction = ({ action, onClose, updateData }) => {
                 value={data.currency_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Currency Code"
-                onChange={(e) => setData("currency_code", e.target.value)}
+                onChange={(e) => setData("currency_code", e.target.value.toUpperCase())}
             />
             {errors.currency_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -97,7 +97,7 @@ const CurrenciesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Currency Description"
                 onChange={(e) =>
-                    setData("currency_description", e.target.value)
+                    setData("currency_description", e.target.value.toUpperCase())
                 }
             />
             {errors.currency_description && (

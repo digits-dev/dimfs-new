@@ -116,7 +116,7 @@ const SubClassificationsAction = ({ action, onClose, updateData, all_classificat
                 value={data.subclass_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Subclass Code"
-                onChange={(e) => setData("subclass_code", e.target.value)}
+                onChange={(e) => setData("subclass_code", e.target.value.toUpperCase())}
             />
             {errors.subclass_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -130,7 +130,7 @@ const SubClassificationsAction = ({ action, onClose, updateData, all_classificat
                 disabled={action === "View"}
                 placeholder="Enter Subclass Description"
                 onChange={(e) =>
-                    setData("subclass_description", e.target.value)
+                    setData("subclass_description", e.target.value.toUpperCase())
                 }
             />
             {errors.subclass_description && (

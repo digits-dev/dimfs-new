@@ -114,7 +114,7 @@ const StoreCategoriesAction = ({ action, onClose, updateData, all_sub_classifica
                 disabled={action === "View"}
                 placeholder="Enter Store Category Description"
                 onChange={(e) =>
-                    setData("store_category_description", e.target.value)
+                    setData("store_category_description", e.target.value.toUpperCase())
                 }
             />
             {errors.store_category_description && (

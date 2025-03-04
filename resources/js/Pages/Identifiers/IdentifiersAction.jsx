@@ -80,7 +80,7 @@ const IdentifiersAction = ({ action, onClose, updateData }) => {
                 value={data.identifier_column}
                 disabled={action === "View"}
                 placeholder="Enter Identifier Column"
-                onChange={(e) => setData("identifier_column", e.target.value)}
+                onChange={(e) => setData("identifier_column", e.target.value.toUpperCase())}
             />
             {errors.identifier_column && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -94,7 +94,7 @@ const IdentifiersAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Identifier Description"
                 onChange={(e) =>
-                    setData("identifier_description", e.target.value)
+                    setData("identifier_description", e.target.value.toUpperCase())
                 }
             />
             {errors.identifier_description && (

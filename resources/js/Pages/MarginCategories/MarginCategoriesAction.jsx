@@ -118,7 +118,7 @@ const MarginCategoriesAction = ({ action, onClose, updateData, all_sub_classific
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Margin Category Code"
                 onChange={(e) =>
-                    setData("margin_category_code", e.target.value)
+                    setData("margin_category_code", e.target.value.toUpperCase())
                 }
             />
             {errors.margin_category_code && (
@@ -133,7 +133,7 @@ const MarginCategoriesAction = ({ action, onClose, updateData, all_sub_classific
                 disabled={action === "View"}
                 placeholder="Enter Margin Category Description"
                 onChange={(e) =>
-                    setData("margin_category_description", e.target.value)
+                    setData("margin_category_description", e.target.value.toUpperCase())
                 }
             />
             {errors.margin_category_description && (

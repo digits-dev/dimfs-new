@@ -117,7 +117,7 @@ const SubCategoriesAction = ({ action, onClose, updateData, all_active_categorie
                 value={data.subcategory_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Subcategory Code"
-                onChange={(e) => setData("subcategory_code", e.target.value)}
+                onChange={(e) => setData("subcategory_code", e.target.value.toUpperCase())}
             />
             {errors.subcategory_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -132,7 +132,7 @@ const SubCategoriesAction = ({ action, onClose, updateData, all_active_categorie
                 disabled={action === "View"}
                 placeholder="Enter Subcategory Description"
                 onChange={(e) =>
-                    setData("subcategory_description", e.target.value)
+                    setData("subcategory_description", e.target.value.toUpperCase())
                 }
             />
             {errors.subcategory_description && (

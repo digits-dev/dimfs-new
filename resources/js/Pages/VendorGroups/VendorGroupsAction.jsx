@@ -113,7 +113,7 @@ const VendorGroupsAction = ({ action, onClose, updateData, all_active_vendors, a
                 value={data.vendor_group_name}
                 disabled={action === "View"}
                 placeholder="Enter Vendor Group Name"
-                onChange={(e) => setData("vendor_group_name", e.target.value)}
+                onChange={(e) => setData("vendor_group_name", e.target.value.toUpperCase())}
             />
             {errors.vendor_group_name && (
                 <div className="font-poppins text-xs font-semibold text-red-600">

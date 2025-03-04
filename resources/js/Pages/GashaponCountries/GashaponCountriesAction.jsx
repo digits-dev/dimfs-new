@@ -86,7 +86,7 @@ const GashaponCountriesAction = ({action, onClose, updateData}) => {
             value={data.country_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Gashapon Country Code"
-            onChange={(e)=> setData("country_code", e.target.value)}
+            onChange={(e)=> setData("country_code", e.target.value.toUpperCase())}
         />
         {(errors.country_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -99,7 +99,7 @@ const GashaponCountriesAction = ({action, onClose, updateData}) => {
             value={data.country_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Country Description"
-            onChange={(e)=> setData("country_description", e.target.value)}
+            onChange={(e)=> setData("country_description", e.target.value.toUpperCase())}
         />
         {(errors.country_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

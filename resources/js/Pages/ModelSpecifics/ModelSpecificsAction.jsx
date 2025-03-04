@@ -82,7 +82,7 @@ const ModelSpecificsAction = ({ action, onClose, updateData }) => {
                 value={data.model_specific_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Model Specific Code"
-                onChange={(e) => setData("model_specific_code", e.target.value)}
+                onChange={(e) => setData("model_specific_code", e.target.value.toUpperCase())}
             />
             {errors.model_specific_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const ModelSpecificsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Model Specific Description"
                 onChange={(e) =>
-                    setData("model_specific_description", e.target.value)
+                    setData("model_specific_description", e.target.value.toUpperCase())
                 }
             />
             {errors.model_specific_description && (

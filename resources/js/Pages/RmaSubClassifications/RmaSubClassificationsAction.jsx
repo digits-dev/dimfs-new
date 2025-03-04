@@ -116,7 +116,7 @@ const RmaSubClassificationsAction = ({action, onClose, updateData, all_active_rm
             value={data.sub_classification_description}
             disabled={action === 'View'}
             placeholder="Enter Sub Classification Description"
-            onChange={(e)=> setData("sub_classification_description", e.target.value)}
+            onChange={(e)=> setData("sub_classification_description", e.target.value.toUpperCase())}
         />
         {(errors.sub_classification_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

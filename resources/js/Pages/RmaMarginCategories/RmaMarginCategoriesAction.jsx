@@ -120,7 +120,7 @@ const RmaMarginCategoriesAction = ({action, onClose, updateData, all_active_rma_
             value={data.margin_category_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Margin Category Code"
-            onChange={(e)=> setData("margin_category_code", e.target.value)}
+            onChange={(e)=> setData("margin_category_code", e.target.value.toUpperCase())}
         />
         {(errors.margin_category_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -133,7 +133,7 @@ const RmaMarginCategoriesAction = ({action, onClose, updateData, all_active_rma_
             value={data.margin_category_description}
             disabled={action === 'View'}
             placeholder="Enter Margin Category Description"
-            onChange={(e)=> setData("margin_category_description", e.target.value)}
+            onChange={(e)=> setData("margin_category_description", e.target.value.toUpperCase())}
         />
         {(errors.margin_category_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

@@ -462,7 +462,7 @@ class AdmMenus extends Seeder
                 'name'              => 'Gashapon Vendor Types',
                 'type'              => 'Route',
                 'path'              => 'GashaponVendorTypes\GashaponVendorTypesControllerGetIndex',
-                'slug'              => 'gashapon_vendor_groups',
+                'slug'              => 'gashapon_vendor_types',
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',
                 'parent_id'         => 10,

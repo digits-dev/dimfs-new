@@ -75,7 +75,7 @@ const ItemMasterUpdate = ({page_title, update_inputs, item_master_detail, table_
     <>
       <Head title={page_title}/>
       <ContentPanel>
-        <p className="text-lg font-semibold mb-2">Update Item Master Data</p>
+        <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'} text-lg font-semibold mb-2`}>Update Item Master Data</p>
         <div className='border p-4 rounded-lg'>
           {update_inputs &&
             <form onSubmit={handleFormSubmit}>

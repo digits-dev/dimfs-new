@@ -84,7 +84,7 @@ const WarehouseCategoriesAction = ({ action, onClose, updateData }) => {
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Warehouse Category Code"
                 onChange={(e) =>
-                    setData("warehouse_category_code", e.target.value)
+                    setData("warehouse_category_code", e.target.value.toUpperCase())
                 }
             />
             {errors.warehouse_category_code && (
@@ -95,7 +95,7 @@ const WarehouseCategoriesAction = ({ action, onClose, updateData }) => {
             {/* WAREHOUSE CATEGORY DESCRIPTION */}
             <InputComponent
                 name="warehouse_category_description"
-                value={data.warehouse_category_description}
+                value={data.warehouse_category_description.toUpperCase()}
                 disabled={action === "View"}
                 placeholder="Enter Warehouse Category Description"
                 onChange={(e) =>

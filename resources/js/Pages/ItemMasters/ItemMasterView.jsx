@@ -19,7 +19,7 @@ const ItemMasterView = ({page_title, table_headers, item_master_detail}) => {
     <>
       <Head title={page_title}/>
       <ContentPanel>
-        <p className="text-lg font-semibold mb-2">Item Details</p>
+        <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'} text-lg font-semibold mb-2`}>Item Details</p>
         <div className='border p-4 rounded-lg'>
           {table_headers &&
             <div>
@@ -43,7 +43,7 @@ const ItemMasterView = ({page_title, table_headers, item_master_detail}) => {
               
               {item_master_detail.get_item_segmentations != 0 && 
                 <div className='mt-5'>
-                  <p className="text-base font-semibold mb-2">Segmentations</p>
+                  <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'} text-base font-semibold mb-2`}>Segmentations</p>
                   <div className="grid grid-cols-2 gap-2 mt-2 border rounded-lg p-3">
                   {item_master_detail.get_item_segmentations.map((item, index) => (
                       <InputComponent

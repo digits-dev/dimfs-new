@@ -82,7 +82,7 @@ const AppleLobsAction = ({action, onClose, updateData}) => {
             value={data.apple_lob_description}
             disabled={action === 'View'}
             placeholder="Enter Apple LOB Description"
-            onChange={(e)=> setData("apple_lob_description", e.target.value)}
+            onChange={(e)=> setData("apple_lob_description", e.target.value.toUpperCase())}
         />
         {(errors.apple_lob_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

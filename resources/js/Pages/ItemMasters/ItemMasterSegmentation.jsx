@@ -72,7 +72,7 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
     <>
       <Head title={page_title}/>
       <ContentPanel>
-        <p className="text-lg font-semibold mb-2">Item Segmentation</p>
+        <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'} text-lg font-semibold mb-2`}>Item Segmentation</p>
         <div className='border p-4 rounded-lg'>
           {segmentation_inputs &&
             <div>

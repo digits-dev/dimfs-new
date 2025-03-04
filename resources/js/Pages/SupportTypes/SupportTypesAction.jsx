@@ -80,7 +80,7 @@ const SupportTypesAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Support Type Description"
                 onChange={(e) =>
-                    setData("support_type_description", e.target.value)
+                    setData("support_type_description", e.target.value.toUpperCase())
                 }
             />
             {errors.support_type_description && (

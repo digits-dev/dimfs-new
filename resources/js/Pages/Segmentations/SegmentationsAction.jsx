@@ -97,7 +97,7 @@ const SegmentationsAction = ({ action, onClose, updateData }) => {
                 value={data.segmentation_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Segmentation Code"
-                onChange={(e) => setData("segmentation_code", e.target.value)}
+                onChange={(e) => setData("segmentation_code", e.target.value.toUpperCase())}
             />
             {errors.segmentation_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -111,7 +111,7 @@ const SegmentationsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Segmentation Description"
                 onChange={(e) =>
-                    setData("segmentation_description", e.target.value)
+                    setData("segmentation_description", e.target.value.toUpperCase())
                 }
             />
             {errors.segmentation_description && (
@@ -125,7 +125,7 @@ const SegmentationsAction = ({ action, onClose, updateData }) => {
                 value={data.import_header_name}
                 disabled={action === "View"}
                 placeholder="Enter Import Header Name"
-                onChange={(e) => setData("import_header_name", e.target.value)}
+                onChange={(e) => setData("import_header_name", e.target.value.toUpperCase())}
             />
             {errors.import_header_name && (
                 <div className="font-poppins text-xs font-semibold text-red-600">

@@ -117,7 +117,7 @@ const RmaStoreCategoriesAction = ({action, onClose, updateData, all_active_rma_s
             value={data.store_category_description}
             disabled={action === 'View'}
             placeholder="Enter Store Category Description"
-            onChange={(e)=> setData("store_category_description", e.target.value)}
+            onChange={(e)=> setData("store_category_description", e.target.value.toUpperCase())}
         />
         {(errors.store_category_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

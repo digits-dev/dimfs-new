@@ -82,7 +82,7 @@ const GashaponVendorGroupsAction = ({action, onClose, updateData}) => {
             value={data.vendor_group_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Vendor Group Description"
-            onChange={(e)=> setData("vendor_group_description", e.target.value)}
+            onChange={(e)=> setData("vendor_group_description", e.target.value.toUpperCase())}
         />
         {(errors.vendor_group_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

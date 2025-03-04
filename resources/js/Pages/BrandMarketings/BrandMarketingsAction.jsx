@@ -82,7 +82,7 @@ const BrandMarketingsAction = ({action, onClose, updateData}) => {
             value={data.brand_marketing_description}
             disabled={action === 'View'}
             placeholder="Enter Brand Marketing Description"
-            onChange={(e)=> setData("brand_marketing_description", e.target.value)}
+            onChange={(e)=> setData("brand_marketing_description", e.target.value.toUpperCase())}
         />
         {(errors.brand_marketing_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

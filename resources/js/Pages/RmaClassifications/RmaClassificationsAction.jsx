@@ -121,7 +121,7 @@ const RmaClassificationsAction = ({action, onClose, updateData, all_active_rma_c
             value={data.class_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Class Code"
-            onChange={(e)=> setData("class_code", e.target.value)}
+            onChange={(e)=> setData("class_code", e.target.value.toUpperCase())}
         />
         {(errors.class_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -134,7 +134,7 @@ const RmaClassificationsAction = ({action, onClose, updateData, all_active_rma_c
             value={data.class_description}
             disabled={action === 'View'}
             placeholder="Enter Class Description"
-            onChange={(e)=> setData("class_description", e.target.value)}
+            onChange={(e)=> setData("class_description", e.target.value.toUpperCase())}
         />
         {(errors.class_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

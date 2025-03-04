@@ -85,7 +85,7 @@ const CategoriesAction = ({action, onClose, updateData}) => {
             value={data.color_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Color Code"
-            onChange={(e)=> setData("color_code", e.target.value)}
+            onChange={(e)=> setData("color_code", e.target.value.toUpperCase())}
         />
         {(errors.color_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -98,7 +98,7 @@ const CategoriesAction = ({action, onClose, updateData}) => {
             value={data.color_description}
             disabled={action === 'View'}
             placeholder="Enter Color Description"
-            onChange={(e)=> setData("color_description", e.target.value)}
+            onChange={(e)=> setData("color_description", e.target.value.toUpperCase())}
         />
         {(errors.color_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

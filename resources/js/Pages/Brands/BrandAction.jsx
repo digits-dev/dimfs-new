@@ -90,7 +90,7 @@ const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_
             value={data.brand_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Brand Code"
-            onChange={(e)=> setData("brand_code", e.target.value)}
+            onChange={(e)=> setData("brand_code", e.target.value.toUpperCase())}
         />
         {(errors.brand_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -103,7 +103,7 @@ const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_
             value={data.brand_description}
             disabled={action === 'View'}
             placeholder="Enter Brand Description"
-            onChange={(e)=> setData("brand_description", e.target.value)}
+            onChange={(e)=> setData("brand_description", e.target.value.toUpperCase())}
         />
         {(errors.brand_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -114,7 +114,7 @@ const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_
         {action == 'View' && 
             <InputComponent
                 displayName="Brand Group"
-                value={data.category_name}
+                value={data.brand_groups_name}
                 disabled={action === 'View'}
                 placeholder="Enter Brand Group"
             />
@@ -148,7 +148,7 @@ const BrandAction = ({action, onClose, updateData, all_active_brand_groups, all_
             value={data.contact_name}
             disabled={action === 'View'}
             placeholder="Enter Contact Name"
-            onChange={(e)=> setData("contact_name", e.target.value)}
+            onChange={(e)=> setData("contact_name", e.target.value.toUpperCase())}
         />
         {(errors.contact_name) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

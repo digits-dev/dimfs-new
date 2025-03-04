@@ -196,7 +196,7 @@ const VendorsAction = ({
                 value={data.vendor_name}
                 disabled={action === "View"}
                 placeholder="Enter Vendor Name"
-                onChange={(e) => setData("vendor_name", e.target.value)}
+                onChange={(e) => setData("vendor_name", e.target.value.toUpperCase())}
             />
             {errors.vendor_name && (
                 <div className="font-poppins text-xs font-semibold text-red-600">

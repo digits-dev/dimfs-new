@@ -86,7 +86,7 @@ const UomsAction = ({ action, onClose, updateData }) => {
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 displayName="UOM Code"
                 placeholder="Enter UOM Code"
-                onChange={(e) => setData("uom_code", e.target.value)}
+                onChange={(e) => setData("uom_code", e.target.value.toUpperCase())}
             />
             {errors.uom_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -100,7 +100,7 @@ const UomsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 displayName="UOM Description"
                 placeholder="Enter UOM Description"
-                onChange={(e) => setData("uom_description", e.target.value)}
+                onChange={(e) => setData("uom_description", e.target.value.toUpperCase())}
             />
             {errors.uom_description && (
                 <div className="font-poppins text-xs font-semibold text-red-600">

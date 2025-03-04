@@ -86,7 +86,7 @@ const GashaponUomsAction = ({action, onClose, updateData}) => {
             value={data.uom_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Gashapon UOM Code"
-            onChange={(e)=> setData("uom_code", e.target.value)}
+            onChange={(e)=> setData("uom_code", e.target.value.toUpperCase())}
         />
         {(errors.uom_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -99,7 +99,7 @@ const GashaponUomsAction = ({action, onClose, updateData}) => {
             value={data.uom_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon UOM Description"
-            onChange={(e)=> setData("uom_description", e.target.value)}
+            onChange={(e)=> setData("uom_description", e.target.value.toUpperCase())}
         />
         {(errors.uom_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

@@ -83,7 +83,7 @@ const GashaponVendorTypesAction = ({action, onClose, updateData}) => {
             value={data.vendor_type_code}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Vendor Code Description"
-            onChange={(e)=> setData("vendor_type_code", e.target.value)}
+            onChange={(e)=> setData("vendor_type_code", e.target.value.toUpperCase())}
         />
         {(errors.vendor_type_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -96,7 +96,7 @@ const GashaponVendorTypesAction = ({action, onClose, updateData}) => {
             value={data.vendor_type_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Vendor Type Description"
-            onChange={(e)=> setData("vendor_type_description", e.target.value)}
+            onChange={(e)=> setData("vendor_type_description", e.target.value.toUpperCase())}
         />
         {(errors.vendor_type_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

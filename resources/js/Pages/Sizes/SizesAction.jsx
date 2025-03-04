@@ -82,7 +82,7 @@ const SizesAction = ({ action, onClose, updateData }) => {
                 value={data.size_code}
                 disabled={action === 'View' || action === 'Update' && privilege != 1}
                 placeholder="Enter Size Code"
-                onChange={(e) => setData("size_code", e.target.value)}
+                onChange={(e) => setData("size_code", e.target.value.toUpperCase())}
             />
             {errors.size_code && (
                 <div className="font-poppins text-xs font-semibold text-red-600">
@@ -95,7 +95,7 @@ const SizesAction = ({ action, onClose, updateData }) => {
                 value={data.size_description}
                 disabled={action === "View"}
                 placeholder="Enter Size Description"
-                onChange={(e) => setData("size_description", e.target.value)}
+                onChange={(e) => setData("size_description", e.target.value.toUpperCase())}
             />
             {errors.size_description && (
                 <div className="font-poppins text-xs font-semibold text-red-600">

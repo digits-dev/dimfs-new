@@ -80,7 +80,7 @@ const SkuLegendsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Sku Legend Description"
                 onChange={(e) =>
-                    setData("sku_legend_description", e.target.value)
+                    setData("sku_legend_description", e.target.value.toUpperCase())
                 }
             />
             {errors.sku_legend_description && (

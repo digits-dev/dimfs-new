@@ -82,7 +82,7 @@ const GashaponModelsAction = ({action, onClose, updateData}) => {
             value={data.model_description}
             disabled={action === 'View'}
             placeholder="Enter Gashapon Model Description"
-            onChange={(e)=> setData("model_description", e.target.value)}
+            onChange={(e)=> setData("model_description", e.target.value.toUpperCase())}
         />
         {(errors.model_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">

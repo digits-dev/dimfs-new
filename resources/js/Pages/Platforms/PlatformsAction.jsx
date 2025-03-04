@@ -81,7 +81,7 @@ const PlatformsAction = ({ action, onClose, updateData }) => {
                 disabled={action === "View"}
                 placeholder="Enter Platform Description"
                 onChange={(e) =>
-                    setData("platform_description", e.target.value)
+                    setData("platform_description", e.target.value.toUpperCase())
                 }
             />
             {errors.platform_description && (

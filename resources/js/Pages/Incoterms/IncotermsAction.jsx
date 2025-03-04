@@ -85,7 +85,7 @@ const IncotermsAction = ({action, onClose, updateData}) => {
             value={data.incoterms_code}
             disabled={action === 'View' || action === 'Update' && privilege != 1}
             placeholder="Enter Incoterms Code"
-            onChange={(e)=> setData("incoterms_code", e.target.value)}
+            onChange={(e)=> setData("incoterms_code", e.target.value.toUpperCase())}
         />
         {(errors.incoterms_code) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
@@ -98,7 +98,7 @@ const IncotermsAction = ({action, onClose, updateData}) => {
             value={data.incoterms_description}
             disabled={action === 'View'}
             placeholder="Enter Incoterms Description"
-            onChange={(e)=> setData("incoterms_description", e.target.value)}
+            onChange={(e)=> setData("incoterms_description", e.target.value.toUpperCase())}
         />
         {(errors.incoterms_description) && (
             <div className="font-poppins text-xs font-semibold text-red-600">
