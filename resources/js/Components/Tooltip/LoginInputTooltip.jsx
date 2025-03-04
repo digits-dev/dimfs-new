@@ -4,7 +4,7 @@ import 'tippy.js/dist/tippy.css';
 
 const LoginInputTooltip = ({children, content = 'To change tooltip content add "content" attribute', placement = 'top'}) => {
   return (
-    <Tippy className='text-white rounded' content={content} placement={placement}>
+    <Tippy className='text-white rounded' content={content} placement={placement} zIndex={1000}>
         {children}
     </Tippy>
   )

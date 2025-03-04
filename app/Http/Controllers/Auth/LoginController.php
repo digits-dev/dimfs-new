@@ -74,7 +74,9 @@ class LoginController extends Controller
 
             $menus = AdmMenus::with([
                 'children' => function ($query) use ($menus_privileges) {
-                    $query->whereIn('id', $menus_privileges)->orderBy('sorting');
+                    $query->whereIn('id', $menus_privileges)
+                    ->where('is_active', 1)
+                    ->orderBy('sorting');
                 }
             ])
                 ->whereIn('id', $menus_privileges)

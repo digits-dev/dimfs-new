@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use app\Helpers\CommonHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +12,25 @@ class ItemSegmentations extends Model
 
     protected $table = 'item_segmentations';
 
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+            $model->updated_at = null;
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
+
     protected $fillable = [
         'id',
         'item_masters_id',
+        'segmentations_id',
+        'sku_legend_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -28,6 +45,8 @@ class ItemSegmentations extends Model
 
     protected $filterable = [
         'item_masters_id',
+        'segmentations_id',
+        'sku_legend_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -85,5 +104,15 @@ class ItemSegmentations extends Model
     public function getUpdatedBy() {
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
+
+    public function getSkuLegend() {
+        return $this->belongsTo(SkuLegends::class, 'sku_legend_id', 'id');
+    }
+
+    public function getSegmentation() {
+        return $this->belongsTo(Segmentations::class, 'segmentations_id', 'id');
+    }
+
+
 
 }

@@ -127,12 +127,23 @@ const ItemMasters = ({
                                                     <RowAction
                                                         type="link"
                                                         action="edit"
+                                                        hasTooltip
+                                                        tooltipContent="Edit"
                                                         href={`item_masters/update_view/${item.id}`}
                                                     />
                                                 )}
                                                 <RowAction
                                                     type="link"
+                                                    action="add_segmentation"
+                                                    hasTooltip
+                                                    tooltipContent="Add/Update Segmentation"
+                                                    href={`item_masters/segmentaion/${item.id}`}
+                                                />
+                                                <RowAction
+                                                    type="link"
                                                     action="view"
+                                                    hasTooltip
+                                                    tooltipContent="View"
                                                     href={`item_masters/view_details/${item.id}`}
                                                 />
                                             </RowData>

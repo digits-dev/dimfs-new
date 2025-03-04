@@ -228,6 +228,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create', [ItemMastersController::class, 'create']);
         Route::get('/update_view/{item}', [ItemMastersController::class, 'getUpdate']);
         Route::post('/update', [ItemMastersController::class, 'update']);
+        Route::get('/segmentaion/{item}', [ItemMastersController::class, 'getSegmentation']);
+        Route::post('/post_segmentation', [ItemMastersController::class, 'updateSegmentation']);
         Route::get('/view_details/{item}', [ItemMastersController::class, 'getView']);
         Route::get('/export', [ItemMastersController::class, 'export']);
     });

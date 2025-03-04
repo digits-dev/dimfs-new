@@ -320,4 +320,8 @@ class ItemMaster extends Model
     public function getWarranty() {
         return $this->belongsTo(Warranties::class, 'warranties_id', 'id');
     }
+
+    public function getItemSegmentations() {
+        return $this->hasMany(ItemSegmentations::class, 'item_masters_id', 'id');
+    }
 }

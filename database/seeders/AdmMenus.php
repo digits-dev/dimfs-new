@@ -580,7 +580,7 @@ class AdmMenus extends Seeder
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',
                 'parent_id'         => 2,
-                'is_active'         => 1,
+                'is_active'         => 0,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 13
@@ -599,7 +599,7 @@ class AdmMenus extends Seeder
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',
                 'parent_id'         => 2,
-                'is_active'         => 1,
+                'is_active'         => 0,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 14
@@ -618,7 +618,7 @@ class AdmMenus extends Seeder
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',
                 'parent_id'         => 2,
-                'is_active'         => 1,
+                'is_active'         => 0,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 15
@@ -637,7 +637,7 @@ class AdmMenus extends Seeder
                 'color'             => NULL,
                 'icon'              => 'fa-regular fa-circle',
                 'parent_id'         => 2,
-                'is_active'         => 1,
+                'is_active'         => 0,
                 'is_dashboard'      => 0,
                 'id_adm_privileges'  => 1,
                 'sorting'           => 16

@@ -16,6 +16,8 @@ class CreateItemSegmentationsTable extends Migration
         Schema::create('item_segmentations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_masters_id')->nullable()->index();
+            $table->unsignedBigInteger('segmentations_id')->nullable();
+            $table->unsignedBigInteger('sku_legend_id')->nullable();
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();

@@ -10,7 +10,10 @@ use App\Models\AdmModels\AdmModules;
 use App\Models\ItemMaster;
 use App\Models\ItemMasterApproval;
 use App\Models\ItemMasterHistory;
+use App\Models\ItemSegmentations;
 use App\Models\ModuleHeaders;
+use App\Models\Segmentations;
+use App\Models\SkuLegends;
 use App\Models\TableSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -54,6 +57,8 @@ class ItemMastersController extends Controller
         'getSkuLegend',
         'getCurrency',
         'getWarranty',
+        'getItemSegmentations.getSegmentation',
+        'getItemSegmentations.getSkuLegend',
     ];
 
     public function __construct() {
@@ -197,6 +202,8 @@ class ItemMastersController extends Controller
             return $columns;
         });
 
+
+
         return Inertia::render("ItemMasters/ItemMasterUpdate", $data);
     }
 
@@ -238,7 +245,51 @@ class ItemMastersController extends Controller
         }
     }
 
-    // ---------------------------------------- VIEW ITEM -------------------------------------------//
+    // ----------------------------------- ADD / UPDATE SEGMENTATION -------------------------------/
+    
+    public function getSegmentation($item){
+        $data = [];
+        $data['page_title'] = 'Item Master - Segmentation';
+        $data['item_master_id'] = $item;
+        $data['segmentation_inputs'] = Segmentations::where('status', 'ACTIVE')->get();
+        $data['sku_legend_options'] = SkuLegends::select('sku_legend_description as label', 'id as value')->where('status', 'ACTIVE')->get();
+        $data['item_segmentations'] = ItemSegmentations::where('item_masters_id', $item)->with(['getSkuLegend', 'getSegmentation'])->get();
+
+        return Inertia::render("ItemMasters/ItemMasterSegmentation", $data);
+    }
+
+    public function updateSegmentation(Request $request){
+
+        $request->validate($request->validation);
+        $itemValues = Arr::except($request->all(), ['validation']);
+
+        try {
+            foreach ($itemValues as $key => $item) {
+                if (is_array($item) && isset($item['segmentation_id'], $item['sku_legend_id'])) {
+                    ItemSegmentations::updateOrCreate(
+                        [
+                            'item_masters_id' => $request->item_master_id,
+                            'segmentations_id' => $item['segmentation_id'],
+                        ],
+                        [
+                            'sku_legend_id' => $item['sku_legend_id'],
+                        ]
+                    );
+                }
+            }
+
+            return redirect('/item_masters')->with(['message' => 'Item Segmentation Update Success!', 'type' => 'success']);
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Item Master', $e->getMessage());
+            return back()->with(['message' => 'Item Update Failed!', 'type' => 'error']);
+        }
+        
+        
+    }
+
+    // ---------------------------------------- VIEW ITEM ----------------------------------------------//
 
     public function getView(ItemMaster $item){
 

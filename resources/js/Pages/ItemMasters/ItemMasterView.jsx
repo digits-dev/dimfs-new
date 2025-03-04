@@ -10,7 +10,10 @@ import InputComponent from '../../Components/Forms/Input';
 
 const ItemMasterView = ({page_title, table_headers, item_master_detail}) => {
   const { theme } = useTheme();
-  const { primayActiveColor, textColorActive, buttonSwalColor } = useThemeStyles(theme);
+  const { primayActiveColor, textColorActive } = useThemeStyles(theme);
+
+  // console.log(item_master_detail);
+
 
   return (
     <>
@@ -37,6 +40,25 @@ const ItemMasterView = ({page_title, table_headers, item_master_detail}) => {
                   );
                 })}
               </div>
+              
+              {item_master_detail.get_item_segmentations != 0 && 
+                <div className='mt-5'>
+                  <p className="text-base font-semibold mb-2">Segmentations</p>
+                  <div className="grid grid-cols-2 gap-2 mt-2 border rounded-lg p-3">
+                  {item_master_detail.get_item_segmentations.map((item, index) => (
+                      <InputComponent
+                        key={index}
+                        disabled={true}
+                        displayName={item.get_segmentation?.segmentation_description}
+                        value={item.get_sku_legend?.sku_legend_description ?? "-"} 
+                        onChange={()=>{}}                  
+                    />
+                    ))
+                  }
+                  </div>
+                </div>
+              
+              }
               
               <div className="flex justify-between mt-4">
                   <Button
