@@ -17,7 +17,7 @@ const Dashboard = ({
     rma_item_master_update_counter }) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
-    const { textColor } = useThemeStyles(theme);
+    const { textColor, sideBarBgColor } = useThemeStyles(theme);
 
     const [activeTab, setActiveTab] = useState("tab1")
     
@@ -32,15 +32,15 @@ const Dashboard = ({
             <Head title="Dashboard" />
             {auth.access.isView && auth.access.isRead && 
 
-              <div className="w-full mx-auto bg-white shadow-menus rounded-lg overflow-hidden">
-                  <div className="flex bg-gray-200">
+              <div className={`w-full mx-auto ${sideBarBgColor} shadow-menus rounded-lg overflow-hidden`}>
+                  <div className={`flex  ${theme == 'bg-skin-blue' ? 'bg-gray-200': 'bg-black/20'}`}>
                       {tabs.map((tab) => (
                           <button
                               key={tab.id}
                               onClick={() => setActiveTab(tab.id)}
-                              className={`flex items-center justify-center px-5 py-3 bg-gray-200 font-medium text-sm transition-colors focus:outline-none ${
+                              className={`flex items-center justify-center px-5 py-3 font-medium text-sm transition-colors focus:outline-none ${
                                   activeTab === tab.id
-                                  ? "bg-white rounded-t-lg"
+                                  ? `${sideBarBgColor} rounded-t-lg`
                                   : "text-muted-foreground text-gray-600 hover:text-foreground hover:bg-gray-300 "
                               }`}
                           >

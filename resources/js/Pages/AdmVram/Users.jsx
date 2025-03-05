@@ -172,7 +172,7 @@ const Users = ({page_title, tableName, users, queryParams, privileges}) => {
                                 });
                             }}
                         >
-                            <i className="fa-solid fa-plus mr-1"></i> Add User
+                            <i className="fa-solid fa-plus md:mr-1"></i> <span className='hidden md:block'>Add User</span>
                         </Button>
                         <Export path="/users/export" page_title="Users"/>
                     </div>

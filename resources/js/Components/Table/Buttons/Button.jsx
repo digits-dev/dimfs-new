@@ -24,14 +24,14 @@ const Button = ({
                     disabled={loading}
                     className={`${fontColor} overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
                 >
-                    {children}
+                     <div className="text-xs md:text-sm flex items-center">{children}</div>
                 </button>
             ) : (
                 loading ? (
                     <span
                         className={`${fontColor} pt-2 overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 opacity-70 cursor-not-allowed ${extendClass}`}
                     >
-                        {children}
+                        <div className="text-xs md:text-sm flex items-center">{children}</div>
                     </span>
                 ):
                 (
@@ -39,7 +39,7 @@ const Button = ({
                         href={href}
                         className={`${fontColor} pt-2 overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
                     >
-                        {children}
+                         <div className="text-xs md:text-sm flex items-center">{children}</div>
                     </Link>
                 )
             )}
