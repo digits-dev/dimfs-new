@@ -6,8 +6,18 @@ use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\Brands;
 use App\Models\Classifications;
+use App\Models\GashaponBrands;
+use App\Models\GashaponCategories;
+use App\Models\GashaponItemMaster;
+use App\Models\GashaponItemMasterHistory;
+use App\Models\GashaponProductTypes;
 use App\Models\ItemMaster;
 use App\Models\ItemMasterHistory;
+use App\Models\RmaCategories;
+use App\Models\RmaClassifications;
+use App\Models\RmaItemMaster;
+use App\Models\RmaItemMasterHistory;
+use App\Models\RmaSubClassifications;
 use App\Models\SubClassifications;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -36,6 +46,8 @@ class DashboardController extends Controller
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
                             </svg>',
         ];
+
+        // ITEM MASTER
        
         $item_master_count = ItemMaster::count();
 
@@ -92,6 +104,124 @@ class DashboardController extends Controller
         ->groupBy('date')
         ->orderBy('date', 'desc')
         ->get();
+
+
+        // GASHAPON ITEM MASTER
+
+        $gashapon_item_master_count = GashaponItemMaster::count();
+
+        $data['gashapon_item_master_stats'] = [
+            [
+                'name' => 'Gashapon Item Master',
+                'value' => $gashapon_item_master_count,
+                'label' => 'Gashapon Items',
+                'sublabel' => 'Total Gashapon Items',
+                'icon' => $icons['items'],
+                'gradient' => 'linear-gradient(to bottom right, #fb923c, #db2777)',
+                'href' => '/gashapon_item_masters',
+                'total' => $item_master_count,
+            ],
+            [
+                'name' => 'Gashapon Brands',
+                'value' => GashaponBrands::where('status', 'ACTIVE')->count(),
+                'label' => 'Gashapon Brands',
+                'sublabel' => 'Active Gashapon Brands',
+                'icon' => $icons['brands'],
+                'gradient' => 'linear-gradient(to bottom right, #4ade80, #059669)',
+                'href' => '/gashapon_brands',
+                'total' => GashaponBrands::count(),
+            ],
+            [
+                'name' => 'Gashapon Categories',
+                'value' => GashaponCategories::where('status', 'ACTIVE')->count(),
+                'label' => 'Gashapon Categories',
+                'sublabel' => 'Active Gashapon Categories',
+                'icon' => $icons['classes'],
+                'gradient' => 'linear-gradient(to bottom right, #f87171, #e11d48)',
+                'href' => '/gashapon_categories',
+                'total' => GashaponCategories::count(),
+            ],
+            [
+                'name' => 'Gashapon Product Types',
+                'value' => GashaponProductTypes::where('status', 'ACTIVE')->count(),
+                'label' => 'Product Types',
+                'sublabel' => 'Active Product Types',
+                'icon' => $icons['sub_classes'],
+                'gradient' => 'linear-gradient(to bottom right, #60a5fa, #0891b2)',
+                'href' => '/gashapon_product_types',
+                'total' => GashaponProductTypes::count(),
+            ],
+        ];
+
+        $data['gashapon_item_master_creation_counter'] = GashaponItemMaster::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+
+        $data['gashapon_item_master_update_counter'] = GashaponItemMasterHistory::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+        ->where('action', 'UPDATE-APPROVED')
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+
+        // RMA ITEM MASTER 
+
+        $rma_item_master_count = RmaItemMaster::count();
+
+        $data['rma_item_master_stats'] = [
+            [
+                'name' => 'RMA Item Master',
+                'value' => $rma_item_master_count,
+                'label' => 'RMA Items',
+                'sublabel' => 'Total RMA Items',
+                'icon' => $icons['items'],
+                'gradient' => 'linear-gradient(to bottom right, #fb923c, #db2777)',
+                'href' => '/rma_item_masters',
+                'total' => $rma_item_master_count,
+            ],
+            [
+                'name' => 'RMA Categories',
+                'value' => RmaCategories::where('status', 'ACTIVE')->count(),
+                'label' => 'RMA Categories',
+                'sublabel' => 'Active RMA Categories',
+                'icon' => $icons['brands'],
+                'gradient' => 'linear-gradient(to bottom right, #4ade80, #059669)',
+                'href' => '/rma_categories',
+                'total' => RmaCategories::count(),
+            ],
+            [
+                'name' => 'RMA Classification',
+                'value' => RmaClassifications::where('status', 'ACTIVE')->count(),
+                'label' => 'RMA Classes',
+                'sublabel' => 'Active RMA Classes',
+                'icon' => $icons['classes'],
+                'gradient' => 'linear-gradient(to bottom right, #f87171, #e11d48)',
+                'href' => '/rma_classifications',
+                'total' => RmaClassifications::count(),
+            ],
+            [
+                'name' => 'RMA Sub Classification',
+                'value' => RmaSubClassifications::where('status', 'ACTIVE')->count(),
+                'label' => 'RMA Sub Classes',
+                'sublabel' => 'Active RMA Sub Classes',
+                'icon' => $icons['sub_classes'],
+                'gradient' => 'linear-gradient(to bottom right, #60a5fa, #0891b2)',
+                'href' => '/rma_sub_classifications',
+                'total' => RmaSubClassifications::count(),
+            ],
+        ];
+
+        $data['rma_item_master_creation_counter'] = RmaItemMaster::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+
+        $data['rma_item_master_update_counter'] = RmaItemMasterHistory::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+        ->where('action', 'UPDATE-APPROVED')
+        ->groupBy('date')
+        ->orderBy('date', 'desc')
+        ->get();
+      
 
         return Inertia::render('Dashboard/Dashboard', $data);
     }

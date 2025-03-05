@@ -2,7 +2,7 @@ import React from 'react'
 import StatCard from './StatCard'
 import LineChart from './LineChart'
 
-const ItemCard = ({title = "Sample Title", data, create_data, update_data }) => {
+const ItemCard = ({title = "Sample Title", data, create_data, update_data, create_table_title, update_table_title }) => {
 
   return (
     <div className='border border-dashed rounded-lg p-5'>
@@ -22,7 +22,7 @@ const ItemCard = ({title = "Sample Title", data, create_data, update_data }) => 
             />
           ))}
         </div>
-        <LineChart create_data={create_data} update_data={update_data}/>
+        <LineChart create_data={create_data} update_data={update_data} create_table_title={create_table_title} update_table_title={update_table_title}/>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import ContentPanel from "../Table/ContentPanel";
 import { useTheme } from "../../Context/ThemeContext";
 import Chart from "react-apexcharts";
 
-const LineChart = ({ create_data, update_data }) => {
+const LineChart = ({ create_data, update_data, create_table_title, update_table_title }) => {
     const { theme } = useTheme();
     const [themeColor, setThemeColor] = useState(theme == "bg-skin-blue" ? '#134B70' : '#A4A3A4');
 
@@ -113,7 +113,7 @@ const LineChart = ({ create_data, update_data }) => {
 
     return (
         <div className="mt-5">
-            <p className="mb-2 font-semibold text-sm">Item Creation Counter</p>
+            <p className="mb-2 font-semibold text-sm">{create_table_title}</p>
             <div className="border p-2 rounded-lg mb-5">
                 <Chart
                     options={CreateChartOptions}
@@ -121,7 +121,7 @@ const LineChart = ({ create_data, update_data }) => {
                     height={300}
                 />
             </div>
-            <p className="mb-2 font-semibold text-sm">Updated Item Counter</p>
+            <p className="mb-2 font-semibold text-sm">{update_table_title}</p>
             <div className="border p-2 rounded-lg">
                 <Chart
                     options={UpdateChartOptions}
