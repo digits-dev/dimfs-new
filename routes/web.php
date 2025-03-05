@@ -134,10 +134,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sidebar', [MenusController::class, 'sidebarMenu'])->name('sidebar');
 
     //USERS
-    Route::post('create-user', [AdminUsersController::class, 'postAddSave'])->name('create-user');
-    Route::post('/postAddSave', [AdminUsersController::class, 'postAddSave'])->name('postAddSave');
-    Route::post('/postEditSave', [AdminUsersController::class, 'postEditSave'])->name('postEditSave');
-    Route::post('/deactivate-users', [AdminUsersController::class, 'setStatus'])->name('postDeactivateUsers');
+    Route::prefix('users')->group(function () {
+        Route::post('/bulk_action', [AdminUsersController::class, 'bulkActions']);
+        Route::post('/create', [AdminUsersController::class, 'create']);
+        Route::post('/update', [AdminUsersController::class, 'update']);
+        Route::get('/export', [AdminUsersController::class, 'export']);
+    });
+
 
     //PROFILE PAGE
     Route::get('/profile', [ProfilePageController::class, 'getIndex'])->name('profile_page');

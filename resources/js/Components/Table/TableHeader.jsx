@@ -39,6 +39,7 @@ const TableHeader = ({
 
   const widthClass = {
     auto: "w-auto",
+    xs: 'min-w-10',
     sm: 'min-w-20',
     md: 'min-w-40',
     lg: 'min-w-60',

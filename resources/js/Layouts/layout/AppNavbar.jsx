@@ -134,11 +134,13 @@ const AppNavbar = () => {
                 ref={menuRef}
             >
                     <div className="flex gap-x-4 items-center justify-center lg:justify-start px-[20px] py-[10px] lg:py-[15px]">
-                        <img
-                            src="/images/others/digits-icon.png"
-                            className="w-7 h-7 cursor-pointer duration-500"
-                            alt="App Logo"
-                        />
+                        <Link href='/dashboard'>
+                            <img
+                                src="/images/others/digits-icon.png"
+                                className="w-7 h-7 cursor-pointer duration-500"
+                                alt="App Logo"
+                            />
+                        </Link>
                         <div
                             className={`${
                             theme === 'bg-skin-black'
