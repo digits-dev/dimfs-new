@@ -51,6 +51,8 @@ use App\Http\Controllers\GashaponWarehouseCategories\GashaponWarehouseCategories
 use App\Http\Controllers\ItemMasters\ItemMastersController;
 use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
 use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
+use App\Http\Controllers\GashaponItemMasterApprovals\GashaponItemMasterApprovalsController;
+use App\Http\Controllers\GashaponItemMasterHistories\GashaponItemMasterHistoriesController;
 use App\Http\Controllers\RmaItemMasters\RmaItemMastersController;
 use App\Http\Controllers\RmaItemMasterApprovals\RmaItemMasterApprovalsController;
 use App\Http\Controllers\RmaItemMasterHistories\RmaItemMasterHistoriesController;
@@ -276,6 +278,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/gashapon_template', [GashaponItemMastersController::class, 'importGashaponTemplate']);
         Route::post('/import_gashapon_item', [GashaponItemMastersController::class, 'importGashaponItem']);
     });
+
+    Route::prefix('gashapon_item_master_approvals')->group(function () {
+        Route::get('/approval_view/{action}/{id}', [GashaponItemMasterApprovalsController::class, 'approvalView']);
+        Route::post('/approval', [GashaponItemMasterApprovalsController::class, 'approval']);
+        Route::post('/bulk_action', [GashaponItemMasterApprovalsController::class, 'bulkActions']);
+        Route::get('/export', [GashaponItemMasterApprovalsController::class, 'export']);
+    });
+
+    Route::prefix('gashapon_item_master_histories')->group(function () {
+        Route::get('/view/{id}', [GashaponItemMasterHistoriesController::class, 'view']);
+    });
+
 
     // ---------------------------------------- RMA ITEM MASTER ----------------------------------------//
 

@@ -249,7 +249,7 @@ class GashaponItemMasterApprovalsController extends Controller
                 $updateData['item_values'] = json_encode($itemValues);
 
                 // Increment the counter
-                Counters::incrementCode('item_masters', $digits_code['code_identifier']);
+                Counters::incrementCode('gashapon_item_masters', $digits_code['code_identifier']);
             }
 
             $gashaponItemMaster = GashaponItemMaster::updateOrCreate(
