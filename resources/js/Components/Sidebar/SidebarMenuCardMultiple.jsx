@@ -23,17 +23,6 @@ const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa
               sidebarBorderColor,
           } = useThemeStyles(theme);
   
-    const getTextSizeClass = (text) => {
-        if (text.length <= 10) return 'text-[13px]'; // Short
-        if (text.length <= 20) return 'text-[13px]'; // Medium
-        return 'text-[11px]'; // Long
-      };
-
-      const getChildTextSizeClass = (text) => {
-        if (text.length <= 10) return 'text-[12px]'; // Short
-        if (text.length <= 20) return 'text-[12px]'; // Medium
-        return 'text-[10px]'; // Long
-      };
 
       const colors = ['text-green-400', 'text-red-400', 'text-blue-400', 'text-yellow-400', 'text-purple-400']; 
       
@@ -46,7 +35,7 @@ const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa
             <div className='w-5 h-5  flex items-center justify-center mr-2 flex-shrink-0'>
                 <i className={icon}></i>
             </div>
-            <p className={`${getTextSizeClass(menuTitle)} font-bold text-nowrap flex-1`}>{menuTitle}</p>
+            <p className={`text-xs font-bold text-nowrap flex-1`}>{menuTitle}</p>
             <div className={`w-5 h-5  flex items-center justify-center transition-full duration-300 ${isMenuOpen ? '-rotate-180': ''}`}>
                 <i className="fa-solid fa-caret-down text-xs"></i> 
             </div>
@@ -69,7 +58,7 @@ const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa
                                 <div className='w-5 h-5 flex items-center justify-center mr-1 flex-shrink-0'>
                                     <i className={`fa-solid fa-circle text-[7px] ${colorClass}`}></i>
                                 </div>
-                                <span className={`${getChildTextSizeClass(child_menu.name)} font-semibold flex-1 text-nowrap`}>{child_menu.name}</span>
+                                <span className={`text-[10px] font-semibold flex-1 text-nowrap`}>{child_menu.name}</span>
                         </Link>
             })}
         </div>

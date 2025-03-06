@@ -16,11 +16,6 @@ const SidebarMenuCard = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa-chart-s
             sidebarBorderColor,
         } = useThemeStyles(theme);
 
-  const getTextSizeClass = (text) => {
-    if (text.length <= 10) return 'text-[13px]';
-    if (text.length <= 20) return 'text-[13px]';
-    return 'text-[11px]';
-  };
 
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +39,7 @@ const SidebarMenuCard = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa-chart-s
         <div className='w-5 h-5  flex items-center justify-center mr-2 flex-shrink-0'>
             <i className={icon}></i>
         </div>
-        <p className={`font-bold flex-shrink-0 ${getTextSizeClass(menuTitle)}`}>{menuTitle}</p>
+        <p className={`font-bold flex-shrink-0 text-xs`}>{menuTitle}</p>
     </Link>
   )
 }
