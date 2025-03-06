@@ -312,32 +312,33 @@ class GashaponItemMastersController extends Controller
         $request->validate([
             'file' => 'required|mimes:csv,txt,text/plain',
         ]);
-
+    
         $path = $request->file('file')->getRealPath();
         $dataExcel = Excel::toArray([], $path);
-
+    
         $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::IMPORT, CommonHelpers::myPrivilegeId());
         $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
-
+    
         $headers = $data['table_headers']->pluck('header_name')->toArray();
         $dbColumns = $data['table_headers']->pluck('name')->toArray();
-
+    
         $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
-
+    
         if ($uploadedHeaders !== $headers) {
             return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
-         }
-
+        }
+    
         $dataRows = array_slice($dataExcel[0], 1);
-
-     
+        $jsonItems = []; // Store all valid rows here
+    
+        // First loop: Validation phase (check all rows before inserting)
         foreach ($dataRows as $key => $row) {
             $jsonItemValues = []; // Reset for each row
             $itemValues = array_combine($dbColumns, $row);
-        
+    
             foreach ($itemValues as $itemKey => $value) {
                 $tableHeader = $data['table_headers']->where('name', $itemKey)->first();
-        
+    
                 if (!$tableHeader || is_null($tableHeader->table)) {
                     $jsonItemValues[$itemKey] = $value;
                     continue;
@@ -352,29 +353,32 @@ class GashaponItemMastersController extends Controller
                 
                 if ($description === null) {
                     return back()->with([
-                        'message' => 'Line ' . ($key + 2) . ' with value ' . $value . ' in '. $headerName . ' is not found in submaster',
+                        'message' => 'Line ' . ($key + 2) . ' with value ' . $value . ' in ' . $headerName . ' is not found in submaster',
                         'type' => 'error'
                     ]);
                 }
-        
+    
                 $jsonItemValues[$itemKey] = $itemId;
             }
-        
-            // Encode after processing all columns for the current row
-            $encodedJson = json_encode($jsonItemValues, JSON_PRETTY_PRINT);
-        
-            // Save the encoded JSON
+    
+            // Store the valid row for insertion later
+            $jsonItems[] = json_encode($jsonItemValues, JSON_PRETTY_PRINT);
+        }
+    
+        // Second loop: Insertion phase (only if validation passed)
+        foreach ($jsonItems as $jsonItemValues) {
             GashaponItemMasterApproval::create([
-                'item_values' => $encodedJson,
+                'item_values' => $jsonItemValues,
                 'action' => 'CREATE'
             ]);
-        
+    
             GashaponItemMasterHistory::create([
-                'item_values' => $encodedJson,
+                'item_values' => $jsonItemValues,
                 'action' => 'CREATE',
                 'status' => 'CREATE'
             ]);
         }
+    
         return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
     }
     
