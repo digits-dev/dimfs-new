@@ -21,7 +21,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Arr;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\GashaponTemplateExport;
+use App\Exports\ImportTemplate;
 
 class GashaponItemMastersController extends Controller
 {
@@ -299,6 +299,84 @@ class GashaponItemMastersController extends Controller
     }
 
     public function importGashaponTemplate() {
-        return Excel::download(new GashaponTemplateExport, 'gashapon_template.csv');
+        
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::IMPORT, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
+        $headers = $data['table_headers']->pluck('header_name')->toArray();
+        
+        return Excel::download(new ImportTemplate($headers), 'Gashapon Import Template.csv');
     }
+    
+    public function importGashaponItem(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,text/plain',
+        ]);
+
+        $path = $request->file('file')->getRealPath();
+        $dataExcel = Excel::toArray([], $path);
+
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::GASHAPON_ITEM_MASTER, ActionTypes::IMPORT, CommonHelpers::myPrivilegeId());
+        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::GASHAPON_ITEM_MASTER, $tableSetting);
+
+        $headers = $data['table_headers']->pluck('header_name')->toArray();
+        $dbColumns = $data['table_headers']->pluck('name')->toArray();
+
+        $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
+
+        if ($uploadedHeaders !== $headers) {
+            return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
+         }
+
+        $dataRows = array_slice($dataExcel[0], 1);
+
+     
+        foreach ($dataRows as $key => $row) {
+            $jsonItemValues = []; // Reset for each row
+            $itemValues = array_combine($dbColumns, $row);
+        
+            foreach ($itemValues as $itemKey => $value) {
+                $tableHeader = $data['table_headers']->where('name', $itemKey)->first();
+        
+                if (!$tableHeader || is_null($tableHeader->table)) {
+                    $jsonItemValues[$itemKey] = $value;
+                    continue;
+                }
+            
+                $tableName = $tableHeader->table;
+                $labelColumn = $tableHeader->table_select_label;
+                $headerName = $tableHeader->header_name;
+            
+                $description = DB::table($tableName)->where($labelColumn, $value)->value($labelColumn);
+                $itemId = DB::table($tableName)->where($labelColumn, $value)->value('id');
+                
+                if ($description === null) {
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with value ' . $value . ' in '. $headerName . ' is not found in submaster',
+                        'type' => 'error'
+                    ]);
+                }
+        
+                $jsonItemValues[$itemKey] = $itemId;
+            }
+        
+            // Encode after processing all columns for the current row
+            $encodedJson = json_encode($jsonItemValues, JSON_PRETTY_PRINT);
+        
+            // Save the encoded JSON
+            GashaponItemMasterApproval::create([
+                'item_values' => $encodedJson,
+                'action' => 'CREATE'
+            ]);
+        
+            GashaponItemMasterHistory::create([
+                'item_values' => $encodedJson,
+                'action' => 'CREATE',
+                'status' => 'CREATE'
+            ]);
+        }
+        return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+    }
+    
+    
 }

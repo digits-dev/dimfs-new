@@ -8,16 +8,23 @@ import useThemeStyles from "../../Hooks/useThemeStyles";
 const GashaponItemMastersImportView = ({
     page_title,
 }) => {
- 
+
+  const { handleToast } = useToast();
   const [selectedFile, setSelectedFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
+  const { data, setData, post, processing, errors, reset } = useForm({
+    file: null,
+  });
+
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
+      setData("file", e.target.files[0]);
     }
   };
+
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -36,6 +43,7 @@ const GashaponItemMastersImportView = ({
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       setSelectedFile(e.dataTransfer.files[0]);
+      setData("file", e.dataTransfer.files[0]);
     }
   };
 
@@ -49,10 +57,45 @@ const GashaponItemMastersImportView = ({
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+  
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to upload this file?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, upload it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        post("/gashapon_item_masters/import_gashapon_item", {
+            forceFormData: true,
+            onSuccess: (data) => {
+                const { message, type } = data.props.auth.sessions;
+                handleToast(message, type);
+                removeFile();
+                reset();
+            },
+            onError: (error) => {
+                if (error && error.message) {
+                    handleToast(error.message, "error");
+                } else {
+                    handleToast("An error occurred while uploading.", "error");
+                }
+            },
+        });
+      }
+    });
+  };
+
     return (
         <>
             <Head title={page_title} />
             <ContentPanel>
+            <form onSubmit={handleSubmit}>
                 <p className="text-lg font-semibold mb-2">
                     Upload Gashapon Item Master Data
                 </p>
@@ -216,11 +259,14 @@ const GashaponItemMastersImportView = ({
                                      x
                                   </button>
                                 </div>
+                                {errors.file && <p className="text-red-500 text-sm mt-2">{errors.file}</p>}
                               </div>
                             )}  
                         </div>
                     </div>
                 </div>
+             
+
                 <div className="flex justify-end gap-3 mt-3">
                     <button className="px-4 py-2 border border-gray-300 hover:bg-gray-100 rounded-lg">
                     Cancel
@@ -231,12 +277,13 @@ const GashaponItemMastersImportView = ({
                             !selectedFile ? "bg-green-500" : "bg-green-600"
                         } text-white  hover:bg-green-700`}
                         disabled={!selectedFile}
+                        type="submit"
                         >
                     <i class="fa-solid fa-upload mr-2"></i>
                      Upload File
                     </button>
-
                 </div>
+                </form>
             </ContentPanel>
         </>
     );
