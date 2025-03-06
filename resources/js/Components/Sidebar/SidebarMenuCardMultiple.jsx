@@ -58,7 +58,7 @@ const SidebarMenuCardMultiple = ({menuTitle = 'Sample Menu', icon = 'fa-solid fa
                                 <div className='w-5 h-5 flex items-center justify-center mr-1 flex-shrink-0'>
                                     <i className={`fa-solid fa-circle text-[7px] ${colorClass}`}></i>
                                 </div>
-                                <span className={`text-[10px] font-semibold flex-1 text-nowrap`}>{child_menu.name}</span>
+                                <span className={`text-[10.5px] font-semibold flex-1 text-nowrap`}>{child_menu.name}</span>
                         </Link>
             })}
         </div>

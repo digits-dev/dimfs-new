@@ -65,7 +65,7 @@ const AppSidebar = () => {
     return (
         <>
             <div
-                className={`${theme} absolute z-100 cursor-pointer rounded-full -left-[-14px] md:-left-[-253px] top-[66px] md:top-[15px] lg:top-[15px] border-2 ${borderColor} p-2 flex items-center justify-center`}
+                className={`${theme} absolute z-100 cursor-pointer rounded-full -left-[-14px] md:-left-[-270px] top-[66px] md:top-[15px] lg:top-[15px] border-2 ${borderColor} p-2 flex items-center justify-center`}
                 onClick={() => handleSidebarToggle()}
             >
                 <img
