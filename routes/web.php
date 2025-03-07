@@ -169,11 +169,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tables', [ModulsController::class, 'getTableNames']);
 
     //MENUS
-    Route::post('/menu_management/add', [MenusController::class, 'postAddSave'])->name('MenusControllerPostSaveMenu');
-    Route::get('/menu_management/edit/{id}', [MenusController::class, 'getEdit'])->name('MenusControllerGetEdit');
-    Route::post('/menu_management/edit-menu-save/{id}', [MenusController::class, 'postEditSave'])->name('edit-menus-save');
-    Route::post('/set-status-menus', [MenusController::class, 'postStatusSave'])->name('delete-menus-save');
-    Route::post('/menu_management/postCreateMenus', [MenusController::class, 'postCreateMenus'])->name('postCreateMenus');
+    Route::prefix('menu_management')->group(function () {
+        Route::post('/create_menu', [MenusController::class, 'createMenu']);
+        Route::post('/auto_update_menu', [MenusController::class, 'autoUpdateMenu']);
+        Route::get('/edit/{menu}', [MenusController::class, 'editMenu']);
+    });
+
 
     //Settings
     Route::post('/settings/postSave', [SettingsController::class, 'postSave'])->name('settings-post-save');

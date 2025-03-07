@@ -41,7 +41,7 @@ const Modalv2 = ({isInfoModal = false, modalType = 'success', isOpen, setIsOpen,
                   } className='w-full h-full'/>
                </div>
               <p className="mt-5 text-black font-semibold text-lg text-center">{title}</p>
-              <p className='text-sm text-gray-500 mt-5 text-center'>{content}</p>
+              <div className='text-sm text-gray-500 mt-5 text-center'>{content}</div>
             </div>
             <div className='flex space-x-1 mt-7 justify-center'>
              

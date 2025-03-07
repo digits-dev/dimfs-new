@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const CustomSelect = ({maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -73,6 +73,7 @@ const CustomSelect = ({maxMenuHeight = "100px", isStatus = false, menuPlacement,
                 placeholder={placeholder}
                 defaultValue={value}
                 name={name}
+                isMulti={isMulti}
                 isDisabled={isDisabled}
                 className={`block w-full bg-gray-800 border-gray-300 mt-1  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 onChange={onChange}
