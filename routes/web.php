@@ -209,12 +209,19 @@ Route::middleware(['auth'])->group(function () {
         
         //API Requests
         Route::post('/generate_key', [AdminApiController::class, 'createKey']);
+
+        //API Key Generation
         Route::post('/deactivate_key/{id}', [AdminApiController::class, 'deactivateKey']);
         Route::post('/activate_key/{id}', [AdminApiController::class, 'activateKey']);
         Route::post('/delete_key/{id}', [AdminApiController::class, 'deleteKey']);
 
         //API Create Generation
-        Route::post('/create-api', [AdminApiController::class, 'createApi']);
+        Route::post('/create_api', [AdminApiController::class, 'createApi']);
+
+        //API Edit
+        // Route::post('/edit_api/{id}', [AdminApiController::class, 'editApi']);
+        Route::match(['GET', 'POST'], '/edit_api/{id}', [AdminApiController::class, 'editApi']);
+
     });
 
     // --------------------------------------- TABLE SETTINGS -------------------------------------//

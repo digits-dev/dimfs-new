@@ -33,7 +33,7 @@ class AdminApiController extends Controller
                 'columns' => $columns
             ];
         }
-        
+
         $data['page_title'] = 'Api Generator';
         $data['api'] = ApiConfiguration::all();
         $data['secret_key'] = ApiKeys::all();
@@ -162,5 +162,65 @@ class AdminApiController extends Controller
             CommonHelpers::LogSystemError('API Key Deletion', "ID: {$id} | Error: " . $e->getMessage());
             return back()->with(['message' => 'API Key Deletion Failed!', 'type' => 'error']);
         }
+    }
+
+    public function createApi(Request $request)
+    {
+        try {
+            $request_data = $request->validate([
+                'api_name' => 'required|string',
+                'api_endpoint' => 'required|string',
+                'table' => 'required|string',
+                'action_type' => 'required|string',
+                'api_method' => 'required|string',
+                'sql_where' => 'nullable|string',
+                'fields' => 'required|array',
+                'fields_relations' => 'nullable|array',
+                'fields_validations' => 'nullable|array',
+            ]);
+
+            ApiConfiguration::create([
+                'name' => $request_data['api_name'],
+                'table_name' => $request_data['table'],
+                'fields' => $request_data['fields'],
+                'relations' => $request_data['fields_relations'],
+                'rules' => $request_data['fields_validations'],
+                'sql_parameter' => $request_data['sql_where'],
+                'endpoint' => $request_data['api_endpoint'],
+                'method' => strtoupper($request_data['api_method']),
+                'action_type' => $request_data['action_type'],
+                'auth_type' => 'X-API-KEY',
+                'rate_limit' => 60,
+                'created_at' => now(),
+                'created_by' => CommonHelpers::myId(),
+            ]);
+
+            return back()->with(['message' => 'API successfully created!', 'type' => 'success']);
+        } catch (\Exception $e) {
+            CommonHelpers::LogSystemError('API Generator (Creation)', $e->getMessage());
+            return back()->with(['message' => 'API Creation Failed!', 'type' => 'error']);
+        }
+    }
+
+    public function editApi($id){
+        $databaseName = config('database.connections.mysql.database');
+        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [$databaseName]);
+
+        $data['database_tables_and_columns'] = [];
+        foreach ($tables as $table) {
+            $tableName = $table->TABLE_NAME;
+
+            $columns = Schema::getColumnListing($tableName);
+
+            $data['database_tables_and_columns'][] = [
+                'table_name' => $tableName,
+                'columns' => $columns
+            ];
+        }
+
+        $data['page_title'] = 'Api Edit';
+        $data['api'] = ApiConfiguration::where('id', $id)->get();
+
+        return Inertia::render('AdmVram/ApiEdit', $data);
     }
 }

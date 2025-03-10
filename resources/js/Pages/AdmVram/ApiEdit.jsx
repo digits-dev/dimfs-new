@@ -9,13 +9,14 @@ import TextArea from '../../Components/Forms/TextArea';
 import Button from '../../Components/Table/Buttons/Button';
 import { useToast } from '../../Context/ToastContext';
 import Modalv2 from '../../Components/Modal/Modalv2';
+import ContentPanel from '../../Components/Table/ContentPanel';
 
-const ApiCreation = ({table_x_columns}) => {
+const ApiEdit = ({page_title, api, database_tables_and_columns}) => {
     const baseUrl = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "" + "/api/");
     const [endpoint, setEndpoint] = useState("");
     const { handleToast } = useToast();
     const [showModal, setShowModal] = useState(false);
-    
+
     const handleModalToggle = ()=> {
         setShowModal(!showModal);
     };
@@ -36,6 +37,13 @@ const ApiCreation = ({table_x_columns}) => {
             setSelectedOption("");
         }
       };
+
+    useEffect(() => {
+        if (api && api.length > 0) {
+            const defaultAction = { label: api[0].action_type, value: api[0].action_type };
+            handleSelectChange(defaultAction);
+        }
+    }, [api]);
 
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
@@ -62,24 +70,56 @@ const ApiCreation = ({table_x_columns}) => {
 
     const [selectedTable, setSelectedTable] = useState(null);
     const [selectedColumns, setSelectedColumns] = useState([]);
-    const [allColumns, setAllColumns] = useState([]);  // Store all available columns
+    const [allColumns, setAllColumns] = useState([]);  
 
     const handleTableChange = (selectedOption) => {
         setSelectedTable(selectedOption.value);
-
+    
         // Get all columns for the selected table
-        const columns = table_x_columns.find(table => table.table_name === selectedOption.value)?.columns || [];
-        
-        setAllColumns(columns); // Store full column list
-        setSelectedColumns(columns); // Initially select all columns
+        const columns = database_tables_and_columns.find(table => table.table_name === selectedOption.value)?.columns || [];
+    
+        setAllColumns(columns);
+
+        // Filter default columns
+        const apiFields = api?.[0]?.fields ? Object.keys(api[0].fields) : [];
+        const filteredColumns = columns.filter(col => apiFields.includes(col));
+
+        if(selectedOption.value === api?.[0].table_name) {
+            setSelectedColumns(filteredColumns);
+        } else {
+            setSelectedColumns(columns);
+        }
     };
 
-    const [columnRelations, setColumnRelations] = useState({});
-    const [columnValidations, setColumnValidations] = useState({});
+    // Auto-select the table if available
+    useEffect(() => {
+        if (api && api.length > 0) {
+            const defaultTable = { label: api[0].table_name, value: api[0].table_name };
+            handleTableChange(defaultTable);
+        }
+    }, [api]); 
 
+    const [columnValidations, setColumnValidations] = useState({});
+    const [columnRelations, setColumnRelations] = useState(() => {
+        const initialRelations = {};
+    
+        selectedColumns.forEach((column, index) => {
+            const relation = api[0]?.relations[column]; // Get relation from API
+            if (relation) {
+                initialRelations[index] = {
+                    table: relation.table || "",
+                    column: relation.column || "",
+                    column_get: relation.column_get || ""
+                };
+            }
+        });
+    
+        return initialRelations;
+    });
+    
 
     const handleRelationTableChange = (selectedOption, index) => {
-        const relationColumns = table_x_columns.find(table => table.table_name === selectedOption.value)?.columns || [];
+        const relationColumns = database_tables_and_columns.find(table => table.table_name === selectedOption.value)?.columns || [];
     
         setColumnRelations(prev => ({
             ...prev,
@@ -116,8 +156,7 @@ const ApiCreation = ({table_x_columns}) => {
             ...prev,
             [index]: event.target.value
         }));
-    };
-    
+    };   
 
     const handleRemoveColumn = (indexToRemove) => {
         setSelectedColumns(prevColumns => {
@@ -164,20 +203,28 @@ const ApiCreation = ({table_x_columns}) => {
             fields_validations 
         };
     
-        router.post('api_generator/create_api', formData, {
-            onSuccess: (data) => {
-                const { message, type } = data.props.auth.sessions;
-                handleToast(message, type);
-                router.reload();
-                reset();
-                onClose();
-            },
-            onError: (error) => {},
-        });
-    };       
+        // router.post('api_generator/create_api', formData, {
+        //     onSuccess: (data) => {
+        //         const { message, type } = data.props.auth.sessions;
+        //         handleToast(message, type);
+        //         router.reload();
+        //         reset();
+        //         onClose();
+        //     },
+        //     onError: (error) => {},
+        // });
+
+    };  
+
+    Object.entries(api[0].relations).forEach(([column, relation]) => {
+        console.log(`Column: ${column}`);
+        console.log(`Table: ${relation.table}, Column: ${relation.column}, Column Get: ${relation.column_get}`);
+    });
 
     return (
-        <div>
+        <>
+        <Head title={page_title}/>
+            <ContentPanel>
             <div className='md:grid md:grid-cols-7 md:gap-4'>
                 <div className='md:col-span-3'>
                     <InputComponent 
@@ -185,6 +232,7 @@ const ApiCreation = ({table_x_columns}) => {
                         displayName='API Name'
                         name='api_name'
                         placeholder='Enter API Name'
+                        value={api?.[0].name}
                     />
                 </div>
                 <div className='md:col-span-2'>
@@ -193,7 +241,7 @@ const ApiCreation = ({table_x_columns}) => {
                         displayName='API Endpoint'
                         name='api_endpoint'
                         id="api_endpoint"
-                        value={endpoint}
+                        value={api?.[0].endpoint || endpoint}
                         onChange={(e) => setEndpoint(e.target.value)}
                         placeholder='Enter API Endpoint'
                     />
@@ -201,7 +249,8 @@ const ApiCreation = ({table_x_columns}) => {
                 <div className='md:col-span-2'>
                     <CustomSelect 
                         onChange={handleTableChange}
-                        options={table_x_columns.map(table => ({ label : table.table_name, value: table.table_name}))}
+                        options={database_tables_and_columns.map(table => ({ label : table.table_name, value: table.table_name}))}
+                        value={api ? { label: api?.[0].table_name, value: api?.[0].table_name } : null}
                         displayName='Table'
                         name='table'
                         selectType="react-select"
@@ -221,6 +270,7 @@ const ApiCreation = ({table_x_columns}) => {
                     <CustomSelect 
                         options={items}
                         onChange={handleSelectChange}
+                        value={api ? { label: api?.[0].action_type, value: api?.[0].action_type } : null}
                         displayName='Action Type'
                         name='action_type'
                         selectType="react-select"
@@ -302,13 +352,8 @@ const ApiCreation = ({table_x_columns}) => {
                 </p>
             </div>
 
-            {selectedColumns.map((column, index) => (
+            {selectedColumns.map((column, index) => ( 
                 <div key={index} className='md:grid md:grid-cols-12 md:gap-4 border p-3 pb-4 rounded mb-2'>
-                    
-                    {/* Column No. */}
-                    {/* <div className='md:col-span-1'>
-                        <p className='block text-sm font-bold text-gray-700 font-poppins'>{index + 1}</p>
-                    </div> */}
 
                     {/* Fields Name */}
                     <div className='md:col-span-2'>
@@ -327,19 +372,18 @@ const ApiCreation = ({table_x_columns}) => {
                             <div className='md:col-span-1'>
                                 <CustomSelect 
                                     onChange={(selected) => handleRelationTableChange(selected, index)}
-                                    options={table_x_columns.map(table => ({ label: table.table_name, value: table.table_name }))}
+                                    options={database_tables_and_columns.map(table => ({ label: table.table_name, value: table.table_name }))}
                                     selectType="react-select"
                                     placeholder='Table'
                                     displayName='Table Relation'
                                     name='table_relation'
-                                    value={columnRelations[index]?.table || ""}
                                 />
                             </div>
                             <div className='md:col-span-1'>
                                 <CustomSelect 
                                     onChange={(selected) => handleRelationColumnChange(selected, index)}
                                     options={(columnRelations[index]?.table
-                                        ? table_x_columns.find(table => table.table_name === columnRelations[index]?.table)?.columns
+                                        ? database_tables_and_columns.find(table => table.table_name === columnRelations[index]?.table)?.columns
                                         : []).map(col => ({ label: col, value: col }))}
                                     selectType="react-select"
                                     placeholder='Column'
@@ -352,7 +396,7 @@ const ApiCreation = ({table_x_columns}) => {
                                 <CustomSelect 
                                     onChange={(selected) => handleDisplayColumnChange(selected, index)}
                                     options={(columnRelations[index]?.table
-                                        ? table_x_columns.find(table => table.table_name === columnRelations[index]?.table)?.columns
+                                        ? database_tables_and_columns.find(table => table.table_name === columnRelations[index]?.table)?.columns
                                         : []).map(col => ({ label: col, value: col }))}
                                     selectType="react-select"
                                     placeholder='Display Col'
@@ -405,6 +449,7 @@ const ApiCreation = ({table_x_columns}) => {
                     name='sql_where'
                     displayName='SQL Where Query (Optional)'
                     placeholder='Enter Query here... e.g.(id = [paramId])'
+                    value={api?.[0].sql_parameter}
                 />
                 <small>
                     <i className='fa fa-info-circle me-1 text-sky-500'></i>
@@ -422,7 +467,7 @@ const ApiCreation = ({table_x_columns}) => {
                     onClick={handleModalToggle}
                 >
                     <i className="fa fa-code-merge text-base px-[1px] me-1"></i>
-                    Save & Generate API
+                    Update Generated API
                 </Button>
             </div>
 
@@ -435,8 +480,10 @@ const ApiCreation = ({table_x_columns}) => {
                 onConfirm={handleSubmit}
                 setIsOpen={handleModalToggle}
             />
-        </div>
+        </ContentPanel>
+    </>
     );
 };
 
-export default ApiCreation;
+export default ApiEdit;
+

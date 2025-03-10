@@ -53,28 +53,59 @@ class ApiController extends Controller
                 return response()->json(['error' => 'Method Not Allowed'], 405);
             }
 
-            // GET Method
             if ($method === 'GET') {
-                $query = DB::table($table)->select($fields);
+                try {
+                    // Ensure fields are prefixed with the main table name to avoid ambiguity
+                    $fields = array_map(function ($field) use ($table) {
+                        return "$table.$field";
+                    }, $fields);
 
-                // Apply WHERE condition if sql_parameter is set
-                if (!empty($api->sql_parameter)) {
-                    $sqlCondition = trim(str_replace('WHERE', '', $api->sql_parameter));
-                    $query->whereRaw($sqlCondition);
+                    $query = DB::table($table)->select($fields);
+
+                    // Apply relationships dynamically
+                    $relationships = is_string($api->relations) ? json_decode($api->relations, true) : $api->relations;
+
+                    if (!empty($relationships) && is_array($relationships)) {
+                        foreach ($relationships as $alias => $relation) {
+                            if (isset($relation['table'], $relation['column'], $relation['column_get'])) {
+                                $joinAlias = "{$relation['table']}_{$alias}";
+                                $query->leftJoin("{$relation['table']} as {$joinAlias}", "{$joinAlias}.{$relation['column']}", '=', "{$table}.{$alias}")
+                                    ->addSelect("{$joinAlias}.{$relation['column_get']} as {$alias}_{$relation['column_get']}");
+                            }
+                        }
+                    }
+
+                    // WHERE condition
+                    if (!empty($api->sql_parameter)) {
+                        $query->whereRaw($api->sql_parameter);
+                    }
+
+                    // Implement pagination
+                    $limit = min($request->input('limit', 50), 100);
+                    $offset = max($request->input('offset', 0), 0);
+                    $query->limit($limit)->offset($offset);
+
+                    $initial_response = $query->get();
+                    $response = Crypt::encryptString($initial_response);
+
+                    // Mask sensitive data before logging
+                    $log_data = collect($initial_response)->map(function ($item) {
+                        unset($item->password, $item->token);
+                        return $item;
+                    });
+
+                    // Log API requesT
+                    if ($api->enable_logging) {
+                        $this->logRequest($request, $api->id, $log_data);
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'data' => $initial_response
+                    ], 200);
+                } catch (\Exception $e) {
+                    return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
                 }
-
-                $initial_response = $query->get();
-                $response = Crypt::encryptString($initial_response);
-
-                // Log API request
-                if ($api->enable_logging) {
-                    $this->logRequest($request, $api->id, $initial_response);
-                }
-
-                return response()->json([
-                    'success' => true,
-                    'data' => $initial_response
-                ], 200);
             }
 
             // Handle both Create (POST) and Update (POST with ID)

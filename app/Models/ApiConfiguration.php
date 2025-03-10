@@ -15,12 +15,16 @@ class ApiConfiguration extends Model
         'fields',
         'relations',
         'rules',
+        'sql_parameter',
         'endpoint',
         'method',
+        'action_type',
+        'action_type',
         'auth_type',
         'enable_logging',
         'rate_limit',
-        'status'
+        'status',
+        'created_by'
     ];
 
     // Statuses

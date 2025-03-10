@@ -85,9 +85,9 @@ const ApiSecretKey = ({ secret_key }) => {
     };
 
     return (
-        <>
+        <div>
             <Button
-                extendClass="bg-skin-blue"
+                extendClass="bg-skin-blue mb-3"
                 fontColor="text-white"
                 type="button"
                 onClick={handleGenerateApiKey}
@@ -180,7 +180,7 @@ const ApiSecretKey = ({ secret_key }) => {
                 onConfirm={() => handleDeleteKey(data.id)}
                 setIsOpen={handleModalToggle}
             />
-        </>
+        </div>
     );
 };
 

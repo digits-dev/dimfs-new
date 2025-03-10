@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, usePage, useForm } from "@inertiajs/react";
 import InputComponent from '../../Components/Forms/Input';
 import TableContainer from '../../Components/Table/TableContainer';
 import Thead from '../../Components/Table/Thead';
@@ -11,9 +11,23 @@ import RowAction from '../../Components/Table/RowAction';
 const ApiDocumentation = ({api}) => {
     const baseUrl = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "" + "/api");
     const [loading, setLoading] = useState(false);
+    const { data, setData, post } = useForm({});
     
     router.on('start', () => setLoading(true));
     router.on('finish', () => setLoading(false));
+
+    const handleEditApi = (id) => {
+        post(`api_generator/edit_api/${id}`, {
+            onSuccess: (data) => {
+                const { message, type } = data.props.auth.sessions;
+                handleToast(message, type);
+                router.reload();
+                reset();
+                onClose();
+            },
+            onError: (error) => {},
+        });
+    } 
 
     return (
         <>
@@ -87,6 +101,7 @@ const ApiDocumentation = ({api}) => {
                                     <RowAction
                                         type="button"
                                         action="edit"
+                                        onClick={() => handleEditApi(item.id)}
                                     />
                                 </RowData>
                                 
