@@ -154,20 +154,21 @@ const ModuleHeadersSort = () => {
                                                 {data.items.map((item, index) => (
                                                     <Draggable key={item} draggableId={item} index={index}>
                                                     {(provided, snapshot) => (
-                                                        <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className={`p-2 select-none ${sideBarBgColor} border-2 ${borderTheme} rounded-lg shadow-sm cursor-grab text-center hover:shadow-md ${
-                                                            snapshot.isDragging ? `${sideBarBgColor} scale-105` : ""
-                                                        }`}
-                                                        >
-                                                        {item}
+                                                        <div className={`${theme === 'bg-skin-black' ? ' bg-login-bg-color' : 'bg-white'} select-none flex items-center p-3 border bg-white rounded-lg`}  ref={provided.innerRef} {...provided.draggableProps}>
+                                                            <span className="cursor-grab text-gray-400 text-xs hover:text-gray-400/70 mr-3 " {...provided.dragHandleProps}>
+                                                                <i className="fa-solid fa-grip-vertical"></i>
+                                                            </span>
+                                                            <div className={`p-2 flex items-center rounded-lg ${theme} mr-3`}>
+                                                                <i className={`fa-solid fa-border-none text-white text-[10px]`}></i>    
+                                                            </div>
+                                                            <div className='flex-1 flex-col'>
+                                                                <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/80'} mb-1 font-semibold text-xs`}>{item}</p>
+                                                            </div>
                                                         </div>
                                                     )}
                                                     </Draggable>
                                                 ))}
-                                                {provided.placeholder} {/* Ensures smooth dragging */}
+                                                {provided.placeholder}
                                                 </div>
                                             )}
                                             </Droppable>

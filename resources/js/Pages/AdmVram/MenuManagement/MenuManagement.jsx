@@ -11,7 +11,7 @@ import { useToast } from '../../../Context/ToastContext';
 import axios from 'axios';
 
 
-const MenuManagement = ({privileges, menus}) => {
+const MenuManagement = ({privileges, menus, inactive_menus}) => {
     const { theme } = useTheme();
     const { handleToast } = useToast();
     const [activeMenu, setActiveMenu] = useState('Active Menu');
@@ -82,8 +82,17 @@ const MenuManagement = ({privileges, menus}) => {
                     const { message, type, menus } = data.props.auth.sessions;
                     handleToast(message, type);
                     console.log(menus);
-                    setData("items", menus);
-                    reset();
+                    setData((prevData) => ({
+                        ...prevData,
+                        privilege_name: "",
+                        menu_name: "",
+                        menu_type: "Route",
+                        menu_icon: "",
+                        path: "",
+                        slug: "",
+                        items: [...menus],
+                    }));
+                    
                     onClose();
                 },
                 onError: (error) => {
@@ -147,28 +156,29 @@ const MenuManagement = ({privileges, menus}) => {
         <>
             <Head title="Menu Management" />
             <ContentPanel>
-                <span className='font-bold text-lg'>Welcome to Menu Management</span>
+                <span className={`font-bold text-lg ${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'}`}>Welcome to Menu Management</span>
                 <p className='text-sm text-gray-500'>Organize and configure menu items for different user privileges. Drag and drop to rearrange items.</p>
                 <div className='flex flex-col-reverse md:flex-row mt-4 select-none'>
                     {/* MENUS */}
                     <div className='p-2 rounded-lg md:w-[60%]'>
                         {/* MENU BUTTONS */}
-                        <div className='p-1 bg-gray-200 w-fit flex space-x-1'>
-                            <button className={`${activeMenu == 'Active Menu' ? 'bg-white' : 'hover:bg-black/10'} flex items-center p-2 border  rounded-md outline-none`} onClick={()=>{setActiveMenu('Active Menu');}}>
+                        {/* ${theme === 'bg-skin-black' ? ' text-white' : 'text-black/80'} */}
+                        <div className={`${theme === 'bg-skin-black' ? 'bg-black/30' : 'bg-gray-200'} p-1  w-fit flex space-x-1`}>
+                            <button className={`${activeMenu == 'Active Menu' ? theme == 'bg-skin-black' ? 'bg-skin-black' : 'bg-white ' : 'hover:bg-black/10 border-transparent'} flex items-center p-2 border  rounded-md outline-none`} onClick={()=>{setActiveMenu('Active Menu');}}>
                                 <i className={`${activeMenu == 'Active Menu' ? 'text-green-500' : 'text-gray-500'} fa-solid fa-check  mr-2`}></i>
-                                <p className={`${activeMenu == 'Active Menu' ? 'text-black' : 'text-gray-500'} font-semibold text-xs mr-3`}>Menu Order</p>
+                                <p className={`${activeMenu == 'Active Menu' ? theme == 'bg-skin-black' ? 'text-white' : 'text-black' : 'text-gray-500'} font-semibold text-xs mr-3`}>Menu Order</p>
                                 <div className={`${activeMenu == 'Active Menu' ? 'border-green-500 text-green-700 bg-green-200' : 'border-gray-500 text-gray-700 bg-gray-300'} text-[10px] font-semibold  rounded-full border py-0.5 px-2.5 `}>Active</div>
                             </button>
-                            <button className={`${activeMenu == 'Inactive Menu' ? 'bg-white' : 'hover:bg-black/10'} flex items-center p-2 border rounded-md outline-none`} onClick={()=>{setActiveMenu('Inactive Menu');}}>
+                            <button className={`${activeMenu == 'Inactive Menu' ? theme == 'bg-skin-black' ? 'bg-skin-black' : 'bg-white' : 'hover:bg-black/10 border-transparent'} flex items-center p-2 border  rounded-md outline-none`} onClick={()=>{setActiveMenu('Inactive Menu');}}>
                                 <i className={`${activeMenu == 'Inactive Menu' ? 'text-red-500' : 'text-gray-500'} fa-solid fa-xmark mr-2`}></i>
-                                <p className={`${activeMenu == 'Inactive Menu' ? 'text-black' : 'text-gray-500'} font-semibold text-xs mr-3`}>Menu Order</p>
+                                <p className={`${activeMenu == 'Inactive Menu' ? theme == 'bg-skin-black' ? 'text-white' : 'text-black' : 'text-gray-500'} font-semibold text-xs mr-3`}>Menu Order</p>
                                 <div className={`${activeMenu == 'Inactive Menu' ? 'border-red-500 text-red-700 bg-red-200' : 'border-gray-500 text-gray-700 bg-gray-300'} text-[10px] font-semibold rounded-full border py-0.5 px-2.5`}>Inactive</div>
                             </button>
                         </div>
 
                         {activeMenu === 'Active Menu' ? 
                             <div className='border-2 mt-3 rounded-lg py-2 px-3'>
-                                <span className='font-bold text-sm'>Menu Items</span>
+                                <span className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'} font-bold text-sm`}>Active Menu Items</span>
                                 <p className='text-xs font-medium mb-3 text-gray-500'>Click and drag to reorder menu items. Changes are saved automatically</p>
 
                                 {data.items.length !== 0 ? 
@@ -201,7 +211,7 @@ const MenuManagement = ({privileges, menus}) => {
                                                         {(provided) => (
                                                             <div ref={provided.innerRef} {...provided.draggableProps}>
                                                                 <div
-                                                                    className={`p-4 flex items-center bg-white select-none border-2 rounded-lg shadow-sm hover:shadow-md `}
+                                                                    className={`${theme === 'bg-skin-black' ? ' bg-login-bg-color' : 'bg-white'} p-4 flex items-center select-none border-2 rounded-lg shadow-sm hover:shadow-md `}
                                                                 >   
                                                                     {/* DRAG ICON */}
                                                                     <span {...provided.dragHandleProps} className="cursor-grab text-gray-400  hover:text-gray-400/70 mr-3">
@@ -214,7 +224,7 @@ const MenuManagement = ({privileges, menus}) => {
                                                                     </div>
                                                                     {/* ITEM NAME AND PRIVS */}
                                                                     <div className='flex-1 flex-col'>
-                                                                        <p className='mb-1  font-semibold text-black/80'>{item.name}</p>
+                                                                        <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/80'} mb-1 font-semibold `}>{item.name}</p>
                                                                         <div className='flex flex-wrap gap-1'>
                                                                             {item.get_menus_privileges && item.get_menus_privileges?.map((privilege, index)=>(
                                                                                 <p key={privilege.get_privilege?.name + index} className='text-[10px] text-nowrap bg-cyan-400 text-white px-2  py-0.5 rounded-full font-semibold'>{privilege.get_privilege?.name}</p>
@@ -271,7 +281,7 @@ const MenuManagement = ({privileges, menus}) => {
                                                                                     index={childIndex}
                                                                                 >
                                                                                     {(provided) => (
-                                                                                        <div className='flex items-center p-3 border first:mt-2 ml-3 bg-white rounded-lg'  ref={provided.innerRef} {...provided.draggableProps}>
+                                                                                        <div className={`${theme === 'bg-skin-black' ? ' bg-login-bg-color' : 'bg-white'} flex items-center p-3 border first:mt-2 ml-3 rounded-lg`}  ref={provided.innerRef} {...provided.draggableProps}>
                                                                                             <span className="cursor-grab text-gray-400 text-xs hover:text-gray-400/70 mr-3 " {...provided.dragHandleProps}>
                                                                                                 <i className="fa-solid fa-grip-vertical"></i>
                                                                                             </span>
@@ -279,18 +289,20 @@ const MenuManagement = ({privileges, menus}) => {
                                                                                                 <i className={`${child.icon} text-white text-[10px]`}></i>    
                                                                                             </div>
                                                                                             <div className='flex-1 flex-col'>
-                                                                                                <p className='mb-1 font-semibold text-black/80 text-xs'>{child.name}</p>
+                                                                                                <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/80'} mb-1 font-semibold text-xs`}>{child.name}</p>
                                                                                                 <div className='flex flex-wrap gap-1'>
                                                                                                     {child.get_menus_privileges && child.get_menus_privileges?.map((privilege, index)=>(
                                                                                                         <p key={privilege.get_privilege?.name + index} className='text-[10px] text-nowrap bg-cyan-400 text-white px-2  py-0.5 rounded-full font-semibold'>{privilege.get_privilege?.name}</p>
                                                                                                     ))}
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div className='flex items-center space-x-2'>
-                                                                                                <div className='text-sm w-5 h-5 p-4 flex items-center justify-center hover:bg-gray-300 cursor-pointer group rounded-full '>
-                                                                                                    <i className="fa-solid fa-pen text-xs text-gray-400 group-hover:text-white "></i>
+                                                                                            <Link href={`/menu_management/edit/${child.id}`}>
+                                                                                                <div className='flex items-center space-x-2'>
+                                                                                                    <div className='text-sm w-5 h-5 p-4 flex items-center justify-center hover:bg-gray-300 cursor-pointer group rounded-full '>
+                                                                                                        <i className="fa-solid fa-pen text-xs text-gray-400 group-hover:text-white "></i>
+                                                                                                    </div>
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </Link>
                                                                                         </div>
                                                                                     )}
                                                                                 </Draggable>
@@ -344,15 +356,50 @@ const MenuManagement = ({privileges, menus}) => {
                             </div>
                         :
                             <div className='border-2 mt-3 rounded-lg py-2 px-3'>
-                                <span className='font-bold text-sm'>Menu Items</span>
-                                <p className='text-xs font-medium mb-3 text-gray-500'>Click and drag to reorder menu items</p>
+                                <span className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'} font-bold text-sm`}>Inactive Menu Items</span>
+                                <p className='text-xs font-medium mb-3 text-gray-500'>Click edit icon to configure inactive menus</p>
 
-                                
-                                <div className="select-none w-full h-64 flex items-center justify-center border border-dashed rounded-lg border-gray-300">
-                                    <p className="font-semibold text-gray-300">
-                                        Inactive Menu is Empty
-                                    </p>
+                                <div className='max-h-[30rem] overflow-y-auto scrollbar-none space-y-2'>
+                                    {inactive_menus?.length != 0 ?
+                                        inactive_menus.map((item, index)=>(
+                                            <div
+                                                className={`${theme === 'bg-skin-black' ? ' bg-login-bg-color' : 'bg-white'} p-4 flex items-center select-none border-2 rounded-lg shadow-sm hover:shadow-md `} key={item.id + index}
+                                            >   
+                                                {/* MENU ICON */}
+                                                <div className={`p-3 flex items-center rounded-lg ${theme} mr-3`}>
+                                                    <i className={`${item.icon} text-white`}></i>    
+                                                </div>
+                                                {/* ITEM NAME AND PRIVS */}
+                                                <div className='flex-1 flex-col'>
+                                                    <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/80'} mb-1  font-semibold`}>{item.name}</p>
+                                                    <div className='flex flex-wrap gap-1'>
+                                                        {item.get_menus_privileges && item.get_menus_privileges?.map((privilege, index)=>(
+                                                            <p key={privilege.get_privilege?.name + index} className='text-[10px] text-nowrap bg-cyan-400 text-white px-2  py-0.5 rounded-full font-semibold'>{privilege.get_privilege?.name}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                {/* ACTIONS */}
+                                                <div className='flex items-center space-x-2'>
+                                                    {/* EDIT ICON */}
+                                                    <Link href={`/menu_management/edit/${item.id}`}>
+                                                        <div className='text-sm w-6 h-6 p-4 flex items-center justify-center hover:bg-gray-300 cursor-pointer group rounded-full '>
+                                                            <i className="fa-solid fa-pen text-gray-400 group-hover:text-white "></i>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        ))
+                                    :
+
+                                    <div className="select-none w-full h-64 flex items-center justify-center border border-dashed rounded-lg border-gray-300">
+                                        <p className="font-semibold text-gray-300">
+                                            Inactive Menu is Empty
+                                        </p>
+                                    </div>
+                                    
+                                    }
                                 </div>
+                                
                                 
                             </div>
                         }
@@ -362,7 +409,7 @@ const MenuManagement = ({privileges, menus}) => {
                     <div className='border-2 p-4 rounded-lg md:w-[40%] h-fit ml-2'>
                         <div className='flex items-center'>
                             <img src="/images/others/menu.png" className="w-5 h-5 cursor-pointer duration-500"/>
-                            <p className='font-bold text-black/90 ml-3'>Create Menu</p>
+                            <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'} font-bold ml-3`}>Create Menu</p>
                         </div>
                         <p className='font-medium text-xs text-gray-500 mt-1'>Add a new menu item and assign privileges</p>
                         <CustomSelect
@@ -413,8 +460,8 @@ const MenuManagement = ({privileges, menus}) => {
                                     Route
                                 </button>
                                 <button
-                                    className={`text-white flex-1 py-1.5 z-10 outline-none text-sm font-medium
-                                    ${data.menu_type === "URL" ? "text-white" : "text-black/50"}`}
+                                    className={`flex-1 py-1.5 z-10 outline-none text-sm font-medium
+                                    ${data.menu_type == "URL" ? "text-white" : "text-black/50"}`}
                                     onClick={() => setData("menu_type", "URL")}
                                 >
                                     URL

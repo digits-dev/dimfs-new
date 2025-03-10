@@ -39,6 +39,13 @@ class MenusController extends Controller{
         ->orderBy('sorting')
         ->get();
 
+        $data['inactive_menus'] = AdmMenus::with(['getMenusPrivileges.getPrivilege'])
+        ->where('parent_id', 0)
+        ->where('is_active', 0)
+        ->orderBy('sorting')
+        ->get();
+
+
         return Inertia::render('AdmVram/MenuManagement/MenuManagement', $data);
     }
 
@@ -130,7 +137,6 @@ class MenusController extends Controller{
         }
 
         return json_encode(["message"=> 'Menu Updated', "type"=>"success"]);
-
       
     }
     
@@ -152,6 +158,96 @@ class MenusController extends Controller{
         ->find($menu);
 
         return Inertia::render('AdmVram/MenuManagement/MenuManagementEdit', $data);
+    }
+
+    public function updateMenu(Request $request){
+
+        $validatedFields = $request->validate([
+            'privileges' => 'required',
+            'menu_name' => 'required',
+            'menu_type' => 'required',
+            'menu_icon' => 'required',
+            'status' => 'required',
+            'path' => 'required',
+            'slug' => 'required_if:menu_type,Route',
+        ]);
+
+        try {
+
+            DB::beginTransaction();
+            
+            // FOR UPDATING NEW PRIVILEGE
+            $currentPrivileges = admMenusPrivileges::where('id_adm_menus', $request->id)
+            ->pluck('id_adm_privileges')
+            ->toArray();
+
+            $newPrivileges = collect($request->privileges)->pluck('id')->toArray();
+            $privilegesToDelete = array_diff($currentPrivileges, $newPrivileges);
+
+            // DELETING PRIVILEGE/S
+            admMenusPrivileges::where('id_adm_menus', $request->id)
+            ->whereIn('id_adm_privileges', $privilegesToDelete)
+            ->delete();
+
+            $privilegesToAdd = array_diff($newPrivileges, $currentPrivileges);
+
+            // PREPARING NEW RECORDS FOR INSERT
+            $newRecords = array_map(function($privilegeId) use ($request) {
+                return [
+                    'id_adm_menus' => $request->id,
+                    'id_adm_privileges' => $privilegeId,
+                ];
+            }, $privilegesToAdd);
+        
+            // INSERT NEW PRIVILEGE
+            if (!empty($newRecords)) {
+                admMenusPrivileges::insert($newRecords);
+            }
+
+            // FOR UPDATING MENU
+            $menu = AdmMenus::find($request->id);
+            $menu->name = $validatedFields['menu_name'] ?? null;
+            $menu->type = $validatedFields['menu_type'] ?? null;
+            $menu->icon = $validatedFields['menu_icon'] ?? null;
+            $menu->path = $validatedFields['path'] ?? null;
+            $menu->slug = $validatedFields['slug'] ?? null;
+            $menu->is_active = $validatedFields['status'] ?? null;
+
+            if ($validatedFields['status'] == 0){
+                $menu->parent_id = 0;
+                $menu->sorting = 0;
+            }
+    
+            $menu->save();
+
+            
+            // UPDATING THE CHILDREN SORT
+            $child_sorting = 1;
+
+            if (isset($request['children']) && !empty($request['children'])) {
+                foreach ($request['children'] as $child) {
+                    $child_menu = AdmMenus::find($child['id']);
+                    $child_menu->sorting = $child_sorting;
+                    $child_menu->parent_id = $request['id'];
+
+                    $child_menu->save();
+                    $child_sorting++;
+                }
+            }
+            DB::commit();
+
+            return redirect('menu_management')->with(['message' => 'Menu Update Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Menu Management', $e->getMessage());
+            return back()->with(['message' => 'Menu Creation Failed!', 'type' => 'error']);
+        }
+
+        
     }
     
 

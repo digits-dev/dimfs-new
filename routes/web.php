@@ -171,6 +171,7 @@ Route::middleware(['auth'])->group(function () {
     //MENUS
     Route::prefix('menu_management')->group(function () {
         Route::post('/create_menu', [MenusController::class, 'createMenu']);
+        Route::post('/update_menu', [MenusController::class, 'updateMenu']);
         Route::post('/auto_update_menu', [MenusController::class, 'autoUpdateMenu']);
         Route::get('/edit/{menu}', [MenusController::class, 'editMenu']);
     });
