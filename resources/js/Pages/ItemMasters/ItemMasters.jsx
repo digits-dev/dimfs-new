@@ -87,6 +87,20 @@ const ItemMasters = ({
                                         path="/item_masters/export"
                                     />
                                 )}
+                                <Button
+                                    extendClass={
+                                        (["bg-skin-white"].includes(theme)
+                                            ? primayActiveColor
+                                            : theme) + " py-[5px] px-[10px]"
+                                    }
+                                    type="link"
+                                    fontColor={textColorActive}
+                                    href="item_masters/import_modules"
+                                >
+                                    <i className="fa-solid fa-upload mr-1"></i>{" "}
+                                    Import Modules
+                                </Button>
+
                             </div>
                             <div className="flex">
                                 <CustomFilter>

@@ -21,8 +21,8 @@ const Button = ({
             {type == "button" ? (
                 <button
                     onClick={onClick}
-                    disabled={loading}
-                    className={`${fontColor} overflow-hidden border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
+                    disabled={disabled ? disabled : loading}
+                    className={`${fontColor} overflow-hidden disabled:cursor-not-allowed border border-gray-500 rounded-md font-poppins text-sm px-2 py-2 hover:opacity-80 ${extendClass}`}
                 >
                      <div className="text-xs md:text-sm flex items-center">{children}</div>
                 </button>

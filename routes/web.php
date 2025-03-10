@@ -53,6 +53,7 @@ use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
 use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
 use App\Http\Controllers\GashaponItemMasterApprovals\GashaponItemMasterApprovalsController;
 use App\Http\Controllers\GashaponItemMasterHistories\GashaponItemMasterHistoriesController;
+use App\Http\Controllers\ItemMasterModuleImports\ItemMasterModuleImportsController;
 use App\Http\Controllers\RmaItemMasters\RmaItemMastersController;
 use App\Http\Controllers\RmaItemMasterApprovals\RmaItemMasterApprovalsController;
 use App\Http\Controllers\RmaItemMasterHistories\RmaItemMasterHistoriesController;
@@ -253,13 +254,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('item_masters')->group(function () {
         Route::get('/create_view', [ItemMastersController::class, 'getCreate']);
-        Route::post('/create', [ItemMastersController::class, 'create']);
         Route::get('/update_view/{item}', [ItemMastersController::class, 'getUpdate']);
-        Route::post('/update', [ItemMastersController::class, 'update']);
         Route::get('/segmentaion/{item}', [ItemMastersController::class, 'getSegmentation']);
-        Route::post('/post_segmentation', [ItemMastersController::class, 'updateSegmentation']);
         Route::get('/view_details/{item}', [ItemMastersController::class, 'getView']);
         Route::get('/export', [ItemMastersController::class, 'export']);
+        Route::post('/create', [ItemMastersController::class, 'create']);
+        Route::post('/update', [ItemMastersController::class, 'update']);
+        Route::post('/post_segmentation', [ItemMastersController::class, 'updateSegmentation']);
+        
+        // IMPORTS 
+        Route::get('/import_modules', [ItemMasterModuleImportsController::class, 'getImportModules']);
+        Route::get('/item_master_import', [ItemMasterModuleImportsController::class, 'getItemMasterImport']);
+        
     });
 
     Route::prefix('item_master_approvals')->group(function () {
