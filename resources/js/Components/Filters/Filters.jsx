@@ -10,7 +10,6 @@ const Filters = ({ filter_inputs }) => {
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
     const [pathname, setPathname] = useState(null);
-    console.log(filter_inputs);
     const initialFormData = filter_inputs.reduce((acc, item) => {
         acc[item.name] = "";
         return acc;

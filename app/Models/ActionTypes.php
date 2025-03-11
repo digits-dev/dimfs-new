@@ -17,6 +17,12 @@ class ActionTypes extends Model
     public const UPDATE_READONLY = 5;
     public const VIEW = 6;
     public const IMPORT = 7;
+    public const IMPORT_SKU_LEGEND = 8;
+    public const IMPORT_SKU_STATUS = 9;
+    public const IMPORT_WRR_DATE = 10;
+    public const IMPORT_ECOM_DETAILS = 11;
+    public const IMPORT_ACCOUNTING = 12;
+    public const IMPORT_MCB = 13;
 
     public static function boot()
     {

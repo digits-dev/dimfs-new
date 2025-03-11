@@ -111,7 +111,7 @@ const TableSettings = ({ tableName, table_settings, queryParams }) => {
                                 queryParams={queryParams}
                                 width="lg"
                             >
-                                Action Types ID
+                                Action Type
                             </TableHeader>
                             <TableHeader
                                 name="report_header"

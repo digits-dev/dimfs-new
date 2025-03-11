@@ -168,7 +168,7 @@ const ItemMasterSkuLegendImport = ({page_title}) => {
                                 Download the CSV template with the correct column structure
                             </p>
                             <p className={`${pageSubTitle} mt-2 text-xs mb-4`}>Use our pre-formatted template to ensure your data is structured correctly for import.</p>
-                            <a href="/gashapon_item_masters/gashapon_template" 
+                            <a href="/item_masters/sku_legend_template" 
                                 className={`${theme} inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium mt-2 px-4 py-2 w-full hover:opacity-70 text-white`}>
                                 <Download className="h-5 w-5" />
                                 Download Template
