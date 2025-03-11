@@ -275,9 +275,7 @@ Route::middleware(['auth'])->group(function () {
         // IMPORT TEMPLATES
         Route::get('/item_master_template', [ItemMasterModuleImportsController::class, 'importItemMasterTemplate']); 
         Route::get('/sku_legend_template', [ItemMasterModuleImportsController::class, 'importSkuLegendTemplate']); 
-        Route::get('/sku_status_template', [ItemMasterModuleImportsController::class, 'importSkuStatusTemplate']); 
         Route::get('/wrr_date_template', [ItemMasterModuleImportsController::class, 'importWrrDateTemplate']); 
-        Route::get('/ecom_details_template', [ItemMasterModuleImportsController::class, 'importEcomDetailsTemplate']); 
         Route::get('/item_master_accounting_template', [ItemMasterModuleImportsController::class, 'importItemMasterAccountingTemplate']); 
         Route::get('/item_master_mcb_template', [ItemMasterModuleImportsController::class, 'importItemMasterMcbTemplate']); 
         

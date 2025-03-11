@@ -30,15 +30,6 @@ const ItemMasterImportModules = ({page_title}) => {
         },
         {
           id: 3,
-          name: "SKU Status/Segmentation Bulk Import",
-          description: "Existing item SKU status/Segmentation bulk update",
-          action: "SKU Status/Segmentation Import",
-          type: "existing",
-          icon: <Tag className="h-4 w-4" />,
-          href: '/item_masters/item_master_import/sku_status'
-        },
-        {
-          id: 4,
           name: "WRR Date Bulk Import",
           description: "Existing item WRR date bulk update",
           action: "WRR Date Import",
@@ -47,16 +38,7 @@ const ItemMasterImportModules = ({page_title}) => {
           href: '/item_masters/item_master_import/wrr_date'
         },
         {
-          id: 5,
-          name: "ECOM Details Bulk Import",
-          description: "Existing item ECOM details bulk update",
-          action: "ECOM Details Import",
-          type: "existing",
-          icon: <ShoppingCart className="h-4 w-4" />,
-          href: '/item_masters/item_master_import/ecom_details'
-        },
-        {
-          id: 6,
+          id: 4,
           name: "Item Master Bulk Import (Accounting)",
           description: "Existing item master bulk update",
           action: "Update Item Import",
@@ -65,7 +47,7 @@ const ItemMasterImportModules = ({page_title}) => {
           href: '/item_masters/item_master_import/accounting'
         },
         {
-          id: 7,
+          id: 5,
           name: "Item Master Bulk Import (MCB)",
           description: "Existing item master bulk update",
           action: "Update Item Import",

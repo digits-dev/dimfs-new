@@ -53,10 +53,13 @@ class ItemMastersController extends Controller
         'getVendorType',
         'getIncoterm',
         'getInventoryType',
+        'getUom',
         'getSkuStatus',
         'getSkuLegend',
         'getCurrency',
         'getWarranty',
+        'getAppleLob',
+        'getSize',
         'getItemSegmentations.getSegmentation',
         'getItemSegmentations.getSkuLegend',
     ];

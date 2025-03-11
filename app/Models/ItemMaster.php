@@ -321,6 +321,18 @@ class ItemMaster extends Model
         return $this->belongsTo(Warranties::class, 'warranties_id', 'id');
     }
 
+    public function getAppleLob() {
+        return $this->belongsTo(AppleLobs::class, 'apple_lobs_id', 'id');
+    }
+
+    public function getUom() {
+        return $this->belongsTo(Uoms::class, 'uoms_id', 'id');
+    }
+
+    public function getSize() {
+        return $this->belongsTo(Sizes::class, 'sizes_id', 'id');
+    }
+
     public function getItemSegmentations() {
         return $this->hasMany(ItemSegmentations::class, 'item_masters_id', 'id');
     }

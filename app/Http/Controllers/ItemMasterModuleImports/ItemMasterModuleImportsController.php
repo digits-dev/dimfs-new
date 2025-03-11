@@ -121,15 +121,6 @@ class ItemMasterModuleImportsController extends Controller
         return Excel::download(new ImportTemplate($headers), 'SKU Legend-Segmentation Template.csv');
     }
 
-    public function importSkuStatusTemplate() {
-        
-        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::IMPORT_SKU_STATUS, CommonHelpers::myPrivilegeId());
-        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
-        $headers = $data['table_headers']->pluck('header_name')->toArray();
-        
-        return Excel::download(new ImportTemplate($headers), 'SKU Status-Segmentation Template.csv');
-    }
-
     public function importWrrDateTemplate() {
         
         $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::IMPORT_WRR_DATE, CommonHelpers::myPrivilegeId());
@@ -137,15 +128,6 @@ class ItemMasterModuleImportsController extends Controller
         $headers = $data['table_headers']->pluck('header_name')->toArray();
         
         return Excel::download(new ImportTemplate($headers), 'WRR Date Template.csv');
-    }
-
-    public function importEcomDetailsTemplate() {
-        
-        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::IMPORT_ECOM_DETAILS, CommonHelpers::myPrivilegeId());
-        $data['table_headers'] = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
-        $headers = $data['table_headers']->pluck('header_name')->toArray();
-        
-        return Excel::download(new ImportTemplate($headers), 'ECOM Details Template.csv');
     }
 
     public function importItemMasterAccountingTemplate() {
