@@ -142,6 +142,18 @@ const useThemeStyles = (theme) => {
             'bg-skin-blue': 'bg-white',
             'bg-skin-black': 'bg-black-table-color',
         },
+
+        pageTitle: {
+            'bg-skin-blue': 'text-black/90',
+            'bg-skin-black': 'text-white/90',
+        },
+
+        pageSubTitle: {
+            'bg-skin-blue': 'text-gray-500',
+            'bg-skin-black': 'text-gray-400',
+        },
+
+
       
 
     };
@@ -174,6 +186,8 @@ const useThemeStyles = (theme) => {
         sidebarActiveMenuBgColor: styles.sidebarActiveMenuBgColor[theme],
         sidebarActiveMenuBorderColor: styles.sidebarActiveMenuBorderColor[theme],
         sidebarBorderColor: styles.sidebarBorderColor[theme],
+        pageTitle: styles.pageTitle[theme],
+        pageSubTitle: styles.pageSubTitle[theme],
     };
 };
 

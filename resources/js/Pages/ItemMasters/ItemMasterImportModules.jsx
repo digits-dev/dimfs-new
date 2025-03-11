@@ -3,9 +3,11 @@ import React from 'react'
 import ContentPanel from '../../Components/Table/ContentPanel'
 import { useTheme } from '../../Context/ThemeContext';
 import { Badge, Calendar, Database, File, FileUp, Layers, ShoppingCart, Tag } from 'lucide-react';
+import useThemeStyles from '../../Hooks/useThemeStyles';
 
 const ItemMasterImportModules = ({page_title}) => {
     const { theme } = useTheme();
+    const { pageTitle, pageSubTitle} = useThemeStyles(theme);
 
     const modules = [
         {
@@ -24,52 +26,52 @@ const ItemMasterImportModules = ({page_title}) => {
           action: "SKU Legend/Segmentation Import",
           type: "existing",
           icon: <Tag className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
+          href: '/item_masters/item_master_import/sku_legend'
         },
         {
           id: 3,
-          name: "WRR Date Bulk Import",
-          description: "Existing item WRR date bulk update",
-          action: "WRR Date Import",
-          type: "existing",
-          icon: <Calendar className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
-        },
-        {
-          id: 4,
-          name: "ECOM Details Bulk Import",
-          description: "Existing item ECOM details bulk update",
-          action: "ECOM Details Import",
-          type: "existing",
-          icon: <ShoppingCart className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
-        },
-        {
-          id: 5,
-          name: "Item Master Bulk Import (Accounting)",
-          description: "Existing item master bulk update",
-          action: "Update Item Import",
-          type: "existing",
-          icon: <Database className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
-        },
-        {
-          id: 6,
-          name: "Item Master Bulk Import (MCB)",
-          description: "Existing item master bulk update",
-          action: "Update Item Import",
-          type: "existing",
-          icon: <Database className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
-        },
-        {
-          id: 7,
           name: "SKU Status/Segmentation Bulk Import",
           description: "Existing item SKU status/Segmentation bulk update",
           action: "SKU Status/Segmentation Import",
           type: "existing",
           icon: <Tag className="h-4 w-4" />,
-          href: 'item_masters/item_master_import'
+          href: '/item_masters/item_master_import/sku_status'
+        },
+        {
+          id: 4,
+          name: "WRR Date Bulk Import",
+          description: "Existing item WRR date bulk update",
+          action: "WRR Date Import",
+          type: "existing",
+          icon: <Calendar className="h-4 w-4" />,
+          href: '/item_masters/item_master_import/wrr_date'
+        },
+        {
+          id: 5,
+          name: "ECOM Details Bulk Import",
+          description: "Existing item ECOM details bulk update",
+          action: "ECOM Details Import",
+          type: "existing",
+          icon: <ShoppingCart className="h-4 w-4" />,
+          href: '/item_masters/item_master_import/ecom_details'
+        },
+        {
+          id: 6,
+          name: "Item Master Bulk Import (Accounting)",
+          description: "Existing item master bulk update",
+          action: "Update Item Import",
+          type: "existing",
+          icon: <Database className="h-4 w-4" />,
+          href: '/item_masters/item_master_import/accounting'
+        },
+        {
+          id: 7,
+          name: "Item Master Bulk Import (MCB)",
+          description: "Existing item master bulk update",
+          action: "Update Item Import",
+          type: "existing",
+          icon: <Database className="h-4 w-4" />,
+          href: '/item_masters/item_master_import/mcb'
         },
       ]
 
@@ -83,14 +85,14 @@ const ItemMasterImportModules = ({page_title}) => {
                     <Layers className="h-4 w-4 md:h-6 md:w-6 text-white" />
                 </div>
                 <div className='flex-1'>
-                    <span className={`font-bold text-sm md:text-lg ${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'}`}>Import Modules</span>
-                    <p className='text-xs md:text-sm text-gray-500'>Choose from the available modules below</p>
+                    <span className={`font-bold text-sm md:text-lg ${pageTitle}`}>Import Modules</span>
+                    <p className={`${pageSubTitle} text-xs md:text-sm `}>Choose from the available modules below</p>
                 </div>
                 <Link href='/item_masters' className={`${theme} text-white text-xs px-2.5 py-1.5 md:px-3 md:py-2 rounded-lg border-black font-semibold hover:opacity-70`}>
                     Go Back
                 </Link>
             </div>
-            <div className={`border border-slate-200 mt-3 p-4 space-y-2 rounded-lg ${theme == 'bg-skin-black' ? 'text-white' : 'text-black'} `}>
+            <div className={`border border-slate-200 mt-3 p-4 space-y-2 rounded-lg ${pageTitle} `}>
                 {modules.map((module, index) => (
                     <div
                     key={module.id + index}
@@ -117,7 +119,7 @@ const ItemMasterImportModules = ({page_title}) => {
                             </div>
                             )}
                         </div>
-                        <p className="text-slate-600 text-[10px] md:text-xs">{module.description}</p>
+                        <p className={`${pageSubTitle} text-[10px] md:text-xs`}>{module.description}</p>
                         </div>
                     </div>
 

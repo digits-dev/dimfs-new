@@ -1,15 +1,14 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import React, { useState, useRef } from "react";
+import { useToast } from "../../../Context/ToastContext";
+import ContentPanel from "../../../Components/Table/ContentPanel";
+import { useTheme } from "../../../Context/ThemeContext";
+import Button from "../../../Components/Table/Buttons/Button";
+import { Calendar, Check, Download, Info, Upload, X } from "lucide-react";
+import useThemeStyles from "../../../Hooks/useThemeStyles";
+import Modalv2 from "../../../Components/Modal/Modalv2";
 
-import Button from "../../Components/Table/Buttons/Button";
-import { Badge, Check, Download, FolderDown, Info, Upload, X } from "lucide-react";
-import useThemeStyles from "../../Hooks/useThemeStyles";
-import { useToast } from "../../Context/ToastContext";
-import ContentPanel from "../../Components/Table/ContentPanel";
-import { useTheme } from "../../Context/ThemeContext";
-import Modalv2 from "../../Components/Modal/Modalv2";
-
-const GashaponItemMastersImportView = ({page_title}) => {
+const ItemMasterWrrDateBulkImport = ({page_title}) => {
   const { handleToast } = useToast();
   const { theme } = useTheme();
   const { pageTitle, pageSubTitle } = useThemeStyles(theme);
@@ -21,10 +20,6 @@ const GashaponItemMastersImportView = ({page_title}) => {
     file: null,
   });
 
-  const handleConfirmModalToggle = () => {
-      setConfirmModal(!confirmModal);
-  }
-
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -32,6 +27,9 @@ const GashaponItemMastersImportView = ({page_title}) => {
     }
   };
 
+  const handleConfirmModalToggle = () => {
+    setConfirmModal(!confirmModal);
+  }
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -90,9 +88,9 @@ const GashaponItemMastersImportView = ({page_title}) => {
             <div>
                 <div className='flex space-x-3 items-center'>
                     <div className={`${theme} w-fit p-2 md:p-3 rounded-lg`}>
-                        <FolderDown className="h-4 w-4 md:h-6 md:w-6 text-white" />
+                        <Calendar className="h-4 w-4 md:h-6 md:w-6 text-white" />
                     </div>
-                    <span className={`font-bold text-sm md:text-lg ${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'}`}>Gashapon Item Master Bulk Import</span>
+                    <span className={`font-bold text-sm md:text-lg ${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'}`}>WRR Date Bulk Import</span>
                 </div>
 
                 <div className="bg-blue-50 border-blue-200 border rounded-lg p-4 mt-4">
@@ -112,9 +110,9 @@ const GashaponItemMastersImportView = ({page_title}) => {
                                 <Check className="h-4 w-4 text-green-600" />
                             </div>
                             <div>
-                            <p className={`${pageTitle} font-semibold text-sm`}>Column Dependencies</p>
+                            <p className={`${pageTitle} font-semibold text-sm`}>Date Format Requirement</p>
                             <p className={`${pageSubTitle} text-muted-foreground text-xs`}>
-                                System will accept blank unless the columns have dependencies with each other
+                                Date format should be yyyy-mm-dd (e.g., 2020-10-03)
                             </p>
                             </div>
                         </div>
@@ -123,13 +121,13 @@ const GashaponItemMastersImportView = ({page_title}) => {
                     <div className="p-4 border-l-4 border-l-green-500 border rounded-lg">
                         <div className="flex gap-3">
                             <div className="bg-green-100 rounded-full p-1 h-6 w-6 flex items-center justify-center flex-shrink-0">
-                              <Check className="h-4 w-4 text-green-600" />
+                            <Check className="h-4 w-4 text-green-600" />
                             </div>
                             <div>
-                              <p className={`${pageTitle} font-semibold text-sm`}>Required Fields</p>
-                              <p className={`${pageSubTitle} text-muted-foreground text-xs`}>
-                                If one of the ff needs to be updated e.g. (brand, wh category) <span className="font-semibold">BRAND, WH CATEGORY</span> can't be null/blank
-                              </p>
+                            <p className={`${pageTitle} font-semibold text-sm`}>Date Sorting Rule</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>
+                                Dates must be sorted from <b>OLD</b> to <b>NEW</b>
+                            </p>
                             </div>
                         </div>
                     </div>
@@ -137,11 +135,35 @@ const GashaponItemMastersImportView = ({page_title}) => {
                     <div className="p-4 border-l-4 border-l-green-500 border rounded-lg">
                         <div className="flex gap-3">
                             <div className="bg-green-100 rounded-full p-1 h-6 w-6 flex items-center justify-center flex-shrink-0">
-                              <Check className="h-4 w-4 text-green-600" />
+                            <Check className="h-4 w-4 text-green-600" />
                             </div>
                             <div>
-                              <p className={`${pageTitle} font-semibold text-sm`}>Upload Limit</p>
-                              <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Upload limit up to 1,000 records per upload session</p>
+                            <p className={`${pageTitle} font-semibold text-sm`}>Multiple Digits Code Upload</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Uploading of Digits Code can be multiple per file (System will get the earliest date for Initial WRR, and get the latest date for Latest WRR)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 border-l-4 border-l-green-500 border rounded-lg">
+                        <div className="flex gap-3">
+                            <div className="bg-green-100 rounded-full p-1 h-6 w-6 flex items-center justify-center flex-shrink-0">
+                            <Check className="h-4 w-4 text-green-600" />
+                            </div>
+                            <div>
+                            <p className={`${pageTitle} font-semibold text-sm`}>Validation of Digits Code and Date</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>System will not accept wrong Digits Code or Date</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 border-l-4 border-l-green-500 border rounded-lg">
+                        <div className="flex gap-3">
+                            <div className="bg-green-100 rounded-full p-1 h-6 w-6 flex items-center justify-center flex-shrink-0">
+                            <Check className="h-4 w-4 text-green-600" />
+                            </div>
+                            <div>
+                            <p className={`${pageTitle} font-semibold text-sm`}>Blank Field Restriction</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>System will not accept blank fields</p>
                             </div>
                         </div>
                     </div>
@@ -184,7 +206,7 @@ const GashaponItemMastersImportView = ({page_title}) => {
                             </p>
                             <p className={`${pageSubTitle} mt-2 text-xs mb-4`}>Use our pre-formatted template to ensure your data is structured correctly for import.</p>
                             <a href="/gashapon_item_masters/gashapon_template" 
-                                className={`${theme} inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium mt-2 px-4 py-2 w-full hover:opacity-70  text-white`}>
+                                className={`${theme} inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium mt-2 px-4 py-2 w-full hover:opacity-70 text-white`}>
                                 <Download className="h-5 w-5" />
                                 Download Template
                             </a>
@@ -279,10 +301,10 @@ const GashaponItemMastersImportView = ({page_title}) => {
 
                     <Button
                         type="button"
+                        onClick={()=>{handleConfirmModalToggle()}}
                         extendClass={`px-4 py-2 border-none rounded-lg ${!selectedFile ? "bg-green-500" : "bg-green-600"} text-white hover:opacity-70`}
                         fontColor="text-white"
                         disabled={!selectedFile}
-                        onClick={()=>{handleConfirmModalToggle()}}
                     >
                           <Upload className="h-5 w-5 mr-1"/> <span>Upload File</span>
                     </Button>
@@ -301,4 +323,4 @@ const GashaponItemMastersImportView = ({page_title}) => {
     );
 };
 
-export default GashaponItemMastersImportView;
+export default ItemMasterWrrDateBulkImport;

@@ -262,9 +262,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/update', [ItemMastersController::class, 'update']);
         Route::post('/post_segmentation', [ItemMastersController::class, 'updateSegmentation']);
         
-        // IMPORTS 
+        // IMPORT VIEWS
         Route::get('/import_modules', [ItemMasterModuleImportsController::class, 'getImportModules']);
         Route::get('/item_master_import', [ItemMasterModuleImportsController::class, 'getItemMasterImport']);
+        Route::get('/item_master_import/sku_legend', [ItemMasterModuleImportsController::class, 'getItemMasterSkuLegendImport']);
+        Route::get('/item_master_import/sku_status', [ItemMasterModuleImportsController::class, 'getItemMasterSkuStatusImport']);
+        Route::get('/item_master_import/wrr_date', [ItemMasterModuleImportsController::class, 'getItemMasterWrrDateImport']);
+        Route::get('/item_master_import/ecom_details', [ItemMasterModuleImportsController::class, 'getItemEcomDetailsImport']);
+        Route::get('/item_master_import/accounting', [ItemMasterModuleImportsController::class, 'getItemMasterAccountingImport']);
+        Route::get('/item_master_import/mcb', [ItemMasterModuleImportsController::class, 'getItemMasterMcbImport']);
         
     });
 
