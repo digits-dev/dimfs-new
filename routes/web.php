@@ -278,6 +278,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/wrr_date_template', [ItemMasterModuleImportsController::class, 'importWrrDateTemplate']); 
         Route::get('/item_master_accounting_template', [ItemMasterModuleImportsController::class, 'importItemMasterAccountingTemplate']); 
         Route::get('/item_master_mcb_template', [ItemMasterModuleImportsController::class, 'importItemMasterMcbTemplate']); 
+
+        // IMPORT
+
+        Route::post('/import_item_master', [ItemMasterModuleImportsController::class, 'importItemMasterItem']);
         
     });
 

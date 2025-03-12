@@ -164,22 +164,7 @@ const ItemMasters = ({
 
                                             {table_headers?.map(
                                                 (header, index) => {
-                                                    const value =
-                                                        header.table_join
-                                                            ? header.table_join
-                                                                  .split(".")
-                                                                  .reduce(
-                                                                      (
-                                                                          acc,
-                                                                          key
-                                                                      ) =>
-                                                                          acc?.[
-                                                                              key
-                                                                          ],
-                                                                      item
-                                                                  )
-                                                            : item[header.name];
-
+                                                    const value = header.table_join ? header.table_join.split(".").reduce((acc,key) =>acc?.[key],item) : item[header.name]
                                                     return (
                                                         <RowData
                                                             key={index}

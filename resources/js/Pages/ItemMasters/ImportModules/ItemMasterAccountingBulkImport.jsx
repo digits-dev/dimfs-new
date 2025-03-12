@@ -97,7 +97,7 @@ const ItemMasterAccountingBulkImport = ({page_title}) => {
                     <div className="flex items-start gap-3">
                     <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                     <div>
-                        <h2 className="text-base font-semibold text-blsue-700">Import Guidelines</h2>
+                        <h2 className="text-base font-semibold text-blue-700">Import Guidelines</h2>
                         <p className="text-blue-700 text-sm">Please review these important instructions before uploading your file</p>
                     </div>
                     </div>

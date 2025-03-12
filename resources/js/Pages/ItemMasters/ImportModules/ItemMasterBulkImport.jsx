@@ -63,7 +63,7 @@ const ItemMasterBulkImport = ({page_title}) => {
   };
 
   const handleSubmit = () => {
-    post("/gashapon_item_masters/import_gashapon_item", {
+    post("/item_masters/import_item_master", {
         forceFormData: true,
         onSuccess: (data) => {
             const { message, type } = data.props.auth.sessions;
@@ -97,7 +97,7 @@ const ItemMasterBulkImport = ({page_title}) => {
                     <div className="flex items-start gap-3">
                     <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                     <div>
-                        <h2 className="text-base font-semibold text-blsue-700">Import Guidelines</h2>
+                        <h2 className="text-base font-semibold text-blue-700">Import Guidelines</h2>
                         <p className="text-blue-700 text-sm">Please review these important instructions before uploading your file</p>
                     </div>
                     </div>
@@ -139,7 +139,7 @@ const ItemMasterBulkImport = ({page_title}) => {
                             </div>
                             <div>
                             <p className={`${pageTitle} font-semibold text-sm`}>Default Codes</p>
-                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Enter "0" for serial code, IMEI code1, and IMEI code2</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Enter <b>IMEI</b> or <b>SERIAL</b> for Serial Code, <b>1</b> or <b>0</b> for Product Type</p>
                             </div>
                         </div>
                     </div>

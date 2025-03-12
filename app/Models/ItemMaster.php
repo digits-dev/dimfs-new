@@ -89,6 +89,20 @@ class ItemMaster extends Model
         'deleted_at',
         'created_at',
         'updated_at',
+
+        'compatibility',
+        'apple_report_inclusion',
+        'apple_lobs_id',
+        'size',
+        'size_value',
+        'sizes_id',
+        'uoms_id',
+        'device_uid',
+        'product_type',
+        'item_length',
+        'item_width',
+        'item_height',
+        'item_weight',
        
     ];
 
@@ -156,6 +170,20 @@ class ItemMaster extends Model
         'deleted_at',
         'created_at',
         'updated_at',
+
+        'compatibility',
+        'apple_report_inclusion',
+        'apple_lobs_id',
+        'size',
+        'size_value',
+        'sizes_id',
+        'uoms_id',
+        'device_uid',
+        'product_type',
+        'item_length',
+        'item_width',
+        'item_height',
+        'item_weight',
     ];
 
     public function scopeSearchAndFilter($query, $request){
@@ -191,6 +219,9 @@ class ItemMaster extends Model
                         'sku_legends_id' => ['getSkuLegend', 'sku_legend_description'],
                         'currencies_id' => ['getCurrency', 'currency_description'],
                         'warranties_id' => ['getWarranty', 'warranty_description'],
+                        'apple_lobs_id' => ['getAppleLob', 'apple_lob_description'],
+                        'sizes_id' => ['getSize', 'size_code'],
+                        'uoms_id' => ['getUom', 'uom_code'],
                     ];
                     
                 
