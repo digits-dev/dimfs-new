@@ -43,6 +43,10 @@ const CreateTableSetting = ({ privileges, action_types }) => {
             id: "79",
             name: "RMA Item Master",
         },
+        {
+            id: "82",
+            name: "Item Master Approval (Accounting)",
+        },
     ];
 
     const handleCheckboxChange = (item) => {

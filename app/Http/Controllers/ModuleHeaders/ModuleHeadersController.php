@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmModels\AdmModules;
 use App\Models\GashaponItemMaster;
 use App\Models\ItemMaster;
+use App\Models\ItemMasterAccountingApproval;
 use App\Models\ModuleHeaders;
 use App\Models\RmaItemMaster;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class ModuleHeadersController extends Controller
 
         $data['all_active_modules'] = AdmModules::select('id', 'name', 'is_active as status')
             ->where('is_active', 1)
-            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master'])
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master', 'Item Master Approval (Accounting)'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
@@ -60,7 +61,7 @@ class ModuleHeadersController extends Controller
             });
 
         $data['all_modules'] = AdmModules::select('id', 'name', 'is_active as status')    
-            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master'])
+            ->whereIn('name', ['Item Master', 'Gashapon Item Masters', 'RMA Item Master', 'Item Master Approval (Accounting)'])
             ->get()
             ->map(function ($module) {
                 $module->status = $module->status === 1 ? 'ACTIVE' : 'INACTIVE';
@@ -105,6 +106,21 @@ class ModuleHeadersController extends Controller
                 Schema::getColumnListing((new RmaItemMaster())->getTable()),
                 function ($column) {
                     return !ModuleHeaders::where('name', $column)->where('module_id', '79')->exists();
+                }
+            )
+        ));
+
+        $data['item_master_accounting_columns'] = array_values(array_map(
+            function ($column) {
+                return [
+                    'id' => $column,
+                    'name' => $column
+                ];
+            },
+            array_filter(
+                Schema::getColumnListing((new ItemMasterAccountingApproval())->getTable()),
+                function ($column) {
+                    return !ModuleHeaders::where('name', $column)->where('module_id', '82')->exists();
                 }
             )
         ));

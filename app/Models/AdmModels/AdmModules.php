@@ -15,4 +15,5 @@ class AdmModules extends Model
     public const ITEM_MASTER = 38;
     public const GASHAPON_ITEM_MASTER = 28;
     public const RMA_ITEM_MASTER = 79;
+    public const ITEM_MASTER_APPROVAL_ACCOUNTING = 82;
 }

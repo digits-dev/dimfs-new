@@ -139,7 +139,7 @@ const ItemMasterBulkImport = ({page_title}) => {
                             </div>
                             <div>
                             <p className={`${pageTitle} font-semibold text-sm`}>Default Codes</p>
-                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Enter <b>IMEI</b> or <b>SERIAL</b> for Serial Code, <b>1</b> or <b>0</b> for Product Type</p>
+                            <p className={`${pageSubTitle} text-muted-foreground text-xs`}>Enter <b>IMEI</b> or <b>SERIAL</b> for Device UID, <b>1</b> or <b>0</b> for Product Type</p>
                             </div>
                         </div>
                     </div>

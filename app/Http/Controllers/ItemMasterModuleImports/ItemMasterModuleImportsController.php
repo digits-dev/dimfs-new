@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
 use App\Models\ItemMaster;
+use App\Models\ItemMasterAccountingApproval;
 use App\Models\ItemMasterApproval;
 use App\Models\ItemMasterHistory;
 use App\Models\ModuleHeaders;
@@ -118,16 +119,12 @@ class ItemMasterModuleImportsController extends Controller
         return $this->importTemplate(ActionTypes::IMPORT, 'Item Master Template.csv');
     }
     
-    public function importSkuLegendTemplate() {
-        return $this->importTemplate(ActionTypes::IMPORT_SKU_LEGEND, 'SKU Legend-Segmentation Template.csv');
-    }
-    
-    public function importWrrDateTemplate() {
-        return $this->importTemplate(ActionTypes::IMPORT_WRR_DATE, 'WRR Date Template.csv');
-    }
-    
     public function importItemMasterAccountingTemplate() {
-        return $this->importTemplate(ActionTypes::IMPORT_ACCOUNTING, 'Item Master (Accounting) Template.csv');
+        
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, ActionTypes::IMPORT_ACCOUNTING, CommonHelpers::myPrivilegeId());
+        $headers = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, $tableSetting)->pluck('header_name')->toArray();
+        return Excel::download(new ImportTemplate($headers), 'Item Master (Accounting) Template.csv');
+        
     }
     
     public function importItemMasterMcbTemplate() {
@@ -160,10 +157,16 @@ class ItemMasterModuleImportsController extends Controller
     
         $dataRows = array_slice($dataExcel[0], 1);
         $jsonItems = [];
+
+        if (empty($dataRows)) {
+            return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
+        }
        
         foreach ($dataRows as $key => $row) {
             $jsonItemValues = []; // Reset for each row
             $itemValues = array_combine($dbColumns, $row);
+
+            
     
             foreach ($itemValues as $itemKey => $value) {
                 $tableHeader = $table_headers->where('name', $itemKey)->first();
@@ -171,8 +174,10 @@ class ItemMasterModuleImportsController extends Controller
                 $labelColumn = $tableHeader->table_select_label;
                 $headerName = $tableHeader->header_name;
 
+
+
                 // NOT NULLABLE
-                if (empty($value)){
+                if ($value === null || $value === '') {
                     return back()->with([
                         'message' => 'Line ' . ($key + 2) . ' with column of ' . $headerName . ' can\'t be null or blank',
                         'type' => 'error'
@@ -192,7 +197,7 @@ class ItemMasterModuleImportsController extends Controller
                 // ITEM MASTER DESCRIPTION EXCEEDING LENGTH
                 if ($itemKey == 'item_description'){
                     if(strlen($value) > 60){
-						return back()->with([
+                    return back()->with([
                             'message' => 'Line ' . ($key + 2) . ' in ' . $headerName . ' exceed 60 characters',
                             'type' => 'error'
                         ]);
@@ -244,6 +249,252 @@ class ItemMasterModuleImportsController extends Controller
                 'status' => 'CREATE'
             ]);
         }
+    
+        return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+    }
+
+
+    public function importItemMasterItemAccounting(Request $request)
+    {
+
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,text/plain',
+        ]);
+    
+        $path = $request->file('file')->getRealPath();
+        $dataExcel = Excel::toArray([], $path);
+    
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, ActionTypes::IMPORT_ACCOUNTING, CommonHelpers::myPrivilegeId());
+        $table_headers = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, $tableSetting);
+
+    
+        $headers = $table_headers->pluck('header_name')->toArray();
+        $dbColumns = $table_headers->pluck('name')->toArray();
+    
+        $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
+
+        
+        if ($uploadedHeaders !== $headers) {
+            return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
+        }
+    
+        $dataRows = array_slice($dataExcel[0], 1);
+        $jsonItems = [];
+
+        if (empty($dataRows)) {
+            return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
+        }
+        
+
+        foreach ($dataRows as $key => $row) {
+            
+            $numericKeys = ['store_cost', 'ecom_store_cost', 'landed_cost', 'actual_landed_cost', 'landed_cost_sea', 'working_store_cost', 'ecom_working_store_cost', 'working_landed_cost'];
+            $itemValues = array_combine($dbColumns, $row);
+            $itemMaster = ItemMaster::with(['getVendorType', 'getMarginCategory'])->where('digits_code', $itemValues['digits_code'])->first();
+
+    
+            foreach ($numericKeys as $numKey) {
+                if (isset($itemValues[$numKey])) {
+                    $itemValues[$numKey] = (float) str_replace(',', '', $itemValues[$numKey]);
+                }
+            }
+
+            
+            // VALIDATIONS 
+            
+            // EXISTING DIGITS CODE
+            if(!$itemMaster){
+                return back()->with([
+                    'message' => 'Line ' . ($key + 2) . ' Digits Code: ' . $itemValues['digits_code'] . ' not exist ',
+                    'type' => 'error'
+                ]);
+            }
+
+        
+            // EFFECTIVE DATE FORMAT
+            $date = \DateTime::createFromFormat('Y-m-d', $itemValues['effective_date']);
+            if (!$date || $date->format('Y-m-d') !== $itemValues['effective_date']) {
+                return back()->with([
+                    'message' => 'Effective Date format should be a valid date in "YYYY-MM-DD" format',
+                    'type' => 'error'
+                ]);
+            }
+         
+            $storeCostPercentage = ItemMasterAccountingApproval::calculateCostPercentage($itemValues['store_cost'], $itemMaster);
+            $ecommStoreCostPercentage = ItemMasterAccountingApproval::calculateCostPercentage($itemValues['ecom_store_cost'], $itemMaster);
+            
+            $vendorType = $itemMaster->getVendorType;
+            $marginCategory = $itemMaster->getMarginCategory;
+
+            $jsonItemValues = [
+                "item_masters_id" => $itemMaster->id,
+                "brands_id" => $itemMaster->brands_id,
+                "categories_id" => $itemMaster->categories_id,
+                "margin_categories_id" => $itemMaster->margin_categories_id,
+                "support_types_id" => $itemMaster->support_types_id,
+                "current_srp" => $itemMaster->current_srp,
+                "promo_srp" => $itemMaster->promo_srp,
+                "duration_from" => $itemMaster->duration_from,
+                "duration_to" => $itemMaster->duration_to,
+                "encoder_privileges_id" => CommonHelpers::myPrivilegeId(),
+                "created_by" => CommonHelpers::myId(),
+                "store_cost_percentage" => $storeCostPercentage,
+                "working_store_cost_percentage" => ItemMasterAccountingApproval::calculateCostPercentage($itemValues['working_store_cost'], $itemMaster),
+                "ecom_store_cost_percentage" => $ecommStoreCostPercentage,
+                "ecom_working_store_cost_percentage" => ItemMasterAccountingApproval::calculateCostPercentage($itemValues['ecom_working_store_cost'], $itemMaster),
+                
+            ];
+
+            foreach ($itemValues as $itemKey => $value) {
+                $tableHeader = $table_headers->where('name', $itemKey)->first();
+                $tableName = $tableHeader->table;
+                $labelColumn = $tableHeader->table_select_label;
+                $headerName = $tableHeader->header_name;
+
+                // NOT NULLABLE
+                if ($value === null || $value === ''){
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with column of ' . $headerName . ' can\'t be null or blank',
+                        'type' => 'error'
+                    ]);
+                }
+
+                // FOR COSTS TYPE CHECK
+                $costs = [
+                    'store_cost',
+                    'ecom_store_cost', 
+                    'landed_cost', 
+                    'actual_landed_cost', 
+                    'landed_cost_sea', 
+                    'working_store_cost', 
+                    'ecom_working_store_cost', 
+                    'working_landed_cost'
+                ];
+
+                if (in_array($itemKey, $costs)) {
+                    if (!is_numeric($value)) {
+                        return back()->with([
+                            'message' => $headerName . ' must be a valid number or decimal on ' . 'Line ' . ($key + 2),
+                            'type' => 'error'
+                        ]);
+                    }
+                }
+
+                // dd($itemValues);
+
+                if(isset($itemValues['working_store_cost']) && isset($itemValues['working_landed_cost']) && isset($itemValues['ecom_working_store_cost'])) {
+                    
+                    if($marginCategory->margin_category_description == "UNITS"){
+
+                        dd('1');
+                        $checkUntWCost = ItemMasterAccountingApproval::checkUntWorkingStoreCost($itemValues, $itemMaster);
+                        if($checkUntWCost == 1){
+                            return back()->with([
+                                'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check Working Store Cost.',
+                                'type' => 'error'
+                            ]);
+                        }
+
+                    }
+                    
+                    elseif($marginCategory->margin_category_description == "ACCESSORIES"){
+                    
+                        $checkAccWCost = ItemMasterAccountingApproval::checkAccWorkingStoreCost($itemValues, $itemMaster, $storeCostPercentage);
+                        if($checkAccWCost == 1){
+                            return back()->with([
+                                'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check Working Store Cost.',
+                                'type' => 'error'
+                            ]);
+                        }
+                        
+                        $checkEcomAccWCost = ItemMasterAccountingApproval::checkAccEcomWorkingStoreCost($itemValues, $itemMaster, $ecommStoreCostPercentage);
+                        if($checkEcomAccWCost == 1){
+                            return back()->with([
+                                'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check ECOMM Working Store Cost.',
+                                'type' => 'error'
+                            ]);
+                        }
+
+                    }
+                }
+
+
+                // STORE COST CHECKING
+                $vendor_type = ["LOC-CON","LOC-OUT","LR-CON","LR-OUT"];
+                    
+                if(in_array($vendorType->vendor_type_code,$vendor_type)){
+                   
+                    $checkLocalCost = ItemMasterAccountingApproval::checkLocalStoreCost($itemValues, $itemMaster);
+
+                    if($checkLocalCost == 1){
+                        return back()->with([
+                            'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check store cost.',
+                            'type' => 'error'
+                        ]);
+                    }
+                }
+                elseif($marginCategory->margin_category_description == "UNITS"){
+           
+                    $checkUntCost = ItemMasterAccountingApproval::checkUnitStoreCost($itemValues, $itemMaster);
+                    if($checkUntCost == 1){
+                        return back()->with([
+                            'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check store cost.',
+                            'type' => 'error'
+                        ]);
+                    }
+                    
+                }
+                
+                elseif($marginCategory->margin_category_description == "ACCESSORIES"){
+
+                    $checkAccCost = ItemMasterAccountingApproval::checkAccStoreCost($itemValues, $itemMaster, $storeCostPercentage);
+                    if($checkAccCost == 1){
+                        return back()->with([
+                            'message' => 'Line '. ($key + 2) .': with digits code "'. $itemValues['digits_code'] .'" check store cost.',
+                            'type' => 'error'
+                        ]);
+                    }
+                }
+
+                // ADDING UPLOADED DATA
+
+                if (!$tableHeader || is_null($tableHeader->table)) {
+                    $jsonItemValues[$itemKey] = $value;
+                    continue;
+                }
+            
+                $description = DB::table($tableName)->where($labelColumn, $value)->where('status', 'ACTIVE')->value($labelColumn);
+                $itemId = DB::table($tableName)->where($labelColumn, $value)->value('id');
+                
+                if ($description === null) {
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with value ' . $value . ' in ' . $headerName . ' is not found in submaster',
+                        'type' => 'error'
+                    ]);
+                }
+    
+                $jsonItemValues[$itemKey] = $itemId;
+            }
+
+
+            $jsonItems[] = $jsonItemValues;
+
+        }
+    
+        dd($jsonItems);
+        // Second loop: Insertion phase (only if validation passed)
+        // foreach ($jsonItems as $jsonItemValues) {
+        //     ItemMasterApproval::create([
+        //         'item_values' => $jsonItemValues,
+        //         'action' => 'CREATE'
+        //     ]);
+    
+        //     ItemMasterHistory::create([
+        //         'item_values' => $jsonItemValues,
+        //         'action' => 'CREATE',
+        //         'status' => 'CREATE'
+        //     ]);
+        // }
     
         return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
     }
