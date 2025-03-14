@@ -63,7 +63,7 @@ const ItemMasterWrrDateBulkImport = ({page_title}) => {
   };
 
   const handleSubmit = () => {
-    post("/gashapon_item_masters/import_gashapon_item", {
+    post("/item_masters/import_item_master_wrr_date", {
         forceFormData: true,
         onSuccess: (data) => {
             const { message, type } = data.props.auth.sessions;
@@ -112,7 +112,7 @@ const ItemMasterWrrDateBulkImport = ({page_title}) => {
                             <div>
                             <p className={`${pageTitle} font-semibold text-sm`}>Date Format Requirement</p>
                             <p className={`${pageSubTitle} text-muted-foreground text-xs`}>
-                                Date format should be yyyy-mm-dd (e.g., 2020-10-03)
+                                Date format should be YYYY-MM-DD (e.g., 2020-10-03)
                             </p>
                             </div>
                         </div>

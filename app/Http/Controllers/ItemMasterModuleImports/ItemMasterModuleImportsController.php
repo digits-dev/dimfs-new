@@ -13,6 +13,7 @@ use App\Models\ItemMasterApproval;
 use App\Models\ItemMasterHistory;
 use App\Models\ModuleHeaders;
 use App\Models\TableSettings;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -129,6 +130,10 @@ class ItemMasterModuleImportsController extends Controller
     
     public function importItemMasterMcbTemplate() {
         return $this->importTemplate(ActionTypes::IMPORT_MCB, 'Item Master (MCB) Template.csv');
+    }
+
+    public function importWrrDateTemplate() {
+        return $this->importTemplate(ActionTypes::IMPORT_WRR_DATE, 'Item Master WRR Date Template.csv');
     }
     
     // ------------------------------------------- IMPORT ------------------------------------------------//
@@ -524,6 +529,144 @@ class ItemMasterModuleImportsController extends Controller
     
     }
 
+    public function importItemMasterWrrDate(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,text/plain',
+        ]);
     
+        $path = $request->file('file')->getRealPath();
+        $dataExcel = Excel::toArray([], $path);
+    
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::IMPORT_WRR_DATE, CommonHelpers::myPrivilegeId());
+        $table_headers = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
+    
+        $headers = $table_headers->pluck('header_name')->toArray();
+        $dbColumns = $table_headers->pluck('name')->toArray();
+    
+        $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
+
+        
+        if ($uploadedHeaders !== $headers) {
+            return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
+        }
+    
+        $dataRows = array_slice($dataExcel[0], 1);
+        $jsonItems = [];
+
+        if (empty($dataRows)) {
+            return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
+        }
+        
+        foreach ($dataRows as $key => $row) {
+            
+            $itemValues = array_combine($dbColumns, $row);
+            $itemMaster = ItemMaster::where('digits_code', $itemValues['digits_code'])->first();
+    
+            // VALIDATIONS 
+            
+            // EXISTING DIGITS CODE
+            if(!$itemMaster){
+                return back()->with([
+                    'message' => 'Line ' . ($key + 2) . ' Digits Code: ' . $itemValues['digits_code'] . ' not exist ',
+                    'type' => 'error'
+                ]);
+            }
+
+            // EFFECTIVE DATE FORMAT
+            $date = \DateTime::createFromFormat('Y-m-d', $itemValues['latest_wrr_date']);
+            if (!$date || $date->format('Y-m-d') !== $itemValues['latest_wrr_date']) {
+                return back()->with([
+                    'message' => 'Latest WRR Date format should be a valid date in "YYYY-MM-DD" format',
+                    'type' => 'error'
+                ]);
+            }
+         
+
+            foreach ($itemValues as $itemKey => $value) {
+                $tableHeader = $table_headers->where('name', $itemKey)->first();
+                $tableName = $tableHeader->table;
+                $labelColumn = $tableHeader->table_select_label;
+                $headerName = $tableHeader->header_name;
+
+                // NOT NULLABLE
+                if ($value === null || $value === ''){
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with column of ' . $headerName . ' can\'t be null or blank',
+                        'type' => 'error'
+                    ]);
+                }
+                
+
+
+                if ($itemKey === 'latest_wrr_date'){
+                    if(empty($itemMaster->initial_wrr_date) || is_null($itemMaster->initial_wrr_date)){
+                        $jsonItemValues = [
+                            'digits_code' => $itemMaster->digits_code,
+                            'initial_wrr_date' => date('Y-m-d', strtotime((string)$value)),
+                            'latest_wrr_date' => date('Y-m-d', strtotime((string)$value)),
+                            'updated_by' => CommonHelpers::myId()
+                            
+                        ];        
+                    }
+                    else{
+                        $jsonItemValues = [
+                            'digits_code' => $itemMaster->digits_code,
+                            'latest_wrr_date' => self::getLatestWRRDate($itemMaster['digits_code'], $value),
+                            'updated_by' => CommonHelpers::myId()
+                        ]; 
+                    
+                    }
+                
+                }
+
+            }
+
+            $jsonItems[] = $jsonItemValues;
+
+        }
+
+        try {
+
+            DB::beginTransaction();
+
+            foreach ($jsonItems as $jsonItemValues) {
+                ItemMaster::where('digits_code', $jsonItemValues['digits_code'])->update($jsonItemValues);
+            }
+
+            DB::commit();
+
+            return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Item Master WRR Date Export', $e->getMessage());
+            return back()->with(['message' => 'File uploading failed', 'type' => 'error']);
+        }
+        
+    
+    }
+
+    public function getLatestWRRDate($digits_code, $latest_wrr_date)
+	{
+		$data = "";
+		$existingItemLatestWRR = ItemMaster::where('digits_code', $digits_code)->value('latest_wrr_date');
+		$first = new Carbon((string)$existingItemLatestWRR);
+		$second = new Carbon((string)$latest_wrr_date);
+		
+		if($first->gte($second)){
+			$data = $existingItemLatestWRR;
+		}
+		elseif(!is_null($latest_wrr_date)){
+			$data = date('Y-m-d', strtotime((string)$latest_wrr_date));
+		}
+		else{
+			$data = $existingItemLatestWRR;
+		}
+		return $data;
+	}
 
 }

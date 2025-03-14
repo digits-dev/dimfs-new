@@ -283,6 +283,7 @@ Route::middleware(['auth'])->group(function () {
         // IMPORT
 
         Route::post('/import_item_master', [ItemMasterModuleImportsController::class, 'importItemMasterItem']);
+        Route::post('/import_item_master_wrr_date', [ItemMasterModuleImportsController::class, 'importItemMasterWrrDate']);
         Route::post('/import_item_master_accounting', [ItemMasterModuleImportsController::class, 'importItemMasterItemAccounting']);
         
     });
