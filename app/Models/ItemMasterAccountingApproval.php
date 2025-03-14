@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use app\Helpers\CommonHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,228 @@ class ItemMasterAccountingApproval extends Model
 {
     use HasFactory;
 
-    // CALCULATE STORE COST PERCENTAGES
+	public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->created_by = CommonHelpers::myId();
+            $model->updated_at = null;
+        });
+        static::updating(function($model)
+        {
+            $model->updated_by = CommonHelpers::myId();
+        });
+    }
+
+	protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'effective_date' => 'datetime:Y-m-d',
+    ];
+	
+    protected $fillable = [
+
+        'id',
+        'status',
+        'item_masters_id',
+        'brands_id',
+        'categories_id',
+        'margin_categories_id',
+        'support_types_id',
+        'current_srp',
+        'promo_srp',
+        'store_cost',
+        'store_cost_percentage',
+        'ecom_store_cost',
+        'ecom_store_cost_percentage',
+        'landed_cost',
+        'landed_cost_sea',
+        'actual_landed_cost',
+        'working_store_cost',
+        'working_store_cost_percentage',
+        'ecom_working_store_cost',
+        'ecom_working_store_cost_percentage',
+        'working_landed_cost',
+        'effective_date',
+        'duration_from',
+        'duration_to',
+        'encoder_privileges_id',
+        'approver_privileges_id',
+        'created_by',
+        'updated_by',
+        'approved_by',
+        'rejected_by',
+        'approved_at',
+        'rejected_at',
+        'created_at',
+        'updated_at',
+    
+    ];
+
+
+	protected $filterable = [
+
+        'status',
+        'item_masters_id',
+        'brands_id',
+        'categories_id',
+        'margin_categories_id',
+        'support_types_id',
+        'current_srp',
+        'promo_srp',
+        'store_cost',
+        'store_cost_percentage',
+        'ecom_store_cost',
+        'ecom_store_cost_percentage',
+        'landed_cost',
+        'landed_cost_sea',
+        'actual_landed_cost',
+        'working_store_cost',
+        'working_store_cost_percentage',
+        'ecom_working_store_cost',
+        'ecom_working_store_cost_percentage',
+        'working_landed_cost',
+        'effective_date',
+        'duration_from',
+        'duration_to',
+        'encoder_privileges_id',
+        'approver_privileges_id',
+        'created_by',
+        'updated_by',
+        'approved_by',
+        'rejected_by',
+        'approved_at',
+        'rejected_at',
+        'created_at',
+        'updated_at',
+    
+    ];
+
+
+	public function scopeSearchAndFilter($query, $request){
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($query) use ($search) {
+                foreach ($this->filterable as $field) {
+                    if ($field === 'created_by') {
+                        $query->orWhereHas('getCreatedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'item_masters_id') {
+                        $query->orWhereHas('getItem', function ($query) use ($search) {
+                            $query->where('digits_code', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'brands_id') {
+                        $query->orWhereHas('getBrand', function ($query) use ($search) {
+                            $query->where('brand_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'categories_id') {
+                        $query->orWhereHas('getCategory', function ($query) use ($search) {
+                            $query->where('category_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'margin_categories_id') {
+                        $query->orWhereHas('getMarginCategory', function ($query) use ($search) {
+                            $query->where('margin_category_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'support_types_id') {
+                        $query->orWhereHas('getSupportType', function ($query) use ($search) {
+                            $query->where('support_type_description', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'approved_by') {
+                        $query->orWhereHas('getApprovedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    }
+                    if ($field === 'rejected_by') {
+                        $query->orWhereHas('getRejectedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    }
+                    else if ($field === 'status') {
+                        $query->orWhere($field, '=', $search);
+                    }
+                    elseif ($field === 'updated_by')  {
+                        $query->orWhereHas('getUpdatedBy', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%$search%");
+                        });
+                    }
+                    
+                    elseif (in_array($field, ['created_at', 'updated_at'])) {
+                        $query->orWhereDate($field, $search);
+                    }
+                    else {
+                        $query->orWhere($field, 'LIKE', "%$search%");
+                    }
+                }
+            });
+        }
+
+        foreach ($this->filterable as $field) {
+            if ($request->filled($field)) {
+                $value = $request->input($field);
+                if ($field === 'status') {
+                    $query->where($field, '=', $value);
+                }
+                if ($field === 'item_masters_id') {
+                    $query->orWhereHas('getItem', function ($query) use ($value) {
+                        $query->where('digits_code', 'LIKE', "%$value%");
+                    });
+                }
+                else{
+                    $query->where($field, 'LIKE', "%$value%");
+                }
+            }
+        }
+    
+        return $query;
+
+    }
+
+    public function getItem() {
+        return $this->belongsTo(ItemMaster::class, 'item_masters_id', 'id');
+    }
+
+	public function getBrand() {
+		return $this->belongsTo(Brands::class, 'brands_id', 'id');
+	}
+
+	public function getCategory() {
+		return $this->belongsTo(Categories::class, 'categories_id', 'id');
+	}
+
+	public function getMarginCategory() {
+		return $this->belongsTo(MarginCategories::class, 'margin_categories_id', 'id');
+	}
+
+	public function getSupportType() {
+		return $this->belongsTo(SupportTypes::class, 'support_types_id', 'id');
+	}
+
+    public function getCreatedBy() {
+        return $this->belongsTo(AdmUser::class, 'created_by', 'id');
+    }
+    public function getApprovedBy() {
+        return $this->belongsTo(AdmUser::class, 'approved_by', 'id');
+    }
+    public function getRejectedBy() {
+        return $this->belongsTo(AdmUser::class, 'rejected_by', 'id');
+    }
+    
+    public function getUpdatedBy() {
+        return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
+    }
+	
+
+    // ------------------------------------- FOR ACCOUNTING IMPORT --------------------------------------------------------//
+
     public static function calculateCostPercentage($cost, $item_details) {
         
         $value = 0.0000;
@@ -25,8 +247,6 @@ class ItemMasterAccountingApproval extends Model
         return number_format($value, 4, '.', '');
     }
 
-
-    // CHECK LOCAL STORE COST
     public static function checkLocalStoreCost($upload_values, $item_details){
 	    
 	    if(empty($item_details->promo_srp) || is_null($item_details->promo_srp) || $item_details->promo_srp ==='0.00' || $item_details->promo_srp === 0.00){
@@ -63,7 +283,6 @@ class ItemMasterAccountingApproval extends Model
 		return 0;
 	}
 
-
     public static function getComputedLocalMarginPercentage($margin_percentage, $vendor_type_id, $brands){
 
         
@@ -91,8 +310,6 @@ class ItemMasterAccountingApproval extends Model
     
     }
 
-
-    // CHECK UNIT STORE COST
     public static function checkUnitStoreCost($upload_values, $item_details){
 	    
 	    if(empty($item_details->promo_srp) || $item_details->promo_srp ==='0.00' || $item_details->promo_srp === 0.00){
@@ -111,9 +328,6 @@ class ItemMasterAccountingApproval extends Model
 		}
 		return 0;
 	}
-
-
-    // CHECK ACCESSORRIES STORE COST
 
     public static function checkAccStoreCost($upload_values, $item_details, $store_cost_percentage){
 	    
@@ -186,7 +400,6 @@ class ItemMasterAccountingApproval extends Model
 		
 	}
 
-
     public static function getComputedUploadMarginPercentage($margin_percentage, $margin_categories_id, $margin_category, $brand){
     
         $marginMatrix = MarginMatrix::where('margin_category',$margin_category)
@@ -208,7 +421,6 @@ class ItemMasterAccountingApproval extends Model
         }
     
     }
-
 
     public static function checkUntWorkingStoreCost($upload_values, $item_details){
 

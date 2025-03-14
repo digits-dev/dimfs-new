@@ -53,6 +53,7 @@ use App\Http\Controllers\ItemMasterApprovals\ItemMasterApprovalsController;
 use App\Http\Controllers\ItemMasterHistories\ItemMasterHistoriesController;
 use App\Http\Controllers\GashaponItemMasterApprovals\GashaponItemMasterApprovalsController;
 use App\Http\Controllers\GashaponItemMasterHistories\GashaponItemMasterHistoriesController;
+use App\Http\Controllers\ItemMasterAccountingApprovals\ItemMasterAccountingApprovalsController;
 use App\Http\Controllers\ItemMasterModuleImports\ItemMasterModuleImportsController;
 use App\Http\Controllers\RmaItemMasters\RmaItemMastersController;
 use App\Http\Controllers\RmaItemMasterApprovals\RmaItemMasterApprovalsController;
@@ -286,11 +287,19 @@ Route::middleware(['auth'])->group(function () {
         
     });
 
+    Route::prefix('item_master_accounting_approvals')->group(function () {
+        Route::get('/approval_view/{action}/{id}', [ItemMasterAccountingApprovalsController::class, 'approvalView']);
+        Route::post('/approve_item', [ItemMasterAccountingApprovalsController::class, 'approveItem']);
+        Route::post('/bulk_action', [ItemMasterAccountingApprovalsController::class, 'bulkActions']);
+        Route::post('/export', [ItemMasterAccountingApprovalsController::class, 'export']);
+        Route::get('/export', [ItemMasterAccountingApprovalsController::class, 'export']);
+
+    });
+
     Route::prefix('item_master_approvals')->group(function () {
         Route::get('/approval_view/{action}/{id}', [ItemMasterApprovalsController::class, 'approvalView']);
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
         Route::post('/bulk_action', [ItemMasterApprovalsController::class, 'bulkActions']);
-        Route::get('/export', [ItemMasterApprovalsController::class, 'export']);
     });
 
     Route::prefix('item_master_histories')->group(function () {

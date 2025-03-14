@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "../../Context/ThemeContext";
+import { router } from "@inertiajs/react";
 
 const RowStatus = ({
     children,
@@ -15,9 +16,15 @@ const RowStatus = ({
         active: "bg-status-success",
         inactive: "bg-status-error",
         yellow: "bg-yellow-500",
+        cyan: "bg-cyan-400",
         red: "bg-red-500",
         green: "bg-green-500",
     }[systemStatus];
+
+    const [loading, setLoading] = useState(false);
+
+    router.on("start", () => setLoading(true));
+    router.on("finish", () => setLoading(false));
 
     return (
         <td
@@ -27,7 +34,7 @@ const RowStatus = ({
                     : "bg-white"
             }`}
         >
-            {isLoading ? (
+            {loading ? (
                 <span className="animate-pulse inline-block w-3/4 rounded-lg h-4 p-auto bg-gray-200">
                     &nbsp;&nbsp;
                 </span>

@@ -256,7 +256,6 @@ class ItemMasterModuleImportsController extends Controller
 
     public function importItemMasterItemAccounting(Request $request)
     {
-
         $request->validate([
             'file' => 'required|mimes:csv,txt,text/plain',
         ]);
@@ -266,7 +265,6 @@ class ItemMasterModuleImportsController extends Controller
     
         $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, ActionTypes::IMPORT_ACCOUNTING, CommonHelpers::myPrivilegeId());
         $table_headers = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER_APPROVAL_ACCOUNTING, $tableSetting);
-
     
         $headers = $table_headers->pluck('header_name')->toArray();
         $dbColumns = $table_headers->pluck('name')->toArray();
@@ -285,7 +283,6 @@ class ItemMasterModuleImportsController extends Controller
             return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
         }
         
-
         foreach ($dataRows as $key => $row) {
             
             $numericKeys = ['store_cost', 'ecom_store_cost', 'landed_cost', 'actual_landed_cost', 'landed_cost_sea', 'working_store_cost', 'ecom_working_store_cost', 'working_landed_cost'];
@@ -299,7 +296,6 @@ class ItemMasterModuleImportsController extends Controller
                 }
             }
 
-            
             // VALIDATIONS 
             
             // EXISTING DIGITS CODE
@@ -310,7 +306,6 @@ class ItemMasterModuleImportsController extends Controller
                 ]);
             }
 
-        
             // EFFECTIVE DATE FORMAT
             $date = \DateTime::createFromFormat('Y-m-d', $itemValues['effective_date']);
             if (!$date || $date->format('Y-m-d') !== $itemValues['effective_date']) {
@@ -380,13 +375,10 @@ class ItemMasterModuleImportsController extends Controller
                     }
                 }
 
-                // dd($itemValues);
-
                 if(isset($itemValues['working_store_cost']) && isset($itemValues['working_landed_cost']) && isset($itemValues['ecom_working_store_cost'])) {
                     
                     if($marginCategory->margin_category_description == "UNITS"){
-
-                        dd('1');
+    
                         $checkUntWCost = ItemMasterAccountingApproval::checkUntWorkingStoreCost($itemValues, $itemMaster);
                         if($checkUntWCost == 1){
                             return back()->with([
@@ -480,23 +472,58 @@ class ItemMasterModuleImportsController extends Controller
             $jsonItems[] = $jsonItemValues;
 
         }
+
+        try {
+
+            DB::beginTransaction();
+
+            foreach ($jsonItems as $jsonItemValues) {
+                ItemMasterAccountingApproval::create([
+                    'item_masters_id' => $jsonItemValues['item_masters_id'],
+                    'brands_id' => $jsonItemValues['brands_id'],
+                    'categories_id' => $jsonItemValues['categories_id'],
+                    'margin_categories_id' => $jsonItemValues['margin_categories_id'],
+                    'support_types_id' => $jsonItemValues['support_types_id'],
+                    'current_srp' => $jsonItemValues['current_srp'],
+                    'promo_srp' => $jsonItemValues['promo_srp'],
+                    'duration_from' => $jsonItemValues['duration_from'],
+                    'duration_to' => $jsonItemValues['duration_to'],
+                    'encoder_privileges_id' => $jsonItemValues['encoder_privileges_id'],
+                    'store_cost_percentage' => $jsonItemValues['store_cost_percentage'],
+                    'working_store_cost_percentage' => $jsonItemValues['working_store_cost_percentage'],
+                    'ecom_store_cost_percentage' => $jsonItemValues['ecom_store_cost_percentage'],
+                    'ecom_working_store_cost_percentage' => $jsonItemValues['ecom_working_store_cost_percentage'],
+                    'store_cost' => $jsonItemValues['store_cost'],
+                    'ecom_store_cost' => $jsonItemValues['ecom_store_cost'],
+                    'landed_cost' => $jsonItemValues['landed_cost'],
+                    'actual_landed_cost' => $jsonItemValues['actual_landed_cost'],
+                    'landed_cost_sea' => $jsonItemValues['landed_cost_sea'],
+                    'working_store_cost' => $jsonItemValues['working_store_cost'],
+                    'ecom_working_store_cost' => $jsonItemValues['ecom_working_store_cost'],
+                    'working_landed_cost' => $jsonItemValues['working_landed_cost'],
+                    'effective_date' => $jsonItemValues['effective_date'],
+                    'created_by' => $jsonItemValues['created_by'],
+                    'encoder_privileges_id' => CommonHelpers::myPrivilegeId(),
+            
+                ]);
+        
+            }
+
+            DB::commit();
+
+            return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Item Master Accounting Export', $e->getMessage());
+            return back()->with(['message' => 'File uploading failed', 'type' => 'error']);
+        }
     
-        dd($jsonItems);
-        // Second loop: Insertion phase (only if validation passed)
-        // foreach ($jsonItems as $jsonItemValues) {
-        //     ItemMasterApproval::create([
-        //         'item_values' => $jsonItemValues,
-        //         'action' => 'CREATE'
-        //     ]);
-    
-        //     ItemMasterHistory::create([
-        //         'item_values' => $jsonItemValues,
-        //         'action' => 'CREATE',
-        //         'status' => 'CREATE'
-        //     ]);
-        // }
-    
-        return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
     }
+
+    
 
 }
