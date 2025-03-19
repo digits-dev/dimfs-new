@@ -283,10 +283,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/item_master_mcb_template', [ItemMasterModuleImportsController::class, 'importItemMasterMcbTemplate']); 
 
         // IMPORT
-
         Route::post('/import_item_master', [ItemMasterModuleImportsController::class, 'importItemMasterItem']);
         Route::post('/import_item_master_wrr_date', [ItemMasterModuleImportsController::class, 'importItemMasterWrrDate']);
         Route::post('/import_item_master_accounting', [ItemMasterModuleImportsController::class, 'importItemMasterItemAccounting']);
+        Route::post('/import_item_master_mcb', [ItemMasterModuleImportsController::class, 'importItemMasterItemMcb']);
         
     });
 
@@ -303,6 +303,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/approval_view/{action}/{id}', [ItemMasterApprovalsController::class, 'approvalView']);
         Route::post('/approval', [ItemMasterApprovalsController::class, 'approval']);
         Route::post('/bulk_action', [ItemMasterApprovalsController::class, 'bulkActions']);
+        Route::get('/export', [ItemMasterApprovalsController::class, 'export']);
     });
 
     Route::prefix('item_master_histories')->group(function () {

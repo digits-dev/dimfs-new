@@ -63,7 +63,7 @@ const ItemMasterMcbBulkImport = ({page_title}) => {
   };
 
   const handleSubmit = () => {
-    post("/gashapon_item_masters/import_gashapon_item", {
+    post("/item_masters/import_item_master_mcb", {
         forceFormData: true,
         onSuccess: (data) => {
             const { message, type } = data.props.auth.sessions;

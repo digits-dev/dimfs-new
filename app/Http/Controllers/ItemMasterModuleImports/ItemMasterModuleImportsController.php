@@ -12,6 +12,7 @@ use App\Models\ItemMasterAccountingApproval;
 use App\Models\ItemMasterApproval;
 use App\Models\ItemMasterHistory;
 use App\Models\ModuleHeaders;
+use App\Models\Segmentations;
 use App\Models\TableSettings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -135,6 +136,13 @@ class ItemMasterModuleImportsController extends Controller
     public function importWrrDateTemplate() {
         return $this->importTemplate(ActionTypes::IMPORT_WRR_DATE, 'Item Master WRR Date Template.csv');
     }
+
+    public function importSkuLegendTemplate() {
+        $headers = Segmentations::where('status', 'ACTIVE')->pluck('import_header_name')->toArray();
+        array_unshift($headers, 'DIGITS CODE');
+    
+        return Excel::download(new ImportTemplate($headers), 'SKU Legend Segmentation Template.csv');
+    }
     
     // ------------------------------------------- IMPORT ------------------------------------------------//
 
@@ -178,8 +186,6 @@ class ItemMasterModuleImportsController extends Controller
                 $tableName = $tableHeader->table;
                 $labelColumn = $tableHeader->table_select_label;
                 $headerName = $tableHeader->header_name;
-
-
 
                 // NOT NULLABLE
                 if ($value === null || $value === '') {
@@ -257,7 +263,6 @@ class ItemMasterModuleImportsController extends Controller
     
         return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
     }
-
 
     public function importItemMasterItemAccounting(Request $request)
     {
@@ -668,5 +673,162 @@ class ItemMasterModuleImportsController extends Controller
 		}
 		return $data;
 	}
+
+    public function importItemMasterItemMcb(Request $request){
+
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,text/plain',
+        ]);
+    
+        $path = $request->file('file')->getRealPath();
+        $dataExcel = Excel::toArray([], $path);
+    
+        $tableSetting = TableSettings::getActiveHeaders(AdmModules::ITEM_MASTER, ActionTypes::IMPORT_MCB, CommonHelpers::myPrivilegeId());
+        $table_headers = ModuleHeaders::getHeadersByModule(AdmModules::ITEM_MASTER, $tableSetting);
+    
+        $headers = $table_headers->pluck('header_name')->toArray();
+        $dbColumns = $table_headers->pluck('name')->toArray();
+    
+        $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
+
+        
+        if ($uploadedHeaders !== $headers) {
+            return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
+        }
+    
+        $dataRows = array_slice($dataExcel[0], 1);
+        $jsonItems = [];
+
+        if (empty($dataRows)) {
+            return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
+        }
+       
+        foreach ($dataRows as $key => $row) {
+            $jsonItemValues = []; // Reset for each row
+            $itemValues = array_combine($dbColumns, $row);
+
+            $itemMaster = ItemMaster::where('digits_code', $itemValues['digits_code'])->first();
+
+            if (!$itemMaster){
+                return back()->with(['message' => 'Digits Code in Line ' . ($key + 2) . ' not found', 'type' => 'error']);
+            }
+
+            $existingUPC = ItemMaster::where('upc_code', $itemValues['upc_code'])
+            ->where('id', '!=', optional($itemMaster)->id)
+            ->exists();
+
+            if ($existingUPC) {
+                // UPC code already exists for another item
+                return back()->with(['message' => 'UPC code in Line ' . ($key + 2) . ' is already in use by another item', 'type' => 'error']);
+            }
+            elseif ($itemMaster && $itemMaster->upc_code == $itemValues['upc_code']) {
+                // The entered UPC is the same as the existing one
+                return back()->with([
+                    'message' => 'UPC code in Line ' . ($key + 2) . ' is the same as the original. No need to update.', 
+                    'type' => 'error'
+                ]);
+            }
+
+
+            if ($itemValues['classifications_id'] != null || $itemValues['sub_classifications_id'] != null || $itemValues['margin_categories_id'] != null || $itemValues['categories_id']){
+                if ($itemValues['margin_categories_id'] == null){
+                    return back()->with(['message' => 'Margin Category Description in Line ' . ($key + 2) . ' should not be null or blank', 'type' => 'error']);
+                }
+                if ($itemValues['categories_id'] == null){
+                    return back()->with(['message' => 'Category Description in Line ' . ($key + 2) . ' should not be null or blank', 'type' => 'error']);
+                }
+                if ($itemValues['classifications_id'] == null){
+                    return back()->with(['message' => 'Class Description in Line ' . ($key + 2) . ' should not be null or blank', 'type' => 'error']);
+                }
+                if ($itemValues['sub_classifications_id'] == null){
+                    return back()->with(['message' => 'Subclass Description in Line ' . ($key + 2) . ' should not be null or blank', 'type' => 'error']);
+                }
+            }
+
+
+            foreach ($itemValues as $itemKey => $value) {
+                $tableHeader = $table_headers->where('name', $itemKey)->first();
+                $tableName = $tableHeader->table;
+                $labelColumn = $tableHeader->table_select_label;
+                $headerName = $tableHeader->header_name;
+
+                // NOT NULLABLE
+                if ($value === null || $value === '') {
+                   continue;
+                }
+
+                // ITEM MASTER DESCRIPTION EXCEEDING LENGTH
+                if ($itemKey == 'item_description'){
+                    if(strlen($value) > 60){
+                    return back()->with([
+                            'message' => 'Line ' . ($key + 2) . ' in ' . $headerName . ' exceed 60 characters',
+                            'type' => 'error'
+                        ]);
+					}
+                }
+
+
+                if (!$tableHeader || is_null($tableHeader->table)) {
+                    $jsonItemValues[$itemKey] = $value;
+                    continue;
+                }
+            
+                $description = DB::table($tableName)->where($labelColumn, $value)->where('status', 'ACTIVE')->value($labelColumn);
+                $itemId = DB::table($tableName)->where($labelColumn, $value)->value('id');
+                
+                if ($description === null) {
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with value ' . $value . ' in ' . $headerName . ' is not found in submaster',
+                        'type' => 'error'
+                    ]);
+                }
+    
+                $jsonItemValues[$itemKey] = $itemId;
+
+              
+            }
+    
+            // Store the valid row for insertion later
+            $jsonItems[] = [
+                "item_values" => json_encode($jsonItemValues, JSON_PRETTY_PRINT),
+                "item_master_id" => $itemMaster->id
+            ];
+                    
+        }
+    
+      
+        try {
+
+            DB::beginTransaction();
+
+            foreach ($jsonItems as $jsonItemValues) {
+
+                ItemMasterApproval::create([
+                    'item_values' => $jsonItemValues['item_values'],
+                    'item_master_id' => $jsonItemValues['item_master_id'],
+                    'action' => 'UPDATE'
+                ]);
+        
+                ItemMasterHistory::create([
+                    'item_values' => $jsonItemValues['item_values'],
+                    'action' => 'UPDATE',
+                    'status' => 'UPDATE'
+                ]);
+            }
+
+            DB::commit();
+
+            return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Item Master MCB Export', $e->getMessage());
+            return back()->with(['message' => 'File uploading failed', 'type' => 'error']);
+        }
+    
+    }
 
 }
