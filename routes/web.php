@@ -35,6 +35,7 @@ use App\Http\Controllers\ItemPlatforms\ItemPlatformsController;
 use App\Http\Controllers\ItemPromoTypes\ItemPromoTypesController;
 use App\Http\Controllers\ItemSegmentations\ItemSegmentationsController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\EcommMarginMatrices\EcommMarginMatricesController;
 use App\Http\Controllers\GashaponBrands\GashaponBrandsController;
 use App\Http\Controllers\GashaponCategories\GashaponCategoriesController;
 use App\Http\Controllers\GashaponCountries\GashaponCountriesController;
@@ -60,6 +61,7 @@ use App\Http\Controllers\RmaItemMasterApprovals\RmaItemMasterApprovalsController
 use App\Http\Controllers\RmaItemMasterHistories\RmaItemMasterHistoriesController;
 use App\Http\Controllers\ItemSerials\ItemSerialsController;
 use App\Http\Controllers\MarginCategories\MarginCategoriesController;
+use App\Http\Controllers\MarginMatrices\MarginMatricesController;
 use App\Http\Controllers\ModelSpecifics\ModelSpecificsController;
 use App\Http\Controllers\ModuleHeaders\ModuleHeadersController;
 use App\Http\Controllers\Platforms\PlatformsController;
@@ -608,6 +610,23 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/update', [WarrantiesController::class, 'update']);
         Route::get('/export', [WarrantiesController::class, 'export']);
     });
+    
+    // MARGIN MATRIX
+    Route::prefix('margin_matrices')->group(function () {
+        Route::post('/create', [MarginMatricesController::class, 'create']);
+        Route::post('/update', [MarginMatricesController::class, 'update']);
+        Route::get('/export', [MarginMatricesController::class, 'export']);
+
+    });
+    
+    // MARGIN MATRIX
+    Route::prefix('ecomm_margin_matrices')->group(function () {
+        Route::post('/create', [EcommMarginMatricesController::class, 'create']);
+        Route::post('/update', [EcommMarginMatricesController::class, 'update']);
+        Route::get('/export', [EcommMarginMatricesController::class, 'export']);
+
+    });
+    
 
     // ----------------------------------- GASHAPON SUBMASTERS -------------------------------------//
 

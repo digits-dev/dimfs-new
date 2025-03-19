@@ -50,8 +50,8 @@ class BrandsController extends Controller
         $data['all_active_brand_groups'] = BrandGroups::select('id', 'brand_group_description as name', 'status')
             ->where('status', 'ACTIVE')
                 ->get();
-            $data['all_brand_groups'] = BrandGroups::select('id', 'brand_group_description as name', 'status')     
-                ->get();
+        $data['all_brand_groups'] = BrandGroups::select('id', 'brand_group_description as name', 'status')     
+            ->get();
 
         return Inertia::render("Brands/Brands", $data);
         
