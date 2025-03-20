@@ -269,7 +269,7 @@ const ItemMasterWrrDateBulkImport = ({page_title}) => {
                                     <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="bg-green-100 py-2 px-3 rounded-lg text-green-500">
-                                            <i class="fa-regular fa-file-excel text-xl"></i>
+                                            <i className="fa-regular fa-file-excel text-xl"></i>
                                         </div>
                                         <div>
                                         <p className={`text-sm font-medium ${pageTitle}`}>{selectedFile.name}</p>

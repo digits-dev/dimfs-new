@@ -63,7 +63,7 @@ const ItemMasterSkuLegendImport = ({page_title}) => {
   };
 
   const handleSubmit = () => {
-    post("/gashapon_item_masters/import_gashapon_item", {
+    post("/item_masters/import_item_sku_segmentation", {
         forceFormData: true,
         onSuccess: (data) => {
             const { message, type } = data.props.auth.sessions;
@@ -232,7 +232,7 @@ const ItemMasterSkuLegendImport = ({page_title}) => {
                                     <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="bg-green-100 py-2 px-3 rounded-lg text-green-500">
-                                            <i class="fa-regular fa-file-excel text-xl"></i>
+                                            <i className="fa-regular fa-file-excel text-xl"></i>
                                         </div>
                                         <div>
                                         <p className={`text-sm font-medium ${pageTitle}`}>{selectedFile.name}</p>

@@ -11,8 +11,10 @@ use App\Models\ItemMaster;
 use App\Models\ItemMasterAccountingApproval;
 use App\Models\ItemMasterApproval;
 use App\Models\ItemMasterHistory;
+use App\Models\ItemSegmentations;
 use App\Models\ModuleHeaders;
 use App\Models\Segmentations;
+use App\Models\SkuLegends;
 use App\Models\TableSettings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -139,7 +141,7 @@ class ItemMasterModuleImportsController extends Controller
 
     public function importSkuLegendTemplate() {
         $headers = Segmentations::where('status', 'ACTIVE')->pluck('import_header_name')->toArray();
-        array_unshift($headers, 'DIGITS CODE');
+        array_unshift($headers, 'DIGITS CODE', 'SKU LEGEND');
     
         return Excel::download(new ImportTemplate($headers), 'SKU Legend Segmentation Template.csv');
     }
@@ -698,6 +700,7 @@ class ItemMasterModuleImportsController extends Controller
     
         $dataRows = array_slice($dataExcel[0], 1);
         $jsonItems = [];
+        $digitsCodes = [];
 
         if (empty($dataRows)) {
             return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
@@ -757,6 +760,17 @@ class ItemMasterModuleImportsController extends Controller
                    continue;
                 }
 
+                if ($itemKey == 'digits_code'){
+                    if (in_array($value, $digitsCodes)) {
+                        return back()->with([
+                            'message' => 'Duplicate Digits Code found: ' . $value . ' in Line ' . ($key + 2),
+                            'type' => 'error'
+                        ]);
+                    }
+
+                    $digitsCodes[] = $value;
+                }
+
                 // ITEM MASTER DESCRIPTION EXCEEDING LENGTH
                 if ($itemKey == 'item_description'){
                     if(strlen($value) > 60){
@@ -814,6 +828,150 @@ class ItemMasterModuleImportsController extends Controller
                     'action' => 'UPDATE',
                     'status' => 'UPDATE'
                 ]);
+            }
+
+            DB::commit();
+
+            return back()->with(['message' => 'File uploaded successfully!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Item Master MCB Export', $e->getMessage());
+            return back()->with(['message' => 'File uploading failed', 'type' => 'error']);
+        }
+    
+    }
+
+    public function importItemMasterSkuSegmentation(Request $request){
+
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,text/plain',
+        ]);
+    
+        $path = $request->file('file')->getRealPath();
+        $dataExcel = Excel::toArray([], $path);
+    
+        $headers = Segmentations::where('status', 'ACTIVE')->pluck('import_header_name')->toArray();
+        array_unshift($headers, 'DIGITS CODE', 'SKU LEGEND');
+    
+        $uploadedHeaders = array_map('trim', $dataExcel[0][0]);
+
+        
+        if ($uploadedHeaders !== $headers) {
+            return back()->with(['message' => 'Headers do not match the required format!', 'type' => 'error']);
+        }
+    
+        $dataRows = array_slice($dataExcel[0], 1);
+        $importData = [];
+        $digitsCodes = [];
+
+        if (empty($dataRows)) {
+            return back()->with(['message' => 'Fields should not be Empty', 'type' => 'error']);
+        }
+ 
+        foreach ($dataRows as $key => $row) {
+            $itemArray = [];
+           
+
+            $itemValues = array_combine($headers, $row);
+            $itemMaster = ItemMaster::where('digits_code', $itemValues['DIGITS CODE'])->first();
+
+            if (!$itemMaster){
+                return back()->with(['message' => 'Digits Code in Line ' . ($key + 2) . ' not found', 'type' => 'error']);
+            }
+
+            foreach ($itemValues as $itemKey => $value) {
+
+                // NOT NULLABLE
+                if ($value === null || $value === '') {
+                    return back()->with([
+                        'message' => 'Line ' . ($key + 2) . ' with column of ' . $itemKey . ' can\'t be null or blank',
+                        'type' => 'error'
+                    ]);
+                }
+ 
+                if ($itemKey == 'DIGITS CODE'){
+                    if (in_array($value, $digitsCodes)) {
+                        return back()->with([
+                            'message' => 'Duplicate DIGITS CODE found: ' . $value . ' in Line ' . ($key + 2),
+                            'type' => 'error'
+                        ]);
+                    }
+
+                    $digitsCodes[] = $value;
+                    $itemArray['item_master_id'] = $itemMaster->id;
+                }
+                else {
+                    $sku_legend_id = SkuLegends::where('sku_legend_description', $value)
+                        ->where('status', 'ACTIVE')
+                        ->value('id');
+                
+                    if (!$sku_legend_id) {
+                        return back()->with([
+                            'message' => ($itemKey == 'SKU LEGEND' ? 'SKU Legend ' : 'Header ' . $itemKey . ' with the value ') . 
+                                        $value . ' in Line ' . ($key + 2) . ' not found in the submaster',
+                            'type' => 'error'
+                        ]);
+                    }
+                
+                    if ($itemKey == 'SKU LEGEND') {
+                        $itemArray['item_sku_legend_id'] = $sku_legend_id;
+                    } 
+                    else {
+                    
+                        $segmentation_id = Segmentations::where('import_header_name', $itemKey)
+                            ->where('status', 'ACTIVE')
+                            ->value('id');
+                
+                        if (!isset($itemArray['segmentations'])) {
+                            $itemArray['segmentations'] = [];
+                        }
+                
+                        $itemArray['segmentations'][$itemKey] = [
+                            "sku_legend_id" => $sku_legend_id,
+                            "segmentation_id" => $segmentation_id
+                        ];
+                    }
+                }
+              
+            }
+    
+            $importData[] = $itemArray;
+                    
+        }
+
+        dd($importData);
+    
+      
+        try {
+
+            DB::beginTransaction();
+
+            foreach ($importData as $data) {
+
+                $itemMaster = ItemMaster::find($data['item_master_id']);
+
+                $itemMaster->sku_legends_id = $data['item_sku_legend_id'];
+
+                foreach($data['segmentations'] as $segmentation)
+                {
+                    if (is_array($segmentation) && isset($segmentation['segmentation_id'], $segmentation['sku_legend_id'])) {
+                        ItemSegmentations::updateOrCreate(
+                            [
+                                'item_masters_id' => $data['item_master_id'],
+                                'segmentations_id' => $segmentation['segmentation_id'],
+                            ],
+                            [
+                                'sku_legend_id' => $segmentation['sku_legend_id'],
+                            ]
+                        );
+                    }
+                }
+
+                $itemMaster->save();
             }
 
             DB::commit();
