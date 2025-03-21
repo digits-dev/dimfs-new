@@ -221,10 +221,14 @@ Route::middleware(['auth'])->group(function () {
 
         //API Create Generation
         Route::post('/create_api', [AdminApiController::class, 'createApi']);
+        Route::post('/update_api', [AdminApiController::class, 'updateApi']);
 
         //API Edit
-        // Route::post('/edit_api/{id}', [AdminApiController::class, 'editApi']);
-        Route::match(['GET', 'POST'], '/edit_api/{id}', [AdminApiController::class, 'editApi']);
+        Route::get('/edit/{id}', [AdminApiController::class, 'editApi']);
+
+        // VIEW API
+        Route::get('/view/{id}', [AdminApiController::class, 'viewApi']);
+       
 
     });
 

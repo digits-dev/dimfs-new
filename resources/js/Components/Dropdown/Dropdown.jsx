@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const DropdownSelect = ({maxMenuHeight = "100px", menuPlacement, isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const DropdownSelect = ({maxMenuHeight = "100px", menuPlacement, isStatus = false, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = 'react-select', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -62,7 +62,7 @@ const DropdownSelect = ({maxMenuHeight = "100px", menuPlacement, isStatus = fals
         <div className={`relative ${addMainClass}`}>
             <label
                 htmlFor={name}
-                className={`block text-sm font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
+                className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
             >
                 {displayName || FormatLabelName(name)}
             </label>

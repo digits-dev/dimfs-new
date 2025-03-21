@@ -166,19 +166,20 @@ class AdminApiController extends Controller
 
     public function createApi(Request $request)
     {
-        try {
-            $request_data = $request->validate([
-                'api_name' => 'required|string',
-                'api_endpoint' => 'required|string',
-                'table' => 'required|string',
-                'action_type' => 'required|string',
-                'api_method' => 'required|string',
-                'sql_where' => 'nullable|string',
-                'fields' => 'required|array',
-                'fields_relations' => 'nullable|array',
-                'fields_validations' => 'nullable|array',
-            ]);
+        $request_data = $request->validate([
+            'api_name' => 'required|string',
+            'api_endpoint' => 'required|string',
+            'table' => 'required|string',
+            'action_type' => 'required|string',
+            'api_method' => 'required|string',
+            'sql_where' => 'nullable|string',
+            'fields' => 'required|array',
+            'fields_relations' => 'nullable|array',
+            'fields_validations' => 'nullable|array',
+        ]);
 
+        try {
+            
             ApiConfiguration::create([
                 'name' => $request_data['api_name'],
                 'table_name' => $request_data['table'],
@@ -195,10 +196,39 @@ class AdminApiController extends Controller
                 'created_by' => CommonHelpers::myId(),
             ]);
 
-            return back()->with(['message' => 'API successfully created!', 'type' => 'success']);
+            return redirect('api_generator')->with(['message' => 'API successfully created!', 'type' => 'success']);
         } catch (\Exception $e) {
             CommonHelpers::LogSystemError('API Generator (Creation)', $e->getMessage());
             return back()->with(['message' => 'API Creation Failed!', 'type' => 'error']);
+        }
+    }
+
+    public function updateApi(Request $request){
+
+        dd($request->all());
+
+        $request_data = $request->validate([
+            'api_name' => 'required|string',
+            'api_endpoint' => 'required|string',
+            'table' => 'required|string',
+            'action_type' => 'required|string',
+            'api_method' => 'required|string',
+            'sql_where' => 'nullable|string',
+            'fields' => 'required|array',
+            'fields_relations' => 'nullable|array',
+            'fields_validations' => 'nullable|array',
+        ]);
+
+
+        try {
+            
+            // Updates Here
+
+            return redirect('api_generator')->with(['message' => 'API successfully created!', 'type' => 'success']);
+
+        } catch (\Exception $e) {
+            CommonHelpers::LogSystemError('API Generator (Update)', $e->getMessage());
+            return back()->with(['message' => 'API Updating Failed!', 'type' => 'error']);
         }
     }
 
@@ -206,21 +236,29 @@ class AdminApiController extends Controller
         $databaseName = config('database.connections.mysql.database');
         $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [$databaseName]);
 
-        $data['database_tables_and_columns'] = [];
+        $data['table_columns'] = [];
         foreach ($tables as $table) {
             $tableName = $table->TABLE_NAME;
 
             $columns = Schema::getColumnListing($tableName);
 
-            $data['database_tables_and_columns'][] = [
+            $data['table_columns'][] = [
                 'table_name' => $tableName,
                 'columns' => $columns
             ];
         }
 
         $data['page_title'] = 'Api Edit';
-        $data['api'] = ApiConfiguration::where('id', $id)->get();
+        $data['api'] = ApiConfiguration::where('id', $id)->first();
 
-        return Inertia::render('AdmVram/ApiEdit', $data);
+        return Inertia::render('AdmVram/ApiGenerator/ApiGeneratorEdit', $data);
+    }
+
+    public function viewApi($id){
+
+        $data['page_title'] = 'Api Edit';
+        $data['api'] = ApiConfiguration::where('id', $id)->first();
+
+        return Inertia::render('AdmVram/ApiGenerator/ApiGeneratorView', $data);
     }
 }

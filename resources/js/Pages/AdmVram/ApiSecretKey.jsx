@@ -85,7 +85,7 @@ const ApiSecretKey = ({ secret_key }) => {
     };
 
     return (
-        <div>
+        <div className="p-3">
             <Button
                 extendClass="bg-skin-blue mb-3"
                 fontColor="text-white"

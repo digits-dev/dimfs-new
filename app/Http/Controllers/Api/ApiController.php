@@ -101,7 +101,8 @@ class ApiController extends Controller
 
                     return response()->json([
                         'success' => true,
-                        'data' => $initial_response
+                        'data' => $initial_response,
+                        'message' => $api->name . ' retrieved successfully',
                     ], 200);
                 } catch (\Exception $e) {
                     return response()->json(['success' => false, 'error' => $e->getMessage()], 500);

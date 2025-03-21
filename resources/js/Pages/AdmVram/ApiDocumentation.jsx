@@ -10,34 +10,16 @@ import RowData from '../../Components/Table/RowData';
 import RowAction from '../../Components/Table/RowAction';
 const ApiDocumentation = ({api}) => {
     const baseUrl = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "" + "/api");
-    const [loading, setLoading] = useState(false);
-    const { data, setData, post } = useForm({});
     
-    router.on('start', () => setLoading(true));
-    router.on('finish', () => setLoading(false));
-
-    const handleEditApi = (id) => {
-        post(`api_generator/edit_api/${id}`, {
-            onSuccess: (data) => {
-                const { message, type } = data.props.auth.sessions;
-                handleToast(message, type);
-                router.reload();
-                reset();
-                onClose();
-            },
-            onError: (error) => {},
-        });
-    } 
-
     return (
-        <>
+        <div className='space-y-3 p-3'>
             <InputComponent
                 displayName="API BASE URL" 
                 value={baseUrl}
                 disabled
             />   
 
-            <TableContainer>
+            <TableContainer data={api?.data}>
                 <Thead>
                     <Row>
                         <TableHeader
@@ -80,28 +62,29 @@ const ApiDocumentation = ({api}) => {
                 <Tbody data={api}>
                     {api &&
                         api.map((item, index) => (
-                            <Row key={item.id}>
-                                <RowData isLoading={loading}>
+                            <Row key={item.id + index}>
+                                <RowData>
                                     {item.id}
                                 </RowData>
-                                <RowData isLoading={loading}>
+                                <RowData>
                                     {item.name}
                                 </RowData>
-                                <RowData isLoading={loading}>
+                                <RowData>
                                     {item.method}
                                 </RowData>
-                                <RowData isLoading={loading}>
+                                <RowData>
                                     {item.endpoint}
                                 </RowData>
                                 <RowData center>
                                     <RowAction
-                                        type="button"
+                                        type="link"
                                         action="view"
+                                        href={`/api_generator/view/${item.id}`}
                                     />
                                     <RowAction
-                                        type="button"
+                                        type="link"
                                         action="edit"
-                                        onClick={() => handleEditApi(item.id)}
+                                        href={`/api_generator/edit/${item.id}`}
                                     />
                                 </RowData>
                                 
@@ -110,7 +93,7 @@ const ApiDocumentation = ({api}) => {
                 </Tbody>
             </TableContainer>
             
-        </>
+        </div>
     );
 };
 

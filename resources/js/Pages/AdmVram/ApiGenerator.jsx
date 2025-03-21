@@ -1,62 +1,73 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import React, { useContext, useEffect, useState } from 'react';
-import ContentPanel from "../../Components/Table/ContentPanel";
 import ApiDocumentation from './ApiDocumentation';
 import ApiSecretKey from './ApiSecretKey';
-import ApiCreation from './ApiCreation';
+import { useTheme } from '../../Context/ThemeContext';
+import useThemeStyles from '../../Hooks/useThemeStyles';
+import ApiGeneratorCreate from './ApiGenerator/ApiGeneratorCreate';
 
 const ApiGenerator = ({page_title, api, secret_key, database_tables_and_columns}) => {
     const [activeTab, setActiveTab] = useState("tab1")
+    const { auth } = usePage().props;
+    const { theme } = useTheme();
+    const { textColor, sideBarBgColor } = useThemeStyles(theme);
+
 
     const tabs = [
-      { id: "tab1", icon: "fa fa-file-lines", label: "Api Documentation" },
-      { id: "tab2", icon: "fa fa-key", label: "Api Secret Key" },
-      { id: "tab3", icon: "fa fa-screwdriver-wrench", label: "Api Generator" },
+      { id: "tab1", image: "/images/others/document-icon.png", label: "Api Documentation" },
+      { id: "tab2", image: "/images/others/key-icon.png", label: "Api Secret Key" },
+      { id: "tab3", image: "/images/others/gear-icon.png", label: "Api Generator" },
     ]
     return (
-        <>
+        <div className={`${textColor}`}>
         <Head title={page_title}/>
-        <ContentPanel>
-            <div className="w-full mx-auto">
-                <div className="flex border-b">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`px-4 py-2 font-medium text-sm transition-colors focus:outline-none ${
-                                activeTab === tab.id
-                                ? "text-primary border-b-2 border-primary"
-                                : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
-                            }`}
-                        >
-                            <i className={`me-1 ${tab.icon}`}></i>
-                            {tab.label}
-                        </button>        
-                    ))}
-                </div>
-
-                <div className="py-4">
-                    {activeTab === "tab1" && (
-                        <div className="space-y-2">
+        <div className={`w-full mx-auto ${sideBarBgColor} shadow-menus rounded-lg overflow-hidden`}>
+                  <div className={`flex  ${theme == 'bg-skin-blue' ? 'bg-gray-200': 'bg-black/20'}`}>
+                      {tabs.map((tab) => (
+                          <button
+                              key={tab.id}
+                              onClick={() => setActiveTab(tab.id)}
+                              className={`flex items-center justify-center px-5 py-3 font-medium text-sm transition-colors focus:outline-none ${
+                                  activeTab === tab.id
+                                  ? `${sideBarBgColor} rounded-t-lg`
+                                  : "text-muted-foreground text-gray-600 hover:text-foreground hover:bg-gray-300 "
+                              }`}
+                          >
+                                <img
+                                    src={tab.image}
+                                    className={`w-4 h-4 md:w-5 md:h-5 md:mr-2 cursor-pointer duration-500 
+                                    ${
+                                        activeTab === tab.id
+                                        ? "opacity-100"
+                                        : "opacity-50"
+                                    }`}
+                                />
+                             
+                              <div className="hidden md:block">{tab.label}</div>
+                          </button>        
+                      ))}
+                  </div>
+                  <div>
+                      {activeTab === "tab1" && (
+                          <div className="p-2">
                             <ApiDocumentation api={api}></ApiDocumentation>
-                        </div>
-                    )}
+                          </div>
+                      )}
 
-                    {activeTab === "tab2" && (
-                        <div className="space-y-2">
+                      {activeTab === "tab2" && (
+                          <div className="p-2">
                             <ApiSecretKey secret_key={secret_key}></ApiSecretKey>
-                        </div>
-                    )}
+                          </div>
+                      )}
 
-                    {activeTab === "tab3" && (
-                        <div className="space-y-2">
-                            <ApiCreation table_x_columns={database_tables_and_columns}></ApiCreation>
-                        </div>
-                    )}
-                </div>
-            </div>
-            </ContentPanel>
-        </>
+                      {activeTab === "tab3" && (
+                          <div>
+                            <ApiGeneratorCreate table_columns={database_tables_and_columns}/>
+                          </div>
+                      )}
+                  </div>
+              </div>
+        </div>
     );
 };
 

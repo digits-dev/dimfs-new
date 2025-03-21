@@ -4,7 +4,7 @@ import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
 
-const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = '', placeholder, extendClass, addMainClass }) => {
+const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = 'react-select', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
@@ -26,12 +26,14 @@ const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = fals
             backgroundColor: "#1f2937", // Dark background for dropdown menu
             color: "#9CA3AF", // Dropdown text color
             maxHeight: maxMenuHeight,
+            zIndex: 9999,
             
         }),
         menuList: (provided) => ({
             ...provided,
             maxHeight: maxMenuHeight, 
             overflowY: "auto", 
+            
         }),
         option: (provided, state) => ({
             ...provided,
@@ -51,6 +53,7 @@ const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = fals
         menu: (provided) => ({
             ...provided,
             maxHeight: maxMenuHeight,
+            zIndex: 9999,
         }),
         menuList: (provided) => ({
             ...provided,
@@ -63,7 +66,7 @@ const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = fals
         <div className={`relative ${addMainClass}`}>
             <label
                 htmlFor={name}
-                className={`block text-sm font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
+                className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
             >
                 {displayName || FormatLabelName(name)}
             </label>
