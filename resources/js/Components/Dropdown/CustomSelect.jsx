@@ -3,14 +3,15 @@ import DescIcon from "../Table/Icons/DescIcon";
 import FormatLabelName from "../../Utilities/FormatLabelName";
 import Select from 'react-select';
 import { useTheme } from "../../Context/ThemeContext";
+import LoginInputTooltip from "../Tooltip/LoginInputTooltip";
 
-const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = 'react-select', placeholder, extendClass, addMainClass }) => {
+const CustomSelect = ({isMulti = false, onError, maxMenuHeight = "100px", isStatus = false, menuPlacement, isDisabled,  options, onChange, value, name, defaultSelect, displayName, is_multi='', selectType = 'react-select', placeholder, extendClass, addMainClass }) => {
     const {theme} = useTheme();
     const customStyles = {
         control: (provided) => ({
             ...provided,
             backgroundColor: "#101215", // Dark background (Tailwind's bg-gray-800)
-            borderColor: "#9CA3AF)", // Border color (Tailwind's border-gray-600)
+            borderColor: onError ? '#dc3545' : "#9CA3AF)", // Border color (Tailwind's border-gray-600)
             color: "#fff", // Text color
             boxShadow: "none",
             "&:hover": {
@@ -45,7 +46,14 @@ const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = fals
         }),
     };
 
+    const NoDropdownIndicator = () => null;
+
     const customStatusStyles = {
+        control: (provided) => ({
+            ...provided,
+            borderColor: onError ? '#dc3545' : "#9CA3AF)",
+      
+        }),
         option: (provided, state) => ({
           ...provided,
           color: isStatus ? state.data.status === "INACTIVE" ? "#EB4034" : "" : "", // Make text red for INACTIVE status
@@ -70,45 +78,28 @@ const CustomSelect = ({isMulti = false, maxMenuHeight = "100px", isStatus = fals
             >
                 {displayName || FormatLabelName(name)}
             </label>
-            {selectType 
-            ? 
-           <Select
-                placeholder={placeholder}
-                defaultValue={value}
-                name={name}
-                isMulti={isMulti}
-                isDisabled={isDisabled}
-                className={`block w-full bg-gray-800 border-gray-300 mt-1  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-                onChange={onChange}
-                menuPlacement={menuPlacement}
-                options={options.map(opt => ({ value: opt.value, label: opt.label, name: name, status: opt.status}))}
-                styles={theme === 'bg-skin-black' ? customStyles : customStatusStyles}
-            />
-             
-               
-            : 
-                <select
+            <div className="relative">
+                <Select
+                    placeholder={placeholder}
+                    defaultValue={value}
                     name={name}
-                    value={value}
+                    isMulti={isMulti}
+                    components={onError ? { DropdownIndicator: NoDropdownIndicator } : undefined}
+                    isDisabled={isDisabled}
+                    className={`block w-full bg-gray-800 border-gray-300 mt-1  rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                     onChange={onChange}
-                    disabled={isDisabled}
-                    className={`appearance-none px-4 pr-7 py-2 text-sm text-left outline-none border border-gray-300 rounded-lg ${theme === 'bg-skin-black' ? theme+' text-gray-300' : 'bg-white'} w-full cursor-pointer hover:border-gray-400 focus:ring-2 focus:ring-blue-500 transition duration-200 truncate ${extendClass}`}
-                >
-                    <option value="" className="truncate">{defaultSelect}</option>
-                    {options.map((option, index) => (
-                        <option key={index} value={option.id} className="truncate">
-                            {option.name}
-                        </option>
-                    ))}
-                </select>
-            }
-            {!selectType 
-            ? 
-                <span className="absolute top-1/2 right-5 -translate-y-1/2  pointer-events-none">
-                    <DescIcon />
-                </span>
-            : ''}
-           
+                    menuPlacement={menuPlacement}
+                    options={options.map(opt => ({ value: opt.value, label: opt.label, name: name, status: opt.status}))}
+                    styles={theme === 'bg-skin-black' ? customStyles : customStatusStyles}
+                />
+                 {onError && 
+                    <LoginInputTooltip content={onError}>
+                    <i
+                        className="fa-solid fa-circle-info text-red-600 absolute cursor-pointer top-1/2 text-xs md:text-base right-1.5 md:right-3 transform -translate-y-1/2">
+                    </i>
+                    </LoginInputTooltip>
+                }
+            </div>
         </div>
     );
 };

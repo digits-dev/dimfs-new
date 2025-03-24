@@ -147,6 +147,12 @@ const ApiSecretKey = ({ secret_key }) => {
                                 <RowData center>
                                     <RowAction
                                         type="button"
+                                        hasTooltip
+                                        tooltipContent={
+                                            item.status === 0
+                                                ? "Activate Key"
+                                                : "Deactivate Key"
+                                        }
                                         action={
                                             item.status === 0
                                                 ? "activate"
@@ -161,7 +167,9 @@ const ApiSecretKey = ({ secret_key }) => {
 
                                     <RowAction 
                                         type="button" 
-                                        action="delete" 
+                                        action="delete"
+                                        hasTooltip
+                                        tooltipContent="Delete key"
                                         onClick={() => 
                                             {handleModalToggle(); setData("id", item.id)}
                                         }

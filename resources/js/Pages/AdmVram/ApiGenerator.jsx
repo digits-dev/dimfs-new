@@ -6,7 +6,7 @@ import { useTheme } from '../../Context/ThemeContext';
 import useThemeStyles from '../../Hooks/useThemeStyles';
 import ApiGeneratorCreate from './ApiGenerator/ApiGeneratorCreate';
 
-const ApiGenerator = ({page_title, api, secret_key, database_tables_and_columns}) => {
+const ApiGenerator = ({page_title, api, queryParams, secret_key, database_tables_and_columns}) => {
     const [activeTab, setActiveTab] = useState("tab1")
     const { auth } = usePage().props;
     const { theme } = useTheme();
@@ -16,7 +16,6 @@ const ApiGenerator = ({page_title, api, secret_key, database_tables_and_columns}
     const tabs = [
       { id: "tab1", image: "/images/others/document-icon.png", label: "Api Documentation" },
       { id: "tab2", image: "/images/others/key-icon.png", label: "Api Secret Key" },
-      { id: "tab3", image: "/images/others/gear-icon.png", label: "Api Generator" },
     ]
     return (
         <div className={`${textColor}`}>
@@ -50,19 +49,13 @@ const ApiGenerator = ({page_title, api, secret_key, database_tables_and_columns}
                   <div>
                       {activeTab === "tab1" && (
                           <div className="p-2">
-                            <ApiDocumentation api={api}></ApiDocumentation>
+                            <ApiDocumentation api={api} queryParams={queryParams}></ApiDocumentation>
                           </div>
                       )}
 
                       {activeTab === "tab2" && (
                           <div className="p-2">
                             <ApiSecretKey secret_key={secret_key}></ApiSecretKey>
-                          </div>
-                      )}
-
-                      {activeTab === "tab3" && (
-                          <div>
-                            <ApiGeneratorCreate table_columns={database_tables_and_columns}/>
                           </div>
                       )}
                   </div>

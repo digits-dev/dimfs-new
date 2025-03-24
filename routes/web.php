@@ -220,14 +220,20 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/delete_key/{id}', [AdminApiController::class, 'deleteKey']);
 
         //API Create Generation
-        Route::post('/create_api', [AdminApiController::class, 'createApi']);
-        Route::post('/update_api', [AdminApiController::class, 'updateApi']);
 
+        Route::get('/create_api_view', [AdminApiController::class, 'createApiView']);
+        Route::post('/create_api', [AdminApiController::class, 'createApi']);
+        
         //API Edit
         Route::get('/edit/{id}', [AdminApiController::class, 'editApi']);
+        Route::post('/update_api', [AdminApiController::class, 'updateApi']);
 
         // VIEW API
         Route::get('/view/{id}', [AdminApiController::class, 'viewApi']);
+
+        // BULK ACTIONS
+        Route::post('/bulk_action', [AdminApiController::class, 'bulkActions']);
+        
        
 
     });

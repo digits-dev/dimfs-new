@@ -34,6 +34,12 @@ const { data, setData, processing, reset, post, errors } = useForm({
     fields_validations: api?.rules || {}
 });
 
+// FOR ADDING ALL COLUMNS ON LOAD
+useEffect(()=>{
+    const columns = table_columns.find(table => table.table_name === api?.table_name)?.columns || [];
+    setAllColumns(columns);
+});
+
 const previewData = {
     success: true,
     data: [1, 2].map((id, index) => 
@@ -273,6 +279,7 @@ const handleModalToggle = ()=> {
                                         name='api_name'
                                         onChange={(e)=>{setData("api_name", e.target.value)}}
                                         placeholder='Enter API Name'
+                                        onError={errors.api_name}
                                         value={data.api_name}
                                     />
                                     <p className='text-[10px] mt-1 font-medium text-gray-500'>Human-readable name for your API</p>
@@ -284,6 +291,7 @@ const handleModalToggle = ()=> {
                                         placeholder='Enter API Endpoint'
                                         onChange={(e)=>{setData("api_endpoint", e.target.value)}}
                                         value={data.api_endpoint}
+                                        onError={errors.api_endpoint}
                                     />
                                     <p className='text-[10px] mt-1 font-medium text-gray-500'>Endpoint identifier</p>
                                 </div>
@@ -295,6 +303,7 @@ const handleModalToggle = ()=> {
                                         name='table'
                                         value={data.table ? { label: data.table, value: data.table } : null}
                                         selectType="react-select"
+                                        onError={errors.table}
                                         placeholder='Select Table'
                                     />
                                     <p className='text-[10px] mt-1 font-medium text-gray-500'>Database table to query</p>
@@ -315,6 +324,7 @@ const handleModalToggle = ()=> {
                                         displayName='Action Type'
                                         onChange={handleSelectChange}
                                         name='action_type'
+                                        onError={errors.action_type}
                                         menuPlacement="top"
                                         value={data.action_type ? { label: data.action_type, value: data.action_type } : null}
                                         selectType="react-select"
