@@ -111,10 +111,19 @@ class LoginController extends Controller
             
             $today = Carbon::now();
             $lastChangePass = Carbon::parse($users->last_password_updated);
-            $needsPasswordChange = Hash::check('qwerty', $users->password) || $lastChangePass->diffInMonths($today) > 3;
+            $needsPasswordChange = Hash::check('qwerty', $users->password);
+
             if($needsPasswordChange){
-                Log::debug("message: {$needsPasswordChange}");
-                Session::put('check_user',true);
+                Session::put('check_user', true);
+                Session::put('check_user_type', 'default');
+            }
+            elseif($lastChangePass->diffInMonths($today) > 3){
+                Session::put('check_user', true);
+                Session::put('check_user_type', 'waive');
+            }
+            else{
+                Session::put('check_user', false);
+                Session::put('check_user_type', null);
             }
 
             $unreadAnnouncements = Announcement::whereDoesntHave('admUsers', function($query) use ($users) {
@@ -124,17 +133,17 @@ class LoginController extends Controller
                 Session::put('unread-announcement',true);
             }
 
-            $exist = Auth::user()->notifications()->where('type', 'system users')->exists();
-            if(!$exist){
-                $appname = AdmSettings::where('name','appname')->pluck('content')->first() ?? 'Vram AT.';
-                CommonHelpers::sendNotification([
-                    'content' => "Welcome to ".$appname." We're excited to have you here!.",
-                    'id_adm_users' => [$users->id],
-                    'type' => 'system users',
-                    'is_read' => 0,
-                    'to' => url('/')
-                ]);
-            }
+            // $exist = Auth::user()->notifications()->where('type', 'system users')->exists();
+            // if(!$exist){
+            //     $appname = AdmSettings::where('name','appname')->pluck('content')->first() ?? 'Vram AT.';
+            //     CommonHelpers::sendNotification([
+            //         'content' => "Welcome to ".$appname." We're excited to have you here!.",
+            //         'id_adm_users' => [$users->id],
+            //         'type' => 'system users',
+            //         'is_read' => 0,
+            //         'to' => url('/')
+            //     ]);
+            // }
 
             return redirect()->intended('dashboard');
         }

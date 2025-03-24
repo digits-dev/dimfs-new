@@ -48,9 +48,7 @@ const ChangePassword = () => {
     });
 
     const handlePasswordChange = (e) => {
-
-
-    const newPassword = e.target.value;
+        const newPassword = e.target.value;
         setData("new_password", newPassword);
         setPasswordStrength(checkPasswordStrength(newPassword));
     };[]

@@ -1,6 +1,12 @@
 import React from 'react'
 
-const CheckboxWithText = ({key, id="custom-checkbox", text= "Show Password", type="checkbox", name="exampleCheckbox"  , color="blue-500", handleClick, isChecked, disabled, addMainClass, textColor = "text-white" }) => {
+const CheckboxWithText = ({key, id="custom-checkbox", text= "Show Password", type="checkbox", name="exampleCheckbox", color = "login", handleClick, isChecked, disabled, addMainClass, textColor = "text-white" }) => {
+
+    const colorStyle = {
+        login : 'checked:border-login-btn-color checked:bg-login-btn-color checked:before:bg-login-btn-color',
+        blue: 'checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500'
+    }[color];
+
   return (
     <div className={`inline-flex items-center w-full ${addMainClass}`}>
         <label
@@ -16,7 +22,7 @@ const CheckboxWithText = ({key, id="custom-checkbox", text= "Show Password", typ
                 onChange={handleClick}
                 disabled={disabled}
                 checked={isChecked}
-                className={`before:content[''] peer relative h-[15px] w-[15px] md:h-[18px] md:w-[18px] cursor-pointer appearance-none rounded-md border border-gray-400 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-9 before:w-9 md:before:h-12 md:before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-login-btn-color checked:bg-login-btn-color checked:before:bg-login-btn-color hover:before:opacity-10 outline-none ${
+                className={`before:content[''] peer relative h-[15px] w-[15px] md:h-[18px] md:w-[18px] cursor-pointer appearance-none rounded-md border border-gray-400 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-9 before:w-9 md:before:h-12 md:before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity ${colorStyle} hover:before:opacity-10 outline-none ${
                     disabled
                         ? "bg-gray-500 border-gray-500"
                         : ""

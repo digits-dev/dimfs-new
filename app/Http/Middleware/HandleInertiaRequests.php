@@ -55,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'menu' => CommonHelpers::getCurrentMenu(),
                 'check_user' => $request->session()->get('check_user'),
+                'check_user_type' => $request->session()->get('check_user_type'),
                 'announcement' => $request->session()->get('unread-announcement'),
                 'notifications' => fn () => Auth::user() ? Auth::user()->notifications()->orderBy('created_at','DESC')->get() : [],
                 'unread_notifications' => fn () => Auth::user() ? Auth::user()->notifications()->where('is_read', 0)->orderBy('created_at','DESC')->count() : [],

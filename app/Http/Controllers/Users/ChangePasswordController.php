@@ -8,7 +8,9 @@ use App\Models\AdmPasswordHistories;
 use App\Models\AdmUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class ChangePasswordController extends Controller
@@ -66,9 +68,29 @@ class ChangePasswordController extends Controller
             return back()->withErrors($data);
         }
 
-        
-
     }
 
+    public function waive() {
+        $user = AdmUser::find(CommonHelpers::myId());
+
+        if ($user->waiver_count == 3){
+            return back()->withErrors([
+               'message' => "Can't waive anymore, you need to change your password"
+            ]);
+        }
+
+        $user->waiver_count = $user->waiver_count + 1;
+        $user->last_password_updated = Carbon::now()->format('Y-m-d');
+
+        $user->save();
+
+        Session::put('check_user', false);
+        Session::put('check_user_type', null);
+
+        return back()->with([
+            'message' => "Waive Success",
+            'type' => 'success'
+        ]);
+    }
     
 }

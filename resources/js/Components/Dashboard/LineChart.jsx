@@ -5,7 +5,6 @@ import Chart from "react-apexcharts";
 
 const LineChart = ({ create_data, update_data, create_table_title, update_table_title }) => {
     const { theme } = useTheme();
-    const [themeColor, setThemeColor] = useState(theme == "bg-skin-blue" ? '#134B70' : '#A4A3A4');
 
     // CREATE
     const [CreateChartOptions, setCreateChartOptions] = useState({
@@ -24,7 +23,6 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
             type: "datetime",
             categories: [],
         },
-        colors: [themeColor],
     });
 
     const [CreateChartSeries, setCreateChartSeries] = useState([
@@ -37,6 +35,8 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
     
 
     useEffect(() => {
+        const newColor = theme === "bg-skin-blue" ? '#134B70' : '#A4A3A4';
+
         if (create_data && create_data.length > 0) {
             const dates = create_data.map((data) => data.date);
             const counts = create_data.map((data) => data.count);
@@ -47,6 +47,7 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
                     ...prevOptions.xaxis,
                     categories: dates,
                 },
+                colors: [newColor],
             }));
 
             setCreateChartSeries([
@@ -57,7 +58,7 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
                 },
             ]);
         }
-    }, [update_data]);
+    }, [update_data, theme]);
 
     // UPDATE
     const [UpdateChartOptions, setUpdateChartOptions] = useState({
@@ -76,7 +77,6 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
             type: "datetime",
             categories: [],
         },
-        colors: [themeColor],
     });
 
     const [UpdateChartSeries, setUpdateChartSeries] = useState([
@@ -89,6 +89,8 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
 
 
     useEffect(() => {
+        const newColor = theme === "bg-skin-blue" ? '#134B70' : '#A4A3A4';
+
         if (update_data && update_data.length > 0) {
             const dates = update_data.map((data) => data.date);
             const counts = update_data.map((data) => data.count);
@@ -99,6 +101,7 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
                     ...prevOptions.xaxis,
                     categories: dates,
                 },
+                colors: [newColor],
             }));
 
             setUpdateChartSeries([
@@ -109,7 +112,7 @@ const LineChart = ({ create_data, update_data, create_table_title, update_table_
                 },
             ]);
         }
-    }, [create_data]);
+    }, [create_data, theme]);
 
     return (
         <div className="mt-5">

@@ -4,6 +4,7 @@ import ContentPanel from "../../Components/Table/ContentPanel";
 import useThemeStyles from "../../Hooks/useThemeStyles";
 import { useTheme } from "../../Context/ThemeContext";
 import ItemCard from "../../Components/Dashboard/ItemCard";
+import ChangePassModal from "../../Components/Modal/ChangePassModal";
 
 const Dashboard = ({ 
     item_master_stats, 
@@ -30,6 +31,7 @@ const Dashboard = ({
     return (
         <div className={`${textColor}`}>
             <Head title="Dashboard" />
+            <ChangePassModal/>
             {auth.access.isView && auth.access.isRead && 
 
               <div className={`w-full mx-auto ${sideBarBgColor} shadow-menus rounded-lg overflow-hidden`}>

@@ -118,11 +118,6 @@ Route::get('/applogo', [SettingsController::class, 'getApplogo'])->name('app-log
 Route::get('/login-details', [SettingsController::class, 'getLoginDetails'])->name('app-login-details');
 
 Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::post('/check-password', [ForceChangePasswordController::class, 'checkPassword'])->name('check-current-password');
-    Route::get('change-password', [ForceChangePasswordController::class, 'showChangeForcePasswordForm'])->name('show-change-force-password');
-    Route::post('/save-change-password', [ForceChangePasswordController::class, 'postUpdatePassword'])->name('update_password');
-    Route::post('/check-waive', [ForceChangePasswordController::class, 'checkWaive'])->name('check-waive-count');
-    Route::post('/waive-change-password', [ForceChangePasswordController::class, 'waiveChangePassword'])->name('waive-change-password');
 
     //ANNOUNCEMENT
     Route::get('unread-announcement', [AnnouncementsController::class, 'getUnreadAnnouncements'])->name('show-announcement');
@@ -159,6 +154,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('change_password')->group(function () {
         Route::get('/', [ChangePasswordController::class, 'getIndex'])->name('change_password');
         Route::post('/update', [ChangePasswordController::class, 'changePassword'])->name('changePassword');
+        Route::post('/waive', [ChangePasswordController::class, 'waive']);
     });
 
     //PRIVILEGES
