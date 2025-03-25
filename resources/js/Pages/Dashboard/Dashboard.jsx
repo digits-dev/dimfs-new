@@ -21,6 +21,11 @@ const Dashboard = ({
     const { textColor, sideBarBgColor } = useThemeStyles(theme);
 
     const [activeTab, setActiveTab] = useState("tab1")
+
+    const sample = [
+        'https://app.powerbi.com/view?r=eyJrIjoiOGJmZjg0NDktZTc0YS00OTFhLWEwNjctMmVjODJhZWFkZGI2IiwidCI6ImVhNjUwNjA1LTVlOGQtNGRkNC1iNzhmLTAyZTNlZDVmZWQ5OCIsImMiOjEwfQ%3D%3D',
+        'https://app.powerbi.com/view?r=eyJrIjoiMzk2NDc1MjktNTAxYy00YzQyLTlkMmItMDRjYWY5YmM0OGMyIiwidCI6ImVhNjUwNjA1LTVlOGQtNGRkNC1iNzhmLTAyZTNlZDVmZWQ5OCIsImMiOjEwfQ%3D%3D'
+    ]
     
     const tabs = [
       { id: "tab1", image: "/images/dashboard/item-master.png", label: "Item Master" },
@@ -32,9 +37,23 @@ const Dashboard = ({
         <div className={`${textColor}`}>
             <Head title="Dashboard" />
             <ChangePassModal/>
+
+            {/* {sample.map((item)=>(
+                <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                    <iframe
+                        title="IT Ops Dashboard"
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                        src={item}
+                        frameBorder="0"
+                        allowFullScreen={true}
+                    ></iframe>
+                </div>
+            ))} */}
+
+            
             {auth.access.isView && auth.access.isRead && 
 
-              <div className={`w-full mx-auto ${sideBarBgColor} shadow-menus rounded-lg overflow-hidden`}>
+              <div className={`w-full mx-auto ${sideBarBgColor} mt-5 shadow-menus rounded-lg overflow-hidden`}>
                   <div className={`flex  ${theme == 'bg-skin-blue' ? 'bg-gray-200': 'bg-black/20'}`}>
                       {tabs.map((tab) => (
                           <button

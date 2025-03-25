@@ -179,31 +179,3 @@ button:disabled {
     animation: slideInLeft 0.5s forwards;
 }
 
-
-/* border bottom for rows  */
-
-tbody tr {
-    position: relative; 
-}
-  
-tbody tr:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%; 
-    border-bottom: 0.60px solid #797878; 
-    z-index: 40;
-}
-
-.ph {
-    font-family: "Phosphor" !important;
-    font-style: normal;
-    /* font-weight: normal; */
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-/* end of border bottom for rows  */

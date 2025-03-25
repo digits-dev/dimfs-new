@@ -1,8 +1,8 @@
 import React from "react";
 
-const Checkbox = ({ id, type="checkbox" , name, handleClick, isChecked, disabled }) => {
+const Checkbox = ({ id, type="checkbox" , name, handleClick, isChecked, disabled, addClass }) => {
     return (
-        <div className="inline-flex items-center">
+        <div className={`inline-flex items-center ${addClass}`}>
             <label
                 className="relative flex cursor-pointer items-center rounded-full p-1"
                 htmlFor={id} // Use dynamic id

@@ -942,10 +942,7 @@ class ItemMasterModuleImportsController extends Controller
             $importData[] = $itemArray;
                     
         }
-
-        dd($importData);
     
-      
         try {
 
             DB::beginTransaction();

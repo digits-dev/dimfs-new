@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Admin; 
+namespace App\Http\Controllers\Admin;
+
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\AdmModels\AdmModules;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\AdmModels\AdmPrivileges;
+use App\Models\AdmModels\AdmPrivilegesRoles;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PrivilegesController extends Controller{
     private $table_name;
@@ -18,6 +23,7 @@ class PrivilegesController extends Controller{
     private $sortBy;
     private $sortDir;
     private $perPage;
+    
     public function __construct() {
         $this->table_name  =  'adm_privileges';
         $this->primary_key = 'id';
@@ -37,6 +43,7 @@ class PrivilegesController extends Controller{
         if(!CommonHelpers::isView()) {
             return Inertia::render('Errors/RestrictionPage');
         }
+
         $data = [];
         $data['tableName'] = 'adm_privileges';
         $data['page_title'] = 'Privileges';
@@ -47,154 +54,192 @@ class PrivilegesController extends Controller{
 
     public function createPrivilegesView(){
         if(!CommonHelpers::isCreate()) {
-            echo 'error!';
+            return Inertia::render('Errors/RestrictionPage');
         }
-        $id = 0;
-        $row = [];
-        $modules = DB::table("adm_modules")->where('is_protected', 0)->whereNull('deleted_at')
-         ->select("adm_modules.*", 
-                DB::raw("(select is_visible from adm_privileges_roles where id_adm_modules = adm_modules.id and id_adm_privileges = '$id') as is_visible"), 
-                DB::raw("(select is_create from adm_privileges_roles where id_adm_modules  = adm_modules.id and id_adm_privileges = '$id') as is_create"), 
-                DB::raw("(select is_read from adm_privileges_roles where id_adm_modules    = adm_modules.id and id_adm_privileges = '$id') as is_read"), 
-                DB::raw("(select is_edit from adm_privileges_roles where id_adm_modules    = adm_modules.id and id_adm_privileges = '$id') as is_edit"), 
-                DB::raw("(select is_delete from adm_privileges_roles where id_adm_modules  = adm_modules.id and id_adm_privileges = '$id') as is_delete"),
-                DB::raw("(select is_void from adm_privileges_roles where id_adm_modules    = adm_modules.id and id_adm_privileges = '$id') as is_void"),
-                DB::raw("(select is_override from adm_privileges_roles where id_adm_modules  = adm_modules.id and id_adm_privileges = '$id') as is_override")
-                )
-         ->orderby("name", "asc")->get();
-         $roles = DB::table('adm_privileges_roles')
-         ->whereIn('id_adm_modules', $modules->pluck('id'))
-         ->get()
-         ->groupBy('id_adm_modules');
-        
-         return Inertia::render('AdmVram/PrivilegesForm', [
-            'moduleses' => $modules,
-            'row'=> $row,
-            'role_data' => $roles
-        ]);
-    }
 
-    public function getEdit($id){
-        if (!CommonHelpers::isCreate()){
-            echo 'error!';
-        }
-        $row = DB::table($this->table_name)->where("id", $id)->first();
-        $modules = DB::table("adm_modules")->where('is_protected', 0)->where('deleted_at', null)->select("adm_modules.*")->orderby("name", "asc")->get();
-        $modules->map(function ($modul) use ($id) {
-            $modul->roles = DB::table('adm_privileges_roles')
-                ->where('id_adm_modules', $modul->id)
-                ->where('id_adm_privileges', $id)
-                ->first();
-            return $modul;
+        $data = [];
+        $data['action'] = 'Create';
+        $data['privilege'] = [];
+        $data['modules_data'] = AdmModules::where('is_protected', 0)
+        ->get()
+        ->map(function ($module) {
+            return [
+                'id' => $module->id,
+                'name' => $module->name,
+                'permissions' => [
+                    'view' => false,
+                    'create' => false,
+                    'read' => false,
+                    'update' => false,
+                    'delete' => false,
+                ],
+            ];
         });
-        return Inertia::render('AdmVram/PrivilegesForm', [
-            'moduleses' => $modules,
-            'row'=> $row
-        ]);
+       
+        return Inertia::render('AdmVram/PrivilegesForm', $data);
+    }
+
+    public function editPrivilegeView($id){
+
+        if(!CommonHelpers::isCreate()) {
+            return Inertia::render('Errors/RestrictionPage');
+        }
+
+        $data = [];
+        $data['action'] = 'Update';
+        $data['privilege'] = AdmPrivileges::find($id);
+        $data['modules_data'] = AdmModules::with(['permissions' => function ($query) use ($id) {
+            $query->where('id_adm_privileges', $id);
+        }])
+        ->where('is_protected', 0)
+        ->get()
+        ->map(function ($module) {
+            return [
+                'id' => $module->id,
+                'name' => $module->name,
+                'permissions' => [
+                    'view' => (bool)optional($module->permissions)->is_visible,
+                    'create' => (bool)optional($module->permissions)->is_create,
+                    'read' => (bool)optional($module->permissions)->is_read,
+                    'update' => (bool)optional($module->permissions)->is_edit,
+                    'delete' => (bool)optional($module->permissions)->is_delete,
+                ],
+            ];
+        });
+       
+        return Inertia::render('AdmVram/PrivilegesForm', $data);
         
     }
 
-    public function postAddSave(Request $request){
+    public function editPrivilege(Request $request){
+
+        $validatedFields = $request->validate([
+            'privilege_name' => 'required|string',
+            'theme_color' => 'required',
+        ]);
+
+        try {
+
+            DB::beginTransaction();
+
+            $privilege = AdmPrivileges::find($request->id);
+            $privilegeExist = AdmPrivileges::where('name', $request->privilege_name)->exists();
     
-        if (!CommonHelpers::isCreate()) {
-            echo 'error';
-        }
-
-        $savePriv = [
-            "name" => $request->name,
-            "is_superadmin" => $request->is_superadmin,
-            "theme_color" => $request->theme_color,
-            "created_at"  => date('Y-m-d H:i:s')
-        ];
-
-        $id = DB::table($this->table_name)->insertGetId($savePriv);
-
-        //set theme
-        Session::put('theme_color', $request->theme_color);
-
-        $priv = $request->privileges;
-  
-        if ($priv) {
-            foreach ($priv as $id_modul => $data) {
-                $arrs = [];
-                $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                $arrs['is_create'] = @$data['is_create'] ?: 0;
-                $arrs['is_read'] = @$data['is_read'] ?: 0;
-                $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                $arrs['is_void'] = @$data['is_void'] ?: 0;
-                $arrs['is_override'] = @$data['is_override'] ?: 0;
-                $arrs['id_adm_privileges'] = $id;
-                $arrs['id_adm_modules'] = $id_modul;
-                DB::table("adm_privileges_roles")->insert($arrs);
-
-                $module = DB::table('adm_modules')->where('id', $id_modul)->first();
-            }
-        }
-
-        //Refresh Session Roles
-        $roles = DB::table('adm_privileges_roles')->where('id_adm_privileges', CommonHelpers::myPrivilegeId())->join('adm_modules', 'adm_modules.id', '=', 'id_adm_modules')->select('adm_modules.name', 'adm_modules.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete', 'is_void', 'is_override')->get();
-        Session::put('admin_privileges_roles', $roles);
-
-        return json_encode(["message"=>"Created successfully!", "type"=>"success"]);
-    }
-
-    public function postEditSave(Request $request){
-        if (!CommonHelpers::isUpdate()){
-            echo 'error!';
-        }
-
-        $id = $request->id;
-        $savePriv = [
-            "name" => $request->name,
-            "is_superadmin" => $request->is_superadmin,
-            "theme_color" => $request->theme_color,
-            "updated_at"  => date('Y-m-d H:i:s')
-        ];
-
-        DB::table($this->table_name)->where($this->primary_key, $id)->update($savePriv);
-
-        $priv = $request->privileges;
-        // This solves issue #1074
-        // DB::table("adm_privileges_roles")->where("id_adm_privileges", $id)->delete();
-    
-        if ($priv) {
-            foreach ($priv as $id_modul => $data) {
-                //Check Menu
-                $module = DB::table('adm_modules')->where('id', $id_modul)->first();
-                $currentPermission = DB::table('adm_privileges_roles')->where('id_adm_modules', $id_modul)->where('id_adm_privileges', $id)->first();
-         
-                if ($currentPermission) {
-                    $arrs = [];
-                    foreach($data as $key => $val){
-                        $arrs[$key] = @$val ? : 0;
-                    }
-                    DB::table('adm_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
+            if ($request->privilege_name !== $privilege->name) {
+                if (!$privilegeExist) {
+                    $privilege->name = $validatedFields['privilege_name'];
                 } else {
-                    $arrs = [];
-                    $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                    $arrs['is_create'] = @$data['is_create'] ?: 0;
-                    $arrs['is_read'] = @$data['is_read'] ?: 0;
-                    $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                    $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                    $arrs['is_void'] = @$data['is_void'] ?: 0;
-                    $arrs['is_override'] = @$data['is_override'] ?: 0;
-                    $arrs['id_adm_privileges'] = $id;
-                    $arrs['id_adm_modules'] = $id_modul;
-                    DB::table("adm_privileges_roles")->insert($arrs);
+                    return back()->withErrors(['privilege_name' => 'Privilege Name already exists']);
                 }
             }
+
+            $privilege->theme_color = $validatedFields['theme_color'];
+            $privilege->is_superadmin = $request->is_superadmin === 'Yes' ? 1 : 0;
+            $privilege->save();
+
+            if ($request->is_superadmin === 'No'){
+                foreach ($request->modules as $module){
+
+                    AdmPrivilegesRoles::updateOrCreate(
+                        [
+                            'id_adm_modules' => $module['id'],
+                            'id_adm_privileges' => $privilege->id,
+                        ],
+                        [
+                            'is_visible' => $module['permissions']['view'] ? 1 : 0,
+                            'is_create' => $module['permissions']['create'] ? 1 : 0,
+                            'is_read' => $module['permissions']['read'] ? 1 : 0,
+                            'is_edit' => $module['permissions']['update'] ? 1 : 0,
+                            'is_delete' => $module['permissions']['delete'] ? 1 : 0,
+                        ]
+                    );
+                    
+                }
+            }
+
+            DB::commit();
+
+            return redirect('privileges')->with(['message' => 'Privilege Update Success!', 'type' => 'success']);
+
         }
 
-        //Refresh Session Roles
-        if ($id == CommonHelpers::myPrivilegeId()) {
-            $roles = DB::table('adm_privileges_roles')->where('id_adm_privileges', CommonHelpers::myPrivilegeId())->join('adm_modules', 'adm_modules.id', '=', 'id_adm_modules')->select('adm_modules.name', 'adm_modules.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete', 'is_void', 'is_override')->get();
-            Session::put('admin_privileges_roles', $roles);
-
-            Session::put('theme_color', $request->theme_color);
+        catch (\Exception $e) {
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Privileges', $e->getMessage());
+            return redirect('privileges')->with(['message' => 'Privileges Update Failed!', 'type' => 'error']);
         }
 
-        return json_encode(["message"=>"Updated successfully!", "type"=>"success"]);
+    }
+
+    public function createPrivilege(Request $request){
+
+        $validatedFields = $request->validate([
+            'privilege_name' => 'required|string|unique:adm_privileges,name',
+            'theme_color' => 'required',
+        ]);
+
+        try {
+
+            DB::beginTransaction();
+
+            $privilege = AdmPrivileges::create([
+                "name" => $validatedFields['privilege_name'],
+                "is_superadmin" => $request->is_superadmin === 'Yes' ? 1 : 0,
+                "theme_color" => $validatedFields['theme_color'],
+            ]);
+
+            if ($request->is_superadmin === 'No'){
+                foreach ($request->modules as $module){
+    
+                    AdmPrivilegesRoles::updateOrCreate(
+                        [
+                            'id_adm_modules' => $module['id'],
+                            'id_adm_privileges' => $privilege->id,
+                        ],
+                        [
+                            'is_visible' => $module['permissions']['view'] ? 1 : 0,
+                            'is_create' => $module['permissions']['create'] ? 1 : 0,
+                            'is_read' => $module['permissions']['read'] ? 1 : 0,
+                            'is_edit' => $module['permissions']['update'] ? 1 : 0,
+                            'is_delete' => $module['permissions']['delete'] ? 1 : 0,
+                        ]
+                    );
+                    
+                }
+            }
+            
+            DB::commit();
+
+            return redirect('privileges')->with(['message' => 'Privilege Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            DB::rollBack();
+            CommonHelpers::LogSystemError('Privileges', $e->getMessage());
+            return redirect('privileges')->with(['message' => 'Privileges Creation Failed!', 'type' => 'error']);
+        }
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'Id',
+            'Name',
+            'Type',
+        ];
+
+        $columns = [
+            'id',
+            'name',
+            'is_superadmin',
+        ];
+
+        $filename = "Privileges - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 
 }

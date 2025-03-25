@@ -10,7 +10,7 @@ const Tbody = ({data, children}) => {
   return (
    <>
     {data?.length != 0 ?  
-        <tbody>
+        <tbody className='divide-y divide-secondary'>
             {children}
         </tbody>
         : <tbody>

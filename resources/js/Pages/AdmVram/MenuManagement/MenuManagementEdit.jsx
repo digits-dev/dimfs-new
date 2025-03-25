@@ -31,8 +31,6 @@ const MenuManagementEdit = ({page_title, privileges, menu}) => {
         status: menu?.is_active,
     });
 
-    console.log(data)
-
     const handleConfirmModalToggle = () => {
         setConfirmModal(!confirmModal);
     }
@@ -79,8 +77,8 @@ const MenuManagementEdit = ({page_title, privileges, menu}) => {
       <Head title={page_title}/>
       <ContentPanel>
           <div className='flex items-center'>
-              <img src="/images/others/menu.png" className="w-6 h-6 cursor-pointer duration-500"/>
-              <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'} font-bold text-lg ml-3`}>Update Menu</p>
+              <img src="/images/others/menu.png" className="w-6 h-6 duration-500"/>
+              <p className={`${theme === 'bg-skin-black' ? ' text-white' : 'text-black/90'} font-semibold text-lg ml-3`}>Update Menu</p>
           </div>
           <div className={`flex flex-col md:flex-row justify-center items-stretch gap-4 mt-4 h-full ${theme === 'bg-skin-black' ? ' text-white' : 'text-gray-700'}`}>
             {/* CARD 1 */}

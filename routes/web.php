@@ -158,10 +158,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     //PRIVILEGES
-    Route::get('privileges/create-privileges', [PrivilegesController::class, 'createPrivilegesView'])->name('create-privileges');
-    Route::get('privileges/edit-privileges/{id}', [PrivilegesController::class, 'getEdit'])->name('edit-privileges');
-    Route::post('/privilege/postAddSave', [PrivilegesController::class, 'postAddSave'])->name('postAddSave');
-    Route::post('/privilege/postEditSave', [PrivilegesController::class, 'postEditSave'])->name('postEditSave');
+    Route::prefix('privileges')->group(function () {
+        Route::get('/create-privileges', [PrivilegesController::class, 'createPrivilegesView']);
+        Route::get('/edit-privileges/{id}', [PrivilegesController::class, 'editPrivilegeView']);
+        Route::post('/edit_save', [PrivilegesController::class, 'editPrivilege']);
+        Route::post('/create_save', [PrivilegesController::class, 'createPrivilege']);
+        Route::get('/export', [PrivilegesController::class, 'export']);
+    });
+   
 
     //MODULES
     Route::get('create-modules', [ModulsController::class, 'getAddModuls'])->name('create-modules');

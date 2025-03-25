@@ -18,8 +18,6 @@ return new class extends Migration
             $table->tinyInteger('is_read')->nullable();
             $table->tinyInteger('is_edit')->nullable();
             $table->tinyInteger('is_delete')->nullable();
-            $table->tinyInteger('is_void')->nullable();
-            $table->tinyInteger('is_override')->nullable();
             $table->integer('id_adm_privileges')->nullable();
             $table->integer('id_adm_modules')->nullable();
             $table->timestamps();
