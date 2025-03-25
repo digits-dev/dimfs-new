@@ -11,6 +11,7 @@ import getAppLogo from '../../Components/SystemSettings/ApplicationLogo';
 import useThemeSwalColor from '../../Hooks/useThemeSwalColor';
 import Modalv2 from '../../Components/Modal/Modalv2';
 import ThemeToggleSwitch from '../../Components/Table/Buttons/ThemeToggleSwitch';
+import { Bell } from 'lucide-react';
 const AppNavbar = () => {
     const { auth } = usePage().props;
     const [showMenu, setShowMenu] = useState(false);
@@ -224,7 +225,10 @@ const AppNavbar = () => {
                     {showNotifications && (
                         <div className={`absolute z-90 right-1 top-[113px] md:lg:top-[65px] lg:top-[65px] ${theme === 'bg-skin-black' ? 'bg-skin-black' : 'bg-white' }  py-3 rounded-[5px] pop-up-boxshadow z-[100] w-[332px] max-h-[390px]`}>
                             <div className="flex items-center gap-5 border-b-[1px] px-3 pb-2 min-w-75 w-[332px]">
-                                <span className={`${ (!['bg-skin-black'].includes(theme) ? textColor : textColorActive) }`}><i className="fa fa-info-circle font-semibold"></i> Notifications</span>
+                            <div className={` ${textColor} text-sm flex items-center`}>
+                                Notifications
+                                {unreadnNotifications > 0 &&  <div className={`text-[8px] font-semibold ${theme == 'bg-skin-blue' ? theme : 'bg-gray-600'} text-white px-3 ml-2 rounded-full`}>{unreadnNotifications} new</div>}   
+                            </div>
                             </div>
                             <div className="mb-2">
                                 <div className="max-h-[250px] overflow-y-auto overflow-x-hidden"> {/* Restrict height and enable scrolling */}
@@ -244,15 +248,9 @@ const AppNavbar = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="pl-2 mt-5 pr-2">
-                                    <Button
-                                        href="/notifications/view-all-notifications"
-                                        type="link"
-                                        extendClass={(theme === 'bg-skin-white' ? `bg-skin-white-hover` : theme) + ` px-[85px] w-full border-[1px] ${borderColor}`}
-                                        fontColor="text-white"
-                                    >
-                                        View all notifications
-                                    </Button>
+
+                                <div className="mt-3 text-center">
+                                    <Link className={`${textColor} text-xs`} href="/notifications/view-all-notifications">View all notifications</Link>
                                 </div>
                             </div>
                         </div>

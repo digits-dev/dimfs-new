@@ -2,11 +2,14 @@ import React, { Fragment } from "react";
 import { Link } from "@inertiajs/react";
 import useViewport from "../../Hooks/useViewport";
 import useThemeStyles from "../../Hooks/useThemeStyles";
+import { useTheme } from "../../Context/ThemeContext";
+
 
 
 const   Pagination = ({ paginate, onClick, extendClass }) => {
     const { width } = useViewport();
     const mobileView = width < 640 ? true : false ;
+    const { theme } = useTheme();
     const { paginationHoverColor, primayActiveColor, paginationSideActiveColor, textColor } = useThemeStyles(extendClass);
     
     return (
@@ -44,19 +47,19 @@ const   Pagination = ({ paginate, onClick, extendClass }) => {
             // Desktop View
             :
             <>
-                <span className="text-gray-500 font-medium text-sm">
+                <span className="text-gray-500 font-medium text-sm ">
                    {paginate.data.length != 0 ? 
                    `Showing ${paginate.from} to ${paginate.to} of ${paginate.total} results.` 
                    : 
                    `Showing 0 results.`} 
                 </span>
 
-                <nav className="inline-flex p-2">
+                <nav className="inline-flex p-2 space-x-1">
                     {paginate.links.map((link, index) => {
                         const Label = index == 0
-                            ? <i className={`fa-solid fa-chevron-left text-sm`}></i>
+                            ? <i className="fa-solid fa-chevron-left text-xs"></i>
                             : paginate.links.length - 1 == index
-                            ? <i className={`fa-solid fa-chevron-right text-sm`}></i>
+                            ? <i className="fa-solid fa-chevron-right text-xs"></i>
                             : link.label;
 
                         return <Fragment key={"page" + link.label + 'index' + index}>
@@ -66,16 +69,13 @@ const   Pagination = ({ paginate, onClick, extendClass }) => {
                             href={link.url}
                             preserveScroll
                             preserveState
-                            className={`${link.active ? `text-gray-100`: `text-gray-500`} hover:text-white inline-block px-4 py-2 font-medium text-sm border first:rounded-tl-md first:rounded-bl-md last:rounded-tr-md last:rounded-br-md border-gray-300 
-                                ${extendClass === 'bg-skin-white' ? 'hover:bg-skin-white-hover' : paginationHoverColor }
-                                ${link.active && (extendClass === 'bg-skin-white' ? primayActiveColor : extendClass) } 
-                                ${!link.url && "cursor-not-allowed "}`}
+                            className={`text-white inline-flex items-center justify-center p-3 py-2 w-9 h-9 font-medium rounded-full text-xs  ${theme} hover:opacity-70
+                                ${link.active && "bg-secondary text-white"} ${!link.url && "cursor-not-allowed "}`}
                         >
                             {Label}
-                        </Link> :
-
-                        <span className={`text-gray-500 hover:text-white inline-block px-3 py-2 font-medium text-sm border first:rounded-tl-md first:rounded-bl-md last:rounded-tr-md last:rounded-br-md border-gray-300 
-                            ${extendClass === 'bg-skin-white' ? 'hover:bg-skin-white-hover' : paginationHoverColor }
+                        </Link> 
+                        :
+                        <span className={`text-white inline-flex opacity-50 items-center justify-center p-3 py-2 w-9 h-9 rounded-full font-medium text-xs  ${theme} bg-accent2 hover:opacity-70 disabled:opacity-80
                             cursor-not-allowed `}>
                                 {Label}
                         </span>}

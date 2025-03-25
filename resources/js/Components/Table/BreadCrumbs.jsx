@@ -38,7 +38,7 @@ const BreadCrumbs = () => {
             <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center ${theme == 'bg-skin-white' && 'border border-skin-black-light bg-skin-black'}  ${theme === 'bg-skin-black' ? 'bg-skin-black-light' : theme}`}>
                 <i className={`${icon} text-base md:text-lg text-white `}></i>
             </div>
-            <span className={`font-medium text-base md:text-xl ${theme === 'bg-skin-black' ? 'text-gray-400': ''} `}>{title}</span>
+            <span className={`font-bold text-base md:text-xl ${theme === 'bg-skin-black' ? 'text-gray-400': 'text-skin-blue-secondary'} `}>{title}</span>
         </div>
         <div className={`flex items-center ${theme === 'bg-skin-black' ? 'text-gray-300' : 'text-black'} text-xs space-x-2`}>
             {title != 'Dashboard' && 
