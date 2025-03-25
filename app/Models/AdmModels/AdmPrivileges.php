@@ -12,6 +12,9 @@ class AdmPrivileges extends Model
 
     protected $guarded = [];
 
+    public function scopeGetData($query){
+        return $query;
+    }
     
     protected $fillable = [
         'id',
