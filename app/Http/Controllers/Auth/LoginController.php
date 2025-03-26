@@ -157,7 +157,7 @@ class LoginController extends Controller
         $data = [];
         $data['profile'] = AdmUserProfiles::where('status', 'ACTIVE')->where('adm_user_id', CommonHelpers::myId())->first();
         $data['priv'] = DB::table("adm_privileges")->where("id", $id)->first();
-        $data['roles'] = DB::table('adm_privileges_roles')->where('id_adm_privileges', $id)->join('adm_modules', 'adm_modules.id', '=', 'id_adm_modules')->select('adm_modules.name', 'adm_modules.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete', 'is_void', 'is_override')->get();
+        $data['roles'] = DB::table('adm_privileges_roles')->where('id_adm_privileges', $id)->join('adm_modules', 'adm_modules.id', '=', 'id_adm_modules')->select('adm_modules.name', 'adm_modules.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
 		return $data;
     }
 

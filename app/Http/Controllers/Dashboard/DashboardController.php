@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\AdmModels\AdmSettings;
 use App\Models\Brands;
 use App\Models\Classifications;
 use App\Models\GashaponBrands;
@@ -221,6 +222,13 @@ class DashboardController extends Controller
         ->groupBy('date')
         ->orderBy('date', 'desc')
         ->get();
+
+        $data['dashboard_settings_data'] = AdmSettings::whereIn('name', ['Default Dashboard', 'Embedded Dashboard'])
+        ->get()
+        ->mapWithKeys(function ($item) {
+            return [$item->content => $item->content_input_type];
+        })
+        ->toArray();
       
 
         return Inertia::render('Dashboard/Dashboard', $data);

@@ -4,8 +4,10 @@ import SuccessAnim from '../../../../public/Animations/success-anim.json';
 import ErrorAnim from '../../../../public/Animations/error-anim.json';
 import WarningAnim from '../../../../public/Animations/warning-anim.json';
 import Buttonv2 from '../Table/Buttons/Buttonv2';
+import { useTheme } from '../../Context/ThemeContext';
 
 const Modalv2 = ({isInfoModal = false, modalType = 'success', isOpen, setIsOpen, title, content, closeButton = false, cancelButton = true, cancelButtonColor = 'bg-gray-200', cancelButtonName = 'Cancel', confirmButtonName = 'Confirm', confirmButtonType = 'button', confirmButtonColor, href, confirmButtonIcon = null, onConfirm, infoButtonName = 'Got it'}) => {
+    const { theme } = useTheme();
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
     };
@@ -21,7 +23,7 @@ const Modalv2 = ({isInfoModal = false, modalType = 'success', isOpen, setIsOpen,
                 {
                   cancelButton && <Buttonv2 name={cancelButtonName} color={cancelButtonColor} textColor='text-black' onClick={handleButtonClick}/>
                 }
-                <Buttonv2 type={confirmButtonType} href={href} name={confirmButtonName} color={confirmButtonColor} icon={confirmButtonIcon} onClick={()=>{handleButtonClick(); onConfirm();}}/>
+                <Buttonv2 type={confirmButtonType} href={href} name={confirmButtonName} color={confirmButtonColor || theme} icon={confirmButtonIcon} onClick={()=>{handleButtonClick(); onConfirm();}}/>
             </div>
           </>
           :
@@ -46,7 +48,7 @@ const Modalv2 = ({isInfoModal = false, modalType = 'success', isOpen, setIsOpen,
             <div className='flex space-x-1 mt-7 justify-center'>
              
               {
-                <Buttonv2 name={infoButtonName} color={confirmButtonColor} textColor='text-white' onClick={()=>{handleButtonClick(); onConfirm();}}/>
+                <Buttonv2 name={infoButtonName} color={confirmButtonColor || theme} textColor='text-white' onClick={()=>{handleButtonClick(); onConfirm();}}/>
               }
             </div>
           </>

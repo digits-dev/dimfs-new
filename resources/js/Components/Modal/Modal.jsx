@@ -27,8 +27,9 @@ const Modal = ({
         md: "max-w-md",
         lg: "max-w-lg",
         xl: "max-w-xl",
-        "2xl": "min-w-2xl",
+        "2xl": "max-w-2xl",
     }[width];
+    
     const {theme} = useTheme();
     const { textColor, primayActiveColor, textColorActive } = useThemeStyles(theme);
     return (
@@ -47,7 +48,7 @@ const Modal = ({
                         className={`${theme === 'bg-skin-black' ? 'bg-black-table-color text-gray-300' : 'bg-white'}   rounded-lg shadow-custom ${maxWidth} w-full m-5`}
                     >
                         <div className={`${theme === 'bg-skin-white' ? 'bg-skin-black' : theme} rounded-t-lg flex justify-between p-3 border-b-2 items-center`}>
-                            <p className={`${fontColor} font-poppins font-extrabold text-lg`}>
+                            <p className={`${fontColor} font-poppins font-medium text-sm md:text-base`}>
                                {icon && <i className={`${icon} mr-2`}></i> }{title}
                             </p>
                             <i

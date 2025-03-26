@@ -81,7 +81,6 @@ const MenuManagement = ({privileges, menus, inactive_menus}) => {
                 onSuccess: (data) => {
                     const { message, type, menus } = data.props.auth.sessions;
                     handleToast(message, type);
-                    console.log(menus);
                     setData((prevData) => ({
                         ...prevData,
                         privilege_name: "",

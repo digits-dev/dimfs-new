@@ -39,6 +39,8 @@ class MenusController extends Controller{
         ->orderBy('sorting')
         ->get();
 
+        
+
         $data['inactive_menus'] = AdmMenus::with(['getMenusPrivileges.getPrivilege'])
         ->where('parent_id', 0)
         ->where('is_active', 0)

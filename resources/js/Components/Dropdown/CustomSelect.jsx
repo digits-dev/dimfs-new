@@ -44,6 +44,28 @@ const CustomSelect = ({isMulti = false, onError, maxMenuHeight = "100px", isStat
                 backgroundColor: "#4b5563", // Active state background
             },
         }),
+
+        multiValue: (base) => ({
+            ...base,
+            backgroundColor: '#595a63',
+            borderRadius: '4px',
+            overflow: 'hidden',
+        }),
+        multiValueLabel: (base) => ({
+            ...base,
+            color: 'white',
+            fontWeight: 'semibold',
+        }),
+        multiValueRemove: (base) => ({
+            ...base,
+            color: 'white',
+            ':hover': {
+                backgroundColor: '#747680',
+                color: 'white',
+            },
+        }),
+
+        
     };
 
     const NoDropdownIndicator = () => null;
@@ -67,6 +89,26 @@ const CustomSelect = ({isMulti = false, onError, maxMenuHeight = "100px", isStat
             ...provided,
             maxHeight: maxMenuHeight, 
             overflowY: "auto", 
+        }),
+
+        multiValue: (base) => ({
+            ...base,
+            backgroundColor: '#1e3a8a',
+            borderRadius: '4px',
+            overflow: 'hidden',
+        }),
+        multiValueLabel: (base) => ({
+            ...base,
+            color: 'white',
+            fontWeight: 'semibold',
+        }),
+        multiValueRemove: (base) => ({
+            ...base,
+            color: 'white',
+            ':hover': {
+                backgroundColor: '#415fb5',
+                color: 'white',
+            },
         }),
       };
       

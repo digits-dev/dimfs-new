@@ -3,200 +3,178 @@
 namespace App\Http\Controllers\Admin; 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\AdmEmbeddedDashboard;
+use App\Models\AdmEmbeddedDashboardPrivilege;
+use App\Models\AdmModels\AdmPrivileges;
 use App\Models\AdmModels\AdmSettings;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+
 
 class SettingsController extends Controller{
 
-    private $sortBy;
-    private $sortDir;
-    private $perPage;
-    private $table_name;
-    private $primary_key;
-    public function __construct() {
-        $this->table_name  =  'adm_settings';
-        $this->primary_key = 'id';
-    }
-
     public function getIndex(){
-        $data['app_name'] = AdmSettings::where('name','appname')->pluck('content')->first();
-        $data['favicon'] = AdmSettings::where('name','favicon')->first();
-        $data['logo'] = AdmSettings::where('name','logo')->first();
-        $data['login_background_color'] = AdmSettings::where('name','login_background_color')->pluck('content')->first();
-        $data['login_font_color'] = AdmSettings::where('name','login_font_color')->pluck('content')->first();
-        $data['login_background_image'] = AdmSettings::where('name','login_background_image')->first();
+        $data = [];
+        $data['privileges'] = AdmPrivileges::select('id as value', 'name as label')->get();
+
+        $data['embedded_dashboards'] = AdmEmbeddedDashboard::with(['getDashboardPrivileges.getPrivilege'])->get();
+
+        $data['dashboard_button_data'] = AdmSettings::whereIn('name', ['Default Dashboard', 'Embedded Dashboard'])
+        ->get()
+        ->mapWithKeys(function ($item) {
+            return [$item->content => $item->content_input_type];
+        })
+        ->toArray();
+
         return Inertia::render('AdmVram/Settings',$data);
     }
 
-    public function postSave(Request $request){
-        $appname = [$request->app_name];
-        $favicon = [$request->favicon];
-        $system_logo = [$request->system_logo];
-        $login_background_color = [$request->login_background_color];
-        $login_font_color = [$request->login_font_color];
-        $login_background_image = [$request->login_background_image];
+    public function addEmbeddedDashboard(Request $request){
+     
+        $validatedFields = $request->validate([
+            'name' => 'required|string|unique:adm_embedded_dashboards,name',
+            'description' => 'required|string|max:60',
+            'url' => 'required|string',
+            'privileges' => 'required',
+        ]);
 
-        $appnameArr = [];
-        if(!in_array(null, $appname, true)) {
-            foreach($appname as $name){
-                $appnameCon['name'] = 'appname';
-                $appnameCon['content'] = $name;
-                $appnameCon['content_input_type'] = 'text';
-                $appnameCon['dataenum'] = '';
-                $appnameCon['helper'] = '';
-                $appnameCon['group_setting'] = 'Application Settings';
-                $appnameCon['label'] = 'Application System';
-                $appnameCon['created_at'] = date('Y-m-d h:i:s');
-                $appnameArr[] = $appnameCon;
+        try {
+
+            DB::beginTransaction();
+
+            $embeddedDashboard = AdmEmbeddedDashboard::create([
+                'name' => $validatedFields['name'], 
+                'description' => $validatedFields['description'],   
+                'url' => $validatedFields['url'], 
+                'status' => 'ACTIVE',
+                'created_by' => CommonHelpers::myId(),
+            ]);
+
+            foreach($validatedFields['privileges'] as $privilege){
+
+                AdmEmbeddedDashboardPrivilege::create([
+                    'adm_embedded_dashboard_id' => $embeddedDashboard->id, 
+                    'adm_privileges_id' => $privilege['value'],   
+                ]);
+                
             }
-        }
-   
-        $faviconArr = [];
-        if(!in_array(null, $favicon, true)) {
-            foreach($favicon as $fav){
-                $name = 'favicon-logo' . '.' . $fav->getClientOriginalExtension();
-                $filename = $name;
-                $fav->move('images/settings/favicon-logo',$filename);
 
-                $faviconCon['name'] = 'favicon';
-                $faviconCon['content'] = 'images/settings/favicon-logo/'.$filename;
-                $faviconCon['content_input_type'] = 'upload_image';
-                $faviconCon['dataenum'] = '';
-                $faviconCon['helper'] = '';
-                $faviconCon['group_setting'] = 'Application Settings';
-                $faviconCon['label'] = 'Favicon';
-                $faviconCon['created_at'] = date('Y-m-d h:i:s');
-                $faviconArr[] = $faviconCon;
-            }
+            DB::commit();
+
+            return back()->with(['message' => 'Embedded Dashboard Creation Success!', 'type' => 'success']);
+
         }
 
-        $logoArr = [];
-        if(!in_array(null, $system_logo, true)) {
-            foreach($system_logo as $logo){
-                $name = 'system-logo' . '.' . $logo->getClientOriginalExtension();
-                $filename = $name;
-                $logo->move('images/settings/system-logo',$filename);
-
-                $logoCon['name'] = 'logo';
-                $logoCon['content'] = 'images/settings/system-logo/'.$filename;
-                $logoCon['content_input_type'] = 'upload_image';
-                $logoCon['dataenum'] = '';
-                $logoCon['helper'] = '';
-                $logoCon['group_setting'] = 'Application Settings';
-                $logoCon['label'] = 'Logo';
-                $logoCon['created_at'] = date('Y-m-d h:i:s');
-                $logoArr[] = $logoCon;
-            }
+        catch (\Exception $e) {
+            DB::rollBack();
+            CommonHelpers::LogSystemError('App Settings - Dashboard Settings', $e->getMessage());
+            return back()->with(['message' => 'Embedded Dashboard Creation Failed!', 'type' => 'error']);
         }
 
-        $lbcArr = [];
-        if(!in_array(null, $login_background_color, true)) {
-            foreach($login_background_color as $lbc){
-                $lbcCon['name'] = 'login_background_color';
-                $lbcCon['content'] = $lbc;
-                $lbcCon['content_input_type'] = 'text';
-                $lbcCon['dataenum'] = '';
-                $lbcCon['helper'] = 'Input hexacode';
-                $lbcCon['group_setting'] = 'Login Register Style';
-                $lbcCon['label'] = 'Login Background Color';
-                $lbcCon['created_at'] = date('Y-m-d h:i:s');
-                $lbcArr[] = $lbcCon;
-            }
-        }
-
-        $lfcArr = [];
-        if(!in_array(null, $login_font_color, true)) {
-            foreach($login_font_color as $lfc){
-                $lfcCon['name'] = 'login_font_color';
-                $lfcCon['content'] = $lfc;
-                $lfcCon['content_input_type'] = 'text';
-                $lfcCon['dataenum'] = '';
-                $lfcCon['helper'] = 'Input hexacode';
-                $lfcCon['group_setting'] = 'Login Register Style';
-                $lfcCon['label'] = 'Login Font Color';
-                $lfcCon['created_at'] = date('Y-m-d h:i:s');
-                $lfcArr[] = $lfcCon;
-            }
-        }
-
-        $lbiArr = [];
-        if(!in_array(null, $login_background_image, true)) {
-            foreach($login_background_image as $lbi){
-                $name = 'login-logo' . '.' . $lbi->getClientOriginalExtension();
-                $filename = $name;
-                $lbi->move('images/settings/login-logo',$filename);
-
-                $lbiCon['name'] = 'login_background_image';
-                $lbiCon['content'] = 'images/settings/login-logo/'.$filename;
-                $lbiCon['content_input_type'] = 'upload_image';
-                $lbiCon['dataenum'] = '';
-                $lbiCon['helper'] = '';
-                $lbiCon['group_setting'] = 'Login Register Style';
-                $lbiCon['label'] = 'Login Background Image';
-                $lbiCon['created_at'] = date('Y-m-d h:i:s');
-                $lbiArr[] = $lbiCon;
-            }
-        }
-
-        $saveSettings = array_merge($appnameArr, $faviconArr, $logoArr, $lbcArr, $lfcArr, $lbiArr);
-
-        foreach($saveSettings as $key => $val){
-            AdmSettings::updateOrInsert(
-                [
-                    'name'                => $val['name'],
-                ],
-                [
-                    'name'                => $val['name'],
-                    'content'             => $val['content'],
-                    'content_input_type'  => $val['content_input_type'],
-                    'dataenum'            => $val['dataenum'],
-                    'helper'              => $val['helper'],
-                    'helper'              => $val['helper'],
-                    'group_setting'       => $val['group_setting'],
-                    'label'               => $val['label']
-                ]
-            );
-        }
-        return json_encode(["message"=>"Save successfully!", "status"=>"success"]);
     }
 
-    public function postDelete(Request $request){
-        $id = $request->id;
-        $details = AdmSettings::where('id',$id)->first();
+    public function updateEmbeddedDashboard(Request $request){
+     
+        $validatedFields = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string|max:60',
+            'url' => 'required|string',
+            'privileges' => 'required',
+            'status' => 'required'
+        ]);
 
-        $filePath = public_path($details->content);
+        try {
 
-        if (File::exists($filePath)) {
-            File::delete($filePath);
-            AdmSettings::where('id',$id)->update(['content'=>null]);
-            return json_encode(["message"=>"Deleted successfully!", "status"=>"success"]);
-        } else {
-            return json_encode(["message"=>"File not found!", "status"=>"error"]);
-        }
+            DB::beginTransaction();
+
+            // FOR UPDATING NEW PRIVILEGE
+            $currentPrivileges = AdmEmbeddedDashboardPrivilege::where('adm_embedded_dashboard_id', $request->id)
+            ->pluck('adm_privileges_id')
+            ->toArray();
+
+            $newPrivileges = collect($request->privileges)->pluck('value')->toArray();
+            $privilegesToDelete = array_diff($currentPrivileges, $newPrivileges);
+
+            // DELETING PRIVILEGE/S
+            AdmEmbeddedDashboardPrivilege::where('adm_embedded_dashboard_id', $request->id)
+            ->whereIn('adm_privileges_id', $privilegesToDelete)
+            ->delete();
+
+            $privilegesToAdd = array_diff($newPrivileges, $currentPrivileges);
+
+            // PREPARING NEW RECORDS FOR INSERT
+            $newRecords = array_map(function($privilegeId) use ($request) {
+                return [
+                    'adm_embedded_dashboard_id' => $request->id,
+                    'adm_privileges_id' => $privilegeId,
+                ];
+            }, $privilegesToAdd);
         
-        return json_encode(["message"=>"Deleted successfully!", "status"=>"success"]);
+            // INSERT NEW PRIVILEGE
+            if (!empty($newRecords)) {
+                AdmEmbeddedDashboardPrivilege::insert($newRecords);
+            }
+
+
+            $embeddedDashboard = AdmEmbeddedDashboard::find($request->id);
+
+            $embeddedDashboardNameExist = AdmEmbeddedDashboard::where('name', $validatedFields['name'])->exists();
+
+            if ($request->name !== $embeddedDashboard->name) {
+                if (!$embeddedDashboardNameExist) {
+                    $embeddedDashboard->name = $validatedFields['name'];
+                } else {
+                    return back()->withErrors(['name' => 'Dashboard Name already exists!']);
+                }
+            }
+
+            $embeddedDashboard->description = $validatedFields['description'];
+            $embeddedDashboard->url = $validatedFields['url'];
+            $embeddedDashboard->status = $validatedFields['status'];
+
+            $embeddedDashboard->save();
+
+            DB::commit();
+
+            return back()->with(['message' => 'Embedded Dashboard Update Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            DB::rollBack();
+            CommonHelpers::LogSystemError('App Settings - Dashboard Settings', $e->getMessage());
+            return back()->with(['message' => 'Embedded Dashboard Update Failed!', 'type' => 'error']);
+        }
+
     }
 
-    public function getAppname(){
-        $appname = AdmSettings::where('name','appname')->pluck('content')->first();
-        return json_encode(['app_name'=>$appname]);
-    }
-    public function getApplogo(){
-        $logo = AdmSettings::where('name','logo')->pluck('content')->first();
-        return json_encode(['app_logo'=>$logo]);
+    // AXIOS REQUESTS
+
+    public function updateDefaultDashboard(Request $request){
+   
+        $option = $request['option'];
+
+        AdmSettings::where('name', 'Default Dashboard')->update([
+            'content_input_type' => $option,      
+        ]);
+       
+        return response()->json(["message"=>"Default Dashboard changed!", "status"=>"success"]);
+        
     }
 
-    public function getLoginDetails(){
-        $data = [];
-        $data['login_bg_color'] = AdmSettings::where('name','login_background_color')->pluck('content')->first();
-        $data['login_bg_image'] = AdmSettings::where('name','login_background_image')->pluck('content')->first();
-        $data['login_font_color'] = AdmSettings::where('name','login_font_color')->pluck('content')->first();
-        return json_encode($data);
-    }
+    public function updateEmbedDashboardButton(Request $request){
+   
+        $option = $request['option'];
 
+        AdmSettings::where('name', 'Embedded Dashboard')->update([
+            'content_input_type' => $option,      
+        ]);
+       
+        return response()->json(["message"=>"Embedded Dashboard changed!", "status"=>"success"]);
+        
+    }
+   
 }
 
 ?>

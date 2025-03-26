@@ -15,8 +15,6 @@ const Filters = ({ filter_inputs }) => {
         return acc;
     }, {});
 
-    console.log(filter_inputs);
-
     const [filters, setFilters] = useState(initialFormData);
 
     useEffect(() => {

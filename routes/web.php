@@ -180,10 +180,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/edit/{menu}', [MenusController::class, 'editMenu']);
     });
 
-
-    //Settings
-    Route::post('/settings/postSave', [SettingsController::class, 'postSave'])->name('settings-post-save');
-    Route::post('/settings/postDelete', [SettingsController::class, 'postDelete'])->name('settings-post-delete');
+    //APP SETTINGS
+    Route::prefix('settings')->group(function () {
+        Route::post('/add_embedded_dashboard', [SettingsController::class, 'addEmbeddedDashboard']);
+        Route::post('/update_embedded_dashboard', [SettingsController::class, 'updateEmbeddedDashboard']);
+        Route::post('/update_default_dashboard', [SettingsController::class, 'updateDefaultDashboard']);
+        Route::post('/update_embedded_dashboard', [SettingsController::class, 'updateEmbedDashboardButton']);
+    });
 
     //NOTIFICATION
     Route::get('/notifications', [NotificationsController::class, 'getLatestNotif'])->name('latest-notif');
