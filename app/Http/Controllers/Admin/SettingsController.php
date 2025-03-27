@@ -31,22 +31,29 @@ class SettingsController extends Controller{
     }
 
     public function addEmbeddedDashboard(Request $request){
-     
+        
         $validatedFields = $request->validate([
             'name' => 'required|string|unique:adm_embedded_dashboards,name',
             'description' => 'required|string|max:60',
             'url' => 'required|string',
             'privileges' => 'required',
+            'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
 
         try {
 
             DB::beginTransaction();
 
+            $file = $request->file('logo');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('embedded_dashboard_logos', $fileName, 'public');
+
             $embeddedDashboard = AdmEmbeddedDashboard::create([
                 'name' => $validatedFields['name'], 
                 'description' => $validatedFields['description'],   
                 'url' => $validatedFields['url'], 
+                'logo' => $path, 
                 'status' => 'ACTIVE',
                 'created_by' => CommonHelpers::myId(),
             ]);
@@ -84,7 +91,16 @@ class SettingsController extends Controller{
             'status' => 'required'
         ]);
 
+        $embeddedDashboard = AdmEmbeddedDashboard::find($request->id);
+
+        if ($embeddedDashboard->logo !== $request->logo){
+            $request->validate([
+                'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+        }
+
         try {
+            
 
             DB::beginTransaction();
 
@@ -116,9 +132,6 @@ class SettingsController extends Controller{
                 AdmEmbeddedDashboardPrivilege::insert($newRecords);
             }
 
-
-            $embeddedDashboard = AdmEmbeddedDashboard::find($request->id);
-
             $embeddedDashboardNameExist = AdmEmbeddedDashboard::where('name', $validatedFields['name'])->exists();
 
             if ($request->name !== $embeddedDashboard->name) {
@@ -127,6 +140,14 @@ class SettingsController extends Controller{
                 } else {
                     return back()->withErrors(['name' => 'Dashboard Name already exists!']);
                 }
+            }
+
+            if ($embeddedDashboard->logo !== $request->logo){
+                $file = $request->file('logo');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('embedded_dashboard_logos', $fileName, 'public');
+
+                $embeddedDashboard->logo = $path;
             }
 
             $embeddedDashboard->description = $validatedFields['description'];

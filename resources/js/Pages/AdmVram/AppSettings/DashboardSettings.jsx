@@ -22,6 +22,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
         name: "",
         description: "",
         url: "",
+        logo: "",
         status: "",
     });
 
@@ -63,7 +64,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
               'Content-Type': 'application/json',
             },
           };
-          const response = await axios.post('/settings/update_embedded_dashboard', { option: optionData }, config);
+          const response = await axios.post('/settings/update_embedded_dashboard_button', { option: optionData }, config);
         } catch (error) {
           console.log(error);
           setEmbeddedDashboard(optionData == "Yes" ? 'No' : 'Yes');
@@ -73,7 +74,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
         }
     };
 
-    const EmbedDashboardCard = ({id, name, description, privileges, status, created_at, updated_at, url}) => {
+    const EmbedDashboardCard = ({id, name, description, privileges, status, created_at, updated_at, url, logo}) => {
         const createdAt = new Date(created_at);
         const updateAt = updated_at ? new Date(updated_at) : null;
         const CreatedtimeAgo = formatDistanceToNow(createdAt, { addSuffix: true });
@@ -81,17 +82,20 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
 
         return (
             <div className='border p-3 rounded-lg flex flex-col md:flex-row md:items-center md:justify-between'>
-                <div>
-                    <div className='flex items-center'>
-                        <p className='font-semibold mr-2 text-sm md:text-base'>{name}</p>
-                        <p className={`text-[10px] md:text-xs font-semibold ${status === 'ACTIVE' ? 'bg-green-500' : 'bg-red-500'} text-white px-2 py-0.5 rounded-full`}>{status == 'ACTIVE' ? 'Active' : 'Inactive'}</p>
-                    </div>
-                    <p className='text-xs text-gray-500'>{description}</p>
-                    {updated_at ? <p className='text-[10px] md:text-xs text-gray-500'>Last Updated: {UpdatedtimeAgo}</p> : <p className='text-xs text-gray-500'>Created: {CreatedtimeAgo}</p>}
-                    <div className='flex flex-wrap gap-1 mt-1 items-center'>
-                        {privileges && privileges?.map((privilege, index)=>(
-                            <p key={privilege.get_privilege?.name + index} className='text-[8px] text-nowrap bg-cyan-400 text-white px-2  py-0.5 rounded-full font-semibold'>{privilege.get_privilege?.name}</p>
-                        ))}
+                <div className='flex items-center'>
+                    <img src={`../storage/${logo}`} className="bg-white mr-4 ml-2 w-5 h-5 md:w-8 md:h-8 object-cover"/>
+                    <div>
+                        <div className='flex items-center'>
+                            <p className='font-semibold mr-2 text-sm md:text-base'>{name}</p>
+                            <p className={`text-[10px] md:text-xs font-semibold ${status === 'ACTIVE' ? 'bg-green-500' : 'bg-red-500'} text-white px-2 py-0.5 rounded-full`}>{status == 'ACTIVE' ? 'Active' : 'Inactive'}</p>
+                        </div>
+                        <p className='text-xs text-gray-500'>{description}</p>
+                        {updated_at ? <p className='text-[10px] md:text-xs text-gray-500'>Last Updated: {UpdatedtimeAgo}</p> : <p className='text-xs text-gray-500'>Created: {CreatedtimeAgo}</p>}
+                        <div className='flex flex-wrap gap-1 mt-1 items-center'>
+                            {privileges && privileges?.map((privilege, index)=>(
+                                <p key={privilege.get_privilege?.name + index} className='text-[8px] text-nowrap bg-cyan-400 text-white px-2  py-0.5 rounded-full font-semibold'>{privilege.get_privilege?.name}</p>
+                            ))}
+                        </div>
                     </div>
                 </div>
                 <div className='flex items-center mt-2 md:mt-0'>
@@ -107,6 +111,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                 privileges: privileges,
                                 description: description,
                                 url: url,
+                                logo: logo,
                                 status: status,
                             });
                         }}
@@ -124,6 +129,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                 privileges: privileges,
                                 description: description,
                                 url: url,
+                                logo: logo,
                                 status: status,
                             });
                         }}
@@ -215,6 +221,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                             name: "",
                                             description: "",
                                             url: "",
+                                            logo: "",
                                             status: "",
                                         });
                                     }}
@@ -227,7 +234,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                 {embedded_dashboards && embedded_dashboards.map((dashboard, index)=>(
                                     <EmbedDashboardCard 
                                         key={dashboard?.name + index} 
-                                        name={dashboard?.name} 
+                                        name={dashboard?.name}
                                         description={dashboard?.description}
                                         privileges={dashboard?.get_dashboard_privileges}
                                         status={dashboard?.status}
@@ -235,6 +242,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                         updated_at={dashboard?.updated_at}
                                         url={dashboard?.url}
                                         id={dashboard?.id}
+                                        logo={dashboard?.logo}
                                     />
                                 ))}  
                                 
@@ -253,6 +261,7 @@ const DashboardSettings = ({privileges, embedded_dashboards, dashboard_button_da
                                             name: "",
                                             description: "",
                                             url: "",
+                                            logo: "",
                                             status: "",
                                         });
                                     }}

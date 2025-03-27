@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\AdmEmbeddedDashboard;
+use App\Models\AdmEmbeddedDashboardPrivilege;
 use App\Models\AdmModels\AdmSettings;
 use App\Models\Brands;
 use App\Models\Classifications;
@@ -223,14 +225,22 @@ class DashboardController extends Controller
         ->orderBy('date', 'desc')
         ->get();
 
+        // FOR EMBEDDED AND DEFAULT DASHBOARD
+
         $data['dashboard_settings_data'] = AdmSettings::whereIn('name', ['Default Dashboard', 'Embedded Dashboard'])
         ->get()
         ->mapWithKeys(function ($item) {
             return [$item->content => $item->content_input_type];
         })
         ->toArray();
-      
 
+        $dashboard_privilege = AdmEmbeddedDashboardPrivilege::where('adm_privileges_id',  CommonHelpers::myId())
+                ->pluck('adm_embedded_dashboard_id');
+
+        $data['embedded_dashboards'] = AdmEmbeddedDashboard::whereIn('id', $dashboard_privilege)
+            ->where('status', 'ACTIVE')
+            ->get();
+        
         return Inertia::render('Dashboard/Dashboard', $data);
     }
 }

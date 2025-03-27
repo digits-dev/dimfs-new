@@ -1,15 +1,20 @@
 import { router, useForm } from '@inertiajs/react';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CustomSelect from '../../../Components/Dropdown/CustomSelect';
 import InputComponent from '../../../Components/Forms/Input';
 import Buttonv2 from '../../../Components/Table/Buttons/Buttonv2';
 import Modalv2 from '../../../Components/Modal/Modalv2';
 import { useToast } from '../../../Context/ToastContext';
 import { useTheme } from '../../../Context/ThemeContext';
+import LoginInputTooltip from '../../../Components/Tooltip/LoginInputTooltip';
 
 const DashboardSettingsAction = ({action, initialData, privileges, onClose}) => {
     const { handleToast } = useToast();
     const { theme } = useTheme();
+    const fileInputRef = useRef(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [photoName, setPhotoName] = useState(initialData.logo);
+
     const { data, setData, processing, reset, post, errors } = useForm({
         id: "" || initialData.id,
         name: "" || initialData.name,
@@ -19,19 +24,33 @@ const DashboardSettingsAction = ({action, initialData, privileges, onClose}) => 
             label: option.get_privilege?.name,
         })) : [],
         url: "" || initialData.url,
-        status: "" || initialData.status == 'ACTIVE' ? 'Active' : 'Inactive',
+        status: "" || initialData.status == 'ACTIVE' ? 'ACTIVE' : 'INACTIVE',
+        logo: "" || initialData.logo,
     });
+
+    const handleImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setSelectedImage(URL.createObjectURL(file));
+            setData("logo", file);
+            setPhotoName(file ? file.name : "No image chosen");
+        }
+    };
+
+    const handleButtonClick = () => {
+        fileInputRef.current?.click()
+    }
 
     const [showModal, setShowModal] = useState(false);
 
     const statuses = [
         {
             value:'ACTIVE',
-            label: 'Active',
+            label: 'ACTIVE',
         },
         {
             value:'INACTIVE',
-            label: 'Inactive',
+            label: 'INACTIVE',
         },
     ];
 
@@ -79,6 +98,31 @@ const DashboardSettingsAction = ({action, initialData, privileges, onClose}) => 
   return (
     <>
         <div className='space-y-2'>
+            <div>
+                <label
+                    className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
+                >
+                    Logo
+                </label>
+                <div className={`flex items-center relative w-full mt-1 text-xs overflow-hidden rounded-md border ${errors.logo ? 'border-red-600' : 'border-accent'}`}>
+                    <button
+                        onClick={handleButtonClick}
+                        className={`${theme} text-white text-xs px-4 py-2.5 rounded-md font-medium`}
+                        type="button"
+                    >
+                        {photoName ? 'Change Image' : 'Choose Image'}
+                    </button>
+                    <div className={`${!photoName && 'text-gray-500'} px-4 py-2 flex-1 truncate w-full`}>{photoName ? photoName : 'No image chosen'}</div>
+                    <input ref={fileInputRef} type="file" className="hidden" onChange={handleImageChange} />
+                    {errors.logo && 
+                        <LoginInputTooltip content={errors.logo}>
+                        <i
+                            className="fa-solid fa-circle-info text-red-600 absolute cursor-pointer top-1/2 text-xs md:text-base right-1.5 md:right-3 transform -translate-y-1/2">
+                        </i>
+                        </LoginInputTooltip>
+                    }
+                </div>
+            </div>
             {action == "View" && 
                 <div className='flex flex-col'>
                     <div className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}>

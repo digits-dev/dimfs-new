@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->string('url')->nullable();
+            $table->string('logo')->nullable();
             $table->string('status')->default('ACTIVE');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

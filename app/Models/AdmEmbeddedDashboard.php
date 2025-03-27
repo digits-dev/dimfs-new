@@ -29,6 +29,7 @@ class AdmEmbeddedDashboard extends Model
         "name",
         "description",
         "url",
+        "logo",
         "status",
         "privilege_ids",
         "created_by",

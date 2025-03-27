@@ -185,7 +185,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add_embedded_dashboard', [SettingsController::class, 'addEmbeddedDashboard']);
         Route::post('/update_embedded_dashboard', [SettingsController::class, 'updateEmbeddedDashboard']);
         Route::post('/update_default_dashboard', [SettingsController::class, 'updateDefaultDashboard']);
-        Route::post('/update_embedded_dashboard', [SettingsController::class, 'updateEmbedDashboardButton']);
+        Route::post('/update_embedded_dashboard_button', [SettingsController::class, 'updateEmbedDashboardButton']);
     });
 
     //NOTIFICATION
