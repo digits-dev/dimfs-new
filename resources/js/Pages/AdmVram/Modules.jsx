@@ -46,7 +46,6 @@ const Modules = ({ modules, queryParams }) => {
                             </TableButton>
                         </div>
                         <div className='flex'>
-                            <Filters />
                             <TableSearch queryParams={queryParams} />
                         </div>
                     </TopPanel>

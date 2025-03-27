@@ -14,10 +14,10 @@ class AdmUsersSeeders extends Seeder
      */
     public function run()
     {
-        AdmUser::updateOrInsert(['email' => 'admin@superadmin.ph'],
+        AdmUser::updateOrInsert(['email' => 'superadmin@digits.ph'],
         [
             'name' => 'Super Admin',
-            'email' => 'superadmin@vram.ph',
+            'email' => 'superadmin@digits.ph',
             'password' => bcrypt('qwerty'),
             'id_adm_privileges' => 1
         ]);

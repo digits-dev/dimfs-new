@@ -24,8 +24,6 @@ class AdmSeeders extends Seeder
                 $is_read = 1;
                 $is_edit = 1;
                 $is_delete = 1;
-                $is_void = 1;
-                $is_override = 1;
 
                 switch ($module->table_name) {
                     case 'adm_logs':
@@ -50,8 +48,6 @@ class AdmSeeders extends Seeder
                     'is_edit' => $is_edit,
                     'is_delete' => $is_delete,
                     'is_read' => $is_read,
-                    'is_void' => $is_void,
-                    'is_override' => $is_override,
                     'id_adm_privileges' => 1,
                     'id_adm_modules' => $module->id,
                 ]);

@@ -98,6 +98,7 @@ const DashboardSettingsAction = ({action, initialData, privileges, onClose}) => 
   return (
     <>
         <div className='space-y-2'>
+            {action != "View" && 
             <div>
                 <label
                     className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}
@@ -123,6 +124,7 @@ const DashboardSettingsAction = ({action, initialData, privileges, onClose}) => 
                     }
                 </div>
             </div>
+            }
             {action == "View" && 
                 <div className='flex flex-col'>
                     <div className={`block text-xs font-bold ${theme === 'bg-skin-black' ? ' text-gray-400' : 'text-gray-700'}  font-poppins`}>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdmModels\admMenusPrivileges;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +15,7 @@ class AdmMenuPrivileges extends Seeder
      */
     public function run()
     {
-        $data = [
+        $menus = [
             [
                 'id_adm_menus' => 1,
                 'id_adm_privileges' => 1
@@ -307,10 +308,19 @@ class AdmMenuPrivileges extends Seeder
                 'id_adm_menus' => 73,
                 'id_adm_privileges' => 1
             ],
+            [
+                'id_adm_menus' => 74,
+                'id_adm_privileges' => 1
+            ],
         ];
 
-        if (DB::table('adm_menus_privileges')->count() == 0) {
-            DB::table('adm_menus_privileges')->insert($data);
+        foreach ($menus as $menu) {
+            admMenusPrivileges::updateOrCreate(
+                [
+                    'id_adm_menus' => $menu['id_adm_menus'],
+                    'id_adm_privileges' => $menu['id_adm_privileges'],
+                ]
+            );
         }
     }
 }

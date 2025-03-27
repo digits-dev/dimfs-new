@@ -101,26 +101,35 @@ class AdmAdminMenusSeeder extends Seeder
                 'slug'        => 'logs',
                 'icon'        => 'fa fa-history',
                 'parent_id'   => 0,
-                'is_active'   => 1,
-                'sorting'     => 7
+                'is_active'   => 13,
+                'sorting'     => 1
             ],
             [
                 'name'        => 'Module Activity History',
                 'type'        => 'Route',
                 'slug'        => 'module_activity_history',
                 'icon'        => 'fa fa-history',
-                'parent_id'   => 0,
+                'parent_id'   => 13,
                 'is_active'   => 1,
-                'sorting'     => 8
+                'sorting'     => 2
             ],
             [
                 'name'        => 'System Error Logs',
                 'type'        => 'Route',
                 'slug'        => 'system_error_logs',
                 'icon'        => 'fa fa-history',
+                'parent_id'   => 13,
+                'is_active'   => 1,
+                'sorting'     => 3
+            ],
+            [
+                'name'        => 'System Logs',
+                'type'        => 'URL',
+                'slug'        => '##',
+                'icon'        => 'fa fa-history',
                 'parent_id'   => 0,
                 'is_active'   => 1,
-                'sorting'     => 9
+                'sorting'     => 7
             ],
         ];
 
