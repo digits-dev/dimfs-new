@@ -6,7 +6,7 @@ use App\Models\AdmModels\admMenusPrivileges;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AdmMenuPrivileges extends Seeder
+class AdmMenuPrivilegesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
