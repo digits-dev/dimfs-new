@@ -234,12 +234,13 @@ class DashboardController extends Controller
         })
         ->toArray();
 
-        $dashboard_privilege = AdmEmbeddedDashboardPrivilege::where('adm_privileges_id',  CommonHelpers::myId())
+        $dashboard_privilege = AdmEmbeddedDashboardPrivilege::where('adm_privileges_id',  CommonHelpers::myPrivilegeId())
                 ->pluck('adm_embedded_dashboard_id');
 
         $data['embedded_dashboards'] = AdmEmbeddedDashboard::whereIn('id', $dashboard_privilege)
             ->where('status', 'ACTIVE')
             ->get();
+
         
         return Inertia::render('Dashboard/Dashboard', $data);
     }
