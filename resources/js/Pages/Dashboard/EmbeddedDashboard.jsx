@@ -43,9 +43,9 @@ const EmbeddedDashboard = ({embedded_dashboards}) => {
                 </div>
                 <div className="px-3 py-2">
 
-                    {embedded_dashboards?.map((dashboard) => (
+                    {embedded_dashboards?.map((dashboard, index) => (
                         activeTab === dashboard.id && (
-                            <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                            <div key={index} style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
                                 <iframe
                                     title={dashboard.name}
                                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
