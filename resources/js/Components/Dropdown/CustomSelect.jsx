@@ -123,7 +123,7 @@ const CustomSelect = ({isMulti = false, onError, maxMenuHeight = "100px", isStat
             <div className="relative">
                 <Select
                     placeholder={placeholder}
-                    defaultValue={value}
+                    value={value}
                     name={name}
                     isMulti={isMulti}
                     components={onError ? { DropdownIndicator: NoDropdownIndicator } : undefined}

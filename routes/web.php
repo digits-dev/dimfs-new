@@ -120,13 +120,13 @@ Route::get('/login-details', [SettingsController::class, 'getLoginDetails'])->na
 Route::group(['middleware' => ['auth', 'web']], function () {
 
     //ANNOUNCEMENT
-    Route::get('unread-announcement', [AnnouncementsController::class, 'getUnreadAnnouncements'])->name('show-announcement');
-    Route::post('read-announcement', [AnnouncementsController::class, 'markAnnouncementAsRead'])->name('read-announcement');
-    Route::get('announcement', [AnnouncementsController::class, 'getAnnouncements'])->name('announcement');
-    Route::get('announcement/add-announcement', [AnnouncementsController::class, 'addAnnouncementForm'])->name('add-announcement');
-    Route::post('announcement/SaveAnnouncement', [AnnouncementsController::class, 'saveAnnouncement'])->name('announcement/SaveAnnouncement');
-    Route::get('announcement/edit-announcement/{id}', [AnnouncementsController::class, 'editAnnouncement'])->name('edit-announcement');
-    Route::post('announcement/saveEditAnnouncement', [AnnouncementsController::class, 'saveEditAnnouncement'])->name('saveEditAnnouncement');
+    Route::prefix('announcements')->group(function () {
+        Route::get('/add_announcement', [AnnouncementsController::class, 'addAnnouncementForm']);
+        Route::get('/edit_announcement/{id}', [AnnouncementsController::class, 'editAnnouncementForm']);
+        Route::post('/create_announcement', [AnnouncementsController::class, 'createAnnouncement']);
+        Route::post('/update_announcement', [AnnouncementsController::class, 'updateAnnouncement']);
+    });
+
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -48,6 +48,7 @@ const ChangePassword = () => {
     });
 
     const handlePasswordChange = (e) => {
+        e.preventDefault();
         const newPassword = e.target.value;
         setData("new_password", newPassword);
         setPasswordStrength(checkPasswordStrength(newPassword));
