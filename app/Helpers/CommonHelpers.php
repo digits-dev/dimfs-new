@@ -305,35 +305,6 @@ class CommonHelpers {
         }
     }
 
-    public static function isVoid(){
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        if($session){
-            foreach ($session as $v) {
-                if ($v->path == self::getModulePath()) {
-                    return (bool) $v->is_void;
-                }
-            }
-        }
-    }
-
-    public static function isOverride(){
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        if($session){
-            foreach ($session as $v) {
-                if ($v->path == self::getModulePath()) {
-                    return (bool) $v->is_override;
-                }
-            }
-        }
-    }
 
     public static function getModulePath(){
         // Check to position of admin_path

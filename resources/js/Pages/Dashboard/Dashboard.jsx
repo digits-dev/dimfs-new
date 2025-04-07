@@ -7,6 +7,7 @@ import ItemCard from "../../Components/Dashboard/ItemCard";
 import ChangePassModal from "../../Components/Modal/ChangePassModal";
 import EmbeddedDashboard from "./EmbeddedDashboard";
 import DashboardNotAvailable from "./DashboardNotAvailable";
+import AnnouncementModal from "../../Components/Modal/AnnouncementsModal";
 
 const Dashboard = ({ 
     item_master_stats, 
@@ -23,7 +24,9 @@ const Dashboard = ({
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { textColor, sideBarBgColor } = useThemeStyles(theme);
-
+    const { announcement, unread_announcement } = auth.sessions;
+    const [showAnnouncementModal, setShowAnnouncementModal] = useState(unread_announcement);
+    
     const [activeTab, setActiveTab] = useState("tab1")
 
     const tabs = [
@@ -32,7 +35,10 @@ const Dashboard = ({
       { id: "tab3", image: "/images/dashboard/rma.png", label: "RMA Item Master" },
     ]
 
+    console.log(unread_announcement, announcement);
+
     return (
+        <>
         <div className={`${textColor}`}>
             <Head title="Dashboard" />
             <ChangePassModal/>
@@ -108,6 +114,10 @@ const Dashboard = ({
             }
           
         </div>
+        {/* {unread_announcement && 
+            <AnnouncementModal isOpen={showAnnouncementModal} data={JSON.parse(announcement?.json_data)} setIsOpen={setShowAnnouncementModal}/>
+        } */}
+        </>
     );
 };
 

@@ -142,9 +142,9 @@ class AdmUser extends Authenticatable
         return $this->belongsTo(AdmPrivileges::class, 'id_adm_privileges', 'id');
     }
 
-    public function announcements(){
-        return $this->belongsToMany(Announcement::class,'announcement_user')->withTimestamps();
-    }
+    // public function announcements(){
+    //     return $this->belongsToMany(Announcement::class,'announcement_user')->withTimestamps();
+    // }
     
     public function notifications()
     {

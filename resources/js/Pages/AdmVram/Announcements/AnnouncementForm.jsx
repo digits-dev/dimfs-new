@@ -367,7 +367,7 @@ const AnnouncementForm = ({action, update_data}) => {
                             </div>
                         ) : null
                         }
-                        <p className={`text-xs mt-6 whitespace-pre-line ${data.description_center && 'text-center'}`}>
+                        <p className={`text-xs mt-6 whitespace-pre-line overflow-hidden ${data.description_center && 'text-center'}`}>
                             {data.description}
                         </p>
                         

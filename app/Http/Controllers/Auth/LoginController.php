@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Announcement;
 use App\Models\AdmModels\AdmSettings;
 use App\Models\AdmModels\AdmUserProfiles;
+use App\Models\AnnouncementUser;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -47,6 +48,8 @@ class LoginController extends Controller
         ]);
         
         $users = DB::table("adm_users")->where("email", $credentials['email'])->first();
+        $announcement = Announcement::where('status', 'ACTIVE')->first();
+
        
         if(!$users){
             $error = 'The provided credentials do not match our records!';
@@ -67,6 +70,21 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials)) {
+
+            if ($announcement){
+                $announcement_user = AnnouncementUser::where('announcement_id', $announcement->id)->where('adm_user_id', $users->id)->first();
+
+                if ($announcement_user){
+                    if ($announcement_user->is_read == '0'){
+                        Session::put('unread_announcement',true);
+                        Session::put('announcement', $announcement);
+                    }
+                    else{
+                        Session::put('unread_announcement',false);
+                    }
+                }
+            }
+
             $request->session()->regenerate();
 
             $menus_privileges = admMenusPrivileges::where('id_adm_privileges',  $session_details['priv']->id)
@@ -126,12 +144,7 @@ class LoginController extends Controller
                 Session::put('check_user_type', null);
             }
 
-            $unreadAnnouncements = Announcement::whereDoesntHave('admUsers', function($query) use ($users) {
-                $query->where('adm_user_id', $users->id);
-            })->where('status','ACTIVE')->get();
-            if($unreadAnnouncements->isNotEmpty()){
-                Session::put('unread-announcement',true);
-            }
+            
 
             // $exist = Auth::user()->notifications()->where('type', 'system users')->exists();
             // if(!$exist){

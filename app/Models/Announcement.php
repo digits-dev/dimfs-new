@@ -105,4 +105,9 @@ class Announcement extends Model
         return $this->belongsTo(AdmUser::class, 'updated_by', 'id');
     }
 
+    public function admUsers()
+    {
+        return $this->belongsToMany(AdmUser::class, 'announcement_user', 'adm_user_id', 'id');
+    }
+
 }

@@ -8,6 +8,7 @@ use App\Models\AdmModels\AdmLogs;
 use Inertia\Inertia;
 use App\Models\Announcement;
 use App\Models\AdmUser;
+use App\Models\AnnouncementUser;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -88,11 +89,25 @@ class AnnouncementsController extends Controller{
             
             }
 
-            Announcement::create([
+            $announcement = Announcement::create([
                 'name' => $request->name,
                 'json_data' => json_encode($data),
                 'status' => 'ACTIVE',
             ]);
+
+            Announcement::where('id', '!=', $announcement->id)
+            ->update(['status' => 'INACTIVE']);
+
+
+            $activeUsers = AdmUser::where('status', 'ACTIVE')->get();
+
+            foreach ($activeUsers as $user) {
+                AnnouncementUser::create([
+                    'announcement_id' => $announcement->id,
+                    'adm_user_id'     => $user->id,
+                    'is_read'         => 0,
+                ]);
+            }
 
             DB::commit();
 

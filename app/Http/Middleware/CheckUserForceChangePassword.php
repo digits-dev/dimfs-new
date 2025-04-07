@@ -15,9 +15,7 @@ class CheckUserForceChangePassword
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::get('unread-announcement') === true){
-            return redirect()->route('show-announcement')->send();
-        }
+        
         return $next($request);
     }
 }
