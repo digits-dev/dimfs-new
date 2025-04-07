@@ -132,6 +132,7 @@ Route::group(['middleware' => ['auth', 'web']], function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/sidebar', [MenusController::class, 'sidebarMenu'])->name('sidebar');
 
     //USERS
     Route::prefix('users')->group(function () {
@@ -149,6 +150,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update-theme', [ProfilePageController::class, 'updateTheme'])->name('update-theme');
 
     //CHANGE PASSWORD
+
     Route::prefix('change_password')->group(function () {
         Route::get('/', [ChangePasswordController::class, 'getIndex'])->name('change_password');
         Route::post('/update', [ChangePasswordController::class, 'changePassword'])->name('changePassword');
@@ -165,11 +167,10 @@ Route::middleware(['auth'])->group(function () {
     });
    
 
-    //MODULE GENERATOR
-    Route::prefix('module_generator')->group(function () {
-        Route::post('/create_module', [ModulsController::class, 'createModule']);
-    });
- 
+    //MODULES
+    Route::get('create-modules', [ModulsController::class, 'getAddModuls'])->name('create-modules');
+    Route::post('/module_generator/postAddSave', [ModulsController::class, 'postAddSave'])->name('postAddSave');
+    Route::get('/tables', [ModulsController::class, 'getTableNames']);
 
     //MENUS
     Route::prefix('menu_management')->group(function () {

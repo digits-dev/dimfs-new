@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // $this->call([AdmSeeders::class]);
+<<<<<<< Updated upstream
         // $this->call([AdmModulesSeeder::class]);
         // $this->call([AdmAdminMenusSeeder::class]);
         $this->call([AdmMenusSeeder::class]);
@@ -21,5 +21,13 @@ class DatabaseSeeder extends Seeder
         // $this->call([AdmPrivilegesSeeder::class]);
         // $this->call([AdmUsersSeeders::class]);
         // $this->call([AdmSettingsSeeder::class]);
+=======
+        // $this->call([AdmModules::class]);
+        // $this->call([AdmAdminMenusSeeder::class]);
+        // $this->call([AdmMenusSeeder::class]);
+        // $this->call([AdmMenuPrivileges::class]);
+        // $this->call([AdmPrivileges::class]);
+        // $this->call([AdmUsersSeeders::class]);
+>>>>>>> Stashed changes
     }
 }
