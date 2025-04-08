@@ -33,6 +33,8 @@ import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
              }
          });
      };
+
+     console.log(data)
  
      return (
          <>
@@ -45,11 +47,11 @@ import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
                      onChange={(selectedOption) => setData("table_name", selectedOption?.value)}
                      name="table_name"
                      options={database_tables}
-                     value={
-                         data.theme_color
-                             ? database_tables.find((option) => option.value === data.table_name)
-                             : null
-                     }
+                    //  value={
+                    //      data.table_name
+                    //          ? database_tables.find((option) => option.value === data.table_name)
+                    //          : null
+                    //  }
                  />
                  <InputComponent
                      name="module_name"
