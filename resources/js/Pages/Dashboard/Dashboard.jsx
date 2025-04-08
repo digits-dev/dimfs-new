@@ -35,7 +35,6 @@ const Dashboard = ({
       { id: "tab3", image: "/images/dashboard/rma.png", label: "RMA Item Master" },
     ]
 
-    console.log(unread_announcement, announcement);
 
     return (
         <>

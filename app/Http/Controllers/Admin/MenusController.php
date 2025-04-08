@@ -25,7 +25,7 @@ class MenusController extends Controller{
 
         $data = [];
         $data['tableName'] = 'adm_users';
-        $data['page_title'] = 'Users Management';
+        $data['page_title'] = 'Menu Management';
         $data['privileges'] = AdmPrivileges::select('id as value', 'name as label')->get();
 
         $data['menus'] = AdmMenus::with([

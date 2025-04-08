@@ -4,58 +4,66 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\AdmModels\AdmModules;
-use App\Models\AdmModels\AdmMenus;
-use File;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
+// use File;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class ModulsController extends Controller{
-
-    private $table_name;
-    private $primary_key;
+ 
     private $sortBy;
     private $sortDir;
     private $perPage;
+
     public function __construct() {
-        $this->table_name  = 'adm_modules';
-        $this->primary_key = 'id';
-        $this->sortBy = request()->get('sortBy', 'adm_modules.created_at');
+        $this->sortBy = request()->get('sortBy', 'adm_modules.id');
         $this->sortDir = request()->get('sortDir', 'desc');
         $this->perPage = request()->get('perPage', 10);
     }
 
+    public function getAllData(){
+        $query = AdmModules::query();
+        $filter = $query->searchAndFilter(request());
+        $result = $filter->orderBy($this->sortBy, $this->sortDir);
+        return $result;
+    }
+
     public function getIndex(){
-        $query = AdmModules::getData();
-        $query->when(request('search'), function ($query, $search) {
-            $query->where('adm_modules.name', 'LIKE', "%$search%");
-        });
-        $modules = $query->orderBy($this->sortBy, $this->sortDir)->paginate($this->perPage)->withQueryString();
+
+        $data = [];
+        $data['tableName'] = 'adm_modules';
+        $data['page_title'] = 'Module Generator';
+        $data['modules'] = self::getAllData()->paginate($this->perPage)->withQueryString();
+        $data['queryParams'] = request()->query();
+        $data['database_tables'] = self::getAllTables();
+
         
-        return Inertia::render('AdmVram/Modules', [
-            'modules' => Inertia::always($modules),
-            'queryParams' => request()->query()
-        ]);
+        return Inertia::render('AdmVram/ModuleGenerator/ModuleGenerator', $data);
     }
     
-    public function postAddSave(Request $request){
+
+    public function createModule(Request $request){
+
+        $request->validate([
+            'table_name' => 'required',
+            'name' => 'required',
+            'path' => 'required',
+            'icon' => 'required',
+        ]);
+
         if (!CommonHelpers::isCreate()) {
             return Inertia::render('Errors/RestrictionPage');
         }
-
-        // if($request->type === 'route'){
              //CREATE FILE
             $viewFolderName = str_replace(' ', '', ucwords(str_replace('_', ' ', $request->table_name)));
-            $viewContentName = str_replace(' ', '', ucwords(str_replace('_', ' ', $request->table_name)));
             $folderName = $viewFolderName;
             $contentName = $viewFolderName.'Controller';
      
             if(file_exists(base_path('app/Http/Controllers/'.$folderName.'/'.$contentName.'.php'))){
-                return json_encode(['message'=>'Controller already exist!', 'status'=>'danger']);
+                return back()->with(['message' => 'Controller already exist', 'type' => 'error']);
+   
             }else{
                 //MAKE FOLDER
                 $folder = base_path('app/Http/Controllers/'.$folderName);
@@ -113,32 +121,8 @@ class ModulsController extends Controller{
                     DB::table('adm_menus_privileges')->insert(['id_adm_menus' => $menusId, 'id_adm_privileges' => CommonHelpers::myPrivilegeId()]);
                 }
             }
-            return json_encode(['message'=>'Created successfully!', 'status'=>'success']);
-        // }else{
-        //     //CREATE MENUS
-        //     $isExist = DB::table('adm_menuses')->where('name',$request->name)->exists();
-        //     if(!$isExist){
-        //         $menusId = DB::table('adm_menuses')->insertGetId(
-        //             [
-        //                 'name'                => $request->name,
-        //                 'type'                => 'URL',
-        //                 'icon'                => $request->icon,
-        //                 'path'                => '#',
-        //                 'slug'                => NULL,
-        //                 'color'               => NULL,
-        //                 'parent_id'           => 0,
-        //                 'is_active'           => 1,
-        //                 'is_dashboard'        => 0,
-        //                 'id_adm_privileges'    => 1,
-        //                 'sorting'             => 0,
-        //                 'created_at'          => date('Y-m-d H:i:s')
-        //             ]
-        //         );
-        //         //CREATE MENUS PRIVILEGE
-        //         DB::table('adm_menus_privileges')->insert(['id_adm_menus' => $menusId, 'id_adm_privileges' => CommonHelpers::myPrivilegeId()]);
-        //         return json_encode(['message'=>'Created successfully!', 'status'=>'success']);
-        //     }
-        // }
+
+            return back()->with(['message' => 'Module Creation Success!', 'type' => 'success']);
     }
 
     public function controllerContent($controllerName, $finalViewFileName){
@@ -156,7 +140,7 @@ class ModulsController extends Controller{
 
                             class '.$controllerName.' extends Controller{
                                 public function getIndex(){
-                                    return Inertia("'.$finalViewFileName.'/'.$finalViewFileName.'");
+                                    return Inertia::render("'.$finalViewFileName.'/'.$finalViewFileName.'");
                                 }
                             }
                         ?>';
@@ -184,36 +168,57 @@ class ModulsController extends Controller{
         return $content;
     }
 
-    public function getTableNames(){
-        $tables = DB::select('SHOW TABLES');
-        $tableNames = array_map('current', $tables);
-
-        // Define the tables you want to exclude
-        $excludedTables = ['adm_logs',
-                           'adm_menus_privileges',
-                           'adm_menuses',
-                           'adm_modules',
-                           'adm_privileges',
-                           'adm_privileges_roles',
-                           'adm_settings',
-                           'failed_jobs',
-                           'jobs',
-                           'password_reset_tokens',
-                           'personal_access_tokens',
-                           'job_batches',
-                           'migrations']; // Add any other tables you want to exclude
-
-        // Filter out the excluded tables
-        $filteredTables = array_filter($tableNames, function ($table) use ($excludedTables) {
-            return !in_array($table, $excludedTables);
-        });
-        $finalDataTables = [];
-        foreach($filteredTables as $key => $table){
-            $container['id'] = $table;
-            $container['name'] = $table;
-            $finalDataTables[] = $container;
+    public function getAllTables()
+    {
+        $databaseName = config('database.connections.mysql.database');
+        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [$databaseName]);
+    
+        $database_tables = [];
+    
+        $excludedTables = [  
+            'adm_logs',
+            'adm_admin_menuses',
+            'adm_menus_privileges',
+            'adm_embedded_dashboard_privileges',
+            'adm_menuses',
+            'adm_modules',
+            'adm_privileges',
+            'adm_embedded_dashboards',
+            'adm_notifications',
+            'adm_privileges_roles',
+            'adm_settings',
+            'failed_jobs',
+            'jobs',
+            'password_reset_tokens',
+            'personal_access_tokens',
+            'job_batches',
+            'migrations',
+            'adm_password_histories',
+            'adm_user_profiles',
+            'adm_users',
+            'announcement_user',
+            'announcements',
+            'api_configurations',
+            'api_keys',
+            'api_logs',
+            'api_rate_limits',
+        ];
+    
+        foreach ($tables as $table) {
+            $tableName = $table->TABLE_NAME;
+    
+            // Skip if table is in excluded list
+            if (in_array($tableName, $excludedTables)) {
+                continue;
+            }
+    
+            $database_tables[] = [
+                'label' => $tableName,
+                'value' => $tableName
+            ];
         }
-        return response()->json($finalDataTables);
+    
+        return $database_tables;
     }
 
 }
