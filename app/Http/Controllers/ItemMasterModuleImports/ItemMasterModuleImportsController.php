@@ -44,7 +44,7 @@ class ItemMasterModuleImportsController extends Controller
             return Inertia::render('Errors/RestrictionPage');
         }
 
-        if (AdmPrivileges::MCBTM != CommonHelpers::myPrivilegeId() || CommonHelpers::isSuperadmin()){
+        if (!in_array(CommonHelpers::myPrivilegeId(), [AdmPrivileges::MCBTM, AdmPrivileges::SUPERADMIN])) {
             return Inertia::render('Errors/RestrictionPage');
         }
     
@@ -59,7 +59,7 @@ class ItemMasterModuleImportsController extends Controller
             return Inertia::render('Errors/RestrictionPage');
         }
 
-        if (AdmPrivileges::MCBTM != CommonHelpers::myPrivilegeId() || CommonHelpers::isSuperadmin()){
+        if (!in_array(CommonHelpers::myPrivilegeId(), [AdmPrivileges::MCBTM, AdmPrivileges::SUPERADMIN])) {
             return Inertia::render('Errors/RestrictionPage');
         }
     
@@ -113,7 +113,7 @@ class ItemMasterModuleImportsController extends Controller
             return Inertia::render('Errors/RestrictionPage');
         }
 
-        if (AdmPrivileges::MCBTM != CommonHelpers::myPrivilegeId() || CommonHelpers::isSuperadmin()){
+        if (!in_array(CommonHelpers::myPrivilegeId(), [AdmPrivileges::MCBTM, AdmPrivileges::SUPERADMIN])) {
             return Inertia::render('Errors/RestrictionPage');
         }
     
