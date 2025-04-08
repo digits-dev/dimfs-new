@@ -68,38 +68,21 @@ class ItemMasterModuleImportsController extends Controller
         return Inertia::render("ItemMasters/ImportModules/ItemMasterSkuLegendImport", $data);
     }
 
-    public function getItemMasterSkuStatusImport(){
-        if(!CommonHelpers::isView()) {
-            return Inertia::render('Errors/RestrictionPage');
-        }
-    
-        $data = [];
-        $data['page_title'] = 'Item Master - SKU Status/Segmentation Bulk Import';
-        return Inertia::render("ItemMasters/ImportModules/ItemMasterSkuStatusImport", $data);
-    }
-
     public function getItemMasterWrrDateImport(){
         if(!CommonHelpers::isView()) {
             return Inertia::render('Errors/RestrictionPage');
         }
-    
         $data = [];
         $data['page_title'] = 'Item Master - WRR Date Bulk Import';
         return Inertia::render("ItemMasters/ImportModules/ItemMasterWrrDateBulkImport", $data);
     }
 
-    public function getItemEcomDetailsImport(){
+    public function getItemMasterAccountingImport(){
         if(!CommonHelpers::isView()) {
             return Inertia::render('Errors/RestrictionPage');
         }
-    
-        $data = [];
-        $data['page_title'] = 'Item Master - ECOM Details Bulk Import';
-        return Inertia::render("ItemMasters/ImportModules/ItemMasterEcomDetailsImport", $data);
-    }
 
-    public function getItemMasterAccountingImport(){
-        if(!CommonHelpers::isView()) {
+        if (!in_array(CommonHelpers::myPrivilegeId(), [AdmPrivileges::ACCTGHEAD, AdmPrivileges::SUPERADMIN, AdmPrivileges::COSTACCTG, AdmPrivileges::SALESACCTG])) {
             return Inertia::render('Errors/RestrictionPage');
         }
     
