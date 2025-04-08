@@ -113,9 +113,9 @@ const Dashboard = ({
             }
           
         </div>
-        {/* {unread_announcement && 
-            <AnnouncementModal isOpen={showAnnouncementModal} data={JSON.parse(announcement?.json_data)} setIsOpen={setShowAnnouncementModal}/>
-        } */}
+        {unread_announcement && 
+            <AnnouncementModal isOpen={showAnnouncementModal} data={JSON.parse(announcement?.json_data)} setIsOpen={setShowAnnouncementModal} action="View User"/>
+        }
         </>
     );
 };

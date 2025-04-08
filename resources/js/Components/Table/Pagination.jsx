@@ -56,6 +56,8 @@ const   Pagination = ({ paginate, onClick, extendClass }) => {
 
                 <nav className="inline-flex p-2 space-x-1">
                     {paginate.links.map((link, index) => {
+
+                        console.log(link);
                         const Label = index == 0
                             ? <i className="fa-solid fa-chevron-left text-xs"></i>
                             : paginate.links.length - 1 == index
@@ -69,8 +71,8 @@ const   Pagination = ({ paginate, onClick, extendClass }) => {
                             href={link.url}
                             preserveScroll
                             preserveState
-                            className={`text-white inline-flex items-center justify-center p-3 py-2 w-9 h-9 font-medium rounded-full text-xs  ${theme} hover:opacity-70
-                                ${link.active && "bg-secondary text-white"} ${!link.url && "cursor-not-allowed "}`}
+                            className={`text-white inline-flex items-center justify-center p-3 py-2 w-9 h-9 font-medium rounded-full text-xs  hover:opacity-70
+                                ${link.active ? theme == 'bg-skin-blue' ? "bg-skin-blue-accent text-white" : 'bg-gray-500 text-white' : theme} ${!link.url && "cursor-not-allowed "}`}
                         >
                             {Label}
                         </Link> 

@@ -197,6 +197,21 @@ class AnnouncementsController extends Controller{
        
     }
 
+    public function updateAnnouncementIsread(){
+
+        $announcement = Announcement::where('status', 'ACTIVE')->first();
+        $announcementUser = AnnouncementUser::where('announcement_id', $announcement->id)
+            ->where('adm_user_id', CommonHelpers::myId())
+            ->first();
+
+        $announcementUser->is_read = 1;
+        $announcementUser->save();
+
+        Session::put('unread_announcement', false);
+
+        return response()->json(['message' => 'Session updated']);
+    }
+
 }
 
 ?>

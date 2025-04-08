@@ -2,6 +2,7 @@ import confetti from 'canvas-confetti';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTheme } from '../../Context/ThemeContext';
 import { Bell, Eye, Info, TriangleAlert, CircleCheckBig, Calendar, ImageIcon, Link, X } from 'lucide-react';
+import axios from 'axios';
 
 const AnnouncementModal = ({isOpen, setIsOpen, data, action, isImageEdited}) => {
     const { theme } = useTheme();
@@ -11,9 +12,8 @@ const AnnouncementModal = ({isOpen, setIsOpen, data, action, isImageEdited}) => 
 
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
+        updateIsreadSession();
     };
-
-    console.log(action,  isImageEdited)
 
     const objectURL = useMemo(() => {
         if (data?.image && action == 'Create') {
@@ -33,8 +33,20 @@ const AnnouncementModal = ({isOpen, setIsOpen, data, action, isImageEdited}) => 
             return `../storage/${data?.image}`;
         }
 
+        if (data?.image && action == 'View User') {
+            return `../storage/${data?.image}`;
+        }
+
         return null;
     }, [data?.image]);
+
+    const updateIsreadSession = async () => {
+        try {
+          const response = await axios.post('announcements/update_announcement_isread');
+        } catch (error) {
+          console.error(error);
+        }
+    };
 
     // CONFETTI
     useEffect(() => {
@@ -61,7 +73,8 @@ const AnnouncementModal = ({isOpen, setIsOpen, data, action, isImageEdited}) => 
     
                 if (newProgress >= 100) {
                     setProgress(100);
-                    setIsOpen(false); // auto-dismiss
+                    setIsOpen(false);
+                    updateIsreadSession();
                     clearInterval(interval);
                 } else {
                     setProgress(newProgress);

@@ -125,6 +125,7 @@ Route::group(['middleware' => ['auth', 'web']], function () {
         Route::get('/edit_announcement/{id}', [AnnouncementsController::class, 'editAnnouncementForm']);
         Route::post('/create_announcement', [AnnouncementsController::class, 'createAnnouncement']);
         Route::post('/update_announcement', [AnnouncementsController::class, 'updateAnnouncement']);
+        Route::post('/update_announcement_isread', [AnnouncementsController::class, 'updateAnnouncementIsread']);
     });
 
 });
