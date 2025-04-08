@@ -7,6 +7,7 @@ use app\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\ActionTypes;
 use App\Models\AdmModels\AdmModules;
+use App\Models\AdmModels\AdmPrivileges;
 use App\Models\ItemMaster;
 use App\Models\ItemMasterAccountingApproval;
 use App\Models\ItemMasterApproval;
@@ -40,6 +41,10 @@ class ItemMasterModuleImportsController extends Controller
 
     public function getItemMasterImport(){
         if(!CommonHelpers::isView()) {
+            return Inertia::render('Errors/RestrictionPage');
+        }
+
+        if (AdmPrivileges::MCBTM != CommonHelpers::myPrivilegeId()){
             return Inertia::render('Errors/RestrictionPage');
         }
     
