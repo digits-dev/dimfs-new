@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('brand_code', 5)->nullable();
             $table->string('brand_description', 30)->nullable();
             $table->string('brand_beacode', 10)->nullable();
-            $table->unsignedInteger('brand_type_id')->nullable();
+            $table->unsignedInteger('admin_brand_types_id')->nullable();
             $table->enum('status',['ACTIVE','INACTIVE','STATUS QUO','CORE'])->nullable();
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();

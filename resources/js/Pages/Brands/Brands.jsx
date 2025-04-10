@@ -20,8 +20,6 @@ import Modal from "../../Components/Modal/Modal";
 import BrandAction from "./BrandAction";
 import Export from "../../Components/Table/Buttons/Export";
 import CustomFilter from "../../Components/Table/Buttons/CustomFilter";
-import DropdownSelect from "../../Components/Dropdown/Dropdown";
-import InputComponent from "../../Components/Forms/Input";
 import BrandsFilter from "./BrandsFilter";
 
 const Brands = ({

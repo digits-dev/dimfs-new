@@ -56,8 +56,6 @@ const   Pagination = ({ paginate, onClick, extendClass }) => {
 
                 <nav className="inline-flex p-2 space-x-1">
                     {paginate.links.map((link, index) => {
-
-                        console.log(link);
                         const Label = index == 0
                             ? <i className="fa-solid fa-chevron-left text-xs"></i>
                             : paginate.links.length - 1 == index

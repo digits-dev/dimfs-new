@@ -34,7 +34,6 @@ import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
          });
      };
 
-     console.log(data)
  
      return (
          <>
