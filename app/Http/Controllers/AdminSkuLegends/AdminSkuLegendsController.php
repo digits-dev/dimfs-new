@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminSkuLegends;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSkuLegend;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminSkuLegendsController extends Controller
 {
@@ -47,27 +49,30 @@ class AdminSkuLegendsController extends Controller
         return Inertia::render("AdminSkuLegends/AdminSkuLegends", $data);
     }
 
-    public function create(Request $request){
+    public function export()
+    {
 
-        $validatedFields = $request->validate([
-            'sku_legend_description' => 'required|string|max:20|unique:admin_sku_legends,sku_legend_description',
-        ]);
+        $headers = [
+            'SKU Legend Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
 
-        try {
+        $columns = [
+            'sku_legend_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
 
-            AdminSkuLegend::create([
-                'sku_legend_description' => $validatedFields['sku_legend_description'],       
-                'status' => 'ACTIVE',
-            ]);
-    
-            return back()->with(['message' => 'SKU Legend Creation Success!', 'type' => 'success']);
+        $filename = "Admin SKU Legends - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
 
-        }
-
-        catch (\Exception $e) {
-            CommonHelpers::LogSystemError('Admin SKU Legends', $e->getMessage());
-            return back()->with(['message' => 'SKU Legend Creation Failed!', 'type' => 'error']);
-        }
-    
     }
 }

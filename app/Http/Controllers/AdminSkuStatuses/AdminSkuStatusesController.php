@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminSkuStatuses;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminSkuStatus;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminSkuStatusesController extends Controller
 {
@@ -71,5 +73,34 @@ class AdminSkuStatusesController extends Controller
             return back()->with(['message' => 'SKU Status Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'SKU Status Code',
+            'SKU Status Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'sku_status_code',
+            'sku_status_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin SKU Statuses - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

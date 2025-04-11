@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminBrands;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminBrand;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminBrandsController extends Controller
 {
@@ -82,6 +84,39 @@ class AdminBrandsController extends Controller
             return back()->with(['message' => 'Brand Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'Brand Code',
+            'Brand Description',
+            'Brand BEA Code',
+            'Brand Type Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'brand_code',
+            'brand_description',
+            'brand_beacode',
+            'getAdminBrandTypes.brand_type_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin Brands - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 
 }

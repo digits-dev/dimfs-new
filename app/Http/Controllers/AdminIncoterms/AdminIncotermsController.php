@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminIncoterms;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminCurrency;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminIncotermsController extends Controller
 {
@@ -71,5 +73,34 @@ class AdminIncotermsController extends Controller
             return back()->with(['message' => 'Incoterm Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'Incoterm Code',
+            'Incoterm Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'incoterms_code',
+            'incoterms_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin Incoterms - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

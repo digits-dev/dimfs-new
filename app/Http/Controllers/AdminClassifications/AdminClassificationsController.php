@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminClassifications;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminCategory;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminClassificationsController extends Controller
 {
@@ -78,5 +80,36 @@ class AdminClassificationsController extends Controller
             return back()->with(['message' => 'Classification Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'Classification Code',
+            'Classification Description',
+            'Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'class_code',
+            'class_description',
+            'getAdminCategory.category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin Classifications - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminModelSpecifics;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminModelSpecific;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminModelSpecificsController extends Controller
 {
@@ -71,5 +73,34 @@ class AdminModelSpecificsController extends Controller
             return back()->with(['message' => 'Model Specific Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    public function export()
+    {
+
+        $headers = [
+            'Model Specific Code',
+            'Model Specific Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'model_specific_code',
+            'model_specific_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin Model Specifics - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AdminCategories;
 
+use App\Exports\SubmasterExport;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminCategory;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminCategoriesController extends Controller
 {
@@ -70,5 +72,35 @@ class AdminCategoriesController extends Controller
             return back()->with(['message' => 'Category Creation Failed!', 'type' => 'error']);
         }
     
+    }
+
+    
+    public function export()
+    {
+
+        $headers = [
+            'Category Code',
+            'Category Description',
+            'Status',
+            'Created By',
+            'Updated By',
+            'Created At',
+            'Updated At',
+        ];
+
+        $columns = [
+            'category_code',
+            'category_description',
+            'status',
+            'getCreatedBy.name',
+            'getUpdatedBy.name',
+            'created_at',
+            'updated_at',
+        ];
+
+        $filename = "Admin Categories - " . date ('Y-m-d H:i:s');
+        $query = self::getAllData();
+        return Excel::download(new SubmasterExport($query, $headers, $columns), $filename . '.xlsx');
+
     }
 }
