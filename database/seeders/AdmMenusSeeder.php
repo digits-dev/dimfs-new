@@ -88,7 +88,7 @@ class AdmMenusSeeder extends Seeder
                 'sorting'           => 6
             ],
             [
-                'name'              => 'Settings',
+                'name'              => 'Admin Submaster',
                 'type'              => 'URL',
                 'path'              => '#',
                 'slug'              => null,
@@ -100,7 +100,7 @@ class AdmMenusSeeder extends Seeder
                 'sorting'           => 7
             ],
             [
-                'name'              => 'History',
+                'name'              => 'Settings',
                 'type'              => 'URL',
                 'path'              => '#',
                 'slug'              => null,
@@ -110,6 +110,18 @@ class AdmMenusSeeder extends Seeder
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
                 'sorting'           => 8
+            ],
+            [
+                'name'              => 'History',
+                'type'              => 'URL',
+                'path'              => '#',
+                'slug'              => null,
+                'icon'              => 'fa-solid fa-bars',
+                'parent_id'         => 0,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 9
             ],
 
             // ITEMS CHILDREN
@@ -149,6 +161,18 @@ class AdmMenusSeeder extends Seeder
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
                 'sorting'           => 3
+            ],
+            [
+                'name'              => 'Admin Item Master',
+                'type'              => 'Route',
+                'path'              => 'AdminItemMasters\AdminItemMastersControllerGetIndex',
+                'slug'              => 'admin_item_masters',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 2,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 4
             ],
             
             // APPROVALS CHILDREN
@@ -847,6 +871,288 @@ class AdmMenusSeeder extends Seeder
                 'sorting'           => 7
             ],
 
+
+            // ADMIN SUBMASTER CHILDREN
+
+            [
+                'name'              => 'Admin Brands',
+                'type'              => 'Route',
+                'path'              => 'AdminBrands\AdminBrandsControllerGetIndex',
+                'slug'              => 'admin_brands',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 1
+            ],
+            [
+                'name'              => 'Admin Brand Types',
+                'type'              => 'Route',
+                'path'              => 'AdminBrandTypes\AdminBrandTypesControllerGetIndex',
+                'slug'              => 'admin_brand_types',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 2
+            ],
+            [
+                'name'              => 'Admin Categories',
+                'type'              => 'Route',
+                'path'              => 'AdminCategories\AdminCategoriesControllerGetIndex',
+                'slug'              => 'admin_categories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 3
+            ],
+            [
+                'name'              => 'Admin Classifications',
+                'type'              => 'Route',
+                'path'              => 'AdminClassifications\AdminClassificationsControllerGetIndex',
+                'slug'              => 'admin_classifications',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 4
+            ],
+            [
+                'name'              => 'Admin Colors',
+                'type'              => 'Route',
+                'path'              => 'AdminColors\AdminColorsControllerGetIndex',
+                'slug'              => 'admin_colors',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 5
+            ],
+            [
+                'name'              => 'Admin Currencies',
+                'type'              => 'Route',
+                'path'              => 'AdminCurrencies\AdminCurrenciesControllerGetIndex',
+                'slug'              => 'admin_currencies',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 6
+            ],
+            [
+                'name'              => 'Admin Incoterms',
+                'type'              => 'Route',
+                'path'              => 'AdminIncoterms\AdminIncotermsControllerGetIndex',
+                'slug'              => 'admin_incoterms',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 7
+            ],
+            [
+                'name'              => 'Admin Inventories',
+                'type'              => 'Route',
+                'path'              => 'AdminInventories\AdminInventoriesControllerGetIndex',
+                'slug'              => 'admin_inventories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 8
+            ],
+            [
+                'name'              => 'Admin Inventories',
+                'type'              => 'Route',
+                'path'              => 'AdminInventories\AdminInventoriesControllerGetIndex',
+                'slug'              => 'admin_inventories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 8
+            ],
+            [
+                'name'              => 'Admin Margin Categories',
+                'type'              => 'Route',
+                'path'              => 'AdminMarginCategories\AdminMarginCategoriesControllerGetIndex',
+                'slug'              => 'admin_margin_categories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 9
+            ],
+            [
+                'name'              => 'Admin Model Specifics',
+                'type'              => 'Route',
+                'path'              => 'AdminModelSpecifics\AdminModelSpecificsControllerGetIndex',
+                'slug'              => 'admin_model_specifics',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 10
+            ],
+            [
+                'name'              => 'Admin Sizes',
+                'type'              => 'Route',
+                'path'              => 'AdminSizes\AdminSizesControllerGetIndex',
+                'slug'              => 'admin_sizes',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 11
+            ],
+            [
+                'name'              => 'Admin SKU Legends',
+                'type'              => 'Route',
+                'path'              => 'AdminSkuLegends\AdminSkuLegendsControllerGetIndex',
+                'slug'              => 'admin_sku_legends',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 12
+            ],
+            [
+                'name'              => 'Admin SKU Statuses',
+                'type'              => 'Route',
+                'path'              => 'AdminSkuStatuses\AdminSkuStatusesControllerGetIndex',
+                'slug'              => 'admin_sku_statuses',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 13
+            ],
+            [
+                'name'              => 'Admin Store Categories',
+                'type'              => 'Route',
+                'path'              => 'AdminStoreCategories\AdminStoreCategoriesControllerGetIndex',
+                'slug'              => 'admin_store_categories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 14
+            ],
+            [
+                'name'              => 'Admin Sub Categories',
+                'type'              => 'Route',
+                'path'              => 'AdminSubCategories\AdminSubCategoriesControllerGetIndex',
+                'slug'              => 'admin_sub_categories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 15
+            ],
+            [
+                'name'              => 'Admin Sub Classifications',
+                'type'              => 'Route',
+                'path'              => 'AdminSubClassifications\AdminSubClassificationsControllerGetIndex',
+                'slug'              => 'admin_sub_classifications',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 16
+            ],
+            [
+                'name'              => 'Admin Suppliers',
+                'type'              => 'Route',
+                'path'              => 'AdminSuppliers\AdminSuppliersControllerGetIndex',
+                'slug'              => 'admin_suppliers',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 17
+            ],
+            [
+                'name'              => 'Admin UOMs',
+                'type'              => 'Route',
+                'path'              => 'AdminUoms\AdminUomsControllerGetIndex',
+                'slug'              => 'admin_uoms',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 18
+            ],
+            [
+                'name'              => 'Admin Vendors',
+                'type'              => 'Route',
+                'path'              => 'AdminVendors\AdminVendorsControllerGetIndex',
+                'slug'              => 'admin_vendors',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 19
+            ],
+            [
+                'name'              => 'Admin Vendor Types',
+                'type'              => 'Route',
+                'path'              => 'AdminVendorTypes\AdminVendorTypesControllerGetIndex',
+                'slug'              => 'admin_vendor_types',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 20
+            ],
+            [
+                'name'              => 'Admin Warehouse Categories',
+                'type'              => 'Route',
+                'path'              => 'AdminWarehouseCategories\AdminWarehouseCategoriesControllerGetIndex',
+                'slug'              => 'admin_warehouse_categories',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 21
+            ],
+            [
+                'name'              => 'Admin Warranties',
+                'type'              => 'Route',
+                'path'              => 'AdminWarranties\AdminWarrantiesControllerGetIndex',
+                'slug'              => 'admin_warranties',
+                'icon'              => 'fa-regular fa-circle',
+                'parent_id'         => 7,
+                'is_active'         => 1,
+                'is_dashboard'      => 0,
+                'id_adm_privileges' => 1,
+                'sorting'           => 22
+            ],
+
+
+
             // SETTINGS CHILDREN
 
             [
@@ -855,7 +1161,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'ActionTypes\ActionTypesControllerGetIndex',
                 'slug'              => 'action_types',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 7,
+                'parent_id'         => 8,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
@@ -867,7 +1173,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'TableSettings\TableSettingsControllerGetIndex',
                 'slug'              => 'table_settings',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 7,
+                'parent_id'         => 8,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
@@ -879,7 +1185,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'ModuleHeaders\ModuleHeadersControllerGetIndex',
                 'slug'              => 'module_headers',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 7,
+                'parent_id'         => 8,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
@@ -894,7 +1200,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'ItemMasterHistories\ItemMasterHistoriesControllerGetIndex',
                 'slug'              => 'item_master_histories',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 8,
+                'parent_id'         => 9,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
@@ -906,7 +1212,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'GashaponItemMasterHistories\GashaponItemMasterHistoriesControllerGetIndex',
                 'slug'              => 'gashapon_item_master_histories',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 8,
+                'parent_id'         => 9,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,
@@ -918,7 +1224,7 @@ class AdmMenusSeeder extends Seeder
                 'path'              => 'RmaItemMasterHistories\RmaItemMasterHistoriesControllerGetIndex',
                 'slug'              => 'rma_item_master_histories',
                 'icon'              => 'fa-regular fa-circle',
-                'parent_id'         => 8,
+                'parent_id'         => 9,
                 'is_active'         => 1,
                 'is_dashboard'      => 0,
                 'id_adm_privileges' => 1,

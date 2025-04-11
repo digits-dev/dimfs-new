@@ -312,6 +312,98 @@ class AdmMenuPrivilegesSeeder extends Seeder
                 'id_adm_menus' => 74,
                 'id_adm_privileges' => 1
             ],
+            [
+                'id_adm_menus' => 75,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 76,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 77,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 78,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 79,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 80,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 81,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 82,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 84,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 85,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 86,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 87,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 88,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 89,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 90,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 91,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 92,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 93,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 94,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 95,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 96,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 97,
+                'id_adm_privileges' => 1
+            ],
+            [
+                'id_adm_menus' => 98,
+                'id_adm_privileges' => 1
+            ],
         ];
 
         foreach ($menus as $menu) {

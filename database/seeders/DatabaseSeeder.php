@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // $this->call([AdmSeeders::class]);
-        // $this->call([AdmModulesSeeder::class]);
+        $this->call([AdmModulesSeeder::class]);
         // $this->call([AdmAdminMenusSeeder::class]);
-        // $this->call([AdmMenusSeeder::class]);
-        // $this->call([AdmMenuPrivilegesSeeder::class]);
+        $this->call([AdmMenusSeeder::class]);
+        $this->call([AdmMenuPrivilegesSeeder::class]);
         // $this->call([AdmPrivilegesSeeder::class]);
         // $this->call([AdmUsersSeeders::class]);
         // $this->call([AdmSettingsSeeder::class]);
