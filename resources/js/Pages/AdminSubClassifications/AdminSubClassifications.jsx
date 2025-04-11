@@ -19,8 +19,9 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminSubClassificationAction from "./AdminSubClassificationAction";
 
-const AdminSubClassifications = ({page_title, admin_sub_classifications, queryParams}) => {
+const AdminSubClassifications = ({page_title, admin_sub_classifications, queryParams, all_active_admin_classifications, all_admin_classifications}) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -230,7 +231,7 @@ const AdminSubClassifications = ({page_title, admin_sub_classifications, queryPa
                                         {item.sub_class_description ?? '-'}
                                     </RowData>
                                     <RowData >
-                                        {item.get_admin_category?.category_description ?? '-'}
+                                        {item.get_admin_classification?.class_description ?? '-'}
                                     </RowData>
                                     <RowData >
                                         {item.get_created_by?.name ?? '-'}
@@ -265,7 +266,13 @@ const AdminSubClassifications = ({page_title, admin_sub_classifications, queryPa
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminSubClassificationAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_admin_classifications={all_admin_classifications}
+                    all_active_admin_classifications={all_active_admin_classifications} 
+                />
             </Modal>
         </>
     );

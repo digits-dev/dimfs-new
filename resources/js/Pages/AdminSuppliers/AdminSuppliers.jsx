@@ -19,8 +19,9 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminSuppliersAction from "./AdminSuppliersAction";
 
-const AdminSuppliers = ({page_title, admin_suppliers, queryParams}) => {
+const AdminSuppliers = ({page_title, admin_suppliers, queryParams, all_active_admin_vendors, all_admin_vendors}) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -134,7 +135,7 @@ const AdminSuppliers = ({page_title, admin_suppliers, queryParams}) => {
                                 queryParams={queryParams}
                                 width="xl"
                             >
-                                Supplier Description
+                                Supplier Name
                             </TableHeader>
                             <TableHeader
                                 sortable={false}
@@ -265,7 +266,13 @@ const AdminSuppliers = ({page_title, admin_suppliers, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminSuppliersAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_admin_vendors={all_admin_vendors}
+                    all_active_admin_vendors={all_active_admin_vendors} 
+                />
             </Modal>
         </>
     );

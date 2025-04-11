@@ -53,4 +53,30 @@ class AdminSuppliersController extends Controller
 
         return Inertia::render("AdminSuppliers/AdminSuppliers", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'supplier_code' => 'required|string|max:15|unique:admin_suppliers,supplier_code',
+            'supplier_name' => 'required|string|max:50|unique:admin_suppliers,supplier_name',
+        ]);
+   
+        try {
+
+            AdminSupplier::create([
+                'supplier_code' => $validatedFields['supplier_code'], 
+                'supplier_name' => $validatedFields['supplier_name'],        
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Supplier Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Suppliers', $e->getMessage());
+            return back()->with(['message' => 'Supplier Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

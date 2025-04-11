@@ -31,7 +31,6 @@ class AdminVendor extends Model
         'vendor_code',
         'vendor_name',
         'status',
-        'admin_incoterms_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -50,7 +49,6 @@ class AdminVendor extends Model
         'vendor_code',
         'vendor_name',
         'status',
-        'admin_incoterms_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -122,9 +120,5 @@ class AdminVendor extends Model
 
     public function getAdminBrand() {
         return $this->belongsTo(AdminBrand::class, 'admin_brands_id', 'id');
-    }
-
-    public function getAdminIncoterm() {
-        return $this->belongsTo(AdminIncoterm::class, 'admin_incoterms_id', 'id');
     }
 }

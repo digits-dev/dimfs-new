@@ -45,4 +45,30 @@ class AdminColorsController extends Controller
 
         return Inertia::render("AdminColors/AdminColors", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'color_code' => 'required|string|max:5|unique:admin_colors,color_code',
+            'color_description' => 'required|string|max:30|unique:admin_colors,color_description',
+        ]);
+
+        try {
+
+            AdminColor::create([
+                'color_code' => $validatedFields['color_code'], 
+                'color_description' => $validatedFields['color_description'],   
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Color Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Colors', $e->getMessage());
+            return back()->with(['message' => 'Color Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

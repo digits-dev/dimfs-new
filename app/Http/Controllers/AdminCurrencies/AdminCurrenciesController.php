@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminCurrencies;
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminColor;
+use App\Models\AdminCurrency;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class AdminCurrenciesController extends Controller
     }
 
     public function getAllData(){
-        $query = AdminColor::query()->with(['getCreatedBy', 'getUpdatedBy']);
+        $query = AdminCurrency::query()->with(['getCreatedBy', 'getUpdatedBy']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -44,5 +45,31 @@ class AdminCurrenciesController extends Controller
         $data['queryParams'] = request()->query();
 
         return Inertia::render("AdminCurrencies/AdminCurrencies", $data);
+    }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'currency_code' => 'required|string|max:5|unique:admin_currencies,currency_code',
+            'currency_description' => 'required|string|max:20|unique:admin_currencies,currency_description',
+        ]);
+
+        try {
+
+            AdminCurrency::create([
+                'currency_code' => $validatedFields['currency_code'], 
+                'currency_description' => $validatedFields['currency_description'],     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Currency Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Currencies', $e->getMessage());
+            return back()->with(['message' => 'Currency Creation Failed!', 'type' => 'error']);
+        }
+    
     }
 }

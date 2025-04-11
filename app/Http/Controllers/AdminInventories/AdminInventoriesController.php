@@ -45,4 +45,30 @@ class AdminInventoriesController extends Controller
 
         return Inertia::render("AdminInventories/AdminInventories", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'inventory_code' => 'required|string|max:5|unique:admin_inventories,inventory_code',
+            'inventory_description' => 'required|string|max:30|unique:admin_inventories,inventory_description',
+        ]);
+
+        try {
+
+            AdminInventory::create([
+                'inventory_code' => $validatedFields['inventory_code'], 
+                'inventory_description' => $validatedFields['inventory_description'],     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Inventory Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Inventories', $e->getMessage());
+            return back()->with(['message' => 'Inventory Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

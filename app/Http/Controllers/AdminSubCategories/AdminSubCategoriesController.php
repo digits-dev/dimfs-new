@@ -53,4 +53,31 @@ class AdminSubCategoriesController extends Controller
 
         return Inertia::render("AdminSubCategories/AdminSubCategories", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'sub_category_code' => 'required|string|max:15|unique:admin_sub_categories,sub_category_code',
+            'sub_category_description' => 'required|string|max:50|unique:admin_sub_categories,sub_category_description',
+        ]);
+
+        try {
+
+            AdminSubCategory::create([
+                'sub_category_code' => $validatedFields['sub_category_code'], 
+                'sub_category_description' => $validatedFields['sub_category_description'],     
+                'admin_categories_id' => $request->admin_categories_id,     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Sub Category Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Sub Categories', $e->getMessage());
+            return back()->with(['message' => 'Sub Category Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

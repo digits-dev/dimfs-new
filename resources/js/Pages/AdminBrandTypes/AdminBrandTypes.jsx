@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminBrandTypesAction from "./AdminBrandTypesAction";
 
 const AdminBrandTypes = ({page_title, admin_brand_types, queryParams}) => {
     const { auth } = usePage().props;
@@ -251,7 +252,11 @@ const AdminBrandTypes = ({page_title, admin_brand_types, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+               <AdminBrandTypesAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                />
             </Modal>
         </>
     );

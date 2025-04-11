@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('vendor_code', 15)->nullable();
             $table->string('vendor_name')->nullable();
             $table->enum('status',['ACTIVE','INACTIVE'])->nullable();
-            $table->integer('admin_incoterms_id')->nullable();
-            $table->integer('admin_currencies_id')->nullable();
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();

@@ -46,4 +46,30 @@ class AdminWarrantiesController extends Controller
 
         return Inertia::render("AdminWarranties/AdminWarranties", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'warranty_code' => 'required|string|max:5|unique:admin_warranties,warranty_code',
+            'warranty_description' => 'required|string|max:30|unique:admin_warranties,warranty_description',
+        ]);
+   
+        try {
+
+            AdminWarranty::create([
+                'warranty_code' => $validatedFields['warranty_code'], 
+                'warranty_description' => $validatedFields['warranty_description'],          
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Warranty Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Warranties', $e->getMessage());
+            return back()->with(['message' => 'Warranty Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

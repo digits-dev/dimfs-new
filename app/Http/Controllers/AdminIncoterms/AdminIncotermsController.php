@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminIncoterms;
 
 use App\Helpers\CommonHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\AdminCurrency;
 use App\Models\AdminIncoterm;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -44,5 +45,31 @@ class AdminIncotermsController extends Controller
         $data['queryParams'] = request()->query();
 
         return Inertia::render("AdminIncoterms/AdminIncoterms", $data);
+    }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'incoterms_code' => 'required|string|max:5|unique:admin_incoterms,incoterms_code',
+            'incoterms_description' => 'required|string|max:30|unique:admin_incoterms,incoterms_description',
+        ]);
+
+        try {
+
+            AdminIncoterm::create([
+                'incoterms_code' => $validatedFields['incoterms_code'], 
+                'incoterms_description' => $validatedFields['incoterms_description'],     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Incoterm Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Incoterms', $e->getMessage());
+            return back()->with(['message' => 'Incoterm Creation Failed!', 'type' => 'error']);
+        }
+    
     }
 }

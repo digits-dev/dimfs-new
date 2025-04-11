@@ -19,8 +19,9 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminClassificationsAction from "./AdminClassificationsAction";
 
-const AdminClassifications = ({page_title, admin_classifications, queryParams}) => {
+const AdminClassifications = ({page_title, admin_classifications, queryParams, all_active_admin_categories, all_admin_categories}) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -265,7 +266,13 @@ const AdminClassifications = ({page_title, admin_classifications, queryParams}) 
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminClassificationsAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_admin_categories={all_admin_categories}
+                    all_active_admin_categories={all_active_admin_categories} 
+                />
             </Modal>
         </>
     );

@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminCurrenciesAction from "./AdminCurrenciesAction";
 
 const AdminCurrencies = ({page_title, admin_currencies, queryParams}) => {
     const { auth } = usePage().props;
@@ -252,7 +253,7 @@ const AdminCurrencies = ({page_title, admin_currencies, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminCurrenciesAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

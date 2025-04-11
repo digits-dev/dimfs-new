@@ -28,7 +28,7 @@ class AdminVendorsController extends Controller
     }
 
     public function getAllData(){
-        $query = AdminVendor::query()->with(['getCreatedBy', 'getUpdatedBy', 'getAdminBrand', 'getAdminIncoterm']);
+        $query = AdminVendor::query()->with(['getCreatedBy', 'getUpdatedBy', 'getAdminBrand']);
         $filter = $query->searchAndFilter(request());
         $result = $filter->orderBy($this->sortBy, $this->sortDir);
         return $result;
@@ -52,12 +52,33 @@ class AdminVendorsController extends Controller
         $data['all_admin_brands'] = AdminBrand::select('id as value', 'brand_description as label', 'status')     
             ->get();
 
-        $data['all_active_admin_incoterms'] = AdminIncoterm::select('id as value', 'incoterms_description as label', 'status')
-        ->where('status', 'ACTIVE')
-            ->get();
-        $data['all_admin_incoterms'] = AdminIncoterm::select('id as value', 'incoterms_description as label', 'status')     
-            ->get();
-
         return Inertia::render("AdminVendors/AdminVendors", $data);
+    }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'vendor_code' => 'required|string|max:5|unique:admin_vendors,vendor_code',
+            'vendor_name' => 'required|string|max:30|unique:admin_vendors,vendor_name',
+        ]);
+   
+        try {
+
+            AdminVendor::create([
+                'vendor_code' => $validatedFields['vendor_code'], 
+                'vendor_name' => $validatedFields['vendor_name'],        
+                'admin_brands_id' => $request->admin_brands_id,        
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Vendor Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Vendors', $e->getMessage());
+            return back()->with(['message' => 'Vendor Creation Failed!', 'type' => 'error']);
+        }
+    
     }
 }

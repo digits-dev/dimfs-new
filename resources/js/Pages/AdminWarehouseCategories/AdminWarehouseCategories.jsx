@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminWarehouseCategoriesAction from "./AdminWarehouseCategoriesAction";
 
 const AdminWarehouseCategories = ({page_title, admin_warehouse_categories, queryParams}) => {
     const { auth } = usePage().props;
@@ -254,7 +255,7 @@ const AdminWarehouseCategories = ({page_title, admin_warehouse_categories, query
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminWarehouseCategoriesAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

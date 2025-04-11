@@ -45,4 +45,30 @@ class AdminCategoriesController extends Controller
 
         return Inertia::render("AdminCategories/AdminCategories", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'category_code' => 'required|string|max:5|unique:admin_categories,category_code',
+            'category_description' => 'required|string|max:30|unique:admin_categories,category_description',
+        ]);
+
+        try {
+
+            AdminCategory::create([
+                'category_code' => $validatedFields['category_code'], 
+                'category_description' => $validatedFields['category_description'],   
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Category Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Categories', $e->getMessage());
+            return back()->with(['message' => 'Category Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

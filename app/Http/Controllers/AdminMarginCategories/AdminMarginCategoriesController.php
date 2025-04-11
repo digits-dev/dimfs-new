@@ -45,12 +45,39 @@ class AdminMarginCategoriesController extends Controller
         $data['admin_margin_categories'] = self::getAllData()->paginate($this->perPage)->withQueryString();
         $data['queryParams'] = request()->query();
 
-        $data['all_active_sub_classifications'] = AdminSubClassification::select('id as value', 'sub_class_description as label', 'status')
+        $data['all_active_admin_sub_classifications'] = AdminSubClassification::select('id as value', 'sub_class_description as label', 'status')
         ->where('status', 'ACTIVE')
             ->get();
-        $data['all_sub_classifications'] = AdminSubClassification::select('id as value', 'sub_class_description as label', 'status')     
+        $data['all_admin_sub_classifications'] = AdminSubClassification::select('id as value', 'sub_class_description as label', 'status')     
             ->get();
 
         return Inertia::render("AdminMarginCategories/AdminMarginCategories", $data);
+    }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'margin_category_code' => 'required|string|max:15|unique:admin_margin_categories,margin_category_code',
+            'margin_category_description' => 'required|string|max:30|unique:admin_margin_categories,margin_category_description',
+        ]);
+
+        try {
+
+            AdminMarginCategory::create([
+                'margin_category_code' => $validatedFields['margin_category_code'], 
+                'margin_category_description' => $validatedFields['margin_category_description'],     
+                'admin_sub_classifications_id' => $request->admin_sub_classifications_id,     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Margin Category Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Margin Categories', $e->getMessage());
+            return back()->with(['message' => 'Margin Category Creation Failed!', 'type' => 'error']);
+        }
+    
     }
 }

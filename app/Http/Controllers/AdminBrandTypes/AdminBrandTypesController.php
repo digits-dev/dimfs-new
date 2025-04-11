@@ -46,4 +46,30 @@ class AdminBrandTypesController extends Controller
 
         return Inertia::render("AdminBrandTypes/AdminBrandTypes", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'brand_type_code' => 'required|string|max:5|unique:admin_brand_types,brand_type_code',
+            'brand_type_description' => 'required|string|max:30|unique:admin_brand_types,brand_type_description',
+        ]);
+
+        try {
+
+            AdminBrandType::create([
+                'brand_type_code' => $validatedFields['brand_type_code'], 
+                'brand_type_description' => $validatedFields['brand_type_description'],   
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Brand Type Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Brand Types', $e->getMessage());
+            return back()->with(['message' => 'Brand Type Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

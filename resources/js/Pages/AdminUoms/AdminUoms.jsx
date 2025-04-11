@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminUomsAction from "./AdminUomsAction";
 
 const AdminUoms = ({page_title, admin_uoms, queryParams}) => {
     const { auth } = usePage().props;
@@ -252,7 +253,7 @@ const AdminUoms = ({page_title, admin_uoms, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminUomsAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

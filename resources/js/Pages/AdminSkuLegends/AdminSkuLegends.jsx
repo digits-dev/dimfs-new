@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminSkuLegendsAction from "./AdminSkuLegendsAction";
 
 const AdminSkuLegends = ({page_title, admin_sku_legends, queryParams}) => {
     const { auth } = usePage().props;
@@ -238,7 +239,7 @@ const AdminSkuLegends = ({page_title, admin_sku_legends, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminSkuLegendsAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

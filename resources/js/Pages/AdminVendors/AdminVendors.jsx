@@ -19,8 +19,9 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminVendorsAction from "./AdminVendorsAction";
 
-const AdminVendors = ({page_title, admin_vendors, queryParams}) => {
+const AdminVendors = ({page_title, admin_vendors, queryParams, all_active_admin_brands, all_admin_brands}) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -143,12 +144,6 @@ const AdminVendors = ({page_title, admin_vendors, queryParams}) => {
                                 Brand Descripion
                             </TableHeader>
                             <TableHeader
-                                sortable={false}
-                                width="xl"
-                            >
-                                Incoterm Descripion
-                            </TableHeader>
-                            <TableHeader
                                 name="created_by"
                                 queryParams={queryParams}
                                 width="lg"
@@ -239,9 +234,6 @@ const AdminVendors = ({page_title, admin_vendors, queryParams}) => {
                                         {item.get_admin_brand?.brand_description ?? '-'}
                                     </RowData>
                                     <RowData >
-                                        {item.get_admin_incoterm?.incoterms_description ?? '-'}
-                                    </RowData>
-                                    <RowData >
                                         {item.get_created_by?.name ?? '-'}
                                     </RowData>
                                     <RowData >
@@ -274,7 +266,13 @@ const AdminVendors = ({page_title, admin_vendors, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminVendorsAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_admin_brands={all_admin_brands}
+                    all_active_admin_brands={all_active_admin_brands} 
+                />
             </Modal>
         </>
     );

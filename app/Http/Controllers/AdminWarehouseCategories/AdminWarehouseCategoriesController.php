@@ -46,4 +46,30 @@ class AdminWarehouseCategoriesController extends Controller
 
         return Inertia::render("AdminWarehouseCategories/AdminWarehouseCategories", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'wh_category_code' => 'required|string|max:5|unique:admin_warehouse_categories,wh_category_code',
+            'wh_category_description' => 'required|string|max:30|unique:admin_warehouse_categories,wh_category_description',
+        ]);
+   
+        try {
+
+            AdminWarehouseCategory::create([
+                'wh_category_code' => $validatedFields['wh_category_code'], 
+                'wh_category_description' => $validatedFields['wh_category_description'],          
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Warehouse Category Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Warehouse Categories', $e->getMessage());
+            return back()->with(['message' => 'Warehouse Category Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

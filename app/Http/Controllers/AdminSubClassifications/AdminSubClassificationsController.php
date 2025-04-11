@@ -53,4 +53,32 @@ class AdminSubClassificationsController extends Controller
 
         return Inertia::render("AdminSubClassifications/AdminSubClassifications", $data);
     }
+
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'sub_class_code' => 'required|string|max:10|unique:admin_sub_classifications,sub_class_code',
+            'sub_class_description' => 'required|string|max:50|unique:admin_sub_classifications,sub_class_description',
+        ]);
+   
+        try {
+
+            AdminSubClassification::create([
+                'sub_class_code' => $validatedFields['sub_class_code'], 
+                'sub_class_description' => $validatedFields['sub_class_description'],     
+                'admin_classifications_id' => $request->admin_classifications_id,     
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Sub Classification Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Sub Classifications', $e->getMessage());
+            return back()->with(['message' => 'Sub Classification Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

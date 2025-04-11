@@ -46,4 +46,30 @@ class AdminUomsController extends Controller
 
         return Inertia::render("AdminUoms/AdminUoms", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'uom_code' => 'required|string|max:5|unique:admin_uoms,uom_code',
+            'uom_description' => 'required|string|max:30|unique:admin_uoms,uom_description',
+        ]);
+   
+        try {
+
+            AdminUom::create([
+                'uom_code' => $validatedFields['uom_code'], 
+                'uom_description' => $validatedFields['uom_description'],        
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'UOM Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin UOMs', $e->getMessage());
+            return back()->with(['message' => 'UOM Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

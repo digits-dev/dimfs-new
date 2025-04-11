@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminCategoriesAction from "./AdminCategoriesAction";
 
 const AdminCategories = ({page_title, admin_categories, queryParams}) => {
     const { auth } = usePage().props;
@@ -251,7 +252,11 @@ const AdminCategories = ({page_title, admin_categories, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminCategoriesAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                />
             </Modal>
         </>
     );

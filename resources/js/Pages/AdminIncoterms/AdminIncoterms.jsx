@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminIncotermsAction from "./AdminIncotermsAction";
 
 const AdminIncoterms = ({page_title, admin_incoterms, queryParams}) => {
     const { auth } = usePage().props;
@@ -252,7 +253,7 @@ const AdminIncoterms = ({page_title, admin_incoterms, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminIncotermsAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

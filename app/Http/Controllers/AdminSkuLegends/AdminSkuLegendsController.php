@@ -46,4 +46,28 @@ class AdminSkuLegendsController extends Controller
 
         return Inertia::render("AdminSkuLegends/AdminSkuLegends", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'sku_legend_description' => 'required|string|max:20|unique:admin_sku_legends,sku_legend_description',
+        ]);
+
+        try {
+
+            AdminSkuLegend::create([
+                'sku_legend_description' => $validatedFields['sku_legend_description'],       
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'SKU Legend Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin SKU Legends', $e->getMessage());
+            return back()->with(['message' => 'SKU Legend Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

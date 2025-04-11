@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminInventoriesAction from "./AdminInventoriesAction";
 
 const AdminInventories = ({page_title, admin_inventories, queryParams}) => {
     const { auth } = usePage().props;
@@ -254,7 +255,7 @@ const AdminInventories = ({page_title, admin_inventories, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminInventoriesAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

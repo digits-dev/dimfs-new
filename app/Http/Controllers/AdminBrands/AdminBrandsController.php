@@ -55,4 +55,33 @@ class AdminBrandsController extends Controller
 
         return Inertia::render("AdminBrands/AdminBrands", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'brand_code' => 'required|string|max:5|unique:admin_brands,brand_code',
+            'brand_description' => 'required|string|max:30|unique:admin_brands,brand_description',
+        ]);
+
+        try {
+
+            AdminBrand::create([
+                'brand_code' => $validatedFields['brand_code'], 
+                'brand_description' => $validatedFields['brand_description'],   
+                'brand_beacode' => $request->brand_beacode, 
+                'admin_brand_types_id' => $request->admin_brand_types_id,
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Brand Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Brands', $e->getMessage());
+            return back()->with(['message' => 'Brand Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
+
 }

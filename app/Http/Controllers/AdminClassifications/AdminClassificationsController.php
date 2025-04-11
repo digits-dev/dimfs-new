@@ -52,4 +52,31 @@ class AdminClassificationsController extends Controller
 
         return Inertia::render("AdminClassifications/AdminClassifications", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'class_code' => 'required|string|max:5|unique:admin_classifications,class_code',
+            'class_description' => 'required|string|max:50|unique:admin_classifications,class_description',
+        ]);
+
+        try {
+
+            AdminClassification::create([
+                'class_code' => $validatedFields['class_code'], 
+                'class_description' => $validatedFields['class_description'],   
+                'admin_categories_id' => $request->admin_categories_id,   
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Classification Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Classifications', $e->getMessage());
+            return back()->with(['message' => 'Classification Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

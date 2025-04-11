@@ -115,6 +115,6 @@ class AdminMarginCategory extends Model
     }
 
     public function getAdminSubClassification() {
-        return $this->belongsTo(AdminSubClassificationsController::class, 'admin_sub_classifications_id', 'id');
+        return $this->belongsTo(AdminSubClassification::class, 'admin_sub_classifications_id', 'id');
     }
 }

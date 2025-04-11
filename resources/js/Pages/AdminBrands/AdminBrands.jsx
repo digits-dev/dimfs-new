@@ -19,8 +19,9 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminBrandsAction from "./AdminBrandsAction";
 
-const AdminBrands = ({page_title, admin_brands, queryParams}) => {
+const AdminBrands = ({page_title, admin_brands, queryParams, all_active_brand_types, all_brand_types}) => {
     const { auth } = usePage().props;
     const { theme } = useTheme();
     const { primayActiveColor, textColorActive } = useThemeStyles(theme);
@@ -35,8 +36,11 @@ const AdminBrands = ({page_title, admin_brands, queryParams}) => {
         brand_description: "",
         brand_beacode: "",
         admin_brand_types_id: "",
+        admin_brand_types_name: "",
         status: "",
     });
+
+    console.log(admin_brands);
 
     const handleModalClick = () => {
         setIsModalOpen(!isModalOpen);
@@ -198,6 +202,7 @@ const AdminBrands = ({page_title, admin_brands, queryParams}) => {
                                                         brand_description: item.brand_description,
                                                         brand_beacode: item.brand_beacode,
                                                         admin_brand_types_id: item.admin_brand_types_id,
+                                                        admin_brand_types_name: item.get_admin_brand_types?.brand_type_description,
                                                         status: item.status,
                                                     });
                                                 }}
@@ -216,6 +221,7 @@ const AdminBrands = ({page_title, admin_brands, queryParams}) => {
                                                     brand_description: item.brand_description,
                                                     brand_beacode: item.brand_beacode,
                                                     admin_brand_types_id: item.admin_brand_types_id,
+                                                    admin_brand_types_name: item.get_admin_brand_types?.brand_type_description,
                                                     status: item.status,
                                                 });
                                             }}
@@ -243,7 +249,7 @@ const AdminBrands = ({page_title, admin_brands, queryParams}) => {
                                         {item.brand_beacode ?? '-'}
                                     </RowData>
                                     <RowData >
-                                        {item.get_brand_type?.brand_type_description ?? '-'}
+                                        {item.get_admin_brand_types?.brand_type_description ?? '-'}
                                     </RowData>
                                     <RowData >
                                         {item.get_created_by?.name ?? '-'}
@@ -278,7 +284,13 @@ const AdminBrands = ({page_title, admin_brands, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminBrandsAction 
+                    onClose={handleModalClick}
+                    action={action}
+                    updateData={updateData}
+                    all_brand_types={all_brand_types}
+                    all_active_brand_types={all_active_brand_types} 
+                />
             </Modal>
         </>
     );

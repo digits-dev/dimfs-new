@@ -46,4 +46,30 @@ class AdminSizesController extends Controller
 
         return Inertia::render("AdminSizes/AdminSizes", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'size_code' => 'required|string|max:5|unique:admin_sizes,size_code',
+            'size_description' => 'required|string|max:30|unique:admin_sizes,size_description',
+        ]);
+
+        try {
+
+            AdminSizes::create([
+                'size_code' => $validatedFields['size_code'], 
+                'size_description' => $validatedFields['size_description'],       
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Size Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Sizes', $e->getMessage());
+            return back()->with(['message' => 'Size Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

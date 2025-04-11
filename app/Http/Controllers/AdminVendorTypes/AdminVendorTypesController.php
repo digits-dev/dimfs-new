@@ -46,4 +46,30 @@ class AdminVendorTypesController extends Controller
 
         return Inertia::render("AdminVendorTypes/AdminVendorTypes", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'vendor_type_code' => 'required|string|max:15|unique:admin_vendor_types,vendor_type_code',
+            'vendor_type_description' => 'required|string|max:30|unique:admin_vendor_types,vendor_type_description',
+        ]);
+   
+        try {
+
+            AdminVendorType::create([
+                'vendor_type_code' => $validatedFields['vendor_type_code'], 
+                'vendor_type_description' => $validatedFields['vendor_type_description'],          
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Vendor Type Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Vendor Types', $e->getMessage());
+            return back()->with(['message' => 'Vendor Type Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

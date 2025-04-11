@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminModelSpecificsAction from "./AdminModelSpecificsAction";
 
 const AdminModelSpecifics = ({page_title, admin_model_specifics, queryParams}) => {
     const { auth } = usePage().props;
@@ -252,7 +253,7 @@ const AdminModelSpecifics = ({page_title, admin_model_specifics, queryParams}) =
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+                <AdminModelSpecificsAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );

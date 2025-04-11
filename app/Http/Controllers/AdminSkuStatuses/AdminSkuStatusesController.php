@@ -46,4 +46,30 @@ class AdminSkuStatusesController extends Controller
 
         return Inertia::render("AdminSkuStatuses/AdminSkuStatuses", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'sku_status_code' => 'required|string|max:5|unique:admin_sku_statuses,sku_status_code',
+            'sku_status_description' => 'required|string|max:30|unique:admin_sku_statuses,sku_status_description',
+        ]);
+
+        try {
+
+            AdminSkuStatus::create([
+                'sku_status_code' => $validatedFields['sku_status_code'], 
+                'sku_status_description' => $validatedFields['sku_status_description'],       
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'SKU Status Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin SKU Statuses', $e->getMessage());
+            return back()->with(['message' => 'SKU Status Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

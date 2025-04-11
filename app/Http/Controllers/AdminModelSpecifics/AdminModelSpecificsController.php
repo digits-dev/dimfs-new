@@ -46,4 +46,30 @@ class AdminModelSpecificsController extends Controller
 
         return Inertia::render("AdminModelSpecifics/AdminModelSpecifics", $data);
     }
+
+    public function create(Request $request){
+
+        $validatedFields = $request->validate([
+            'model_specific_code' => 'required|string|max:15|unique:admin_model_specifics,model_specific_code',
+            'model_specific_description' => 'required|string|max:30|unique:admin_model_specifics,model_specific_description',
+        ]);
+
+        try {
+
+            AdminModelSpecific::create([
+                'model_specific_code' => $validatedFields['model_specific_code'], 
+                'model_specific_description' => $validatedFields['model_specific_description'],       
+                'status' => 'ACTIVE',
+            ]);
+    
+            return back()->with(['message' => 'Model Specific Creation Success!', 'type' => 'success']);
+
+        }
+
+        catch (\Exception $e) {
+            CommonHelpers::LogSystemError('Admin Model Specifics', $e->getMessage());
+            return back()->with(['message' => 'Model Specific Creation Failed!', 'type' => 'error']);
+        }
+    
+    }
 }

@@ -19,6 +19,7 @@ import RowData from "../../Components/Table/RowData";
 import RowStatus from "../../Components/Table/RowStatus";
 import RowAction from "../../Components/Table/RowAction";
 import Modal from "../../Components/Modal/Modal";
+import AdminVendorTypesAction from "./AdminVendorTypesAction";
 
 const AdminVendorTypes = ({page_title, admin_vendor_types, queryParams}) => {
     const { auth } = usePage().props;
@@ -254,7 +255,7 @@ const AdminVendorTypes = ({page_title, admin_vendor_types, queryParams}) => {
                 fontColor={textColorActive}
                 btnIcon="fa fa-edit"
             >
-              
+              <AdminVendorTypesAction onClose={handleModalClick} updateData={updateData} action={action}/>
             </Modal>
         </>
     );
