@@ -68,6 +68,8 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
       
   };
 
+  console.log(data);
+
   return (
     <>
       <Head title={page_title}/>
@@ -83,19 +85,20 @@ const ItemMasterSegmentation = ({item_master_id, page_title, segmentation_inputs
 
                   return  <div key={index} className="w-full">
                             <CustomSelect
-                              selectType='react-select'
                               name={input.segmentation_column}
-                              value={item_segmentation ? sku_legend_options.find((option) => option.value === item_segmentation.get_sku_legend?.id) : ''}
+                              value={
+                                data[input.segmentation_column]
+                                  ? sku_legend_options.find(
+                                      (option) => option.value === data[input.segmentation_column]?.sku_legend_id
+                                    )
+                                  : ''
+                              }
                               onChange={(selectedValue) => handleInputChange(input.segmentation_column, selectedValue, input.id)}
                               displayName={input.segmentation_description}
                               placeholder={`Enter Segmentation`}
+                              onError={errors[input.segmentation_column]}
                               options={sku_legend_options ? sku_legend_options : []}
                             />
-                            {(errors[input.segmentation_column]) && (
-                                <div className="font-poppins text-xs mt-2 font-semibold text-red-600">
-                                    {errors[input.segmentation_column]}
-                                </div>
-                            )}
                           </div>
                   
                 })}
